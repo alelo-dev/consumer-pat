@@ -29,7 +29,7 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
-        return repository.findAll();
+        return repository.getAllConsumersList();
     }
 
 
@@ -39,9 +39,15 @@ public class ConsumerController {
         repository.save(consumer);
     }
 
+    // Não deve ser possível alterar o saldo do cartão
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    public void updateConsumer(@RequestBody Consumer consumer) {
+        repository.save(consumer);
+    }
+
 
     /*
-     * Deve creditar(adicionar) um valor(value) no cartão do usuário.
+     * Deve creditar(adicionar) um valor(value) em um no cartão.
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
