@@ -89,6 +89,10 @@ public class ConsumerController {
         */
 
         if (establishmentType == 1) {
+            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+            Double cashback  = (value / 100) * 10;
+            value = value - cashback;
+
             consumer = repository.findByFoodCardNumber(cardNumber);
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
@@ -99,6 +103,10 @@ public class ConsumerController {
             repository.save(consumer);
 
         } else {
+            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
+            Double tax  = (value / 100) * 35;
+            value = value + tax;
+
             consumer = repository.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
             repository.save(consumer);
