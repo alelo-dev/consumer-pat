@@ -47,7 +47,7 @@ public class PurchaseService {
         statementRepository.save(statement);
     }
 
-    private Card getValidatedCard(PurchaseParameter parameter) {
+    private Card getValidatedCard(PurchaseParameter parameter) throws EntityNotFoundException, IllegalArgumentException {
         Card card = consumerService.getCardOrException(parameter.getConsumerId(), parameter.getCardNumber());
 
         if (card.getType() != parameter.getType()) {
@@ -57,7 +57,8 @@ public class PurchaseService {
         return card;
     }
 
-    private BigDecimal getValidatedFinalProductValue(PurchaseParameter parameter, Card card) {
+    public BigDecimal getValidatedFinalProductValue(PurchaseParameter parameter, Card card)
+            throws IllegalArgumentException {
         BigDecimal finalProductValue =
                 parameter.getProductValue().multiply(parameter.getType().getPercentageAdjustement());
 

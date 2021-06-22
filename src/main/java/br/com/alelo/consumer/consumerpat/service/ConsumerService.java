@@ -70,7 +70,7 @@ public class ConsumerService {
         cardRepository.save(card);
     }
 
-    public Card getCardOrException(int consumerId, String cardNumber) {
+    public Card getCardOrException(int consumerId, String cardNumber) throws EntityNotFoundException {
         Optional<Card> cardOptional = cardRepository.findByNumberAndConsumerId(cardNumber, consumerId);
 
         if (cardOptional.isEmpty()) {
@@ -84,7 +84,7 @@ public class ConsumerService {
         return consumerRepository.existsById(id);
     }
 
-    private Consumer getConsumerOrException(int id) {
+    private Consumer getConsumerOrException(int id) throws EntityNotFoundException {
         Optional<Consumer> consumerOptional = consumerRepository.findById(id);
 
         if (consumerOptional.isEmpty()) {

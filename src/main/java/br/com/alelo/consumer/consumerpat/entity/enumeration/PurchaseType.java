@@ -14,7 +14,6 @@ public enum PurchaseType {
     }
 
     public BigDecimal getPercentageAdjustement() {
-        double adjustement = percentageIncrease < 0 ? 100 + percentageIncrease : percentageIncrease;
-        return BigDecimal.valueOf(adjustement /= 100);
+        return percentageIncrease == 0 ? BigDecimal.ONE : BigDecimal.valueOf((100 + percentageIncrease) / 100);
     }
 }

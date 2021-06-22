@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "04949151-08d7-489b-a40e-06105325fb78",
+		"_postman_id": "bcab6e59-3725-4630-905b-fd640f53f1b9",
 		"name": "Consumer Pat",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,7 +10,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
 				"url": {
 					"raw": "localhost:8080/consumers?page=0",
 					"host": [
@@ -42,7 +41,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Maria Bigodenha\",\n\t\"cards\": [\n\t\t{\n\t\t\t\"type\": \"FOOD\",\n\t\t\t\"number\": \"F1F1\",\n\t\t\t\"balance\": 1.11\n\t\t},\n\t\t{\n\t\t\t\"type\": \"DRUGSTORE\",\n\t\t\t\"number\": \"D2D2\",\n\t\t\t\"balance\": 2.22\n\t\t},\n\t\t{\n\t\t\t\"type\": \"FUEL\",\n\t\t\t\"number\": \"FE3FE3\",\n\t\t\t\"balance\": 3.33\n\t\t}\n\t]\n}"
+					"raw": "{\n\t\"name\": \"Maria Bigodenha\",\n\t\"cards\": [\n\t\t{\n\t\t\t\"type\": \"FOOD\",\n\t\t\t\"number\": \"F1F1\",\n\t\t\t\"balance\": 100.1\n\t\t},\n\t\t{\n\t\t\t\"type\": \"DRUGSTORE\",\n\t\t\t\"number\": \"D2D2\",\n\t\t\t\"balance\": 200.2\n\t\t},\n\t\t{\n\t\t\t\"type\": \"FUEL\",\n\t\t\t\"number\": \"FE3FE3\",\n\t\t\t\"balance\": 300.3\n\t\t}\n\t]\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/consumers",
@@ -80,6 +79,33 @@
 					"path": [
 						"consumers",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Purchase",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"consumerId\": 1,\n    \"type\": \"FOOD\",\n    \"establishmentName\": \"Pizzaria Xadrezes\",\n    \"productDescription\": \"Pizza de Todinho\",\n    \"productValue\": 50.5,\n    \"cardNumber\": \"F1F1\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/purchases",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"purchases"
 					]
 				}
 			},
