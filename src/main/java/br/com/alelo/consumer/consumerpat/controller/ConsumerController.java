@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 
 import static org.springframework.http.ResponseEntity.*;
 
-
 @AllArgsConstructor
 @RestController
 @RequestMapping("consumers")

@@ -14,11 +14,6 @@ public class ExceptionResult {
         timestamp = LocalDateTime.now();
     }
 
-    public ExceptionResult(Throwable exception) {
-        this();
-        this.message = exception.getMessage();
-    }
-
     public ExceptionResult(String message) {
         this();
         this.message = message;
