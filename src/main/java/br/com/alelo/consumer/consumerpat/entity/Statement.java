@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.parameter.PurchaseParameter;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,6 +17,7 @@ public class Statement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String establishmentName;
     private String productDescription;
     private String cardNumber;
     private BigDecimal value;
@@ -26,6 +28,18 @@ public class Statement {
     @ManyToOne
     private Consumer consumer;
 
-    @ManyToOne
-    private Establishment establishment;
+    public static Statement fromPurchaseParameter(PurchaseParameter parameter) {
+        Statement statement = new Statement();
+
+        Consumer consumer = new Consumer();
+        consumer.setId(parameter.getConsumerId());
+
+        statement.setConsumer(consumer);
+        statement.setEstablishmentName(parameter.getEstablishmentName());
+        statement.setCardNumber(parameter.getCardNumber());
+        statement.setProductDescription(parameter.getProductDescription());
+        statement.setValue(parameter.getProductValue());
+
+        return statement;
+    }
 }

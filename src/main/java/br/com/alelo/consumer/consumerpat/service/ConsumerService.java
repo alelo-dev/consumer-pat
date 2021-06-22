@@ -1,15 +1,11 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import br.com.alelo.consumer.consumerpat.config.Messages;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Statement;
-import br.com.alelo.consumer.consumerpat.parameter.BuyParameter;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
-import br.com.alelo.consumer.consumerpat.respository.StatementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,32 +15,15 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class ConsumerService {
 
-    @Value("${msg.consumer_not_found}")
-    private String CONSUMER_NOT_FOUND;
-
-    @Value("${msg.card_not_found}")
-    private String CARD_NOT_FOUND;
-
-    @Value("${msg.establishment_not_found}")
-    private String ESTABLISHMENT_NOT_FOUND;
-
     private ConsumerRepository consumerRepository;
-    private StatementRepository statementRepository;
     private CardRepository cardRepository;
-    private EstablishmentRepository establishmentRepository;
+    private Messages messages;
 
-    @Autowired
-    public ConsumerService(ConsumerRepository consumerRepository, StatementRepository statementRepository, CardRepository cardRepository, EstablishmentRepository establishmentRepository) {
-        this.consumerRepository = consumerRepository;
-        this.statementRepository = statementRepository;
-        this.cardRepository = cardRepository;
-        this.establishmentRepository = establishmentRepository;
-    }
-
-    public Page<Consumer> findAllConsumers(Pageable pageable) {
+    public Page<Consumer> findAll(Pageable pageable) {
         return consumerRepository.findAll(pageable);
     }
 
@@ -86,48 +65,33 @@ public class ConsumerService {
 
     @Transactional
     public void addValueToCard(int consumerId, BigDecimal valueToAdd, String cardNumber) {
+        Card card = getCardOrException(consumerId, cardNumber);
+        card.setBalance(card.getBalance().add(valueToAdd));
+        cardRepository.save(card);
+    }
 
+    public Card getCardOrException(int consumerId, String cardNumber) {
         Optional<Card> cardOptional = cardRepository.findByNumberAndConsumerId(cardNumber, consumerId);
 
         if (cardOptional.isEmpty()) {
-            throw new EntityNotFoundException(CARD_NOT_FOUND+cardNumber);
+            throw new EntityNotFoundException(messages.cardNotFound +cardNumber);
         }
 
-        Card card = cardOptional.get();
-        card.setBalance(card.getBalance().add(valueToAdd));
+        return cardOptional.get();
+    }
 
-        cardRepository.save(card);
+    public boolean existsConsumerById(int id) {
+        return consumerRepository.existsById(id);
     }
 
     private Consumer getConsumerOrException(int id) {
         Optional<Consumer> consumerOptional = consumerRepository.findById(id);
 
         if (consumerOptional.isEmpty()) {
-            throw new EntityNotFoundException(CONSUMER_NOT_FOUND);
+            throw new EntityNotFoundException(messages.consumerNotFound);
         }
 
         return consumerOptional.get();
     }
 
-    public void buy(BuyParameter parameter) {
-        if (!consumerRepository.existsById(parameter.getConsumerId())) {
-            throw new EntityNotFoundException(CONSUMER_NOT_FOUND);
-        }
-
-        if (!establishmentRepository.existsById(parameter.getEstablishmentId())) {
-            throw new EntityNotFoundException(ESTABLISHMENT_NOT_FOUND);
-        }
-
-        Consumer consumer = consumerRepository.getOne(parameter.getConsumerId());
-
-        Statement statement = new Statement();
-        statement.setConsumer(consumer);
-        statement.setEstablishment(establishmentRepository.getOne(parameter.getEstablishmentId()));
-        statement.setCardNumber(parameter.getCardNumber());
-        statement.setProductDescription(parameter.getProductDescription());
-        statement.setValue(parameter.getProductValue());
-
-        consumerRepository.save(consumer);
-        statementRepository.save(statement);
-    }
 }

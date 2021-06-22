@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import br.com.alelo.consumer.consumerpat.entity.enumeration.BuyType;
+import br.com.alelo.consumer.consumerpat.entity.enumeration.PurchaseType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -16,13 +16,14 @@ public class Card {
     private Integer id;
 
     private String number;
-
     private BigDecimal balance;
-
-    private BuyType type;
+    private PurchaseType type;
 
     @ManyToOne
     @JsonIgnore
     private Consumer consumer;
 
+    public void registerPurchase(BigDecimal productValue) {
+        balance = balance.subtract(productValue);
+    }
 }
