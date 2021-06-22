@@ -17,4 +17,10 @@ public class Messages {
 
     @Value("${msg.insufficient_balance}")
     public String insufficientBalance;
+
+    @Value("${msg.value_toadd_mustbe_positive}")
+    public String valueToAddMustBePositive;
+
+    @Value("${msg.productvalue_mustbe_positive}")
+    public String productValueMustBePositive;
 }

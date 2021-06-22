@@ -36,6 +36,9 @@ public class PurchaseService {
     }
 
     private void updateCard(PurchaseParameter parameter) {
+        if (parameter.getProductValue().doubleValue() < 0) {
+            throw new IllegalArgumentException(messages.productValueMustBePositive);
+        }
         Card card = getValidatedCard(parameter);
         parameter.setProductValue(getValidatedFinalProductValue(parameter, card));
         card.registerPurchase(parameter.getProductValue());

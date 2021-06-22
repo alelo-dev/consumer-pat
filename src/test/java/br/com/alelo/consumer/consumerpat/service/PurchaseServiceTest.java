@@ -75,12 +75,25 @@ class PurchaseServiceTest {
         PurchaseParameter parameter = new PurchaseParameter();
         parameter.setConsumerId(1);
         parameter.setCardNumber("0101");
+        parameter.setProductValue(BigDecimal.ONE);
 
         when(consumerService.existsConsumerById(parameter.getConsumerId())).thenReturn(true);
         when(consumerService.getCardOrException(parameter.getConsumerId(), parameter.getCardNumber()))
         .thenThrow(EntityNotFoundException.class);
 
         assertThrows(EntityNotFoundException.class, () -> service.buy(parameter));
+    }
+
+    @Test
+    void buyShouldThrowIllegalArgumentExceptionIfProducValueIsNegative() {
+        PurchaseParameter parameter = new PurchaseParameter();
+        parameter.setProductValue(BigDecimal.valueOf(-99));
+
+        when(consumerService.existsConsumerById(parameter.getConsumerId())).thenReturn(true);
+        when(consumerService.getCardOrException(parameter.getConsumerId(), parameter.getCardNumber())).thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.buy(parameter));
+        assertEquals(messages.productValueMustBePositive, exception.getMessage());
     }
 
     @Test
@@ -109,6 +122,7 @@ class PurchaseServiceTest {
         parameter.setConsumerId(1);
         parameter.setCardNumber("0101");
         parameter.setType(PurchaseType.FOOD);
+        parameter.setProductValue(BigDecimal.ONE);
 
         Card card = new Card();
         card.setType(PurchaseType.DRUGSTORE);

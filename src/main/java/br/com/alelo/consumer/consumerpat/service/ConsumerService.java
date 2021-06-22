@@ -65,6 +65,10 @@ public class ConsumerService {
 
     @Transactional
     public void addValueToCard(int consumerId, BigDecimal valueToAdd, String cardNumber) {
+        if (valueToAdd.doubleValue() < 0) {
+            throw new IllegalArgumentException(messages.valueToAddMustBePositive);
+        }
+
         Card card = getCardOrException(consumerId, cardNumber);
         card.setBalance(card.getBalance().add(valueToAdd));
         cardRepository.save(card);
