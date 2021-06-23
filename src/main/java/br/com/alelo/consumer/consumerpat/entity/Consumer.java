@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.model.entity;
+package br.com.alelo.consumer.consumerpat.entity;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -10,14 +10,26 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.AccessLevel;
 
-@Data
-@Builder
 @Entity
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Setter
+@Getter
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"documentNumber"})})
 public class Consumer {
 
 	@Id
@@ -28,28 +40,24 @@ public class Consumer {
 	private String name;
 	
 	@Column(nullable = false)
-	private Integer documentNumber;
+	private String documentNumber;
 	
 	private LocalDate birthDate;
 
 	//contacts
-	private Integer mobilePhoneNumber;
-	
-	private Integer residencePhoneNumber;
-	
-	private Integer phoneNumber;
+	private String mobilePhoneNumber;
+	private String residencePhoneNumber;
+	private String phoneNumber;
 	
 	@Column(nullable = false)
 	private String email;
 
 	//Address
-	private String street;
-	private Integer number;
-	private String city;
-	private String country;
-	private Integer portalCode;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "consumer_adress_id", nullable = false)
+	private ConsumerAddress consumerAddress;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "consumer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Collection<ConsumerCard> consumerCards;
 
 	public void merge(final Consumer consumerConverted) {
@@ -60,11 +68,6 @@ public class Consumer {
 		this.residencePhoneNumber = consumerConverted.getResidencePhoneNumber();
 		this.phoneNumber = consumerConverted.getPhoneNumber();
 		this.email = consumerConverted.getEmail();
-		this.street = consumerConverted.getStreet();
-		this.number = consumerConverted.getNumber();
-		this.city = consumerConverted.getCity();
-		this.country = consumerConverted.getCountry();
-		this.portalCode = consumerConverted.getPortalCode();
 	}
 
 }

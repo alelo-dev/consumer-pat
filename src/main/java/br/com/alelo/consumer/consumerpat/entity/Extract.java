@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.model.entity;
+package br.com.alelo.consumer.consumerpat.entity;
 
 import java.time.LocalDate;
 
@@ -14,12 +14,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import br.com.alelo.consumer.consumerpat.model.enumeration.CardType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
 @Entity
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Setter
+@Getter
 public class Extract {
 
 	@Id

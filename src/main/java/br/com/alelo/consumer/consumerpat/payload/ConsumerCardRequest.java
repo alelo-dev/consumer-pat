@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.model.dto;
+package br.com.alelo.consumer.consumerpat.payload;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,10 +7,9 @@ import br.com.alelo.consumer.consumerpat.model.enumeration.CardType;
 
 @Builder
 @Getter
-public class ConsumerCardDTO{
+public class ConsumerCardRequest{
 
 	private String cardNumber;
-	private Double cardBalance;
 	private CardType cardType;
 
 }
