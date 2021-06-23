@@ -9,13 +9,13 @@ import org.springframework.util.StringUtils;
 
 import br.com.alelo.consumer.consumerpat.entity.ConsumerCard;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.exception.CardNumberInvalidEstablishmentTypeException;
 import br.com.alelo.consumer.consumerpat.exception.CardNumberInvalidException;
 import br.com.alelo.consumer.consumerpat.exception.CardTypeInvalidException;
 import br.com.alelo.consumer.consumerpat.exception.ConsumerCardNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.ValueInvalidException;
-import br.com.alelo.consumer.consumerpat.model.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.payload.CardRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerCardRequest;
 import br.com.alelo.consumer.consumerpat.payload.converter.ConsumerCardConverter;

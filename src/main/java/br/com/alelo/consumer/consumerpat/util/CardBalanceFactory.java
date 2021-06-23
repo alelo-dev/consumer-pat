@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.util;
 
+import br.com.alelo.consumer.consumerpat.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.exception.CardTypeInvalidException;
-import br.com.alelo.consumer.consumerpat.model.enumeration.CardType;
 
 public class CardBalanceFactory {
 

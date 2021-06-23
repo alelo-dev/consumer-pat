@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import br.com.alelo.consumer.consumerpat.model.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.enumeration.CardType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

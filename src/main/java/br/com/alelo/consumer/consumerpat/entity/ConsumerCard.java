@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import br.com.alelo.consumer.consumerpat.model.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.enumeration.CardType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
