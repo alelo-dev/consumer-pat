@@ -1,16 +1,15 @@
 package br.com.alelo.consumer.consumerpat.application;
 
-import br.com.alelo.consumer.consumerpat.domain.model.Consumer;
-import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
-
-import java.util.List;
+import br.com.alelo.consumer.consumerpat.dto.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ConsumerApplicationService {
 
-    List<Consumer> listAllConsumers();
-    void createConsumer(Consumer consumer);
-    void updateConsumer(Consumer consumer);
-    void setBalance(int cardNumber, double value);
-    void buy(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value);
+    Page<ConsumerResponseDto> listAllConsumers(Pageable pageable);
+    void createConsumer(ConsumerCreationDto consumer);
+    void updateConsumer(ConsumerUpdateDto consumer);
+    void setBalance(SetBalanceRequestDto balance);
+    void buy(BuyItemRequestDto buyItemRequestDto);
 
 }

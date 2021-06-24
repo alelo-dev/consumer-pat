@@ -7,9 +7,6 @@ import java.util.Optional;
 
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
-    Optional<Consumer> findByCardsFoodCardNumber(int cardNumber);
+    Optional<Consumer> findByCardsCardNumber(int cardNumber);
 
-    Optional<Consumer> findByCardsFuelCardNumber(int cardNumber);
-
-    Optional<Consumer> findByCardsDrugstoreNumber(int cardNumber);
 }

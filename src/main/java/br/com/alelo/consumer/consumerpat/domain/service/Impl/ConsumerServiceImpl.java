@@ -2,13 +2,18 @@ package br.com.alelo.consumer.consumerpat.domain.service.Impl;
 
 import br.com.alelo.consumer.consumerpat.domain.model.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.service.ConsumerService;
-import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.dto.BuyItemRequestDto;
+import br.com.alelo.consumer.consumerpat.dto.ConsumerCreationDto;
+import br.com.alelo.consumer.consumerpat.dto.ConsumerUpdateDto;
+import br.com.alelo.consumer.consumerpat.mappers.AddressMapper;
+import br.com.alelo.consumer.consumerpat.mappers.ConsumerMapper;
+import br.com.alelo.consumer.consumerpat.mappers.ContactsMapper;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,66 +24,60 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     public void setBalance(int cardNumber, double value) {
 
-        var consumer = repository.findByCardsDrugstoreNumber(cardNumber);
+        var consumer = repository.findByCardsCardNumber(cardNumber);
 
-        if(consumer.isPresent()) {
-            // é cartão de farmácia
-            consumer.get().getCards().setDrugstoreCardBalance(consumer.get().getCards().getDrugstoreCardBalance() + value);
-            repository.save(consumer.get());
-        } else {
-            consumer = repository.findByCardsFoodCardNumber(cardNumber);
-            if(consumer.isPresent()) {
-                // é cartão de refeição
-                consumer.get().getCards().setFoodCardBalance(consumer.get().getCards().getFoodCardBalance() + value);
-                repository.save(consumer.get());
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByCardsFuelCardNumber(cardNumber);
-                consumer.get().getCards().setFuelCardBalance(consumer.get().getCards().getFuelCardBalance() + value);
-                repository.save(consumer.get());
-            }
-        }
-
+        consumer.ifPresent(con->{
+            var card = con.getCards().stream()
+                    .filter(car-> car.getCardNumber() == cardNumber)
+                    .findFirst();
+            card.ifPresent(car-> car.addBalance(value));
+            repository.save(con);
+        });
     }
 
     @Override
-    public void save(Consumer consumer) {
+    public void save(ConsumerCreationDto consumerCreationDto) {
+        var consumer = ConsumerMapper.mapConsumerCreationDtoToConsumer(consumerCreationDto);
         repository.save(consumer);
     }
 
     @Override
-    public List<Consumer> listAllConsumers() {
-        return repository.findAll();
+    public void update(ConsumerUpdateDto consumerUpdateDto) {
+        var consumer = repository.findById(consumerUpdateDto.getId());
+        consumer.ifPresent(c->{
+            c.setAddress(AddressMapper.mapAddressUpdateDtoToAddress(consumerUpdateDto.getAddress(), c.getAddress()));
+            c.setBirthDate(consumerUpdateDto.getBirthDate());
+            c.setContacts(ContactsMapper.mapContactsUpdateDtoToContacts(consumerUpdateDto.getContacts(), c.getContacts()));
+            c.setDocumentNumber(consumerUpdateDto.getDocumentNumber());
+            c.setName(consumerUpdateDto.getName());
+            repository.save(c);
+        });
     }
 
     @Override
-    public double buy(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Optional<Consumer> consumer;
+    public Page<Consumer> listAllConsumers(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
 
-        if (establishmentType == EstablishmentType.Food) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            double cashback  = (value / 100) * 10;
-            value = value - cashback;
+    @Override
+    public BuyItemRequestDto buy(BuyItemRequestDto buyItemRequestDto) {
 
-            consumer = repository.findByCardsFoodCardNumber(cardNumber);
-            consumer.get().getCards().setFoodCardBalance(consumer.get().getCards().getFoodCardBalance() - value);
-            repository.save(consumer.get());
+        Optional<Consumer> consumer = repository.findByCardsCardNumber(buyItemRequestDto.getCardNumber());
 
-        }else if(establishmentType == EstablishmentType.Drugstore) {
-            consumer = repository.findByCardsDrugstoreNumber(cardNumber);
-            consumer.get().getCards().setDrugstoreCardBalance(consumer.get().getCards().getDrugstoreCardBalance() - value);
-            repository.save(consumer.get());
+        consumer.ifPresent(con-> {
+            var card = con.getCards().stream()
+                    .filter(car-> car.getCardNumber() == buyItemRequestDto.getCardNumber())
+                    .findFirst();
+            card.ifPresent(car->{
+                buyItemRequestDto
+                        .setValue(CardCalculatorFactory
+                                .getCardCalculator(buyItemRequestDto.getEstablishmentType())
+                                .calculate(buyItemRequestDto.getValue()));
+                car.removeBalance(buyItemRequestDto.getValue());
+            });
+            repository.save(con);
+        });
 
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByCardsFuelCardNumber(cardNumber);
-            consumer.get().getCards().setFuelCardBalance(consumer.get().getCards().getFuelCardBalance() - value);
-            repository.save(consumer.get());
-        }
-
-        return value;
+        return buyItemRequestDto;
     }
 }

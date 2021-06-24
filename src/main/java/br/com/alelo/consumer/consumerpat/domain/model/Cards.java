@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.domain.model;
 
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -13,12 +14,15 @@ public class Cards {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private int foodCardNumber;
-    private double foodCardBalance;
+    private EstablishmentType cardType;
+    private int cardNumber;
+    private double cardBalance;
 
-    private int fuelCardNumber;
-    private double fuelCardBalance;
+    public void addBalance(double balance){
+        this.cardBalance+=balance;
+    }
+    public void removeBalance(double balance){
+        this.cardBalance-=balance;
+    }
 
-    private int drugstoreNumber;
-    private double drugstoreCardBalance;
 }

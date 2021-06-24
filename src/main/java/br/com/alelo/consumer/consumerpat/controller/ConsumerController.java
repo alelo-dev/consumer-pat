@@ -1,16 +1,14 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.application.ConsumerApplicationService;
-import br.com.alelo.consumer.consumerpat.domain.model.Consumer;
-import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-
-@Controller
+@RestController
 @RequestMapping("/consumer")
 @RequiredArgsConstructor
 public class ConsumerController {
@@ -18,21 +16,24 @@ public class ConsumerController {
     private final ConsumerApplicationService consumerApplicationService;
 
     /** Deve listar todos os clientes (cerca de 500) **/
+
+   //devido a uma issue no springfox os parametros do pageable aparecem incorretos no swagger
+   //os parametros corretos são "page", "size" e "sort" caso queiram testar a paginação
     @GetMapping
-    public List<Consumer> listAllConsumers() {
-        return consumerApplicationService.listAllConsumers();
+    public Page<ConsumerResponseDto> listAllConsumers(Pageable pageable) {
+        return consumerApplicationService.listAllConsumers(pageable);
     }
 
     /** Cadastrar novos clientes **/
     @PostMapping
-    public void createConsumer(@RequestBody Consumer consumer) {
+    public void createConsumer(@RequestBody ConsumerCreationDto consumer) {
         consumerApplicationService.createConsumer(consumer);
     }
 
     /** Não deve ser possível alterar o saldo do cartão **/
-    @PutMapping
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        consumerApplicationService.createConsumer(consumer);
+    @PatchMapping
+    public void updateConsumer(@RequestBody ConsumerUpdateDto consumer) {
+        consumerApplicationService.updateConsumer(consumer);
     }
 
     /**
@@ -41,8 +42,8 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      **/
     @PutMapping(value = "/setcardbalance")
-    public void setBalance(int cardNumber, double value) {
-        consumerApplicationService.setBalance(cardNumber, value);
+    public void setBalance(@RequestBody SetBalanceRequestDto balance) {
+        consumerApplicationService.setBalance(balance);
     }
 
     /** O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -54,8 +55,8 @@ public class ConsumerController {
      * 3 - Posto de combustivel (Fuel)
      **/
     @PostMapping(value = "/buy")
-    public void buy(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        consumerApplicationService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+    public void buy(@RequestBody BuyItemRequestDto buyItemRequestDto) {
+        consumerApplicationService.buy(buyItemRequestDto);
     }
 
 }

@@ -4,7 +4,8 @@ package br.com.alelo.consumer.consumerpat.domain.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 
 @Data
@@ -16,12 +17,11 @@ public class Consumer {
     private Integer id;
     private String name;
     private int documentNumber;
-    private Date birthDate;
-    @OneToOne
+    private LocalDate birthDate;
+    @OneToOne(cascade=CascadeType.ALL)
     private Contacts contacts;
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     private Address address;
-    @OneToOne
-    private Cards cards;
-
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Cards> cards;
 }

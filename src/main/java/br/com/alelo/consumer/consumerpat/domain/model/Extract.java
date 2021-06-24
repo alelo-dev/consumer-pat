@@ -3,6 +3,8 @@ package br.com.alelo.consumer.consumerpat.domain.model;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 public class Extract {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int establishmentNameId;
     private String establishmentName;

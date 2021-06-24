@@ -1,15 +1,14 @@
 package br.com.alelo.consumer.consumerpat.application.impl;
 
 import br.com.alelo.consumer.consumerpat.application.ConsumerApplicationService;
-import br.com.alelo.consumer.consumerpat.domain.model.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.service.ConsumerService;
 import br.com.alelo.consumer.consumerpat.domain.service.ExtractService;
-import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.dto.*;
+import br.com.alelo.consumer.consumerpat.mappers.ConsumerMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -19,26 +18,29 @@ public class ConsumerApplicationServiceImpl implements ConsumerApplicationServic
     private final ExtractService extractService;
 
 
-    public List<Consumer> listAllConsumers(){
-        return consumerService.listAllConsumers();
+    public Page<ConsumerResponseDto> listAllConsumers(Pageable pageable){
+        return consumerService.listAllConsumers(pageable)
+                .map(ConsumerMapper::mapConsumerToConsumerResponseDto);
+
     }
 
-    public void createConsumer(Consumer consumer) {
-        consumerService.save(consumer);
+    public void createConsumer(ConsumerCreationDto consumerCreationDto) {
+        consumerService.save(consumerCreationDto);
     }
 
-    public void updateConsumer(Consumer consumer) {
-        consumerService.save(consumer);
-    }
+    public void updateConsumer(ConsumerUpdateDto consumer) {
 
-
-    public void setBalance(int cardNumber, double value) {
-        consumerService.setBalance(cardNumber, value);
+        consumerService.update(consumer);
     }
 
 
-    public void buy(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        value = consumerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
-        extractService.saveExtract(establishmentName, productDescription, LocalDate.now(), cardNumber, value);
+    public void setBalance(SetBalanceRequestDto balance) {
+        consumerService.setBalance(balance.getCardNumber(), balance.getValue());
+    }
+
+
+    public void buy(BuyItemRequestDto buyItemRequestDto) {
+        buyItemRequestDto = consumerService.buy(buyItemRequestDto);
+        extractService.saveExtract(buyItemRequestDto);
     }
 }
