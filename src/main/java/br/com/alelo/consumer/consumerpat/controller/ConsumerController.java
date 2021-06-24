@@ -1,119 +1,57 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
 
+import static org.springframework.http.ResponseEntity.*;
 
-@Controller
-@RequestMapping("/consumer")
+@AllArgsConstructor
+@RestController
+@RequestMapping("consumers")
 public class ConsumerController {
 
-    @Autowired
-    ConsumerRepository repository;
+    private ConsumerService consumerService;
 
-    @Autowired
-    ExtractRepository extractRepository;
-
-
-    /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+    @GetMapping
+    @ApiOperation("Listar todos os consumidores de modo paginado")
+    public ResponseEntity<Page<Consumer>> getConsumers(Pageable pageable) {
+        Page<Consumer> consumers = consumerService.findAll(pageable);
+        return consumers.isEmpty() ? noContent().build() : ok(consumers);
     }
 
 
-    /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    @PostMapping
+    @ApiOperation("Cadastrar um novo consumidor")
+    public ResponseEntity<Consumer> postConsumer(@RequestBody Consumer consumer) {
+        consumerService.save(consumer);
+        return created(null).body(consumer);
     }
 
-    // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    @PatchMapping("/{consumerId}")
+    @ApiOperation("Alterar dados de um consumidor sem alterar o saldo do(s) cartão(ões)")
+    public ResponseEntity<Consumer> patchConsumer(@PathVariable @ApiParam("Id do consumidor") int consumerId, @RequestBody Consumer consumer) {
+        consumer.setId(consumerId);
+        consumerService.save(consumer);
+        return ok(consumer);
     }
 
-
-    /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
-     */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
-        }
+    @PatchMapping("/{consumerId}/balance/{cardNumber}/{transactionAmount}")
+    @ApiOperation("Recarga de cartão")
+    public ResponseEntity<Void> patchCardBalance(
+            @PathVariable @ApiParam("Id do consumidor") int consumerId,
+            @PathVariable @ApiParam("Número do cartão") String cardNumber,
+            @PathVariable @ApiParam("Valor da carga. Deve ser maior que zero")
+                    BigDecimal transactionAmount) {
+        consumerService.cardRecharge(consumerId, cardNumber, transactionAmount);
+        return ok().build();
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-        *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
-        */
-
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
-        }
-
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
-    }
-
 }
