@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -16,56 +16,61 @@ import br.com.alelo.consumer.consumerpat.exception.CardTypeInvalidException;
 import br.com.alelo.consumer.consumerpat.exception.ConsumerCardNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.ValueInvalidException;
+import br.com.alelo.consumer.consumerpat.factory.AbstractCardBalance;
+import br.com.alelo.consumer.consumerpat.factory.CardBalanceFactory;
 import br.com.alelo.consumer.consumerpat.payload.CardRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerCardRequest;
 import br.com.alelo.consumer.consumerpat.payload.converter.ConsumerCardConverter;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerCardRepository;
-import br.com.alelo.consumer.consumerpat.util.AbstractCardBalance;
-import br.com.alelo.consumer.consumerpat.util.CardBalanceFactory;
+import br.com.alelo.consumer.consumerpat.repository.ConsumerCardRepository;
+import lombok.AllArgsConstructor;
 
 
 @Service
+@AllArgsConstructor
 public class ConsumerCardService {
 	
-	@Autowired
-	private ExtractService extractService;
+	private final ExtractService extractService;
 
-	@Autowired
-	private ConsumerCardRepository consumerCardRepository;
+	private final ConsumerCardRepository consumerCardRepository;
 
 	public void save(final ConsumerCardRequest consumerCardRequest){
 		this.consumerCardRepository.saveAndFlush(ConsumerCardConverter.toEntity(consumerCardRequest));
 	}
 	
-	public void addBalanceCardNumber(final CardRequest cardRequest) throws CardNumberInvalidException, ValueInvalidException{
-		if(!StringUtils.hasText(cardRequest.getCardNumber())) {
+	public void addBalanceCardNumber(final String cardNumber, final CardRequest cardRequest){
+		if(!StringUtils.hasText(cardNumber)) {
 			throw new CardNumberInvalidException();
 		}
 
-		if(ObjectUtils.isEmpty(cardRequest.getValue()) || cardRequest.getValue() < 0) {
+		if(ObjectUtils.isEmpty(cardRequest.getValue()) || cardRequest.getValue().compareTo(BigDecimal.ZERO) < 0) {
 			throw new ValueInvalidException();
 		}
 
-		final ConsumerCard consumerCard = this.findByCardNumber(cardRequest.getCardNumber());
+		final ConsumerCard consumerCard = this.findByCardNumber(cardNumber);
 		if(consumerCard != null) {
-			consumerCard.setCardBalance(consumerCard.getCardBalance() + cardRequest.getValue()); 
+			consumerCard.setCardBalance(consumerCard.getCardBalance().add(cardRequest.getValue())); 
 			this.update(consumerCard.getId(), consumerCard);
 		}
 	}
 	
-	public void removeBalanceCardNumber(final CardRequest cardRequest) throws CardNumberInvalidEstablishmentTypeException{
-		final ConsumerCard consumerCard = this.findByCardNumber(cardRequest.getCardNumber());
+	public void removeBalanceCardNumber(final String cardNumber, final CardRequest cardRequest){
+		if(!StringUtils.hasText(cardNumber)) {
+			throw new CardNumberInvalidException();
+		}
+		
+		final ConsumerCard consumerCard = this.findByCardNumber(cardNumber);
 
 		if(consumerCard != null) {
 			this.validateCardNumberTypeWithEstablishmentType(cardRequest.getEstablishmentType(), consumerCard);
 
 			final AbstractCardBalance abstractCardBalance = CardBalanceFactory.createFactory(consumerCard.getCardType());
-			final Double cardBalanceCalculated = abstractCardBalance.calculateCardBalanceForCardType(consumerCard.getCardBalance(), cardRequest.getValue());
+			final BigDecimal cardBalanceCalculated = abstractCardBalance.calculateCardBalanceForCardType(consumerCard.getCardBalance(), cardRequest.getValue());
 
 			consumerCard.setCardBalance(cardBalanceCalculated);
 			this.update(consumerCard.getId(), consumerCard);
 
 			final Extract extract = Extract.builder()
+					.establishmentNameId(cardRequest.getEstablishmentType())
 					.establishmentName(cardRequest.getEstablishmentName())
 					.productDescription(cardRequest.getProductDescription())
 					.dateBuy(LocalDate.now()) 
@@ -91,14 +96,12 @@ public class ConsumerCardService {
 		this.consumerCardRepository.saveAndFlush(consumerCard);
 	}
 	
-	private void validateCardNumberTypeWithEstablishmentType(final Integer establishmentType, final ConsumerCard consumerCard) {
-		final CardType cardType = CardType.getById(establishmentType);
-
-		if(cardType == null) {
+	private void validateCardNumberTypeWithEstablishmentType(final CardType establishmentType, final ConsumerCard consumerCard) {
+		if(establishmentType == null) {
 			throw new CardTypeInvalidException();
 		}
 
-		if(!consumerCard.getCardType().equals(cardType)) {
+		if(!consumerCard.getCardType().equals(establishmentType)) {
 			throw new CardNumberInvalidEstablishmentTypeException("This card number: " + consumerCard.getCardNumber() + " can only be used in " + consumerCard.getCardType().name().toLowerCase() + " establishments!");
 		}
 	}

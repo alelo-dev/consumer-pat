@@ -1,16 +1,16 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class ExtractService {
 
-	@Autowired
-	private ExtractRepository extractRepository;
+	private final ExtractRepository extractRepository;
 
 	public void save(final Extract extract){
 		this.extractRepository.saveAndFlush(extract);

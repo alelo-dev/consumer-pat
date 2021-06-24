@@ -23,6 +23,7 @@ public class ConsumerCardConverter {
 		return ConsumerCardResponse.builder()
 			.cardNumber(consumerCard.getCardNumber())
 			.cardType(consumerCard.getCardType())
+			.cardBalance(consumerCard.getCardBalance())
 			.build();
 	}
 

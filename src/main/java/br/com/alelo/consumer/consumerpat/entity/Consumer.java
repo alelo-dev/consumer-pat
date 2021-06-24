@@ -21,12 +21,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.AccessLevel;
 
 @Entity
-@Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"documentNumber"})})
@@ -61,13 +60,14 @@ public class Consumer {
 	private Collection<ConsumerCard> consumerCards;
 
 	public void merge(final Consumer consumerConverted) {
-		this.name = consumerConverted.getEmail();
+		this.name = consumerConverted.getName();
 		this.documentNumber = consumerConverted.getDocumentNumber(); 
 		this.birthDate = consumerConverted.getBirthDate();
 		this.mobilePhoneNumber = consumerConverted.getMobilePhoneNumber();
 		this.residencePhoneNumber = consumerConverted.getResidencePhoneNumber();
 		this.phoneNumber = consumerConverted.getPhoneNumber();
 		this.email = consumerConverted.getEmail();
+		consumerAddress.merge(consumerConverted.getConsumerAddress());
 	}
 
 }

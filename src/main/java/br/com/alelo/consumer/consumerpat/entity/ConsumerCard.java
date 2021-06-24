@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import br.com.alelo.consumer.consumerpat.enumeration.CardType;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +23,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"cardNumber"})})
@@ -38,9 +39,9 @@ public class ConsumerCard {
 	@Column(nullable = false)
 	private String cardNumber;
 
-	@Column(nullable = false)
+	@Column(nullable=false, precision=10, scale=2)
 	@Builder.Default
-	private Double cardBalance = 0.0;
+	private BigDecimal cardBalance = BigDecimal.ZERO;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)

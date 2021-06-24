@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -14,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import br.com.alelo.consumer.consumerpat.enumeration.CardType;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +22,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class Extract {
@@ -50,7 +50,7 @@ public class Extract {
 	@JoinColumn(name = "consumer_card_id", nullable = false)
 	private ConsumerCard consumerCard;
 	
-	@Builder.Default
-	private Double value = 0.0;
+	@Column(nullable=false, precision=10, scale=2)
+	private BigDecimal value;
 
 }

@@ -1,5 +1,8 @@
 package br.com.alelo.consumer.consumerpat.payload;
 
+import java.math.BigDecimal;
+
+import br.com.alelo.consumer.consumerpat.enumeration.CardType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,10 +10,9 @@ import lombok.Getter;
 @Getter
 public class CardRequest {
 	
-	private Integer establishmentType;
+	private CardType establishmentType;
 	private String establishmentName; 
-	private String cardNumber; 
 	private String productDescription;
-	private Double value;
+	private BigDecimal value;
 	
 }
