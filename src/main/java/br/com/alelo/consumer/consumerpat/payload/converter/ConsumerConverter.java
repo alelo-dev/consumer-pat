@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.model.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerResponse;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerUpdateRequest;

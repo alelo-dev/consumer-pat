@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alelo.consumer.consumerpat.payload.CardRequest;
+import br.com.alelo.consumer.consumerpat.payload.CardValueRequest;
 import br.com.alelo.consumer.consumerpat.service.ConsumerCardService;
 import lombok.RequiredArgsConstructor;
 
@@ -26,8 +27,8 @@ public class CardController {
 	 */
 	@PostMapping(value = "/card-balances/add")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateCardBalance(@RequestHeader(name = "cardNumber") String cardNumber, @RequestBody CardRequest cardRequest){
-		this.consumerCardService.addBalanceCardNumber(cardNumber, cardRequest);
+	public void updateCardBalance(@RequestHeader(name = "cardNumber") String cardNumber, @RequestBody CardValueRequest cardValueRequest){
+		this.consumerCardService.addBalanceCardNumber(cardNumber, cardValueRequest);
 	}
 
 	@PostMapping(value = "/buys")

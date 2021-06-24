@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.enumeration;
+package br.com.alelo.consumer.consumerpat.model.enums;
 
 import lombok.Getter;
 

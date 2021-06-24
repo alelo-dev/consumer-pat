@@ -3,7 +3,7 @@ package br.com.alelo.consumer.consumerpat.payload.converter;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import br.com.alelo.consumer.consumerpat.entity.ConsumerCard;
+import br.com.alelo.consumer.consumerpat.model.entity.ConsumerCard;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerCardRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerCardResponse;
 import lombok.AccessLevel;

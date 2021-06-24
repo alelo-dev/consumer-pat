@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.model.entity;
 
 import java.time.LocalDate;
 import java.util.Collection;

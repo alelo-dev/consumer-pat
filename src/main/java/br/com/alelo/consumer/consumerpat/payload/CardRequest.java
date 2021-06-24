@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.payload;
 
 import java.math.BigDecimal;
 
-import br.com.alelo.consumer.consumerpat.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.model.enums.CardType;
 import lombok.Builder;
 import lombok.Getter;
 

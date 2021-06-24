@@ -7,9 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import br.com.alelo.consumer.consumerpat.entity.ConsumerCard;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.exception.CardNumberInvalidEstablishmentTypeException;
 import br.com.alelo.consumer.consumerpat.exception.CardNumberInvalidException;
 import br.com.alelo.consumer.consumerpat.exception.CardTypeInvalidException;
@@ -18,7 +15,11 @@ import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.ValueInvalidException;
 import br.com.alelo.consumer.consumerpat.factory.AbstractCardBalance;
 import br.com.alelo.consumer.consumerpat.factory.CardBalanceFactory;
+import br.com.alelo.consumer.consumerpat.model.entity.ConsumerCard;
+import br.com.alelo.consumer.consumerpat.model.entity.Extract;
+import br.com.alelo.consumer.consumerpat.model.enums.CardType;
 import br.com.alelo.consumer.consumerpat.payload.CardRequest;
+import br.com.alelo.consumer.consumerpat.payload.CardValueRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerCardRequest;
 import br.com.alelo.consumer.consumerpat.payload.converter.ConsumerCardConverter;
 import br.com.alelo.consumer.consumerpat.repository.ConsumerCardRepository;
@@ -37,18 +38,18 @@ public class ConsumerCardService {
 		this.consumerCardRepository.saveAndFlush(ConsumerCardConverter.toEntity(consumerCardRequest));
 	}
 	
-	public void addBalanceCardNumber(final String cardNumber, final CardRequest cardRequest){
+	public void addBalanceCardNumber(final String cardNumber, final CardValueRequest cardValueRequest){
 		if(!StringUtils.hasText(cardNumber)) {
 			throw new CardNumberInvalidException();
 		}
 
-		if(ObjectUtils.isEmpty(cardRequest.getValue()) || cardRequest.getValue().compareTo(BigDecimal.ZERO) < 0) {
+		if(ObjectUtils.isEmpty(cardValueRequest.getValue()) || cardValueRequest.getValue().compareTo(BigDecimal.ZERO) < 0) {
 			throw new ValueInvalidException();
 		}
 
 		final ConsumerCard consumerCard = this.findByCardNumber(cardNumber);
 		if(consumerCard != null) {
-			consumerCard.setCardBalance(consumerCard.getCardBalance().add(cardRequest.getValue())); 
+			consumerCard.setCardBalance(consumerCard.getCardBalance().add(cardValueRequest.getValue())); 
 			this.update(consumerCard.getId(), consumerCard);
 		}
 	}

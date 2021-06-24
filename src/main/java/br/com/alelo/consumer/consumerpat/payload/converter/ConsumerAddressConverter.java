@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.payload.converter;
 
-import br.com.alelo.consumer.consumerpat.entity.ConsumerAddress;
+import br.com.alelo.consumer.consumerpat.model.entity.ConsumerAddress;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerAddressRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerAddressResponse;
 import lombok.AccessLevel;

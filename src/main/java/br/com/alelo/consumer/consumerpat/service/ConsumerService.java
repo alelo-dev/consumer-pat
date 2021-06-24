@@ -5,9 +5,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.DocumentoNumberAlreadyRegisteredException;
+import br.com.alelo.consumer.consumerpat.model.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerRequest;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerResponse;
 import br.com.alelo.consumer.consumerpat.payload.ConsumerUpdateRequest;
