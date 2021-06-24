@@ -129,7 +129,7 @@ class ConsumerTestApplicationTests {
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy with wrong card (Fuel)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance)
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance/2)
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy (Fuel)
