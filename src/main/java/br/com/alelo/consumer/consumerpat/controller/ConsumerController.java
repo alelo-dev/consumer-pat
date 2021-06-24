@@ -76,11 +76,11 @@ public class ConsumerController {
      */
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/cardbalance", method = RequestMethod.PUT)
-    @ApiOperation(value = "Update Card Balance", tags = TAG_CONSUMER_CONTROLLER, response = Void.class)
+    @ApiOperation(value = "Add Balance on Card", tags = TAG_CONSUMER_CONTROLLER, response = Void.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Card Balance updated."),
 							@ApiResponse(code = 412, message = "Precondition Failed.")})
-    public void setBalance(int cardNumber, double value) {
-    	if (!consumerService.setBalance(cardNumber, value)) {
+    public void addBalance(int cardNumber, double value) {
+    	if (!consumerService.addBalance(cardNumber, value)) {
     		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
     	}
     }

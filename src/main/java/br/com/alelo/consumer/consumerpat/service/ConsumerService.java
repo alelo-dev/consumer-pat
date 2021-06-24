@@ -44,10 +44,11 @@ public class ConsumerService {
     	}
     }
     
-    public boolean setBalance(int cardNumber, double value) {
-    	return addDrugstoreCardBalance(cardNumber, value) ||
-    			addFoodCardBalance(cardNumber, value) ||
-    			addFuelCardBalance(cardNumber, value);
+    public boolean addBalance(int cardNumber, double value) {
+    	return value > 0 && 
+    		(addDrugstoreCardBalance(cardNumber, value) ||
+    		 addFoodCardBalance(cardNumber, value) ||
+    		 addFuelCardBalance(cardNumber, value));
     }
     
     public Extract buy(ConsumerBuyDTO consumerBuyDTO) {
