@@ -71,15 +71,15 @@ public class ConsumerService {
     	if (value >= 0) { 
 	        if (establishmentType == Constants.ESTABLISHMENT_TYPE_FOOD) {
 	            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-	            calculateExtraValue(value, -10);
+	        	value = calculateExtraValue(value, -10);
 	
 	            buy = addFoodCardBalance(cardNumber, -value);
 	
-	        } else if(establishmentType == Constants.ESTABLISHMENT_TYPE_DRUGSTORE) {
+	        } else if (establishmentType == Constants.ESTABLISHMENT_TYPE_DRUGSTORE) {
 	        	buy = addDrugstoreCardBalance(cardNumber, -value);
-	        } else if(establishmentType == Constants.ESTABLISHMENT_TYPE_FUEL) {
+	        } else if (establishmentType == Constants.ESTABLISHMENT_TYPE_FUEL) {
 	            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-	        	calculateExtraValue(value, 35);
+	        	value = calculateExtraValue(value, 35);
 	
 	        	buy = addFuelCardBalance(cardNumber, -value);
 	        }

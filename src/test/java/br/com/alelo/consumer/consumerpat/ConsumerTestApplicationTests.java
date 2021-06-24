@@ -133,7 +133,7 @@ class ConsumerTestApplicationTests {
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy (Fuel)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance)
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance/2)
 				.andExpect(status().isCreated());
 	}
 	
