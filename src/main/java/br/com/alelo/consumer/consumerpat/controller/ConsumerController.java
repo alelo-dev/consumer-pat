@@ -24,22 +24,22 @@ import lombok.RequiredArgsConstructor;
 public class ConsumerController {
 
 	private final ConsumerService consumerService;
-
-	/* Deve listar todos os clientes (cerca de 500) */
-	@GetMapping()
-	@ResponseStatus(HttpStatus.OK)
-	public PageImpl<ConsumerResponse> listAllConsumers(final Pageable pageable){
-		return this.consumerService.findAll(pageable);
-	}
-
+	
 	@GetMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ConsumerResponse findById(@PathVariable final Long id){
 		return this.consumerService.findConsumerDTOById(id);
 	}
 
+	/* Deve listar todos os clientes (cerca de 500) */
+	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	public PageImpl<ConsumerResponse> listAllConsumers(final Pageable pageable){
+		return this.consumerService.findAll(pageable);
+	}
+
 	/* Cadastrar novos clientes */
-	@PostMapping()
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createConsumer(@RequestBody final ConsumerRequest consumerRequest){
 		this.consumerService.save(consumerRequest);
