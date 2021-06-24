@@ -34,12 +34,16 @@ public class ConsumerController {
 
 
     /* Cadastrar novos clientes */
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.CREATED)    
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
@@ -51,7 +55,8 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.PUT)
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
@@ -76,7 +81,8 @@ public class ConsumerController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
