@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
@@ -49,7 +50,7 @@ public class ConsumerService {
     			addFuelCardBalance(cardNumber, value);
     }
     
-    public Extract buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    public Extract buy(ConsumerBuyDTO consumerBuyDTO) {
     	/* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -58,21 +59,29 @@ public class ConsumerService {
         * 2 - Farmácia (DrugStore)
         * 3 - Posto de combustivel (Fuel)
         */
+    	
+    	int establishmentType = consumerBuyDTO.getEstablishmentType();
+    	String establishmentName = consumerBuyDTO.getEstablishmentName();
+    	int cardNumber = consumerBuyDTO.getCardNumber();
+    	String productDescription = consumerBuyDTO.getProductDescription();
+    	double value = consumerBuyDTO.getValue();
 
     	boolean buy = false;
-        if (establishmentType == Constants.ESTABLISHMENT_TYPE_FOOD) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            calculateExtraValue(value, -10);
-
-            buy = addFoodCardBalance(cardNumber, -value);
-
-        } else if(establishmentType == Constants.ESTABLISHMENT_TYPE_DRUGSTORE) {
-        	buy = addDrugstoreCardBalance(cardNumber, -value);
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-        	calculateExtraValue(value, 35);
-
-        	buy = addFuelCardBalance(cardNumber, -value);
+    	if (value >= 0) { 
+	        if (establishmentType == Constants.ESTABLISHMENT_TYPE_FOOD) {
+	            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+	            calculateExtraValue(value, -10);
+	
+	            buy = addFoodCardBalance(cardNumber, -value);
+	
+	        } else if(establishmentType == Constants.ESTABLISHMENT_TYPE_DRUGSTORE) {
+	        	buy = addDrugstoreCardBalance(cardNumber, -value);
+	        } else if(establishmentType == Constants.ESTABLISHMENT_TYPE_FUEL) {
+	            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
+	        	calculateExtraValue(value, 35);
+	
+	        	buy = addFuelCardBalance(cardNumber, -value);
+	        }
         }
 
         if (buy) {

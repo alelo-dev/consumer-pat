@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
@@ -90,8 +91,8 @@ public class ConsumerController {
     @ApiOperation(value = "Make a purchase", tags = TAG_CONSUMER_CONTROLLER, response = Extract.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Successful purchase."),
 							@ApiResponse(code = 412, message = "Precondition Failed.")})
-    public Extract buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-    	Extract extract = consumerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+    public Extract buy(@RequestBody ConsumerBuyDTO consumerBuyDTO) {
+    	Extract extract = consumerService.buy(consumerBuyDTO);
     	if (extract == null) {
     		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
     	} else {

@@ -18,12 +18,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.util.Constants;
 
@@ -115,28 +117,23 @@ class ConsumerTestApplicationTests {
 		createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, foodCardNumber, foodCardBalance, fuelCardNumber, fuelCardBalance);
 		
 		// Buy (Food)
-		this.mvc.perform(post(buildURLMakeAPurchase(Constants.ESTABLISHMENT_TYPE_FOOD, "Establishment Name", foodCardNumber, "Product Description", foodCardBalance))
-				.accept(MediaType.APPLICATION_JSON))
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FOOD, "Establishment Name", foodCardNumber, "Product Description", foodCardBalance)
 				.andExpect(status().isCreated());
 		
 		// Buy (Drugstore)
-		this.mvc.perform(post(buildURLMakeAPurchase(Constants.ESTABLISHMENT_TYPE_DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance))
-				.accept(MediaType.APPLICATION_JSON))
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
 				.andExpect(status().isCreated());
 		
 		// Buy without balance (Drugstore)
-		this.mvc.perform(post(buildURLMakeAPurchase(Constants.ESTABLISHMENT_TYPE_DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance))
-				.accept(MediaType.APPLICATION_JSON))
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy with wrong card (Fuel)
-		this.mvc.perform(post(buildURLMakeAPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance))
-				.accept(MediaType.APPLICATION_JSON))
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance)
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy (Fuel)
-		this.mvc.perform(post(buildURLMakeAPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance))
-				.accept(MediaType.APPLICATION_JSON))
+		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance)
 				.andExpect(status().isCreated());
 	}
 	
@@ -147,14 +144,12 @@ class ConsumerTestApplicationTests {
 		return url.toString();
 	}
 	
-	private String buildURLMakeAPurchase(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-		StringBuilder url = new StringBuilder().append(this.REQUEST_MAPPING).append("buy")
-				.append("?").append("establishmentType=").append(establishmentType)
-				.append("&").append("establishmentName=").append(establishmentName)
-				.append("&").append("cardNumber=").append(cardNumber)
-				.append("&").append("productDescription=").append(productDescription)
-				.append("&").append("value=").append(value);
-		return url.toString();
+	private ResultActions makeNewPurchase(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws Exception {
+		String url = this.REQUEST_MAPPING.concat("buy");
+		
+		return this.mvc.perform(post(url)
+				.content(this.objectMapper.writeValueAsString(new ConsumerBuyDTO(establishmentType, establishmentName, cardNumber, productDescription, value)))
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 	}
 	
 	private Consumer createNewConsumer(int drugstoreCardNumber, double drugstoreCardBalance, int foodCardNumber, double foodCardBalance, int fuelCardNumber, double fuelCardBalance) throws Exception {
