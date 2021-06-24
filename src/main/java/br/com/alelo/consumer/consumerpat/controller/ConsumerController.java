@@ -98,5 +98,4 @@ public class ConsumerController {
     		return extract;
     	}
     }
-
 }
