@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,9 @@ import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentTypeEnum;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import br.com.alelo.consumer.consumerpat.util.Constants;
 
 @Service
 public class ConsumerService {
@@ -62,26 +64,21 @@ public class ConsumerService {
         * 3 - Posto de combustivel (Fuel)
         */
     	
-    	int establishmentType = consumerBuyDTO.getEstablishmentType();
+    	EstablishmentTypeEnum establishmentType = consumerBuyDTO.getEstablishmentType();
     	String establishmentName = consumerBuyDTO.getEstablishmentName();
     	int cardNumber = consumerBuyDTO.getCardNumber();
     	String productDescription = consumerBuyDTO.getProductDescription();
     	double value = consumerBuyDTO.getValue();
 
     	boolean buy = false;
-    	if (value >= 0) { 
-	        if (establishmentType == Constants.ESTABLISHMENT_TYPE_FOOD) {
-	            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-	        	value = calculateExtraValue(value, -10);
-	
+    	if (value >= 0) {
+    		value = calculateExtraValue(value, establishmentType);
+    		
+	        if (establishmentType == EstablishmentTypeEnum.FOOD) {
 	            buy = addFoodCardBalance(cardNumber, -value);
-	
-	        } else if (establishmentType == Constants.ESTABLISHMENT_TYPE_DRUGSTORE) {
+	        } else if (establishmentType == EstablishmentTypeEnum.DRUGSTORE) {
 	        	buy = addDrugstoreCardBalance(cardNumber, -value);
-	        } else if (establishmentType == Constants.ESTABLISHMENT_TYPE_FUEL) {
-	            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-	        	value = calculateExtraValue(value, 35);
-	
+	        } else if (establishmentType == EstablishmentTypeEnum.FUEL) {
 	        	buy = addFuelCardBalance(cardNumber, -value);
 	        }
         }
@@ -94,8 +91,8 @@ public class ConsumerService {
         }
     }
     
-    private double calculateExtraValue(double value, int percentage) {
-    	Double extra = (value / 100) * percentage;
+    private double calculateExtraValue(double value, EstablishmentTypeEnum establishmentType) {
+    	Double extra = new BigDecimal(value / 100).multiply(new BigDecimal(establishmentType.getExtraValuePercentage())).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
         return value + extra;
     }
     

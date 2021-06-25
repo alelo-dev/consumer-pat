@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class ConsumerBuyDTO {
 	
-	public ConsumerBuyDTO(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+	public ConsumerBuyDTO(EstablishmentTypeEnum establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
 		super();
 		this.establishmentType = establishmentType;
 		this.establishmentName = establishmentName;
@@ -18,7 +19,7 @@ public class ConsumerBuyDTO {
 	}
 
 	@ApiModelProperty(notes = "Establishment Type: 1 - Food, 2 - DrugStore, 3 - Fuel.")
-	private int establishmentType;
+	private EstablishmentTypeEnum establishmentType;
 	
 	@ApiModelProperty(notes = "Establishment Name.")
 	private String establishmentName;

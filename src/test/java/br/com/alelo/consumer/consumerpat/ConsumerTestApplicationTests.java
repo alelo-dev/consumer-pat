@@ -32,7 +32,7 @@ import br.com.alelo.consumer.consumerpat.entity.Contact;
 import br.com.alelo.consumer.consumerpat.entity.DrugstoreCard;
 import br.com.alelo.consumer.consumerpat.entity.FoodCard;
 import br.com.alelo.consumer.consumerpat.entity.FuelCard;
-import br.com.alelo.consumer.consumerpat.util.Constants;
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentTypeEnum;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
@@ -122,23 +122,23 @@ class ConsumerTestApplicationTests {
 		createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, foodCardNumber, foodCardBalance, fuelCardNumber, fuelCardBalance);
 		
 		// Buy (Food)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FOOD, "Establishment Name", foodCardNumber, "Product Description", foodCardBalance)
+		makeNewPurchase(EstablishmentTypeEnum.FOOD, "Establishment Name", foodCardNumber, "Product Description", foodCardBalance)
 				.andExpect(status().isCreated());
 		
 		// Buy (Drugstore)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
+		makeNewPurchase(EstablishmentTypeEnum.DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
 				.andExpect(status().isCreated());
 		
 		// Buy without balance (Drugstore)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
+		makeNewPurchase(EstablishmentTypeEnum.DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy with wrong card (Fuel)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance/2)
+		makeNewPurchase(EstablishmentTypeEnum.FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance/2)
 				.andExpect(status().isPreconditionFailed());
 		
 		// Buy (Fuel)
-		makeNewPurchase(Constants.ESTABLISHMENT_TYPE_FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance/2)
+		makeNewPurchase(EstablishmentTypeEnum.FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance/2)
 				.andExpect(status().isCreated());
 	}
 	
@@ -149,7 +149,7 @@ class ConsumerTestApplicationTests {
 		return url.toString();
 	}
 	
-	private ResultActions makeNewPurchase(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws Exception {
+	private ResultActions makeNewPurchase(EstablishmentTypeEnum establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws Exception {
 		String url = this.REQUEST_MAPPING.concat("buy");
 		
 		return this.mvc.perform(post(url)
