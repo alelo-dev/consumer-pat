@@ -2,69 +2,75 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 
 import jdk.jfr.DataAmount;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 
 @Data
 @Entity
-public class Consumer {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Consumer implements Serializable {
+    private static final long SerialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Integer id;
+    private String name;
+    private int documentNumber;
+    private Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    private int mobilePhoneNumber;
+    private int residencePhoneNumber;
+    private int phoneNumber;
+    private String email;
 
     //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    private String street;
+    private int number;
+    private String city;
+    private String country;
+    private int portalCode;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    private Long foodCardNumber;
+    private double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    private Long fuelCardNumber;
+    private double fuelCardBalance;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    private Long drugstoreNumber;
+    private double drugstoreCardBalance;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
+    public Consumer(Integer id, String name, int documentNumber, Date birthDate, int mobilePhoneNumber,
+                    int residencePhoneNumber, int phoneNumber, String email, String street, int number,
+                    String city, String country, int portalCode, Long foodCardNumber, Long fuelCardNumber,
+                    Long drugstoreNumber) {
+        this.id = id;
+        this.name = name;
+        this.documentNumber = documentNumber;
+        this.birthDate = birthDate;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.residencePhoneNumber = residencePhoneNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+        this.portalCode = portalCode;
+        this.foodCardNumber = foodCardNumber;
+        this.fuelCardNumber = fuelCardNumber;
+        this.drugstoreNumber = drugstoreNumber;
     }
-
-
 }
