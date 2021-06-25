@@ -11,8 +11,8 @@ import java.util.Optional;
 public interface CardRepository extends JpaRepository<Card, Integer> {
 
     @Query("SELECT c FROM Card c where c.number = :cardNumber and c.type = :typeCard")
-    Optional<Card> findByFoodCardNumberAndType(@Param("cardNumber") Integer cardNumber, @Param("typeCard") int typeCard);
+    Optional<Card> findByFoodCardNumberAndType(@Param("cardNumber") Long cardNumber, @Param("typeCard") int typeCard);
 
     @Query("SELECT c FROM Card c where c.number = :cardNumber")
-    Optional<Card> findByCardNumber(@Param("cardNumber") Integer cardNumber);
+    Optional<Card> findByCardNumber(@Param("cardNumber") Long cardNumber);
 }

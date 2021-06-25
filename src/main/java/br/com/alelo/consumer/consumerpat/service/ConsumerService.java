@@ -9,13 +9,16 @@ import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.util.TypeCardsEnum;
 import br.com.alelo.consumer.consumerpat.util.exception.InvalidOperationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static br.com.alelo.consumer.consumerpat.util.converter.CustomConsumerConverter.parseList;
+import static br.com.alelo.consumer.consumerpat.util.converter.CustomConsumerConverter.parseObject;
+
 @Service
 public class ConsumerService {
 
@@ -25,27 +28,23 @@ public class ConsumerService {
 
     ConsumerService(ConsumerRepository repository) {this.repository = repository;}
 
-    public List<ConsumerVO> getAllConsumersList(){
-        List<Consumer> entityList = repository.getAllConsumersList();
-        return parseList(entityList);
+    public Page<Consumer> getAllConsumersList(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
-    public void save(ConsumerVO vo) {
+    public ConsumerVO save(ConsumerVO vo) {
         Optional<Consumer> entity = repository.findById(vo.getId());
-        if (entity.isPresent()) {
-            update(entity.get(), vo);
-        } else {
-            register(vo);
-        }
+        return parseObject(entity.isPresent() ? update(entity.get(), vo) : register(vo));
     }
 
-    private void register(ConsumerVO vo) {
+    private Consumer register(ConsumerVO vo) {
         Consumer consumer = saveConsumer(new Consumer(), vo);
 
         Address address = new Address(); address.setConsumerId(consumer.getId());
         saveAddress(address, vo);
 
         registerCards(consumer, vo);
+        return consumer;
     }
 
     private void registerCards(Consumer consumer, ConsumerVO vo) {
@@ -59,10 +58,10 @@ public class ConsumerService {
         cardRepository.save(fuel);
     }
 
-    private void update(Consumer entity, ConsumerVO vo) {
-        saveConsumer(entity, vo);
+    private Consumer update(Consumer entity, ConsumerVO vo) {
         saveAddress(entity.getAddress(), vo);
         updateCards(entity.getCards(), vo);
+        return saveConsumer(entity, vo);
     }
 
     private void updateCards(List<Card> cards, ConsumerVO vo) {
@@ -97,10 +96,12 @@ public class ConsumerService {
         return repository.save(entity);
     }
 
-    public void incrementBalance(int cardNumber, BigDecimal value) {
+    public void incrementBalance(Long cardNumber, BigDecimal value) {
         Card card = cardRepository.findByCardNumber(cardNumber)
                 .orElseThrow(() -> new InvalidOperationException("No records found for this card number: "+cardNumber));
+
         card.setBalance(card.getBalance().add(value));
         cardRepository.save(card);
     }
 }
+

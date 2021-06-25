@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.data.vo.v1;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +13,10 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonPropertyOrder({ "id", "name", "documentNumber", "birthDate", "mobilePhoneNumber", "residencePhoneNumber",
+        "phoneNumber", "email", "streetAddress", "numberAddress", "cityAddress", "countryAddress", "postalCodeAddress",
+        "foodCardNumber", "foodCardBalance", "fuelCardNumber", "fuelCardBalance", "drugstoreCardNumber",
+        "drugstoreCardBalance" })
 public class ConsumerVO implements Serializable {
 
     Integer id;
@@ -25,19 +31,24 @@ public class ConsumerVO implements Serializable {
     String email;
 
     //Address
+    @JsonProperty("streetAddress")
     String street;
+    @JsonProperty("numberAddress")
     Integer number;
+    @JsonProperty("cityAddress")
     String city;
+    @JsonProperty("countryAddress")
     String country;
+    @JsonProperty("postalCodeAddress")
     String postalCode;
 
     //cards
-    Integer foodCardNumber;
+    Long foodCardNumber;
     BigDecimal foodCardBalance;
 
-    Integer fuelCardNumber;
+    Long fuelCardNumber;
     BigDecimal fuelCardBalance;
 
-    Integer drugstoreCardNumber;
+    Long drugstoreCardNumber;
     BigDecimal drugstoreCardBalance;
 }
