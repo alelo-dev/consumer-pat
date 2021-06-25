@@ -1,6 +1,9 @@
 package br.com.alelo.consumer.consumerpat.enums;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,13 +15,19 @@ public enum EstablishmentTypeEnum {
 	DRUGSTORE(2, 0D),
 	FUEL(3, 35D);
 	
-	EstablishmentTypeEnum(int type, double extraValuePercentage) {
+	private EstablishmentTypeEnum(int type, double extraValuePercentage) {
 		this.type = type;
 		this.extraValuePercentage = extraValuePercentage;
 	}
 	
-	int type;
-	double extraValuePercentage;
+	static {
+		establishmentTypeMap = Arrays.asList(EstablishmentTypeEnum.values()).stream().collect(Collectors.toMap(EstablishmentTypeEnum::getType, Function.identity()));
+	}
+	
+	private int type;
+	private double extraValuePercentage;
+	
+	private static Map<Integer, EstablishmentTypeEnum> establishmentTypeMap;
 	
 	@JsonValue
 	public int getType() {
@@ -30,7 +39,7 @@ public enum EstablishmentTypeEnum {
 	}
 	
 	@JsonCreator
-    public static EstablishmentTypeEnum forValue(int value) {
-		return Arrays.asList(EstablishmentTypeEnum.values()).stream().filter(e -> e.type == value).findFirst().orElse(null);
-    }
+	public static EstablishmentTypeEnum getByType(int type) {
+		return establishmentTypeMap.get(type);
+	}
 }
