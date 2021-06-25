@@ -39,7 +39,7 @@ public class PurchaseService extends BaseService {
 
     	boolean buy = false;
     	if (value >= 0) {
-    		value = CalculationUtil.calculateTotalValue(value, establishmentType);
+    		value = CalculationUtil.calculateTotalValue(value, establishmentType.getExtraValuePercentage());
     		
 	        if (establishmentType == EstablishmentTypeEnum.FOOD) {
 	            buy = addFoodCardBalance(cardNumber, -value);

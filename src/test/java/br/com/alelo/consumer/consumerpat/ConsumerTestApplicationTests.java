@@ -127,7 +127,7 @@ class ConsumerTestApplicationTests {
 		// Create a new consumer
 		int foodCardNumber = cardNumber++;
 		double purchaseValue = 100;
-		double foodCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FOOD);
+		double foodCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FOOD.getExtraValuePercentage());
 		createNewConsumer(cardNumber++, defaultBalance, foodCardNumber, foodCardBalance, cardNumber++, defaultBalance);
 		
 		// Buy (Food)
@@ -140,7 +140,7 @@ class ConsumerTestApplicationTests {
 		// Create a new consumer
 		int drugstoreCardNumber = cardNumber++;
 		double purchaseValue = 100;
-		double drugstoreCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.DRUGSTORE);
+		double drugstoreCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.DRUGSTORE.getExtraValuePercentage());
 		createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, cardNumber++, defaultBalance, cardNumber++, defaultBalance);
 		
 		// Buy (Drugstore)
@@ -153,7 +153,7 @@ class ConsumerTestApplicationTests {
 		// Create a new consumer
 		int fuelCardNumber = cardNumber++;
 		double purchaseValue = 100;
-		double fuelCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FUEL);
+		double fuelCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FUEL.getExtraValuePercentage());
 		createNewConsumer(cardNumber++, defaultBalance, cardNumber++, defaultBalance, fuelCardNumber, fuelCardBalance);
 		
 		// Buy (Fuel)
@@ -179,7 +179,7 @@ class ConsumerTestApplicationTests {
 		// Create a new consumer
 		int drugstoreCardNumber = cardNumber++;
 		double purchaseValue = 100;
-		double fuelCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FUEL);
+		double fuelCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FUEL.getExtraValuePercentage());
 		createNewConsumer(drugstoreCardNumber, defaultBalance, cardNumber++, defaultBalance, cardNumber++, fuelCardBalance);
 		
 		// Buy with wrong card
