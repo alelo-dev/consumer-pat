@@ -9,5 +9,5 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     Consumer findByFuelCardNumber(int cardNumber);
 
-    Consumer findByDrugstoreNumber(int cardNumber);
+    Consumer findByDrugstoreCardNumber(int cardNumber);
 }

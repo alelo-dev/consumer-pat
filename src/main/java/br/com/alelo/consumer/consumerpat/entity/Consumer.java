@@ -3,6 +3,10 @@ package br.com.alelo.consumer.consumerpat.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,27 +27,32 @@ public class Consumer {
     private Date birthDate;
 
     //contacts
-    private int mobilePhoneNumber;
-    private int residencePhoneNumber;
-    private int phoneNumber;
-    private String email;
+    @Embedded
+    private Contact contact;
 
     //Address
-    private String street;
-    private int number;
-    private String city;
-    private String country;
-    private int portalCode;
+    @Embedded
+    private Address address;
 
     //cards
-    private int foodCardNumber;
-    private double foodCardBalance;
-
-    private int fuelCardNumber;
-    private double fuelCardBalance;
-
-    private int drugstoreNumber;
-    private double drugstoreCardBalance;
-
-
+    @AttributeOverrides({
+        @AttributeOverride(name = "number", column = @Column(name = "foodCardNumber")),
+        @AttributeOverride(name = "balance", column = @Column(name = "foodCardBalance"))
+    })
+    @Embedded
+    private FoodCard foodCard;
+    
+    @AttributeOverrides({
+        @AttributeOverride(name = "number", column = @Column(name = "fuelCardNumber")),
+        @AttributeOverride(name = "balance", column = @Column(name = "fuelCardBalance"))
+    })
+    @Embedded
+    private FuelCard fuelCard;
+    
+    @AttributeOverrides({
+        @AttributeOverride(name = "number", column = @Column(name = "drugstoreCardNumber")),
+        @AttributeOverride(name = "balance", column = @Column(name = "drugstoreCardBalance"))
+    })
+    @Embedded
+    private DrugstoreCard drugstoreCard;
 }

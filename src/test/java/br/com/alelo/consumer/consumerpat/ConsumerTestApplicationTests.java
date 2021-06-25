@@ -26,7 +26,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
+import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.Contact;
+import br.com.alelo.consumer.consumerpat.entity.DrugstoreCard;
+import br.com.alelo.consumer.consumerpat.entity.FoodCard;
+import br.com.alelo.consumer.consumerpat.entity.FuelCard;
 import br.com.alelo.consumer.consumerpat.util.Constants;
 
 @SpringBootTest
@@ -90,17 +95,17 @@ class ConsumerTestApplicationTests {
 		Consumer consumer = createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, foodCardNumber, foodCardBalance, fuelCardNumber, fuelCardBalance);
 		
 		// Update Drugstore Card Balance
-		double newDrugstoreCardBalance = consumer.getDrugstoreCardBalance() + 100;
+		double newDrugstoreCardBalance = consumer.getDrugstoreCard().getBalance() + 100;
 		this.mvc.perform(put(buildURLUpdateCardBalance(drugstoreCardNumber, newDrugstoreCardBalance)))
 				.andExpect(status().isOk());
 		
 		// Update Food Card Balance
-		double newFoodCardBalance = consumer.getFoodCardBalance() + 100;
+		double newFoodCardBalance = consumer.getFoodCard().getBalance() + 100;
 		this.mvc.perform(put(buildURLUpdateCardBalance(foodCardNumber, newFoodCardBalance)))
 				.andExpect(status().isOk());
 		
 		// Update Food Card Balance
-		double newFuelCardBalance = consumer.getFuelCardBalance() + 100;
+		double newFuelCardBalance = consumer.getFuelCard().getBalance() + 100;
 		this.mvc.perform(put(buildURLUpdateCardBalance(fuelCardNumber, newFuelCardBalance)))
 				.andExpect(status().isOk());
 	}
@@ -168,23 +173,27 @@ class ConsumerTestApplicationTests {
 	private Consumer buildTestConsumer(int drugstoreCardNumber, double drugstoreCardBalance, int foodCardNumber, double foodCardBalance, int fuelCardNumber, double fuelCardBalance) {
 		Consumer consumer = new Consumer();
 		consumer.setBirthDate(new Date());
-		consumer.setCity("City");
-		consumer.setCountry("Country");
 		consumer.setDocumentNumber(888888888);
-		consumer.setDrugstoreCardBalance(drugstoreCardBalance);
-		consumer.setDrugstoreNumber(drugstoreCardNumber);
-		consumer.setEmail("email@test.com");
-		consumer.setFoodCardBalance(foodCardBalance);
-		consumer.setFoodCardNumber(foodCardNumber);
-		consumer.setFuelCardBalance(fuelCardBalance);
-		consumer.setFuelCardNumber(fuelCardNumber);
-		consumer.setMobilePhoneNumber(999999999);
 		consumer.setName("Consumer Name");
-		consumer.setNumber(123);
-		consumer.setPhoneNumber(999999999);
-		consumer.setPortalCode(333333333);
-		consumer.setResidencePhoneNumber(999999999);
-		consumer.setStreet("Street");
+		
+		Address address = new Address();
+		address.setCity("City");
+		address.setCountry("Country");
+		address.setPortalCode(333333333);
+		address.setStreet("Street");
+		address.setNumber(123);
+		consumer.setAddress(address);
+		
+		Contact contact = new Contact();
+		contact.setPhoneNumber(999999999);
+		contact.setResidencePhoneNumber(999999999);
+		contact.setEmail("email@test.com");
+		contact.setMobilePhoneNumber(999999999);
+		consumer.setContact(contact);
+		
+		consumer.setFoodCard(new FoodCard(foodCardNumber, foodCardBalance));
+		consumer.setFuelCard(new FuelCard(fuelCardNumber, fuelCardBalance));
+		consumer.setDrugstoreCard(new DrugstoreCard(drugstoreCardNumber, drugstoreCardBalance));
 		
 		return consumer;
 	}

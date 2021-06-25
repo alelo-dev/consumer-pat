@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
+import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
@@ -34,9 +35,9 @@ public class ConsumerService {
     public Consumer updateConsumer(Consumer consumer) {
     	Consumer persistentConsumer = consumerRepository.findById(consumer.getId()).orElse(null);
     	if (persistentConsumer != null) {
-    		consumer.setDrugstoreCardBalance(persistentConsumer.getDrugstoreCardBalance());
-    		consumer.setFoodCardBalance(persistentConsumer.getFoodCardBalance());
-    		consumer.setFuelCardBalance(persistentConsumer.getFuelCardBalance());
+    		consumer.getDrugstoreCard().setBalance(persistentConsumer.getDrugstoreCard().getBalance());
+    		consumer.getFoodCard().setBalance(persistentConsumer.getFoodCard().getBalance());
+    		consumer.getFuelCard().setBalance(persistentConsumer.getFuelCard().getBalance());
     		
     		return consumerRepository.save(consumer);
     	} else {
@@ -98,17 +99,21 @@ public class ConsumerService {
         return value + extra;
     }
     
+    private boolean addCardBalance(Consumer consumer, Card card, double value) {
+    	double newBalance = card.getBalance() + value;
+		if (newBalance < 0) {
+			return false;
+		} else {
+			card.setBalance(newBalance);
+	        consumerRepository.save(consumer);
+	        return true;
+		}
+    }
+    
     private boolean addDrugstoreCardBalance(int cardNumber, double value) {
-    	Consumer consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
+    	Consumer consumer = consumerRepository.findByDrugstoreCardNumber(cardNumber);
     	if (consumer != null) {
-    		double newBalance = consumer.getDrugstoreCardBalance() + value;
-    		if (newBalance < 0) {
-    			return false;
-    		} else {
-		    	consumer.setDrugstoreCardBalance(newBalance);
-		        consumerRepository.save(consumer);
-		        return true;
-    		}
+    		return addCardBalance(consumer, consumer.getDrugstoreCard(), value);
     	} else {
     		return false;
     	}
@@ -117,14 +122,7 @@ public class ConsumerService {
     private boolean addFoodCardBalance(int cardNumber, double value) {
     	Consumer consumer = consumerRepository.findByFoodCardNumber(cardNumber);
     	if (consumer != null) {
-    		double newBalance = consumer.getFoodCardBalance() + value;
-    		if (newBalance < 0) {
-    			return false;
-    		} else {
-		    	consumer.setFoodCardBalance(newBalance);
-		        consumerRepository.save(consumer);
-		        return true;
-    		}
+    		return addCardBalance(consumer, consumer.getFoodCard(), value);
     	} else {
     		return false;
     	}
@@ -133,14 +131,7 @@ public class ConsumerService {
     private boolean addFuelCardBalance(int cardNumber, double value) {
     	Consumer consumer = consumerRepository.findByFuelCardNumber(cardNumber);
     	if (consumer != null) {
-    		double newBalance = consumer.getFuelCardBalance() + value;
-    		if (newBalance < 0) {
-    			return false;
-    		} else {
-    			consumer.setFuelCardBalance(newBalance);
-		        consumerRepository.save(consumer);
-		        return true;
-	        }
+    		return addCardBalance(consumer, consumer.getFuelCard(), value);
 		} else {
 			return false;
 		}
