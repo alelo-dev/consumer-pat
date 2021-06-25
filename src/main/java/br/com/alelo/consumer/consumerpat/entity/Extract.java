@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -16,12 +18,12 @@ public class Extract {
     int establishmentNameId;
     String establishmentName;
     String productDescription;
-    Date dateBuy;
+    LocalDate dateBuy;
     int cardNumber;
     double value;
 
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, LocalDate dateBuy, int cardNumber, double value) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
@@ -31,14 +33,14 @@ public class Extract {
         this.value = value;
     }
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract( String productDescription, LocalDate dateBuy, int cardNumber, double value) {
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
         this.value = value;
     }
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(String establishmentName, String productDescription, LocalDate dateBuy, int cardNumber, double value) {
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
