@@ -14,6 +14,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.enums.EstablishmentTypeEnum;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 
@@ -47,14 +48,17 @@ public class ConsumerService {
     	}
     }
     
-    public boolean addBalance(int cardNumber, double value) {
-    	return value > 0 && 
+    public void addBalance(int cardNumber, double value) throws BusinessException {
+    	boolean add = value > 0 && 
     		(addDrugstoreCardBalance(cardNumber, value) ||
     		 addFoodCardBalance(cardNumber, value) ||
     		 addFuelCardBalance(cardNumber, value));
+    	if (!add) {
+    		throw new BusinessException("Consumer not found.");
+    	}
     }
     
-    public Extract buy(ConsumerBuyDTO consumerBuyDTO) {
+    public Extract buy(ConsumerBuyDTO consumerBuyDTO) throws BusinessException {
     	/* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -87,7 +91,7 @@ public class ConsumerService {
 	        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
 	        return extractRepository.save(extract);
         } else {
-        	return null;
+        	throw new BusinessException("Consumer not found.");
         }
     }
     
@@ -96,39 +100,41 @@ public class ConsumerService {
         return value + extra;
     }
     
-    private boolean addCardBalance(Consumer consumer, Card card, double value) {
+    private void addCardBalance(Consumer consumer, Card card, double value) throws BusinessException {
     	double newBalance = card.getBalance() + value;
 		if (newBalance < 0) {
-			return false;
+			throw new BusinessException("Insufficient balance.");
 		} else {
 			card.setBalance(newBalance);
 	        consumerRepository.save(consumer);
-	        return true;
 		}
     }
     
-    private boolean addDrugstoreCardBalance(int cardNumber, double value) {
+    private boolean addDrugstoreCardBalance(int cardNumber, double value) throws BusinessException {
     	Consumer consumer = consumerRepository.findByDrugstoreCardNumber(cardNumber);
     	if (consumer != null) {
-    		return addCardBalance(consumer, consumer.getDrugstoreCard(), value);
+    		addCardBalance(consumer, consumer.getDrugstoreCard(), value);
+    		return true;
     	} else {
     		return false;
     	}
     }
     
-    private boolean addFoodCardBalance(int cardNumber, double value) {
+    private boolean addFoodCardBalance(int cardNumber, double value) throws BusinessException {
     	Consumer consumer = consumerRepository.findByFoodCardNumber(cardNumber);
     	if (consumer != null) {
-    		return addCardBalance(consumer, consumer.getFoodCard(), value);
+    		addCardBalance(consumer, consumer.getFoodCard(), value);
+    		return true;
     	} else {
     		return false;
     	}
     }
     
-    private boolean addFuelCardBalance(int cardNumber, double value) {
+    private boolean addFuelCardBalance(int cardNumber, double value) throws BusinessException {
     	Consumer consumer = consumerRepository.findByFuelCardNumber(cardNumber);
     	if (consumer != null) {
-    		return addCardBalance(consumer, consumer.getFuelCard(), value);
+    		addCardBalance(consumer, consumer.getFuelCard(), value);
+    		return true;
 		} else {
 			return false;
 		}

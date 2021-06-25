@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.Api;
@@ -80,8 +81,10 @@ public class ConsumerController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Card Balance updated."),
 							@ApiResponse(code = 412, message = "Precondition Failed.")})
     public void addBalance(int cardNumber, double value) {
-    	if (!consumerService.addBalance(cardNumber, value)) {
-    		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
+    	try {
+    		consumerService.addBalance(cardNumber, value);
+    	} catch (BusinessException be) {
+    		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, be.getMessage());
     	}
     }
 
@@ -92,11 +95,10 @@ public class ConsumerController {
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Successful purchase."),
 							@ApiResponse(code = 412, message = "Precondition Failed.")})
     public Extract buy(@RequestBody ConsumerBuyDTO consumerBuyDTO) {
-    	Extract extract = consumerService.buy(consumerBuyDTO);
-    	if (extract == null) {
-    		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
-    	} else {
-    		return extract;
+    	try {
+    		return consumerService.buy(consumerBuyDTO);
+    	} catch (BusinessException be) {
+    		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, be.getMessage());
     	}
     }
 }
