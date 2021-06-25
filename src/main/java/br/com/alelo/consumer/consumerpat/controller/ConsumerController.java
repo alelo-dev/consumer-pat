@@ -1,8 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import io.swagger.annotations.ApiImplicitParams;
@@ -83,20 +81,6 @@ public class ConsumerController {
     public void addBalance(int cardNumber, double value) {
     	try {
     		consumerService.addBalance(cardNumber, value);
-    	} catch (BusinessException be) {
-    		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, be.getMessage());
-    	}
-    }
-
-    @ResponseBody
-    @ResponseStatus(code = HttpStatus.CREATED)
-    @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    @ApiOperation(value = "Make a purchase", tags = TAG_CONSUMER_CONTROLLER, response = Extract.class)
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "Successful purchase."),
-							@ApiResponse(code = 412, message = "Precondition Failed.")})
-    public Extract buy(@RequestBody ConsumerBuyDTO consumerBuyDTO) {
-    	try {
-    		return consumerService.buy(consumerBuyDTO);
     	} catch (BusinessException be) {
     		throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, be.getMessage());
     	}

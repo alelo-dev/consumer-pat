@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDTO;
+import br.com.alelo.consumer.consumerpat.dto.PurchaseDTO;
 import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Contact;
@@ -33,12 +33,14 @@ import br.com.alelo.consumer.consumerpat.entity.DrugstoreCard;
 import br.com.alelo.consumer.consumerpat.entity.FoodCard;
 import br.com.alelo.consumer.consumerpat.entity.FuelCard;
 import br.com.alelo.consumer.consumerpat.enums.EstablishmentTypeEnum;
+import br.com.alelo.consumer.consumerpat.util.CalculationUtil;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 class ConsumerTestApplicationTests {
 	
-	final String REQUEST_MAPPING = "/consumer/";
+	final String REQUEST_MAPPING_CONSUMER = "/consumer/";
+	final String REQUEST_MAPPING_PURCHASE = "/purchase/";
 	
 	@Autowired
 	WebApplicationContext context;
@@ -48,6 +50,7 @@ class ConsumerTestApplicationTests {
 	ObjectMapper objectMapper;
 	
 	int cardNumber = 1;
+	double defaultBalance = 100;
 	
 	@BeforeAll
 	public void setup() {
@@ -58,25 +61,25 @@ class ConsumerTestApplicationTests {
 	
 	@Test
 	public void getConsumers() throws Exception {
-		String url = this.REQUEST_MAPPING;
+		String url = this.REQUEST_MAPPING_CONSUMER;
 		this.mvc.perform(get(url)).andExpect(status().isOk());
 	}
 
 	@Test
 	public void createConsumer() throws Exception {
-		createNewConsumer(cardNumber++, 100, cardNumber++, 100, cardNumber++, 100);
+		createNewConsumer(cardNumber++, defaultBalance, cardNumber++, defaultBalance, cardNumber++, defaultBalance);
 	}
 	
 	@Test
 	public void updateConsumer() throws Exception {
 		// Create a new consumer
-		Consumer consumer = createNewConsumer(cardNumber++, 100, cardNumber++, 100, cardNumber++, 100);
+		Consumer consumer = createNewConsumer(cardNumber++, defaultBalance, cardNumber++, defaultBalance, cardNumber++, defaultBalance);
 		
 		// Update the consumer
 		String newConsumerName = "New Consumer Name";
 		consumer.setName(newConsumerName);
 		
-		String url = this.REQUEST_MAPPING;
+		String url = this.REQUEST_MAPPING_CONSUMER;
 		this.mvc.perform(put(url).content(this.objectMapper.writeValueAsString(consumer))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -84,25 +87,34 @@ class ConsumerTestApplicationTests {
 	}
 	
 	@Test
-	public void updateCardBalance() throws Exception {
+	public void updateDrugstoreCardBalance() throws Exception {
 		// Create a new consumer
 		int drugstoreCardNumber = cardNumber++;
-		double drugstoreCardBalance = 100;
-		int foodCardNumber = cardNumber++;
-		double foodCardBalance = 100;
-		int fuelCardNumber = cardNumber++;
-		double fuelCardBalance = 100;
-		Consumer consumer = createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, foodCardNumber, foodCardBalance, fuelCardNumber, fuelCardBalance);
+		Consumer consumer = createNewConsumer(drugstoreCardNumber, defaultBalance, cardNumber++, defaultBalance, cardNumber++, defaultBalance);
 		
 		// Update Drugstore Card Balance
 		double newDrugstoreCardBalance = consumer.getDrugstoreCard().getBalance() + 100;
 		this.mvc.perform(put(buildURLUpdateCardBalance(drugstoreCardNumber, newDrugstoreCardBalance)))
 				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void updateFoodCardBalance() throws Exception {
+		// Create a new consumer
+		int foodCardNumber = cardNumber++;
+		Consumer consumer = createNewConsumer(cardNumber++, defaultBalance, foodCardNumber, defaultBalance, cardNumber++, defaultBalance);
 		
 		// Update Food Card Balance
 		double newFoodCardBalance = consumer.getFoodCard().getBalance() + 100;
 		this.mvc.perform(put(buildURLUpdateCardBalance(foodCardNumber, newFoodCardBalance)))
 				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void updateFuelCardBalance() throws Exception {
+		// Create a new consumer
+		int fuelCardNumber = cardNumber++;
+		Consumer consumer = createNewConsumer(cardNumber++, defaultBalance, cardNumber++, defaultBalance, fuelCardNumber, defaultBalance);
 		
 		// Update Food Card Balance
 		double newFuelCardBalance = consumer.getFuelCard().getBalance() + 100;
@@ -111,56 +123,89 @@ class ConsumerTestApplicationTests {
 	}
 	
 	@Test
-	public void makeAPurchase() throws Exception {
+	public void buyFood() throws Exception {
 		// Create a new consumer
-		int drugstoreCardNumber = cardNumber++;
-		double drugstoreCardBalance = 100;
 		int foodCardNumber = cardNumber++;
-		double foodCardBalance = 100;
-		int fuelCardNumber = cardNumber++;
-		double fuelCardBalance = 100;
-		createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, foodCardNumber, foodCardBalance, fuelCardNumber, fuelCardBalance);
+		double purchaseValue = 100;
+		double foodCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FOOD);
+		createNewConsumer(cardNumber++, defaultBalance, foodCardNumber, foodCardBalance, cardNumber++, defaultBalance);
 		
 		// Buy (Food)
 		makeNewPurchase(EstablishmentTypeEnum.FOOD, "Establishment Name", foodCardNumber, "Product Description", foodCardBalance)
 				.andExpect(status().isCreated());
+	}
+	
+	@Test
+	public void buyDrugstore() throws Exception {
+		// Create a new consumer
+		int drugstoreCardNumber = cardNumber++;
+		double purchaseValue = 100;
+		double drugstoreCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.DRUGSTORE);
+		createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, cardNumber++, defaultBalance, cardNumber++, defaultBalance);
 		
 		// Buy (Drugstore)
 		makeNewPurchase(EstablishmentTypeEnum.DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
 				.andExpect(status().isCreated());
-		
-		// Buy without balance (Drugstore)
-		makeNewPurchase(EstablishmentTypeEnum.DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", drugstoreCardBalance)
-				.andExpect(status().isPreconditionFailed());
-		
-		// Buy with wrong card (Fuel)
-		makeNewPurchase(EstablishmentTypeEnum.FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", fuelCardBalance/2)
-				.andExpect(status().isPreconditionFailed());
+	}
+	
+	@Test
+	public void buyFuel() throws Exception {
+		// Create a new consumer
+		int fuelCardNumber = cardNumber++;
+		double purchaseValue = 100;
+		double fuelCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FUEL);
+		createNewConsumer(cardNumber++, defaultBalance, cardNumber++, defaultBalance, fuelCardNumber, fuelCardBalance);
 		
 		// Buy (Fuel)
-		makeNewPurchase(EstablishmentTypeEnum.FUEL, "Establishment Name", fuelCardNumber, "Product Description", fuelCardBalance/2)
+		makeNewPurchase(EstablishmentTypeEnum.FUEL, "Establishment Name", fuelCardNumber, "Product Description", purchaseValue)
 				.andExpect(status().isCreated());
 	}
 	
+	@Test
+	public void buyWithoutBalance() throws Exception {
+		// Create a new consumer
+		int drugstoreCardNumber = cardNumber++;
+		double drugstoreCardBalance = defaultBalance;
+		double purchaseValue = drugstoreCardBalance + 1;
+		createNewConsumer(drugstoreCardNumber, drugstoreCardBalance, cardNumber++, defaultBalance, cardNumber++, defaultBalance);
+		
+		// Buy without balance
+		makeNewPurchase(EstablishmentTypeEnum.DRUGSTORE, "Establishment Name", drugstoreCardNumber, "Product Description", purchaseValue)
+				.andExpect(status().isPreconditionFailed());
+	}
+	
+	@Test
+	public void buyWithWrongCard() throws Exception {
+		// Create a new consumer
+		int drugstoreCardNumber = cardNumber++;
+		double purchaseValue = 100;
+		double fuelCardBalance = CalculationUtil.calculateTotalValue(purchaseValue, EstablishmentTypeEnum.FUEL);
+		createNewConsumer(drugstoreCardNumber, defaultBalance, cardNumber++, defaultBalance, cardNumber++, fuelCardBalance);
+		
+		// Buy with wrong card
+		makeNewPurchase(EstablishmentTypeEnum.FUEL, "Establishment Name", drugstoreCardNumber, "Product Description", purchaseValue)
+				.andExpect(status().isPreconditionFailed());
+	}
+	
 	private String buildURLUpdateCardBalance(int cardNumber, double value) {
-		StringBuilder url = new StringBuilder().append(this.REQUEST_MAPPING).append("cardbalance")
+		StringBuilder url = new StringBuilder().append(this.REQUEST_MAPPING_CONSUMER).append("cardbalance")
 				.append("?").append("cardNumber=").append(cardNumber)
 				.append("&").append("value=").append(value);
 		return url.toString();
 	}
 	
 	private ResultActions makeNewPurchase(EstablishmentTypeEnum establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws Exception {
-		String url = this.REQUEST_MAPPING.concat("buy");
+		String url = this.REQUEST_MAPPING_PURCHASE;
 		
 		return this.mvc.perform(post(url)
-				.content(this.objectMapper.writeValueAsString(new ConsumerBuyDTO(establishmentType, establishmentName, cardNumber, productDescription, value)))
+				.content(this.objectMapper.writeValueAsString(new PurchaseDTO(establishmentType, establishmentName, cardNumber, productDescription, value)))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 	}
 	
 	private Consumer createNewConsumer(int drugstoreCardNumber, double drugstoreCardBalance, int foodCardNumber, double foodCardBalance, int fuelCardNumber, double fuelCardBalance) throws Exception {
 		Consumer consumer = buildTestConsumer(drugstoreCardNumber, drugstoreCardBalance, foodCardNumber, foodCardBalance, fuelCardNumber, fuelCardBalance);
 		
-		String url = this.REQUEST_MAPPING;
+		String url = this.REQUEST_MAPPING_CONSUMER;
 		MvcResult result = this.mvc.perform(post(url).content(this.objectMapper.writeValueAsString(consumer))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated()).andReturn();
