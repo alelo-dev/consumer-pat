@@ -83,6 +83,57 @@ class ConsumerControllerTest {
     }
 
     @Test
+    void willFailUpdateIfConsumerNotFound() throws Exception {
+        consumerRepository.save(testConsumer);
+        final Consumer updatedCustomer = makeConsumer("Updated name");
+        updatedCustomer.setId(-1);
+        mvc.perform(
+                post("/consumer/updateConsumer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(updatedCustomer)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void willFailUpdateWhenTryingToUpdateFoodCardBalance() throws Exception {
+        consumerRepository.save(testConsumer);
+        final Consumer updatedCustomer = makeConsumer("Updated name");
+        updatedCustomer.setId(consumerRepository.findAll().get(0).getId());
+        updatedCustomer.setFoodCardBalance(10000);
+        mvc.perform(
+                post("/consumer/updateConsumer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(updatedCustomer)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void willFailUpdateWhenTryingToUpdateDrugstoreCardBalance() throws Exception {
+        consumerRepository.save(testConsumer);
+        final Consumer updatedCustomer = makeConsumer("Updated name");
+        updatedCustomer.setId(consumerRepository.findAll().get(0).getId());
+        updatedCustomer.setDrugstoreCardBalance(10000);
+        mvc.perform(
+                post("/consumer/updateConsumer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(updatedCustomer)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void willFailUpdateWhenTryingToUpdateFuelCardBalance() throws Exception {
+        consumerRepository.save(testConsumer);
+        final Consumer updatedCustomer = makeConsumer("Updated name");
+        updatedCustomer.setId(consumerRepository.findAll().get(0).getId());
+        updatedCustomer.setFuelCardBalance(10000);
+        mvc.perform(
+                post("/consumer/updateConsumer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(updatedCustomer)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
     void willSetBalanceForDrugstoreCard() throws Exception {
         consumerRepository.save(testConsumer);
         mvc.perform(buildSetBalanceRequest(testConsumer.getDrugstoreNumber()))

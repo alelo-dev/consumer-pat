@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -36,7 +37,23 @@ public class ConsumerController {
     // Não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody Consumer consumer) {
+        validateUpdateRequest(consumer);
+
         repository.save(consumer);
+    }
+
+    private void validateUpdateRequest(Consumer updatedConsumer) {
+        Consumer existingConsumer =
+                repository
+                        .findById(updatedConsumer.getId())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE));
+
+        if (updatedConsumer.getFoodCardBalance() != existingConsumer.getFoodCardBalance()
+                || updatedConsumer.getFuelCardBalance() != existingConsumer.getFuelCardBalance()
+                || updatedConsumer.getDrugstoreCardBalance()
+                        != existingConsumer.getDrugstoreCardBalance()) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     /*
