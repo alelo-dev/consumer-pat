@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.infra.converter;
 
 import br.com.alelo.consumer.consumerpat.controller.response.ConsumerResponse;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.domain.consumer.Consumer;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
@@ -27,4 +28,13 @@ public class ConsumerRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonProperty("birth_date")
     private final LocalDate birthDate;
+
+    @JsonProperty("address")
+    private AddressRequest address;
+
+    @JsonProperty("contact")
+    private ContactRequest contact;
+
+    @JsonProperty("cards")
+    private List<CardRequest> cards;
 }

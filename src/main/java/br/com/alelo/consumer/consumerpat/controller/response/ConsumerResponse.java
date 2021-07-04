@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class ConsumerResponse {
 
     @JsonProperty("consumer_id")
-    private Integer id;
+    private long id;
 
     @JsonProperty("name")
     private final String name;

@@ -5,4 +5,5 @@ public interface Converter<T, D> {
 
     D convert(final T domain);
 
+
 }

@@ -1,8 +1,11 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.application.ConsumerWrapp;
+import br.com.alelo.consumer.consumerpat.controller.request.ConsumerRequest;
 import br.com.alelo.consumer.consumerpat.controller.response.ConsumerResponse;
-import org.hamcrest.Matchers;
+import br.com.alelo.consumer.consumerpat.services.CardService;
+import br.com.alelo.consumer.consumerpat.services.ConsumerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,29 +15,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.http.MediaType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -46,15 +45,17 @@ class ConsumerControllerTest {
     protected MockMvc mockMvc;
 
     @MockBean
-    ConsumerWrapp wrapp;
+    ConsumerService consumerService;
+    @MockBean
+    CardService cardService;
 
     @Test
-    @DisplayName("Dele listar todos os livros por paginação")
-    public void findAllBooks() throws Exception {
+    @DisplayName("Deve listar todos os consumers por paginação")
+    public void findAllConsumer() throws Exception {
 
         final var response = createResponses();
         BDDMockito
-                .given(wrapp.findAll(Mockito.any(Pageable.class))).willReturn(new PageImpl<>(response, getPageable(), response.size()));
+                .given(consumerService.getAllConsumersList(Mockito.any(Pageable.class))).willReturn(new PageImpl<>(response, getPageable(), response.size()));
 
         final MockHttpServletRequestBuilder requestBuilder = requestGetAll();
         mockMvc
@@ -66,6 +67,34 @@ class ConsumerControllerTest {
         ;
 
     }
+    @Test
+    @DisplayName("Deve Criar um consumer e retornar Http Status 201 ")
+    public void createConsumer() throws Exception {
+
+        final ConsumerRequest andre = ConsumerRequest.builder().name("Andre").build();
+        final ConsumerResponse consumerResponse = ConsumerResponse.builder().name("Andre").build();
+        BDDMockito
+                .given(consumerService.create(Mockito.any(ConsumerRequest.class))).willReturn(consumerResponse);
+
+        final MockHttpServletRequestBuilder requestBuilder = requestCreate(andre);
+        mockMvc
+                .perform(requestBuilder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().contentType(parseMediaType("application/json;charset=UTF-8")))
+                .andExpect(status().isCreated())
+                .andExpect(content().json("{\"consumer_id\":0,\"name\":\"Andre\"}"))
+        ;
+
+    }
+
+    private MockHttpServletRequestBuilder requestCreate(ConsumerRequest andre) throws JsonProcessingException {
+        final String json = new ObjectMapper().writeValueAsString(andre);
+        return post("/consumers")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(json);
+    }
+
 
     private MockHttpServletRequestBuilder requestGetAll() {
         return get("/consumers")
