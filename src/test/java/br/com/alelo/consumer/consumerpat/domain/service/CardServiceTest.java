@@ -27,7 +27,7 @@ public class CardServiceTest {
 
     @Test
     void shouldNotFound() throws ApiException {
-        ApiException exception = Assertions.assertThrows(ApiException.class, () -> cardService.creditBalance(123L, new BigDecimal("50.0")));
+        ApiException exception = Assertions.assertThrows(ApiException.class, () -> cardService.creditBalance("123", new BigDecimal("50.0")));
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         Assertions.assertEquals(Code.INVALID_NOT_FOUND, exception.getCode());
@@ -38,7 +38,7 @@ public class CardServiceTest {
     void shouldCreditBalance() throws ApiException {
         Consumer consumer = consumerService.save(ConsumerHelper.buildConsumer());
 
-        Card card = cardService.creditBalance(consumer.getCards().stream().findFirst().get().getNumber(), new BigDecimal("50.0"));
+        Card card = cardService.creditBalance(consumer.getCards().stream().findFirst().get().getCardCode(), new BigDecimal("50.0"));
 
         BigDecimal expected = consumer.getCards().stream().findFirst().get().getBalance().add(new BigDecimal("50.0"));
 

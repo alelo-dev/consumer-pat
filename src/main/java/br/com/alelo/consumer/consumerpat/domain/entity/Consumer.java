@@ -6,14 +6,15 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "consumerCode"))
 public class Consumer {
 
@@ -39,6 +40,4 @@ public class Consumer {
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "consumer_id")
     private Set<Card> cards;
-
-
 }

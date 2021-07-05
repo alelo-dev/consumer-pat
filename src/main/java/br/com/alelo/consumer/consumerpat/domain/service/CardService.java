@@ -25,9 +25,9 @@ public class CardService {
     private ExtractRepository extractRepository;
 
     @Transactional(rollbackFor = Throwable.class)
-    public Card creditBalance(Long number, BigDecimal value) throws ApiException {
+    public Card creditBalance(String cardCode, BigDecimal value) throws ApiException {
         try {
-            Optional<Card> cardOut = cardRepository.findByNumber(number);
+            Optional<Card> cardOut = cardRepository.findByCardCode(cardCode);
             if (cardOut.isEmpty()) {
                 throw new ApiException(HttpStatus.NOT_FOUND, Code.INVALID_NOT_FOUND);
             }

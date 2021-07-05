@@ -6,14 +6,15 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "extractCode"))
 public class Extract {
 

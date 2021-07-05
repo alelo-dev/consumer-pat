@@ -31,7 +31,7 @@ public class ExtractService {
     public Extract buy(Extract extract) throws ApiException {
         try {
             extract.setExtractCode(UUID.randomUUID().toString());
-            Optional<Card> cardOut = cardRepository.findByNumber(extract.getCards().stream().findFirst().get().getNumber());
+            Optional<Card> cardOut = cardRepository.findByCardCode(extract.getCards().stream().findFirst().get().getCardCode());
 
             if (cardOut.isEmpty()) {
                 throw new ApiException(HttpStatus.NOT_FOUND, Code.INVALID_NOT_FOUND);
