@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 @Entity
 @Builder
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "number"))
 public class Card {
 
     @Id
