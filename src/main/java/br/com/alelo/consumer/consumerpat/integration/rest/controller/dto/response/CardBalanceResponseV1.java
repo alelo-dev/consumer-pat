@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardBalanceResponseV1 {
 
-    private Long number;
+    private String cardCode;
     private BigDecimal balance;
 
     public static CardBalanceResponseV1 transformToResponse(Card card) {
-        return CardBalanceResponseV1.builder().number(card.getNumber()).balance(card.getBalance()).build();
+        return CardBalanceResponseV1.builder().cardCode(card.getCardCode()).balance(card.getBalance()).build();
     }
 
 }

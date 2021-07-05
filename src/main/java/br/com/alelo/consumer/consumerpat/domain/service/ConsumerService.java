@@ -31,8 +31,6 @@ public class ConsumerService {
     @Transactional(rollbackFor = Throwable.class)
     public Consumer save(Consumer consumer) throws ApiException {
         try {
-            consumer.setConsumerCode(UUID.randomUUID().toString());
-            consumer.getCards().forEach(card -> card.setCardCode(UUID.randomUUID().toString()));
             return consumerRepository.save(consumer);
         } catch (Exception e) {
             log.error("m=save, stage=error, excption={}", e.getMessage());

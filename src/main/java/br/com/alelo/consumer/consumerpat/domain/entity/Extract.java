@@ -37,4 +37,11 @@ public class Extract {
             {@JoinColumn(name = "card_id")})
     private Set<Card> cards;
 
+    @PrePersist
+    public void initializeUUID() {
+        if (extractCode == null) {
+            extractCode = UUID.randomUUID().toString();
+        }
+    }
+
 }

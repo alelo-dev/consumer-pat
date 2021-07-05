@@ -30,7 +30,6 @@ public class ExtractService {
     @Transactional(rollbackFor = Throwable.class)
     public Extract buy(Extract extract) throws ApiException {
         try {
-            extract.setExtractCode(UUID.randomUUID().toString());
             Optional<Card> cardOut = cardRepository.findByCardCode(extract.getCards().stream().findFirst().get().getCardCode());
 
             if (cardOut.isEmpty()) {

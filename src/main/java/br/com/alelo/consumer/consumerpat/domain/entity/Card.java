@@ -24,4 +24,10 @@ public class Card {
     @Enumerated(EnumType.STRING)
     private CardType type;
 
+    @PrePersist
+    public void initializeUUID() {
+        if (cardCode == null) {
+            cardCode = UUID.randomUUID().toString();
+        }
+    }
 }
