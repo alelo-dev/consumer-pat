@@ -18,7 +18,7 @@ public class ExtractRequestPostV1 {
     private String productDescription;
     private LocalDate dateBuy;
     private BigDecimal value;
-    private Long cardNumber;
+    private Long number;
 
     public static Extract transformToExtract(ExtractRequestPostV1 extractRequestPostV1) {
         return Extract.builder()
@@ -27,7 +27,7 @@ public class ExtractRequestPostV1 {
                 .establishmentName(extractRequestPostV1.getEstablishmentName())
                 .value(extractRequestPostV1.getValue())
                 .productDescription(extractRequestPostV1.getProductDescription())
-                .cards(Set.of(Card.builder().number(extractRequestPostV1.getCardNumber()).build()))
+                .cards(Set.of(Card.builder().number(extractRequestPostV1.getNumber()).build()))
                 .build();
     }
 
