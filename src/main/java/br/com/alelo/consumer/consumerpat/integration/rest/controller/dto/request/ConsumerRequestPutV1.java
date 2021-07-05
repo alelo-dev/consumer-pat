@@ -43,6 +43,7 @@ public class ConsumerRequestPutV1 {
                 .stream()
                 .map(card -> Card
                         .builder()
+                        .cardCode(card.getCardCode())
                         .number(card.getNumber())
                         .type(CardType.valueOf(card.getType()))
                         .build())

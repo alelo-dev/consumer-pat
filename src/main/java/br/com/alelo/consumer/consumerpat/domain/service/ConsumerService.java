@@ -13,9 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Slf4j
@@ -43,9 +42,9 @@ public class ConsumerService {
         try {
             Optional<Consumer> consumerOut = consumerRepository.findByConsumerCode(consumer.getConsumerCode());
             if (consumerOut.isEmpty()) {
-                throw new ApiException(HttpStatus.NOT_FOUND, Code.INVALID_EXCEPTION);
+                throw new ApiException(HttpStatus.NOT_FOUND, Code.INVALID_NOT_FOUND);
             }
-            if (!checkCardBalance(consumer.getCards(), consumerOut.get().getCards())) {
+            if (!checkCardBalance(consumerOut.get().getCards(), consumer.getCards())) {
                 throw new ApiException(HttpStatus.BAD_REQUEST, Code.INVALID_UPDATE);
             }
             consumer.setId(consumerOut.get().getId());
@@ -53,6 +52,8 @@ public class ConsumerService {
         } catch (ApiException e) {
             log.warn("m=update, stage=warn, excption={}", e.getCode().getMessage());
             throw e;
+        }catch (ConcurrentModificationException e){
+            throw new ApiException(HttpStatus.NOT_FOUND, Code.INVALID_CARD_NOT_FOUND);
         } catch (Exception e) {
             log.error("m=update, stage=error, excption={}", e.getMessage());
             throw new ApiException(HttpStatus.BAD_REQUEST, Code.INVALID_EXCEPTION);
@@ -60,11 +61,22 @@ public class ConsumerService {
     }
 
     public boolean checkCardBalance(Set<Card> cardToCompare, Set<Card> cardCompared) {
-        Set<BigDecimal> cardOne = cardToCompare.stream().map(Card::getBalance).collect(Collectors.toSet());
-        Set<BigDecimal> cardTwo = cardCompared.stream().map(Card::getBalance).collect(Collectors.toSet());
-        int initial = cardOne.size();
-        cardTwo.removeIf(cardOne::contains);
-        return (initial - cardTwo.size()) == 0;
+     AtomicBoolean result = new AtomicBoolean(true);
+        cardToCompare.forEach(cardOne ->{
+            for (Card cardTwo : cardCompared) {
+                if(cardOne.getCardCode().equals(cardTwo.getCardCode())){
+                    cardTwo.setId(cardOne.getId());
+                    if(cardTwo.getBalance() != null && cardOne.getBalance().doubleValue() != cardTwo.getBalance().doubleValue()){
+                        result.set(false);
+                    }
+                }else{
+                    if(cardCompared.stream().filter(card -> cardOne.getCardCode().equals(card.getCardCode())).findFirst().isEmpty()) {
+                        cardCompared.add(cardOne);
+                    }
+                }
+            }
+        });
+        return result.get();
     }
 
 }

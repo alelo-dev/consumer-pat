@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class CardRequestPutV1 {
+    private String cardCode;
     private Long number;
     private String type;
 }

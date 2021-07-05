@@ -5,6 +5,7 @@ public enum Code {
     INVALID_REFUND("invalid.refund", "Insuficient Refund"),
     INVALID_EXCEPTION("invalid.exception", "Retry again later"),
     INVALID_NOT_FOUND("invalid.not.found", "Not Found"),
+    INVALID_CARD_NOT_FOUND("invalid.card.not.found", "Card Not Found"),
     INVALID_UPDATE("invalid.update", "Cant update");
 
     Code(String code, String message) {
