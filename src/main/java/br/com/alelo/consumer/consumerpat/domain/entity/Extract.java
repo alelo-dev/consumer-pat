@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "extractCode"))
 public class Extract {
 
     @Id
@@ -23,7 +25,7 @@ public class Extract {
     private String establishmentName;
     private String productDescription;
     private LocalDate dateBuy;
-    private Double value;
+    private BigDecimal value;
 
     @OneToMany(mappedBy = "extract")
     Set<ExtractCard> extractCards;

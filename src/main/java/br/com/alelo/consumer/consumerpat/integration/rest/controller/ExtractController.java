@@ -21,14 +21,9 @@ public class ExtractController {
     @Autowired
     private ExtractService extractService;
 
-    @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ExtractResponseV1> buy(@RequestBody ExtractRequestPostV1 extractRequestPostV1) throws ApiException {
-        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(ExtractResponseV1.transformToResponse(extractService.buy(ExtractRequestPostV1.transformToExtract(extractRequestPostV1))));
-        } catch (ApiException e) {
-            throw e;
-        }
     }
 
 }

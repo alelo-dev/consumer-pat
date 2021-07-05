@@ -5,6 +5,7 @@ import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public class ExtractRequestPostV1 {
     private String establishmentName;
     private String productDescription;
     private LocalDate dateBuy;
-    private Double value;
+    private BigDecimal value;
     private Long cardNumber;
 
     public static Extract transformToExtract(ExtractRequestPostV1 extractRequestPostV1) {

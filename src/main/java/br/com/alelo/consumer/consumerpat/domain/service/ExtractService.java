@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public class ExtractService {
                     cardOut.get().getBalance(),
                     extract.getValue()));
 
-            if (cardOut.get().getBalance() < 0) {
+            if (cardOut.get().getBalance().compareTo(BigDecimal.ZERO) < 0) {
                 throw new ApiException(HttpStatus.BAD_REQUEST, Code.INVALID_REFUND);
             }
 
@@ -52,7 +53,7 @@ public class ExtractService {
             log.info("m=buy, stage=warn, excption={}", e.getCode().getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("m=buy, stage=warn, excption={}", e.getMessage());
+            log.error("m=buy, stage=error, excption={}", e.getMessage());
             throw new ApiException(HttpStatus.BAD_REQUEST, Code.INVALID_EXCEPTION);
         }
     }

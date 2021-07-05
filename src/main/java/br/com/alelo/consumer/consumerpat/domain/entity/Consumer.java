@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Builder
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "consumerCode"))
 public class Consumer {
 
     @Id

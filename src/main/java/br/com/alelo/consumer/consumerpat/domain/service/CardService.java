@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -24,7 +25,7 @@ public class CardService {
     private ExtractRepository extractRepository;
 
     @Transactional(rollbackFor = Throwable.class)
-    public Card creditBalance(Long number, Double value) throws ApiException {
+    public Card creditBalance(Long number, BigDecimal value) throws ApiException {
         try {
             Optional<Card> cardOut = cardRepository.findByNumber(number);
             if (cardOut.isEmpty()) {

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardRequestPostV1 {
     private Long number;
-    private Double balance;
-    private Double value;
+    private BigDecimal balance;
+    private BigDecimal value;
     private String type;
 }

@@ -4,19 +4,21 @@ import br.com.alelo.consumer.consumerpat.domain.service.Strategy;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @Builder
 public class DrugStoreCard implements Strategy {
 
     @Override
-    public Double creditValue(Double balance, Double value) {
-        return balance + value;
+    public BigDecimal creditValue(BigDecimal balance, BigDecimal value) {
+        return balance.add(value);
     }
 
     @Override
-    public Double applyCashback(Double balance, Double value) {
-        Double cashback  = value * 0.1;
-        return balance - (value - cashback);
+    public BigDecimal applyCashback(BigDecimal balance, BigDecimal value) {
+        BigDecimal cashback  = value.multiply(new BigDecimal("0.1"));
+        return balance.subtract((value.subtract(cashback)));
     }
 
 }

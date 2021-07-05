@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ConsumerServiceTest {
@@ -30,13 +32,13 @@ public class ConsumerServiceTest {
         Consumer consumer = consumerService.save(ConsumerHelper.buildConsumer());
         consumer.setName("Jose Ferreira");
         Consumer consumerUpdated = consumerService.update(consumer);
-        Assertions.assertEquals(consumerUpdated.getName(), consumerUpdated.getName());
+        Assertions.assertEquals(consumer.getName(), consumerUpdated.getName());
     }
 
     @Test
     void shouldNotUpdate() throws ApiException {
         Consumer consumer = consumerService.save(ConsumerHelper.buildConsumer());
-        consumer.getCards().stream().findFirst().get().setBalance(2.0);
+        consumer.getCards().stream().findFirst().get().setBalance(new BigDecimal("2.0"));
 
         ApiException exception = Assertions.assertThrows(ApiException.class, () -> consumerService.update(consumer));
 

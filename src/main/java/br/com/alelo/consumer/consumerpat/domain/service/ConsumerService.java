@@ -13,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,9 +61,11 @@ public class ConsumerService {
     }
 
     public boolean checkCardBalance(Set<Card> cardToCompare, Set<Card> cardCompared) {
-        List<Double> cardOne = cardToCompare.stream().map(Card::getBalance).collect(Collectors.toList());
-        List<Double> cardTwo = cardCompared.stream().map(Card::getBalance).collect(Collectors.toList());
-        return cardOne.equals(cardTwo);
+        Set<BigDecimal> cardOne = cardToCompare.stream().map(Card::getBalance).collect(Collectors.toSet());
+        Set<BigDecimal> cardTwo = cardCompared.stream().map(Card::getBalance).collect(Collectors.toSet());
+        int initial = cardOne.size();
+        cardTwo.removeIf(cardOne::contains);
+        return (initial - cardTwo.size()) == 0;
     }
 
 }

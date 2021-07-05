@@ -30,20 +30,12 @@ public class ConsumerController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ConsumerResponseV1> save(@RequestBody ConsumerRequestPostV1 consumerRequestPostV1) throws ApiException {
-        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(ConsumerResponseV1.transformToResponse(consumerService.save(ConsumerRequestPostV1.transformToConsumer(consumerRequestPostV1))));
-        } catch (ApiException e) {
-            throw e;
-        }
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<ConsumerResponseV1> updateConsumer(@RequestBody ConsumerRequestPutV1 consumerRequestPutV1) throws ApiException {
-        try {
+    public ResponseEntity<ConsumerResponseV1> update(@RequestBody ConsumerRequestPutV1 consumerRequestPutV1) throws ApiException {
             return ResponseEntity.ok(ConsumerResponseV1.transformToResponse(consumerService.update(ConsumerRequestPutV1.transformToConsumer(consumerRequestPutV1))));
-        } catch (ApiException e) {
-            throw e;
-        }
     }
 
 }

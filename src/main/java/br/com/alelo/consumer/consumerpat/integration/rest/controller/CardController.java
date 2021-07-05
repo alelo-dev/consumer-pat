@@ -22,11 +22,7 @@ public class CardController {
 
     @RequestMapping(value = "/balance", method = RequestMethod.POST)
     public ResponseEntity<CardBalanceResponseV1> creditBalance(@RequestBody CardBalanceRequestPostV1 cardBalanceRequestPostV1) throws ApiException {
-        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(CardBalanceResponseV1.transformToResponse(cardService.creditBalance(cardBalanceRequestPostV1.getNumber(), cardBalanceRequestPostV1.getValue())));
-        } catch (ApiException e) {
-            throw e;
-        }
     }
 
 }

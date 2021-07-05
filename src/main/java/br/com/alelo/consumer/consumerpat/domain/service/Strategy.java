@@ -1,8 +1,10 @@
 package br.com.alelo.consumer.consumerpat.domain.service;
 
+import java.math.BigDecimal;
+
 public interface Strategy {
 
-    public Double creditValue(Double balance, Double value);
+    public BigDecimal creditValue(BigDecimal balance, BigDecimal value);
 
-    public Double applyCashback(Double balance, Double value);
+    public BigDecimal applyCashback(BigDecimal balance, BigDecimal value);
 }

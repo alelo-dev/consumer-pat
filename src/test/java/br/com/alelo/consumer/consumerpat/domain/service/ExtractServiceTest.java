@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ExtractServiceTest {
@@ -29,7 +31,7 @@ public class ExtractServiceTest {
 
     @Test
     void shouldNotFound() throws ApiException {
-        ApiException exception = Assertions.assertThrows(ApiException.class, () -> extractService.buy(ExtractHelper.buildExtract(CardHelper.buildCard(CardType.FOOD), 15.0)));
+        ApiException exception = Assertions.assertThrows(ApiException.class, () -> extractService.buy(ExtractHelper.buildExtract(CardHelper.buildCard(CardType.FOOD), new BigDecimal("15.0"))));
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         Assertions.assertEquals(Code.INVALID_NOT_FOUND, exception.getCode());
@@ -41,7 +43,7 @@ public class ExtractServiceTest {
 
         Card cardFood = consumer.getCards().stream().filter(card -> card.getType().equals(CardType.FOOD)).findFirst().get();
 
-        ApiException exception = Assertions.assertThrows(ApiException.class, () -> extractService.buy(ExtractHelper.buildExtract(cardFood, 15.0)));
+        ApiException exception = Assertions.assertThrows(ApiException.class, () -> extractService.buy(ExtractHelper.buildExtract(cardFood, new BigDecimal("15.0"))));
 
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
         Assertions.assertEquals(Code.INVALID_REFUND, exception.getCode());
@@ -56,19 +58,17 @@ public class ExtractServiceTest {
         Card cardFuel = consumer.getCards().stream().filter(card -> card.getType().equals(CardType.FUEL)).findFirst().get();
         Card cardDrugStore = consumer.getCards().stream().filter(card -> card.getType().equals(CardType.DRUGSTORE)).findFirst().get();
 
-        Extract extractFood = extractService.buy(ExtractHelper.buildExtract(cardFood, 5.0));
+        Extract extractFood = extractService.buy(ExtractHelper.buildExtract(cardFood, new BigDecimal("5.0")));
+        Extract extractFuel = extractService.buy(ExtractHelper.buildExtract(cardFuel, new BigDecimal("3.0")));
+        Extract extractDrugStore = extractService.buy(ExtractHelper.buildExtract(cardDrugStore, new BigDecimal("1.0")));
 
-        Extract extractFuel = extractService.buy(ExtractHelper.buildExtract(cardFuel, 3.0));
+        BigDecimal expectedFood = cardFood.getBalance().subtract(extractFood.getValue().subtract(extractFood.getValue().multiply(new BigDecimal("0.1"))));
+        BigDecimal expectedFuel = cardFuel.getBalance().subtract(extractFuel.getValue().subtract(extractFuel.getValue().multiply(new BigDecimal("0.35"))));
+        BigDecimal expectedDrugStore = cardDrugStore.getBalance().subtract(extractDrugStore.getValue().subtract(extractDrugStore.getValue().multiply(new BigDecimal("0.1"))));
 
-        Extract extractDrugStore = extractService.buy(ExtractHelper.buildExtract(cardDrugStore, 1.0));
-
-        Double expectedFood = cardFood.getBalance() - (extractFood.getValue() - (extractFood.getValue() * 0.1));
-        Double expectedFuel = cardFuel.getBalance() - (extractFuel.getValue() - (extractFuel.getValue() * 0.35));
-        Double expectedDrugStore = cardDrugStore.getBalance() - (extractDrugStore.getValue() - (extractDrugStore.getValue() * 0.1));
-
-        Assertions.assertEquals(expectedFood, extractFood.getCards().stream().findFirst().get().getBalance());
-        Assertions.assertEquals(expectedFuel, extractFuel.getCards().stream().findFirst().get().getBalance());
-        Assertions.assertEquals(expectedDrugStore, extractDrugStore.getCards().stream().findFirst().get().getBalance());
+        Assertions.assertEquals(0, expectedFood.compareTo(extractFood.getCards().stream().findFirst().get().getBalance()));
+        Assertions.assertEquals(0, expectedFuel.compareTo(extractFuel.getCards().stream().findFirst().get().getBalance()));
+        Assertions.assertEquals(0, expectedDrugStore.compareTo(extractDrugStore.getCards().stream().findFirst().get().getBalance()));
     }
 
 }
