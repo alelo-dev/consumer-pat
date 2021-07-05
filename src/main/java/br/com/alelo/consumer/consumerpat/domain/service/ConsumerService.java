@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.domain.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.service.exception.ApiException;
 import br.com.alelo.consumer.consumerpat.domain.service.exception.Code;
+import br.com.alelo.consumer.consumerpat.integration.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.integration.respository.ConsumerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,6 +24,9 @@ public class ConsumerService {
 
     @Autowired
     private ConsumerRepository consumerRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
     public Page<Consumer> findAll(Pageable pageable) {
         return consumerRepository.findAll(pageable);
@@ -44,10 +49,10 @@ public class ConsumerService {
             if (consumerOut.isEmpty()) {
                 throw new ApiException(HttpStatus.NOT_FOUND, Code.INVALID_NOT_FOUND);
             }
-            if (!checkCardBalance(consumerOut.get().getCards(), consumer.getCards())) {
-                throw new ApiException(HttpStatus.BAD_REQUEST, Code.INVALID_UPDATE);
-            }
+            consumer.setCards(mergeCards(consumerOut.get().getCards(), consumer.getCards()));
             consumer.setId(consumerOut.get().getId());
+            consumer.getCards().forEach(card -> cardRepository.save(card));
+
             return consumerRepository.save(consumer);
         } catch (ApiException e) {
             log.warn("m=update, stage=warn, excption={}", e.getCode().getMessage());
@@ -60,23 +65,21 @@ public class ConsumerService {
         }
     }
 
-    public boolean checkCardBalance(Set<Card> cardToCompare, Set<Card> cardCompared) {
-     AtomicBoolean result = new AtomicBoolean(true);
-        cardToCompare.forEach(cardOne ->{
-            for (Card cardTwo : cardCompared) {
-                if(cardOne.getCardCode().equals(cardTwo.getCardCode())){
-                    cardTwo.setId(cardOne.getId());
-                    if(cardTwo.getBalance() != null && cardOne.getBalance().doubleValue() != cardTwo.getBalance().doubleValue()){
-                        result.set(false);
-                    }
-                }else{
-                    if(cardCompared.stream().filter(card -> cardOne.getCardCode().equals(card.getCardCode())).findFirst().isEmpty()) {
-                        cardCompared.add(cardOne);
-                    }
-                }
-            }
-        });
-        return result.get();
+    public Set<Card> mergeCards(Set<Card> cardToCompare, Set<Card> cardCompared) {
+        Map<String, Card> mapCardToCompare = cardToCompare.stream().collect(Collectors.toMap(Card::getCardCode, e -> e));
+        Map<String, Card> mapCardCompared = cardCompared.stream().collect(Collectors.toMap(Card::getCardCode, e -> e));
+        Map<String, Card> mapMerged = new HashMap<>(mapCardToCompare);
+
+        mapCardCompared.forEach(
+                (key, value) -> mapMerged.merge(key, value, (v1, v2) -> Card.builder().id(v1.getId()).balance(v1.getBalance()).type(v2.getType()).cardCode(v2.getCardCode()).number(v2.getNumber()).build()));
+
+       mapMerged.forEach((key, value) -> {
+           if(value.getBalance() == null){
+               mapMerged.remove(key);
+           }
+       });
+
+        return new HashSet<>(mapMerged.values());
     }
 
 }

@@ -35,16 +35,5 @@ public class ConsumerServiceTest {
         Assertions.assertEquals(consumer.getName(), consumerUpdated.getName());
     }
 
-    @Test
-    void shouldNotUpdate() throws ApiException {
-        Consumer consumer = consumerService.save(ConsumerHelper.buildConsumer());
-        consumer.getCards().stream().findFirst().get().setBalance(new BigDecimal("2.0"));
-
-        ApiException exception = Assertions.assertThrows(ApiException.class, () -> consumerService.update(consumer));
-
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
-        Assertions.assertEquals(Code.INVALID_UPDATE, exception.getCode());
-    }
-
 
 }
