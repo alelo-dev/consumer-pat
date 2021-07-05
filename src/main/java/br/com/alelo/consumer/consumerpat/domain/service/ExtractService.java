@@ -49,7 +49,7 @@ public class ExtractService {
 
             return extractRepository.save(extract);
         } catch (ApiException e) {
-            log.info("m=buy, stage=warn, excption={}", e.getCode().getMessage());
+            log.warn("m=buy, stage=warn, excption={}", e.getCode().getMessage());
             throw e;
         } catch (Exception e) {
             log.error("m=buy, stage=error, excption={}", e.getMessage());
