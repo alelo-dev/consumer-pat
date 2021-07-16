@@ -32,30 +32,36 @@ class ConsumerServiceTest {
     @Test
     public void testUpdateConsumer() {
 
-        Consumer savedConsumer = new Consumer();
-        savedConsumer.setId(1L);
-        savedConsumer.setName("Fulano");
-        savedConsumer.setDocumentNumber(123);
+        Consumer savedConsumer = Consumer.builder()
+                .id(1L)
+                .name("Fulano")
+                .documentNumber(123)
+                .build();
 
-        Card savedCard = new Card();
-        savedCard.setId(1L);
-        savedCard.setTypeCard(TypeCard.FOOD);
-        savedCard.setCardNumber(1234123412341234L);
-        savedCard.setCardBalance(BigDecimal.TEN);
+        Card savedCard = Card.builder()
+                .id(1L)
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
+
         savedConsumer.setCardList(Collections.singleton(savedCard));
 
         when(consumerService.findById(any(Long.class))).thenReturn(Optional.of(savedConsumer));
 
-        Consumer updateConsumer = new Consumer();
-        updateConsumer.setId(1L);
-        updateConsumer.setName("Fulano");
-        updateConsumer.setDocumentNumber(123);
+        Consumer updateConsumer = Consumer.builder()
+                .id(1L)
+                .name("Fulano")
+                .documentNumber(123)
+                .build();
 
-        Card updateCard = new Card();
-        updateCard.setId(1L);
-        updateCard.setTypeCard(TypeCard.FOOD);
-        updateCard.setCardNumber(1234123412341234L);
-        updateCard.setCardBalance(BigDecimal.ONE);
+        Card updateCard = Card.builder()
+                .id(1L)
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.ONE)
+                .build();
+
         updateConsumer.setCardList(Collections.singleton(updateCard));
 
         assertThrows(CardBalanceChangeNotAllowedException.class, () -> consumerService.update(1L, updateConsumer));

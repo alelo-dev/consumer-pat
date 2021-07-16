@@ -17,9 +17,10 @@ class ConsumerRepositoryTest {
 
     @Test
     public void testSaveConsumer() {
-        Consumer consumer = new Consumer();
-        consumer.setName("Fulano");
-        consumer.setDocumentNumber(12);
+        Consumer consumer = Consumer.builder()
+                .name("Fulano")
+                .documentNumber(12)
+                .build();
 
         repository.save(consumer);
 
@@ -28,9 +29,10 @@ class ConsumerRepositoryTest {
 
     @Test
     public void testFindByConsumerDocumentNumber() {
-        Consumer consumer = new Consumer();
-        consumer.setName("Fulano");
-        consumer.setDocumentNumber(21);
+        Consumer consumer = Consumer.builder()
+                .name("Fulano")
+                .documentNumber(21)
+                .build();
 
         repository.save(consumer);
 
@@ -41,9 +43,10 @@ class ConsumerRepositoryTest {
 
     @Test
     public void testDeleteConsumer() {
-        Consumer consumer = new Consumer();
-        consumer.setName("Fulano");
-        consumer.setDocumentNumber(21);
+        Consumer consumer = Consumer.builder()
+                .name("Fulano")
+                .documentNumber(21)
+                .build();
 
         repository.save(consumer);
         repository.delete(consumer);

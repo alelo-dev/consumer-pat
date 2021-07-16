@@ -20,10 +20,11 @@ class CardRepositoryTest {
 
     @Test
     public void testSaveCard() {
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FOOD);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
         repository.save(card);
 
@@ -32,10 +33,11 @@ class CardRepositoryTest {
 
     @Test
     public void testFindByCardNumber() {
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FOOD);
-        card.setCardNumber(4321432143214321L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(4321432143214321L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
         repository.save(card);
 
@@ -46,10 +48,11 @@ class CardRepositoryTest {
 
     @Test
     public void testDeleteCard() {
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FOOD);
-        card.setCardNumber(1111111111111111L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1111111111111111L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
         repository.save(card);
         repository.delete(card);

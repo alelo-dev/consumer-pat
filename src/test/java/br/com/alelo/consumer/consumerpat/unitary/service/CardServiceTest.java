@@ -47,10 +47,11 @@ class CardServiceTest {
     @Test
     public void testSaveCard() {
 
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FOOD);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
         when(cardRepository.save(any(Card.class))).then(returnsFirstArg());
         Card savedCard = cardService.save(card);
@@ -60,8 +61,9 @@ class CardServiceTest {
     @Test
     public void testSaveCardNotEnoughBalance() {
 
-        Card card = new Card();
-        card.setCardBalance(new BigDecimal(-10));
+        Card card = Card.builder()
+                .cardBalance(new BigDecimal(-10))
+                .build();
 
         assertThrows(BusinessException.class, () -> cardService.save(card));
     }
@@ -76,35 +78,40 @@ class CardServiceTest {
     @Test
     public void testBuy() {
 
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FOOD);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
         when(cardRepository.findByCardNumber(any(Long.class))).thenReturn(card);
         when(extractService.save(any(Extract.class))).then(returnsFirstArg());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setValue(BigDecimal.TEN);
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setProductDescription("Product");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FOOD);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .value(BigDecimal.TEN)
+                .cardNumber(card.getCardNumber())
+                .productDescription("Product")
+                .typeEstablishment(TypeEstablishment.FOOD)
+                .build();
+
         cardService.buy(buyDTO);
     }
 
     @Test
     public void testApplyPercentageFood() {
 
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FOOD);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FOOD)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setValue(BigDecimal.ONE);
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setProductDescription("Product");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FOOD);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .value(BigDecimal.ONE)
+                .cardNumber(card.getCardNumber())
+                .productDescription("Product")
+                .typeEstablishment(TypeEstablishment.FOOD)
+                .build();
 
         invokeMethod(cardService, "applyPercentage", buyDTO, card);
 
@@ -114,16 +121,18 @@ class CardServiceTest {
     @Test
     public void testApplyPercentageFuel() {
 
-        Card card = new Card();
-        card.setTypeCard(TypeCard.FUEL);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.FUEL)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setValue(BigDecimal.ONE);
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setProductDescription("Product");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FUEL);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .value(BigDecimal.ONE)
+                .cardNumber(card.getCardNumber())
+                .productDescription("Product")
+                .typeEstablishment(TypeEstablishment.FUEL)
+                .build();
 
         invokeMethod(cardService, "applyPercentage", buyDTO, card);
 
@@ -133,16 +142,18 @@ class CardServiceTest {
     @Test
     public void testApplyPercentageDrugstore() {
 
-        Card card = new Card();
-        card.setTypeCard(TypeCard.DRUGSTORE);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.DRUGSTORE)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setValue(BigDecimal.ONE);
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setProductDescription("Product");
-        buyDTO.setTypeEstablishment(TypeEstablishment.DRUGSTORE);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .value(BigDecimal.ONE)
+                .cardNumber(card.getCardNumber())
+                .productDescription("Product")
+                .typeEstablishment(TypeEstablishment.DRUGSTORE)
+                .build();
 
         invokeMethod(cardService, "applyPercentage", buyDTO, card);
 
@@ -158,16 +169,18 @@ class CardServiceTest {
     @Test
     public void cardPurchaseWithDifferentEstablishment() {
 
-        Card card = new Card();
-        card.setTypeCard(TypeCard.DRUGSTORE);
-        card.setCardNumber(1234123412341234L);
-        card.setCardBalance(BigDecimal.TEN);
+        Card card = Card.builder()
+                .typeCard(TypeCard.DRUGSTORE)
+                .cardNumber(1234123412341234L)
+                .cardBalance(BigDecimal.TEN)
+                .build();
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setValue(BigDecimal.ONE);
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setProductDescription("Product");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FUEL);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .value(BigDecimal.ONE)
+                .cardNumber(card.getCardNumber())
+                .productDescription("Product")
+                .typeEstablishment(TypeEstablishment.FUEL)
+                .build();
 
         assertThrows(BusinessException.class, () -> invokeMethod(cardService, "preValidations", buyDTO, card));
     }

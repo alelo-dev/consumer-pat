@@ -56,9 +56,10 @@ class ConsumerIntegrationTests {
     void updateConsumer() throws Exception {
 
         int documentNumber = 9865;
-        Consumer consumer = new Consumer();
-        consumer.setName("Fulano");
-        consumer.setDocumentNumber(documentNumber);
+        Consumer consumer = Consumer.builder()
+                .name("Fulano")
+                .documentNumber(documentNumber)
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,8 +89,9 @@ class ConsumerIntegrationTests {
     @Test
     void deleteConsumer() throws Exception {
 
-        Consumer consumer = new Consumer();
-        consumer.setDocumentNumber(563);
+        Consumer consumer = Consumer.builder()
+                .documentNumber(563)
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -127,8 +129,9 @@ class ConsumerIntegrationTests {
     private void addConsumer(int quantity) throws Exception {
 
         for (int i = 0; i < quantity; i++) {
-            Consumer consumer = new Consumer();
-            consumer.setDocumentNumber(i);
+            Consumer consumer = Consumer.builder()
+                    .documentNumber(i)
+                    .build();
 
             mvc.perform(post("/consumer")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -142,14 +145,16 @@ class ConsumerIntegrationTests {
 
         int documentNumber = 86500;
 
-        Consumer consumer = new Consumer();
-        consumer.setDocumentNumber(documentNumber);
+        Card card = Card.builder()
+                .cardNumber(8650865086508650L)
+                .cardBalance(BigDecimal.ONE)
+                .typeCard(TypeCard.DRUGSTORE)
+                .build();
 
-        Card card = new Card();
-        card.setCardNumber(8650865086508650L);
-        card.setCardBalance(BigDecimal.ONE);
-        card.setTypeCard(TypeCard.DRUGSTORE);
-        consumer.setCardList(Collections.singleton(card));
+        Consumer consumer = Consumer.builder()
+                .documentNumber(documentNumber)
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)

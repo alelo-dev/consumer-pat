@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,21 +50,24 @@ class CardIntegrationTests {
     @Autowired
     private ExtractRepository extractRepository;
 
-    @Value( "${tax.food}" )
+    @Value("${tax.food}")
     private BigDecimal foodCashback;
 
-    @Value( "${tax.fuel}" )
+    @Value("${tax.fuel}")
     private BigDecimal fuelTax;
 
     @Test
     public void addBalanceToCard() throws Exception {
 
-        Consumer consumer = new Consumer();
-        Card card = new Card();
-        card.setCardNumber(1111111111111111L);
-        card.setCardBalance(BigDecimal.TEN);
-        card.setTypeCard(TypeCard.FOOD);
-        consumer.setCardList(Collections.singleton(card));
+        Card card = Card.builder()
+                .cardNumber(1111111111111111L)
+                .cardBalance(BigDecimal.TEN)
+                .typeCard(TypeCard.FOOD)
+                .build();
+
+        Consumer consumer = Consumer.builder()
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,24 +86,28 @@ class CardIntegrationTests {
     @Test
     public void buyWithFoodCard() throws Exception {
 
-        Consumer consumer = new Consumer();
-        Card card = new Card();
-        card.setCardNumber(2222222222222222L);
-        card.setCardBalance(BigDecimal.TEN);
-        card.setTypeCard(TypeCard.FOOD);
-        consumer.setCardList(Collections.singleton(card));
+        Card card = Card.builder()
+                .cardNumber(2222222222222222L)
+                .cardBalance(BigDecimal.TEN)
+                .typeCard(TypeCard.FOOD)
+                .build();
+
+        Consumer consumer = Consumer.builder()
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setEstablishmentName("Selling");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FOOD);
-        buyDTO.setProductDescription("Product");
-        buyDTO.setValue(BigDecimal.ONE);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .cardNumber(card.getCardNumber())
+                .establishmentName("Selling")
+                .typeEstablishment(TypeEstablishment.FOOD)
+                .productDescription("Product")
+                .value(BigDecimal.ONE)
+                .build();
 
         mvc.perform(put("/card/buy")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -121,24 +127,28 @@ class CardIntegrationTests {
     @Test
     public void buyWithFuelCard() throws Exception {
 
-        Consumer consumer = new Consumer();
-        Card card = new Card();
-        card.setCardNumber(3333333333333333L);
-        card.setCardBalance(BigDecimal.TEN);
-        card.setTypeCard(TypeCard.FUEL);
-        consumer.setCardList(Collections.singleton(card));
+        Card card = Card.builder()
+                .cardNumber(3333333333333333L)
+                .cardBalance(BigDecimal.TEN)
+                .typeCard(TypeCard.FUEL)
+                .build();
+
+        Consumer consumer = Consumer.builder()
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setEstablishmentName("Selling");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FUEL);
-        buyDTO.setProductDescription("Product");
-        buyDTO.setValue(BigDecimal.ONE);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .cardNumber(card.getCardNumber())
+                .establishmentName("Selling")
+                .typeEstablishment(TypeEstablishment.FUEL)
+                .productDescription("Product")
+                .value(BigDecimal.ONE)
+                .build();
 
         mvc.perform(put("/card/buy")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,24 +168,28 @@ class CardIntegrationTests {
     @Test
     public void buyWithDrugstoreCard() throws Exception {
 
-        Consumer consumer = new Consumer();
-        Card card = new Card();
-        card.setCardNumber(4444444444444444L);
-        card.setCardBalance(BigDecimal.TEN);
-        card.setTypeCard(TypeCard.DRUGSTORE);
-        consumer.setCardList(Collections.singleton(card));
+        Card card = Card.builder()
+                .cardNumber(4444444444444444L)
+                .cardBalance(BigDecimal.TEN)
+                .typeCard(TypeCard.DRUGSTORE)
+                .build();
+
+        Consumer consumer = Consumer.builder()
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setEstablishmentName("Selling");
-        buyDTO.setTypeEstablishment(TypeEstablishment.DRUGSTORE);
-        buyDTO.setProductDescription("Product");
-        buyDTO.setValue(BigDecimal.ONE);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .cardNumber(card.getCardNumber())
+                .establishmentName("Selling")
+                .typeEstablishment(TypeEstablishment.DRUGSTORE)
+                .productDescription("Product")
+                .value(BigDecimal.ONE)
+                .build();
 
         mvc.perform(put("/card/buy")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -193,24 +207,28 @@ class CardIntegrationTests {
     @Test
     public void cardPurchaseWithNoBalance() throws Exception {
 
-        Consumer consumer = new Consumer();
-        Card card = new Card();
-        card.setCardNumber(5555555555555555L);
-        card.setCardBalance(BigDecimal.ONE);
-        card.setTypeCard(TypeCard.DRUGSTORE);
-        consumer.setCardList(Collections.singleton(card));
+        Card card = Card.builder()
+                .cardNumber(5555555555555555L)
+                .cardBalance(BigDecimal.ONE)
+                .typeCard(TypeCard.DRUGSTORE)
+                .build();
+
+        Consumer consumer = Consumer.builder()
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setEstablishmentName("Selling");
-        buyDTO.setTypeEstablishment(TypeEstablishment.DRUGSTORE);
-        buyDTO.setProductDescription("Product");
-        buyDTO.setValue(BigDecimal.TEN);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .cardNumber(card.getCardNumber())
+                .establishmentName("Selling")
+                .typeEstablishment(TypeEstablishment.DRUGSTORE)
+                .productDescription("Product")
+                .value(BigDecimal.TEN)
+                .build();
 
         mvc.perform(put("/card/buy")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -230,12 +248,13 @@ class CardIntegrationTests {
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setCardNumber(9865452198756589L);
-        buyDTO.setEstablishmentName("Selling");
-        buyDTO.setTypeEstablishment(TypeEstablishment.DRUGSTORE);
-        buyDTO.setProductDescription("Product");
-        buyDTO.setValue(BigDecimal.ONE);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .cardNumber(9865452198756589L)
+                .establishmentName("Selling")
+                .typeEstablishment(TypeEstablishment.DRUGSTORE)
+                .productDescription("Product")
+                .value(BigDecimal.ONE)
+                .build();
 
         mvc.perform(put("/card/buy")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -248,24 +267,28 @@ class CardIntegrationTests {
     @Test
     public void cardPurchaseWithDifferentEstablishment() throws Exception {
 
-        Consumer consumer = new Consumer();
-        Card card = new Card();
-        card.setCardNumber(6666666666666666L);
-        card.setCardBalance(BigDecimal.ONE);
-        card.setTypeCard(TypeCard.DRUGSTORE);
-        consumer.setCardList(Collections.singleton(card));
+        Card card = Card.builder()
+                .cardNumber(6666666666666666L)
+                .cardBalance(BigDecimal.ONE)
+                .typeCard(TypeCard.DRUGSTORE)
+                .build();
+
+        Consumer consumer = Consumer.builder()
+                .cardList(Collections.singleton(card))
+                .build();
 
         mvc.perform(post("/consumer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        BuyDTO buyDTO = new BuyDTO();
-        buyDTO.setCardNumber(card.getCardNumber());
-        buyDTO.setEstablishmentName("Selling");
-        buyDTO.setTypeEstablishment(TypeEstablishment.FOOD);
-        buyDTO.setProductDescription("Product");
-        buyDTO.setValue(BigDecimal.ONE);
+        BuyDTO buyDTO = BuyDTO.builder()
+                .cardNumber(card.getCardNumber())
+                .establishmentName("Selling")
+                .typeEstablishment(TypeEstablishment.FOOD)
+                .productDescription("Product")
+                .value(BigDecimal.ONE)
+                .build();
 
         mvc.perform(put("/card/buy")
                 .contentType(MediaType.APPLICATION_JSON)
