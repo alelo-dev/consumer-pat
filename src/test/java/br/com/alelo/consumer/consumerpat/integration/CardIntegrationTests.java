@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureJsonTesters
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class CardIntegrationTests {
 
     @Autowired
@@ -80,7 +82,7 @@ class CardIntegrationTests {
 
         Card byCardNumber = cardRepository.findByCardNumber(card.getCardNumber());
         assertThat(byCardNumber).isNotNull();
-        assertThat(byCardNumber.getCardBalance()).isEqualTo(new BigDecimal("20.00"));
+        assertThat(byCardNumber.getCardBalance().compareTo(new BigDecimal("20.00"))).isZero();
     }
 
     @Test

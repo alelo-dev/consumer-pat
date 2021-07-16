@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureJsonTesters
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ConsumerIntegrationTests {
 
     @Autowired
@@ -161,14 +163,26 @@ class ConsumerIntegrationTests {
                 .content(objectMapper.writeValueAsString(consumer)))
                 .andExpect(status().isOk());
 
-        Consumer consumerOriginal = consumerRepository.findByDocumentNumber(documentNumber);
-        consumerOriginal.setName("Ciclano");
-        consumerOriginal.setContactList(new HashSet<>());
-        consumerOriginal.getCardList().stream().findFirst().get().setCardBalance(BigDecimal.TEN);
+        Consumer consumerSaved = consumerRepository.findByDocumentNumber(documentNumber);
+        Card cardSaved = consumerSaved.getCardList().stream().findFirst().get();
 
-        mvc.perform(put("/consumer/{consumerId}", consumerOriginal.getId())
+        Card cardToUpdate = Card.builder()
+                .id(cardSaved.getId())
+                .cardNumber(cardSaved.getCardNumber())
+                .cardBalance(BigDecimal.TEN)
+                .typeCard(cardSaved.getTypeCard())
+                .build();
+
+        Consumer consumerToUpdate = Consumer.builder()
+                .id(consumerSaved.getId())
+                .name("Ciclano")
+                .documentNumber(consumerSaved.getDocumentNumber())
+                .cardList(Collections.singleton(cardToUpdate))
+                .build();
+
+        mvc.perform(put("/consumer/{consumerId}", consumerSaved.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(consumerOriginal)))
+                .content(objectMapper.writeValueAsString(consumerToUpdate)))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof CardBalanceChangeNotAllowedException))
                 .andExpect(result -> assertEquals(String.format("Not is allowed change the balance of the card %s", card.getCardNumber()), result.getResolvedException().getMessage()));

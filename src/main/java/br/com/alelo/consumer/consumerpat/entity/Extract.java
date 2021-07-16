@@ -28,6 +28,6 @@ public class Extract extends BaseEntity {
 
     private BigDecimal value;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Card card;
 }
