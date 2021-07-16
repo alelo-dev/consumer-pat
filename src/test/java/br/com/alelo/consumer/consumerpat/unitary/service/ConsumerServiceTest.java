@@ -30,7 +30,7 @@ class ConsumerServiceTest {
     private ConsumerService consumerService;
 
     @Test
-    public void testUpdateConsumer() {
+    void testUpdateConsumer() {
 
         Consumer savedConsumer = Consumer.builder()
                 .id(1L)

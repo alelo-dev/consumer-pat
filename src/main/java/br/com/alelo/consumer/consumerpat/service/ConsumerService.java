@@ -21,7 +21,7 @@ public class ConsumerService extends BaseServiceImpl<Consumer, ConsumerRepositor
 
         Optional<Consumer> consumer = findById(entity.getId());
 
-        if(!entity.getCardList().isEmpty()) {
+        if (!entity.getCardList().isEmpty()) {
             for (Card card : entity.getCardList()) {
                 if (getCardBalance(consumer, card.getId()).compareTo(card.getCardBalance()) != 0) {
                     throw new CardBalanceChangeNotAllowedException(card.getCardNumber());
@@ -33,6 +33,11 @@ public class ConsumerService extends BaseServiceImpl<Consumer, ConsumerRepositor
     }
 
     private BigDecimal getCardBalance(Optional<Consumer> consumer, Long id) {
-        return consumer.get().getCardList().stream().filter(cardDb -> cardDb.getId().compareTo(id) == 0).findFirst().get().getCardBalance();
+        return consumer.get()
+                .getCardList()
+                .stream()
+                .filter(cardDb -> cardDb.getId().compareTo(id) == 0)
+                .findFirst().get()
+                .getCardBalance();
     }
 }

@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 import br.com.alelo.consumer.consumerpat.enums.TypeContact;
-import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ public class Contact extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TypeContact typeContact;
 
-    @NotNull
+    @Column(nullable = false)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)

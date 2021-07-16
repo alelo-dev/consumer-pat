@@ -19,7 +19,7 @@ class CardRepositoryTest {
     private CardRepository repository;
 
     @Test
-    public void testSaveCard() {
+    void testSaveCard() {
         Card card = Card.builder()
                 .typeCard(TypeCard.FOOD)
                 .cardNumber(1234123412341234L)
@@ -32,7 +32,7 @@ class CardRepositoryTest {
     }
 
     @Test
-    public void testFindByCardNumber() {
+    void testFindByCardNumber() {
         Card card = Card.builder()
                 .typeCard(TypeCard.FOOD)
                 .cardNumber(4321432143214321L)
@@ -47,7 +47,7 @@ class CardRepositoryTest {
     }
 
     @Test
-    public void testDeleteCard() {
+    void testDeleteCard() {
         Card card = Card.builder()
                 .typeCard(TypeCard.FOOD)
                 .cardNumber(1111111111111111L)

@@ -45,7 +45,7 @@ class CardServiceTest {
     }
 
     @Test
-    public void testSaveCard() {
+    void testSaveCard() {
 
         Card card = Card.builder()
                 .typeCard(TypeCard.FOOD)
@@ -59,7 +59,7 @@ class CardServiceTest {
     }
 
     @Test
-    public void testSaveCardNotEnoughBalance() {
+    void testSaveCardNotEnoughBalance() {
 
         Card card = Card.builder()
                 .cardBalance(new BigDecimal(-10))
@@ -69,14 +69,14 @@ class CardServiceTest {
     }
 
     @Test
-    public void testUpdateBalanceCardNotFound() {
+    void testUpdateBalanceCardNotFound() {
 
         when(cardRepository.findByCardNumber(any(Long.class))).thenReturn(null);
         assertThrows(CardNotFoundException.class, () -> cardService.updateBalance(123, BigDecimal.ONE));
     }
 
     @Test
-    public void testBuy() {
+    void testBuy() {
 
         Card card = Card.builder()
                 .typeCard(TypeCard.FOOD)
@@ -94,11 +94,11 @@ class CardServiceTest {
                 .typeEstablishment(TypeEstablishment.FOOD)
                 .build();
 
-        cardService.buy(buyDTO);
+        assertDoesNotThrow(() -> cardService.buy(buyDTO));
     }
 
     @Test
-    public void testApplyPercentageFood() {
+    void testApplyPercentageFood() {
 
         Card card = Card.builder()
                 .typeCard(TypeCard.FOOD)
@@ -119,7 +119,7 @@ class CardServiceTest {
     }
 
     @Test
-    public void testApplyPercentageFuel() {
+    void testApplyPercentageFuel() {
 
         Card card = Card.builder()
                 .typeCard(TypeCard.FUEL)
@@ -140,7 +140,7 @@ class CardServiceTest {
     }
 
     @Test
-    public void testApplyPercentageDrugstore() {
+    void testApplyPercentageDrugstore() {
 
         Card card = Card.builder()
                 .typeCard(TypeCard.DRUGSTORE)
@@ -161,13 +161,13 @@ class CardServiceTest {
     }
 
     @Test
-    public void cardPreValidationsEmptyCard() {
+    void cardPreValidationsEmptyCard() {
 
         assertThrows(CardNotFoundException.class, () -> invokeMethod(cardService, "preValidations", new BuyDTO(), null));
     }
 
     @Test
-    public void cardPurchaseWithDifferentEstablishment() {
+    void cardPurchaseWithDifferentEstablishment() {
 
         Card card = Card.builder()
                 .typeCard(TypeCard.DRUGSTORE)

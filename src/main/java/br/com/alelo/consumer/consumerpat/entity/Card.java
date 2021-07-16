@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 import br.com.alelo.consumer.consumerpat.enums.TypeCard;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +16,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Card extends BaseEntity {
 
-    @NotNull
+    @Column(nullable = false)
     private Long cardNumber;
 
-    @NotNull
+    @Column(nullable = false)
     private BigDecimal cardBalance;
 
-    @NotNull
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TypeCard typeCard;
 

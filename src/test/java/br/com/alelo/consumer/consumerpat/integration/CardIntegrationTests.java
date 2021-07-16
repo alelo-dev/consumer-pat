@@ -57,7 +57,7 @@ class CardIntegrationTests {
     private BigDecimal fuelTax;
 
     @Test
-    public void addBalanceToCard() throws Exception {
+    void addBalanceToCard() throws Exception {
 
         Card card = Card.builder()
                 .cardNumber(1111111111111111L)
@@ -84,7 +84,7 @@ class CardIntegrationTests {
     }
 
     @Test
-    public void buyWithFoodCard() throws Exception {
+    void buyWithFoodCard() throws Exception {
 
         Card card = Card.builder()
                 .cardNumber(2222222222222222L)
@@ -119,13 +119,13 @@ class CardIntegrationTests {
 
         BigDecimal cashback = buyDTO.getValue().multiply(foodCashback);
         BigDecimal balance = card.getCardBalance().subtract(buyDTO.getValue()).add(cashback);
-        assertThat(byCardNumber.getCardBalance().compareTo(balance)).isEqualTo(0);
+        assertThat(byCardNumber.getCardBalance().compareTo(balance)).isZero();
 
         testExtractAfterBuy(card.getCardNumber(), buyDTO.getValue());
     }
 
     @Test
-    public void buyWithFuelCard() throws Exception {
+    void buyWithFuelCard() throws Exception {
 
         Card card = Card.builder()
                 .cardNumber(3333333333333333L)
@@ -160,13 +160,13 @@ class CardIntegrationTests {
 
         BigDecimal tax = buyDTO.getValue().multiply(fuelTax);
         BigDecimal balance = card.getCardBalance().subtract(buyDTO.getValue()).subtract(tax);
-        assertThat(byCardNumber.getCardBalance().compareTo(balance)).isEqualTo(0);
+        assertThat(byCardNumber.getCardBalance().compareTo(balance)).isZero();
 
         testExtractAfterBuy(card.getCardNumber(), buyDTO.getValue());
     }
 
     @Test
-    public void buyWithDrugstoreCard() throws Exception {
+    void buyWithDrugstoreCard() throws Exception {
 
         Card card = Card.builder()
                 .cardNumber(4444444444444444L)
@@ -199,13 +199,13 @@ class CardIntegrationTests {
         Card byCardNumber = cardRepository.findByCardNumber(card.getCardNumber());
         assertThat(byCardNumber).isNotNull();
         BigDecimal balance = card.getCardBalance().subtract(buyDTO.getValue());
-        assertThat(byCardNumber.getCardBalance().compareTo(balance)).isEqualTo(0);
+        assertThat(byCardNumber.getCardBalance().compareTo(balance)).isZero();
 
         testExtractAfterBuy(card.getCardNumber(), buyDTO.getValue());
     }
 
     @Test
-    public void cardPurchaseWithNoBalance() throws Exception {
+    void cardPurchaseWithNoBalance() throws Exception {
 
         Card card = Card.builder()
                 .cardNumber(5555555555555555L)
@@ -239,7 +239,7 @@ class CardIntegrationTests {
     }
 
     @Test
-    public void cardPurchaseWithNoExistingCard() throws Exception {
+    void cardPurchaseWithNoExistingCard() throws Exception {
 
         Consumer consumer = new Consumer();
 
@@ -265,7 +265,7 @@ class CardIntegrationTests {
     }
 
     @Test
-    public void cardPurchaseWithDifferentEstablishment() throws Exception {
+    void cardPurchaseWithDifferentEstablishment() throws Exception {
 
         Card card = Card.builder()
                 .cardNumber(6666666666666666L)
@@ -304,6 +304,6 @@ class CardIntegrationTests {
 
         assertThat(allByCardNumberBefore.size()).isEqualTo(1);
         assertThat(allByCardNumberBefore.get(0).getCard().getCardNumber()).isEqualTo(cardNumber);
-        assertThat(allByCardNumberBefore.get(0).getPurchaseValue().compareTo(value)).isEqualTo(0);
+        assertThat(allByCardNumberBefore.get(0).getPurchaseValue().compareTo(value)).isZero();
     }
 }

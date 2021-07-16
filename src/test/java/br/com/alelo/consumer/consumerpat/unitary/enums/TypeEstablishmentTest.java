@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class TypeEstablishmentTest {
 
     @Test
-    public void testValidEnumMethodOf() {
+    void testValidEnumMethodOf() {
         assertEquals(TypeEstablishment.FOOD, TypeEstablishment.of(1));
     }
 
     @Test
-    public void testNotValidEnumMethodOf() {
+    void testNotValidEnumMethodOf() {
         assertThrows(UnknownEnumValueException.class, () -> TypeEstablishment.of(99));
     }
 }

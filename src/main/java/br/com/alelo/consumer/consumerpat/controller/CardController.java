@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/card")
-public class CardController extends BaseController<Card, CardService> {
+public class CardController extends BaseController<CardService> {
 
     public CardController(CardService cardService) {
         super(cardService);

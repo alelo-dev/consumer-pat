@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 import static br.com.alelo.consumer.consumerpat.enums.TypeEstablishment.FOOD;
@@ -79,12 +80,12 @@ public class CardService extends BaseServiceImpl<Card, CardRepository> {
 
     protected void applyPercentage(BuyDTO buy, Card card) {
 
-        if (buy.getTypeEstablishment() == FOOD) {
+        if (FOOD.equals(buy.getTypeEstablishment())) {
             BigDecimal cashback = buy.getValue().multiply(foodCashback);
             buy.setValue(buy.getValue().subtract(cashback));
         }
 
-        if (buy.getTypeEstablishment() == FUEL) {
+        if (FUEL.equals(buy.getTypeEstablishment())) {
             BigDecimal tax = buy.getValue().multiply(fuelTax);
             buy.setValue(buy.getValue().add(tax));
         }
@@ -94,7 +95,7 @@ public class CardService extends BaseServiceImpl<Card, CardRepository> {
 
     private void preValidations(BuyDTO buy, Card card) {
 
-        if (card == null) {
+        if (Objects.isNull(card)) {
             throw new CardNotFoundException(buy.getCardNumber());
         }
 

@@ -16,7 +16,7 @@ class ConsumerRepositoryTest {
     ConsumerRepository repository;
 
     @Test
-    public void testSaveConsumer() {
+    void testSaveConsumer() {
         Consumer consumer = Consumer.builder()
                 .name("Fulano")
                 .documentNumber(12)
@@ -28,7 +28,7 @@ class ConsumerRepositoryTest {
     }
 
     @Test
-    public void testFindByConsumerDocumentNumber() {
+    void testFindByConsumerDocumentNumber() {
         Consumer consumer = Consumer.builder()
                 .name("Fulano")
                 .documentNumber(21)
@@ -42,7 +42,7 @@ class ConsumerRepositoryTest {
     }
 
     @Test
-    public void testDeleteConsumer() {
+    void testDeleteConsumer() {
         Consumer consumer = Consumer.builder()
                 .name("Fulano")
                 .documentNumber(21)
