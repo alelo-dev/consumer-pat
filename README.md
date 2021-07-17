@@ -17,3 +17,21 @@ Faça um fork do projeto, clone o mesmo, abra na sua IDE de preferência e execu
 Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
 
  ***Atenção: Não inclua nenhuma lib ou framework***  
+
+## Alterações no projeto
+
+O conceito usado foi **Responsabilidade por Camada**. Desta forma, a implementação será baseada em sua finalidade técnica. Por exemplo, a camada de repositório será responsável por permitir a comunicação com o banco de dados.
+
+- **Model** - Classes/Entidades de negócios
+- **Enums** - Enumeradores de negócios
+- **DTO** - Objeto de Transferência de Dados
+- **Validator** - Validador de negócio
+- **Repository** - Comunicação com banco de dados
+- **Service** - Serviços para atender às especificações
+- **Controller** - Interceptador de requisição
+- **Config** - Componente de configuração
+- **Util** - Utilitário para negócios
+
+### Testes integrados
+
+Para este projeto, os testes integrados via Postman disponibilizados através de um arquivo que contém requisições, conteúdo e outros. Os testes estão disponíveis em uma pasta chamada collections_integrated_tests no projeto.
