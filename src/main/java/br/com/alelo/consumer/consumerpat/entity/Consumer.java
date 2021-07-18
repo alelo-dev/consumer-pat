@@ -1,14 +1,13 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 
@@ -21,7 +20,7 @@ public class Consumer {
     Integer id;
     String name;
     int documentNumber;
-    Date birthDate;
+    LocalDate birthDate;
 
     //contacts
     int mobilePhoneNumber;
@@ -40,9 +39,11 @@ public class Consumer {
     int foodCardNumber;
     double foodCardBalance;
 
+    //fuel
     int fuelCardNumber;
     double fuelCardBalance;
 
+    //drugStore
     int drugstoreNumber;
     double drugstoreCardBalance;
 
