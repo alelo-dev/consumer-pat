@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import java.util.Objects;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Consumer {
 
     @Id
@@ -46,6 +48,47 @@ public class Consumer {
     //drugStore
     int drugstoreNumber;
     double drugstoreCardBalance;
+
+    public Consumer(ConsumerPostDTO consumerPostDTO) {
+        this.name = consumerPostDTO.name;
+        this.documentNumber = consumerPostDTO.documentNumber;
+        this.birthDate = consumerPostDTO.birthDate;
+        this.mobilePhoneNumber = consumerPostDTO.mobilePhoneNumber;
+        this.residencePhoneNumber = consumerPostDTO.residencePhoneNumber;
+        this.phoneNumber = consumerPostDTO.phoneNumber;
+        this.email = consumerPostDTO.email;
+        this.street = consumerPostDTO.street;
+        this.number = consumerPostDTO.number;
+        this.city = consumerPostDTO.city;
+        this.country = consumerPostDTO.country;
+        this.portalCode = consumerPostDTO.portalCode;
+        this.foodCardNumber = consumerPostDTO.foodCardNumber;
+        this.foodCardBalance = consumerPostDTO.foodCardBalance;
+        this.fuelCardNumber = consumerPostDTO.fuelCardNumber;
+        this.fuelCardBalance = consumerPostDTO.fuelCardBalance;
+        this.drugstoreNumber = consumerPostDTO.drugstoreNumber;
+        this.drugstoreCardBalance = consumerPostDTO.drugstoreCardBalance;
+    }
+
+    public Consumer(ConsumerPutDTO consumerPutDTO) {
+        this.name = consumerPutDTO.name;
+        this.documentNumber = consumerPutDTO.documentNumber;
+        this.birthDate = consumerPutDTO.birthDate;
+        this.mobilePhoneNumber = consumerPutDTO.mobilePhoneNumber;
+        this.residencePhoneNumber = consumerPutDTO.residencePhoneNumber;
+        this.phoneNumber = consumerPutDTO.phoneNumber;
+        this.email = consumerPutDTO.email;
+        this.street = consumerPutDTO.street;
+        this.number = consumerPutDTO.number;
+        this.city = consumerPutDTO.city;
+        this.country = consumerPutDTO.country;
+        this.portalCode = consumerPutDTO.portalCode;
+        this.foodCardNumber = consumerPutDTO.foodCardNumber;
+        this.fuelCardNumber = consumerPutDTO.fuelCardNumber;
+        this.drugstoreNumber = consumerPutDTO.drugstoreNumber;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
