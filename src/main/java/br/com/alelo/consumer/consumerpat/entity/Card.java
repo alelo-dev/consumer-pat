@@ -1,26 +1,26 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
+import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Data
 @Entity
 public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "BIGINT")
-    private BigInteger id;
+    private Long id;
+
+    @Column(unique = true)
     private String cardNumber;
-    private Double cardBalance;
-    private TypeCard typeCard;
+    private BigDecimal cardBalance;
+    private CardType typeCard;
 }

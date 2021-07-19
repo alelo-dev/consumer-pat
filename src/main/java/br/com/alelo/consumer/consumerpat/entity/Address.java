@@ -1,30 +1,26 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode
 @Builder
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "BIGINT")
-    private BigInteger id;
+    private Long id;
     //Address
     private String street;
     private int number;
     private String city;
     private String country;
-    private String portalCode;
+    private String postalCode;
 }

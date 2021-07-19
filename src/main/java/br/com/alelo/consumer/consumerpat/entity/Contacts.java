@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.math.BigInteger;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -17,8 +20,7 @@ public class Contacts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "BIGINT")
-    private BigInteger id;
+    private Long id;
     private String mobilePhoneNumber;
     private String residencePhoneNumber;
     private String phoneNumber;

@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/java/br/com/alelo/consumer/consumerpat/config/SwaggerConfig2.java
