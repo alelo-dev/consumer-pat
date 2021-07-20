@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "5391b5ce-5f33-4c89-9839-d3f1e8ce20ac",
+		"name": "Aplicação consumer - pat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "update-balance",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"number\": 30,\r\n    \"balance\": 960\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/card/update-balance",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"card",
+						"update-balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"establishmentType\": \"1\",\r\n    \"establishmentName\": \"Posto da vila\",\r\n    \"productDescription\": \"Gasolina Aditivada\",\r\n    \"cardNumber\": 10,\r\n    \"value\": 120.33\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/card/buy",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"card",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-consumer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"João\",\r\n    \"birthDate\": \"1986-11-13\",\r\n    \"documentNumber\": 496586581,\r\n    \"address\": {\r\n        \"city\": \"Guarujá\",\r\n        \"country\": \"SP\",\r\n        \"number\": 10,\r\n        \"portalCode\": 11489521,\r\n        \"street\": \"Rua João Figueiredo\"\r\n    },\r\n    \"cards\": [\r\n        {\r\n            \"balance\": 520,\r\n            \"number\": 10,\r\n            \"cardType\": 1\r\n        },\r\n        {\r\n            \"balance\": 360,\r\n            \"number\": 20,\r\n            \"cardType\": \"2\"\r\n        },\r\n        {\r\n            \"balance\": 985,\r\n            \"number\": 30,\r\n            \"cardType\": \"3\"\r\n        }\r\n    ],\r\n    \"contact\": {\r\n        \"mobilePhoneNumber\": 13996845236,\r\n        \"email\": \"joão@hotmail.com\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/consumer/create-consumer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"create-consumer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-consumer",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"João\",\r\n    \"documentNumber\": 496586581,\r\n    \"birthDate\": \"1986-11-13\",\r\n    \"contact\": {\r\n        \"id\": 3,\r\n        \"mobilePhoneNumber\": 13996845236,\r\n        \"residencePhoneNumber\": 1333589656,\r\n        \"phoneNumber\": 1333475869,\r\n        \"email\": \"joão@hotmail.com\"\r\n    },\r\n    \"address\": {\r\n        \"id\": 2,\r\n        \"street\": \"Rua João Figueiredo\",\r\n        \"number\": 10,\r\n        \"city\": \"Guarujá\",\r\n        \"country\": \"SP\",\r\n        \"portalCode\": 11489521\r\n    },\r\n    \"cards\": [\r\n        {\r\n            \"number\": 20,\r\n            \"balance\": 362.00,\r\n            \"cardType\": 2\r\n        },\r\n        {\r\n            \"number\": 10,\r\n            \"balance\": 520.00,\r\n            \"cardType\": 1\r\n        },\r\n        {\r\n            \"number\": 30,\r\n            \"balance\": 985.00,\r\n            \"cardType\": 3\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/consumer/update-consumer/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"update-consumer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list-all-consumers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/consumer/list-all-consumers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"list-all-consumers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
