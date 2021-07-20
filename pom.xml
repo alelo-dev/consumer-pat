@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.alelo.consumer</groupId>
 	<artifactId>consumer-pat</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>consumer-test</name>
 	<description>Teste para programadores Alelo Adquirencia</description>
 	<properties>
@@ -33,7 +33,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.8</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
