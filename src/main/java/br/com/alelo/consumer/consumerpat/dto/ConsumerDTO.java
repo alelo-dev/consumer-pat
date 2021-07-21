@@ -1,35 +1,35 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
+import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 
 public class ConsumerDTO {
 
-    String name;
-    String  documentNumber;
-    Date birthDate;
+    private String name;
+    private String documentNumber;
+    private Date birthDate;
+    private String mobilePhoneNumber;
+    private String residencePhoneNumber;
+    private String phoneNumber;
+    private String email;
+    private List<Address> addresses;
 
-    public ConsumerDTO(Date birthDate, String documentNumber, String name) {
-        this.birthDate = birthDate;
-        this.documentNumber = documentNumber;
+    public ConsumerDTO(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
+        this.documentNumber = documentNumber;
+        this.birthDate = birthDate;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.residencePhoneNumber = residencePhoneNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.addresses = addresses;
     }
 
     public Consumer toModel(EntityManager manager) {
-        return new Consumer(birthDate, documentNumber, name);
+        return new Consumer(name, documentNumber, birthDate, mobilePhoneNumber, residencePhoneNumber, phoneNumber, email, addresses);
     }
 }
