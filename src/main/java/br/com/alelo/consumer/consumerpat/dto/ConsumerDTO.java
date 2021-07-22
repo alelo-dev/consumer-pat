@@ -6,8 +6,10 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class ConsumerDTO {
 
@@ -19,9 +21,10 @@ public class ConsumerDTO {
     private String phoneNumber;
     private String email;
     private List<Address> addresses;
-    private List<Card> cards;
+    @OneToMany(mappedBy = "consumer")
+    private Set<Card> cards;
 
-    public ConsumerDTO(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses, List<Card> cards) {
+    public ConsumerDTO(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses, Set<Card> cards) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.birthDate = birthDate;

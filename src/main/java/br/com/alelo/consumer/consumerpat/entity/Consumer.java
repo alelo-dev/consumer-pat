@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,7 +20,7 @@ import java.util.List;
 public class Consumer implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String documentNumber;
@@ -33,9 +34,9 @@ public class Consumer implements Serializable {
     @OneToMany(mappedBy = "consumer")
     private List<Address> addresses;
     @OneToMany(mappedBy = "consumer")
-    private List<Card> cards;
+    private Set<Card> cards;
 
-    public Consumer(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses, List<Card> cards) {
+    public Consumer(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses, Set<Card> cards) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.birthDate = birthDate;
@@ -44,17 +45,19 @@ public class Consumer implements Serializable {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.addresses = addresses;
+        this.cards = cards;
     }
 
-        //cards
-    int foodCardNumber;
-    double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+//    //cards
+//    int foodCardNumber;
+//    double foodCardBalance;
+//
+//    int fuelCardNumber;
+//    double fuelCardBalance;
+//
+//    int drugstoreNumber;
+//    double drugstoreCardBalance;
 
 
 }

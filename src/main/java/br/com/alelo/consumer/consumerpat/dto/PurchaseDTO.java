@@ -1,11 +1,14 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
+import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.entity.Type;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
-@EqualsAndHashCode
+import javax.persistence.EntityManager;
+
+@Getter
+@AllArgsConstructor
 public class PurchaseDTO {
 
     private Type type;
@@ -14,11 +17,17 @@ public class PurchaseDTO {
     private String productDescription;
     private double value;
 
-    public PurchaseDTO(Type type, String establishmentName, int cardNumber, String productDescription, double value) {
-        this.type = type;
-        this.establishmentName = establishmentName;
+    public PurchaseDTO(int cardNumber, double value) {
         this.cardNumber = cardNumber;
-        this.productDescription = productDescription;
         this.value = value;
     }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public Purchase toModel(EntityManager manager) {
+        return new Purchase(type, establishmentName, cardNumber, productDescription, value);
+    }
+
 }
