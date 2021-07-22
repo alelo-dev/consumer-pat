@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
@@ -15,6 +16,7 @@ public class ConsumerDTO {
 
     private String name;
     private String documentNumber;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
     private String mobilePhoneNumber;
     private String residencePhoneNumber;

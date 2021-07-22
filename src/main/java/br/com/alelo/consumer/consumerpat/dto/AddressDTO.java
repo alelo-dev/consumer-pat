@@ -10,6 +10,8 @@ public class AddressDTO {
     private String country;
     private String postalCode;
 
+    public AddressDTO() {}
+
     public AddressDTO(String street, int number, String city, String country, String postalCode) {
         this.street = street;
         this.number = number;
