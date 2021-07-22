@@ -33,7 +33,6 @@ public class ConsumerController {
         return repository.getAllConsumersList();
     }
 
-    /* Cadastrar novos clientes */
     @PostMapping(value = "/createConsumer")
     @Transactional
     public String createConsumer(@RequestBody ConsumerDTO consumerDTO) {
