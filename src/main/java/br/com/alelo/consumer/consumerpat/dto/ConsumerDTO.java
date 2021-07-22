@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
 import br.com.alelo.consumer.consumerpat.entity.Address;
+import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 
@@ -18,8 +19,9 @@ public class ConsumerDTO {
     private String phoneNumber;
     private String email;
     private List<Address> addresses;
+    private List<Card> cards;
 
-    public ConsumerDTO(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses) {
+    public ConsumerDTO(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses, List<Card> cards) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.birthDate = birthDate;
@@ -28,9 +30,10 @@ public class ConsumerDTO {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.addresses = addresses;
+        this.cards = cards;
     }
 
     public Consumer toModel(EntityManager manager, AddressRepository addressRepository) {
-        return new Consumer(name, documentNumber, birthDate, mobilePhoneNumber, residencePhoneNumber, phoneNumber, email, addresses);
+        return new Consumer(name, documentNumber, birthDate, mobilePhoneNumber, residencePhoneNumber, phoneNumber, email, addresses, cards);
     }
 }

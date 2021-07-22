@@ -31,8 +31,10 @@ public class Consumer implements Serializable {
     private String email;
     @OneToMany(mappedBy = "consumer")
     private List<Address> addresses;
+    @OneToMany(mappedBy = "consumer")
+    private List<Card> cards;
 
-    public Consumer(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses) {
+    public Consumer(String name, String documentNumber, Date birthDate, String mobilePhoneNumber, String residencePhoneNumber, String phoneNumber, String email, List<Address> addresses, List<Card> cards) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.birthDate = birthDate;
@@ -43,16 +45,15 @@ public class Consumer implements Serializable {
         this.addresses = addresses;
     }
 
-    //    //cards
-//    int foodCardNumber;
-//    double foodCardBalance;
-//
-//    int fuelCardNumber;
-//    double fuelCardBalance;
-//
-//    int drugstoreNumber;
-//    double drugstoreCardBalance;
-//    }
+        //cards
+    int foodCardNumber;
+    double foodCardBalance;
+
+    int fuelCardNumber;
+    double fuelCardBalance;
+
+    int drugstoreNumber;
+    double drugstoreCardBalance;
 
 
 }

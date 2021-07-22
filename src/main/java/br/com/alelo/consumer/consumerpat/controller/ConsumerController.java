@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
@@ -41,14 +40,15 @@ public class ConsumerController {
 
         Consumer newConsumer = consumerDTO.toModel(manager, addressRepository);
         manager.persist(newConsumer);
-        //repository.save(consumer1);
+
         return newConsumer.toString();
     }
-//
-//    // Não deve ser possível alterar o saldo do cartão
-//    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-//    public void updateConsumer(@RequestBody Consumer consumer) {
-//        repository.save(consumer);
-//    }
+
+    // Não deve ser possível alterar o saldo do cartão
+    @PutMapping(value = "/updateConsumer")
+    public Consumer updateConsumer(@RequestBody Consumer consumer) {
+
+        return repository.save(consumer);
+    }
 
 }
