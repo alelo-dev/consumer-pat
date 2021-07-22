@@ -44,8 +44,13 @@ public class ConsumerController {
         return newConsumer.toString();
     }
 
+    @GetMapping("/{id}")
+    public Consumer getById(@PathVariable Integer id) {
+        return repository.getOne(id);
+    }
+
     // Não deve ser possível alterar o saldo do cartão
-    @PutMapping(value = "/updateConsumer")
+    @PutMapping(value = "/{id}")
     public Consumer updateConsumer(@RequestBody Consumer consumer) {
 
         return repository.save(consumer);
