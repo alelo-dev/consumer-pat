@@ -44,11 +44,11 @@ public class ConsumerController {
         //repository.save(consumer1);
         return newConsumer.toString();
     }
-
-    // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
-    }
+//
+//    // Não deve ser possível alterar o saldo do cartão
+//    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+//    public void updateConsumer(@RequestBody Consumer consumer) {
+//        repository.save(consumer);
+//    }
 
 }

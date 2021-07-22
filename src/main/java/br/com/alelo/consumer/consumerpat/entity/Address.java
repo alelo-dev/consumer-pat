@@ -21,7 +21,6 @@ public class Address implements Serializable {
     private String country;
     private String portalCode;
     @ManyToOne
-    @JoinColumn(name = "consumer_id")
     private Consumer consumer;
 
 }

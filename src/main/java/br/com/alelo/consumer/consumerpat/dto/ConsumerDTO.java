@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.dto;
 
 import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -29,7 +30,7 @@ public class ConsumerDTO {
         this.addresses = addresses;
     }
 
-    public Consumer toModel(EntityManager manager) {
+    public Consumer toModel(EntityManager manager, AddressRepository addressRepository) {
         return new Consumer(name, documentNumber, birthDate, mobilePhoneNumber, residencePhoneNumber, phoneNumber, email, addresses);
     }
 }
