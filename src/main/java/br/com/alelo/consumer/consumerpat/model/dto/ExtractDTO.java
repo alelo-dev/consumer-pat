@@ -1,24 +1,18 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.model.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-
 @Data
-@Entity
 @NoArgsConstructor
-public class Extract {
+public class ExtractDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer establishmentNameId;
     private String establishmentName;
@@ -28,7 +22,7 @@ public class Extract {
     private BigDecimal value;
 
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, LocalDateTime dateBuy, String cardNumber, BigDecimal value) {
+    public ExtractDTO(int id, int establishmentNameId, String establishmentName, String productDescription, LocalDateTime dateBuy, String cardNumber, BigDecimal value) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
@@ -38,14 +32,14 @@ public class Extract {
         this.value = value;
     }
 
-    public Extract(String productDescription, LocalDateTime dateBuy, String cardNumber, BigDecimal value) {
+    public ExtractDTO(String productDescription, LocalDateTime dateBuy, String cardNumber, BigDecimal value) {
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
         this.value = value;
     }
 
-    public Extract(int establishmentNameId, String establishmentName, String productDescription, LocalDateTime dateBuy, String cardNumber, BigDecimal value) {
+    public ExtractDTO(int establishmentNameId, String establishmentName, String productDescription, LocalDateTime dateBuy, String cardNumber, BigDecimal value) {
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
