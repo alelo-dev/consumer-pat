@@ -16,4 +16,7 @@ Faça um fork do projeto, clone o mesmo, abra na sua IDE de preferência e execu
 <p>Documentação da API: http://localhost:8080/swagger-ui/ <br/>
 Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
 
+Para efetuar as chamadas é necessário gerar um token(pelo proprio swagger é possível)
+e passar essa chamada no header (token)
+
  ***Atenção: Não inclua nenhuma lib ou framework***  
