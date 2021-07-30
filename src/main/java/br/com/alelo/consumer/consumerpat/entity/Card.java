@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import br.com.alelo.consumer.consumerpat.enumerated.CardType;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.Set;
                 @Index(name = "card_idx_01", columnList = "consumer_id"),
                 @Index(name = "card_idx_02", columnList = "number")
         })
+@ToString(exclude = "consumer")
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_seq")

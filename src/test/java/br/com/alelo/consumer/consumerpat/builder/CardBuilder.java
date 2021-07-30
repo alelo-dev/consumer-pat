@@ -21,7 +21,7 @@ public final class CardBuilder {
         return new Card();
     }
 
-    public static Card card1() {
+    public static Card foodCard() {
         final Card card = new Card();
         card.setId(1L);
         card.setNumber("#1");
@@ -30,7 +30,16 @@ public final class CardBuilder {
         return card;
     }
 
-    public static Card card2() {
+    public static Card drugstoreCard() {
+        final Card card = new Card();
+        card.setId(2L);
+        card.setNumber("#2");
+        card.setBalance(BigDecimal.TEN);
+        card.setTypes(new HashSet<>(Collections.singletonList(CardType.DRUGSTORE_CARD)));
+        return card;
+    }
+
+    public static Card fuelCard() {
         final Card card = new Card();
         card.setId(3L);
         card.setNumber("#3");

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
 
-public abstract class MockitoBaseTest {
+public abstract class BaseMockitoTest {
 
     private AutoCloseable closeable;
 

@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.MockitoBaseTest;
+import br.com.alelo.consumer.consumerpat.BaseMockitoTest;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-class ExtractServiceTest extends MockitoBaseTest {
+class ExtractServiceTest extends BaseMockitoTest {
     @Mock
     private ExtractRepository extractRepository;
     @InjectMocks

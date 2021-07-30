@@ -35,7 +35,7 @@ public final class ConsumerBuilder {
     public static Consumer consumerWith2Cards() {
         final Consumer consumer = new Consumer();
         consumer.setId(1L);
-        consumer.setCards(new ArrayList<>(Arrays.asList(card1(), card2())));
+        consumer.setCards(new ArrayList<>(Arrays.asList(foodCard(), fuelCard())));
         return consumer;
     }
 

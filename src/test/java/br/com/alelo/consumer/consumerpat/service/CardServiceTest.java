@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.MockitoBaseTest;
+import br.com.alelo.consumer.consumerpat.BaseMockitoTest;
 import br.com.alelo.consumer.consumerpat.dto.IncreaseCardBalanceDTO;
 import br.com.alelo.consumer.consumerpat.dto.TransactionDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static br.com.alelo.consumer.consumerpat.builder.CardBuilder.card1;
+import static br.com.alelo.consumer.consumerpat.builder.CardBuilder.foodCard;
 import static br.com.alelo.consumer.consumerpat.builder.IncreaseCardBalanceBuilder.fullIncreaseCardBalanceDTO;
 import static br.com.alelo.consumer.consumerpat.builder.TransactionBuilder.fullTransactionDTO;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class CardServiceTest extends MockitoBaseTest {
+class CardServiceTest extends BaseMockitoTest {
     @Mock
     private CardRepository cardRepository;
     @Mock
@@ -51,7 +51,7 @@ class CardServiceTest extends MockitoBaseTest {
     public void shouldIncreaseCardBalance() {
         IncreaseCardBalanceDTO request = fullIncreaseCardBalanceDTO();
 
-        final Card bdCard = card1();
+        final Card bdCard = foodCard();
         when(cardRepository.findOneByNumber(request.getNumber())).thenReturn(Optional.of(bdCard));
         final BigDecimal expectedValue = request.getValue().add(bdCard.getBalance());
 
@@ -65,7 +65,7 @@ class CardServiceTest extends MockitoBaseTest {
     @Test
     public void shouldProcess() {
         TransactionDTO request = fullTransactionDTO();
-        final Card bdCard = card1();
+        final Card bdCard = foodCard();
         when(cardRepository.findOneByNumber(request.getCardNumber())).thenReturn(Optional.of(bdCard));
 
         final BigDecimal value = BigDecimal.ONE;

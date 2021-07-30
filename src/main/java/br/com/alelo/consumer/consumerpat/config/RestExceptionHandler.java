@@ -38,7 +38,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleValidationException(NotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getDetails(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
