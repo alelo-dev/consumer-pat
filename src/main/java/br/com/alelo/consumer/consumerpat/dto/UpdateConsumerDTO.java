@@ -1,20 +1,12 @@
-package br.com.alelo.consumer.consumerpat.entity;
-
+package br.com.alelo.consumer.consumerpat.dto;
 
 import lombok.Data;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @Data
-@Entity
-@Table(name = "consumer")
-public class Consumer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "consumer_seq")
-    @SequenceGenerator(name = "consumer_seq", allocationSize = 1)
+public class UpdateConsumerDTO {
     private Long id;
     private String name;
     private String documentNumber;
@@ -34,8 +26,5 @@ public class Consumer {
     private String postalCode;
 
     //cards
-
-    //cards
-    @OneToMany(mappedBy = "consumer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Card> cards;
+    private List<UpdateCardDTO> cards;
 }
