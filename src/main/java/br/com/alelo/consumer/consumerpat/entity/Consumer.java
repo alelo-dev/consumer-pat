@@ -1,70 +1,52 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import java.time.LocalDate;
+import java.util.List;
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 @Entity
 public class Consumer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+	private String name;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+	@Column(unique = true)
+	private String documentNumber;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+	private LocalDate birthDate;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+	@OneToOne(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Address address;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CONSUMER_ID", referencedColumnName = "ID")
+	private List<Contact> contacts;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
-    }
+	@OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Card> cards;
 
+	public Consumer(String name, String documentNumber, LocalDate birthDate) {
+	    this.name = name;
+	    this.documentNumber = documentNumber;
+	    this.birthDate = birthDate;
+	}
 
 }
