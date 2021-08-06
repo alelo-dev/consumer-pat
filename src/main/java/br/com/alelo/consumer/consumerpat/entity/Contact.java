@@ -1,0 +1,34 @@
+package br.com.alelo.consumer.consumerpat.entity;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import br.com.alelo.consumer.consumerpat.enuns.ContactTypeEnum;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "contacts")
+public class Contact {
+
+	@Id
+	private Long id;
+	
+	@Enumerated(EnumType.STRING)
+	private ContactTypeEnum type;
+	
+	private String value;
+	
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "consumer_id")
+	private Consumer consumer;
+}
