@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,10 +17,16 @@ import lombok.NoArgsConstructor;
 public class ConsumerCreateDTO {
 	
     private String name;
+    
     private Integer documentNumber;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
+    
     private List<AddressCreateDTO> address;
+    
     private List<ContactCreateDTO> contacts;
+    
     private List<CardCreateDTO> cards;
     
     public Consumer toEntity() {

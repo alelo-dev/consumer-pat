@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerCreateDTO;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
@@ -42,13 +41,24 @@ public class ConsumerServiceImpl implements IConsumerService {
 		Consumer consumer = consumerDTO.toEntity();
 		consumer.getAddress().forEach(a -> a.setConsumer(consumer));
 		consumer.getContacts().forEach(c -> c.setConsumer(consumer));
-		consumer.getCards().forEach(c -> {
-			c.setConsumer(consumer);
-			if (!ObjectUtils.isEmpty(c.getId())) {				
-				c.setBalance(cardRepository.findBalanceByCardId(c.getId()));
-			}
-		});
+		consumer.getCards().forEach(c -> c.setConsumer(consumer));
+/**
+ * Caso seja necessário alterar os dados do cartão como o tipo e o numero, 
+ * ativiar este trecho e inativar linha acima do codigo. 
+ * Também é necessário alterar a entidade Consumers o CascadeType, do atributo cards.
+ **/
+//		consumer.getCards().forEach(c -> {
+//			c.setConsumer(consumer);
+//			if (!ObjectUtils.isEmpty(c.getId())) {				
+//				c.setBalance(cardRepository.findBalanceByCardId(c.getId()));
+//			}
+//		}); 
 		return repository.save(consumer);
+	}
+
+	@Override
+	public ConsumerDTO findById(Long id) {
+		return ConsumerDTO.to(repository.getOne(id));
 	}
 
 }

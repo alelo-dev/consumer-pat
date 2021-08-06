@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,14 +28,6 @@ public class ConsumerController {
 	@Autowired
 	IConsumerService service;
 
-//    @Autowired
-//    ConsumerRepository repository;
-//
-//    @Autowired
-//    ExtractRepository extractRepository;
-
-
-    /* Deve listar todos os clientes (cerca de 500) */
     @GetMapping
     public Page<ConsumerDTO> pageConsumers(
     		@RequestParam(value="page", defaultValue="0") Integer page, 
@@ -42,8 +35,6 @@ public class ConsumerController {
         return service.pageConsumers(page, linesPerPage);
     }
 
-
-    /* Cadastrar novos clientes */
     @PostMapping
     public ResponseEntity<Void> createConsumer(@RequestBody ConsumerCreateDTO consumerCreateDTO) {
         Consumer consumer = service.create(consumerCreateDTO);
@@ -51,10 +42,15 @@ public class ConsumerController {
 		return ResponseEntity.created(uri).build();
     }
 
-    // Não deve ser possível alterar o saldo do cartão
-    @PutMapping(value = "/{id}")
+    
+    @PutMapping
     public void updateConsumer(@RequestBody ConsumerDTO consumerDTO) {
         service.update(consumerDTO);
+    }
+    
+    @GetMapping(value = "/{id}")
+    public ConsumerDTO findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
 

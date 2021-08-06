@@ -31,5 +31,12 @@ public interface IConsumerService {
 	 * @param {@link ConsumerDTO}
 	 */
 	 Consumer update(ConsumerDTO consumerDTO);
+	 
+	 /**
+	  * Método responsável por resgatar um consumidor cadastrado através do ID.
+	  * 
+	  * @param id
+	  */
+	 ConsumerDTO findById(Long id);
 	
 }
