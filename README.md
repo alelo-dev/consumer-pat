@@ -17,3 +17,8 @@ Faça um fork do projeto, clone o mesmo, abra na sua IDE de preferência e execu
 Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
 
  ***Atenção: Não inclua nenhuma lib ou framework***  
+<hr>
+
+#### Template Postman
+
+Disponibilizei os templates dos serviços criados por este link: [Collection Postman](https://www.getpostman.com/collections/2a651ce360ee0a99ab9e)
