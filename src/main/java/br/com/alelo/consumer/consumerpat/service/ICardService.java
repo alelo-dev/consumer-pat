@@ -25,13 +25,13 @@ public interface ICardService {
 	 * 
 	 * @param cardBalanceDTO
 	 */
-	void setCardBalance(CardBalanceDTO cardBalanceDTO);
+	Card setCardBalance(CardBalanceDTO cardBalanceDTO);
 	
 	/**
 	 * Método responsável por debitar um valor ao saldo do cartão.
 	 * 
 	 * @param cardBalanceDTO
 	 */
-	void buyCardBalance(String cardNumber, BigDecimal value);
+	Card buyCardBalance(String cardNumber, BigDecimal value);
 
 }

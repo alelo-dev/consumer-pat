@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import br.com.alelo.consumer.consumerpat.exception.CardNotAcceptedException;
 import br.com.alelo.consumer.consumerpat.exception.CardNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.NotEnoughBalanceException;
+import br.com.alelo.consumer.consumerpat.exception.ObjectNotFoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandle {
@@ -30,6 +31,12 @@ public class ResourceExceptionHandle {
 	public ResponseEntity<StandardError> cardNotAccepted(CardNotAcceptedException e, HttpServletRequest request) {
 		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+	
+	@ExceptionHandler(ObjectNotFoundException.class)
+	public ResponseEntity<StandardError> cardNotAccepted(ObjectNotFoundException e, HttpServletRequest request) {
+		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	
 }

@@ -28,20 +28,22 @@ public class CardServiceImpl implements ICardService {
 	}
 	
 	@Override
-	public void setCardBalance(CardBalanceDTO cardBalanceDTO) {
+	public Card setCardBalance(CardBalanceDTO cardBalanceDTO) {
 		Card card = findByNumber(cardBalanceDTO.getCardNumber());
 		card.setBalance(card.getBalance().add(cardBalanceDTO.getValue()));
 		cardTransactionService.creditTransaction(card.getNumber(), cardBalanceDTO.getValue(), card.getBalance());
 		repository.save(card);
+		return card;
 	}
 
 	@Override
-	public void buyCardBalance(String cardNumber, BigDecimal value) {
+	public Card buyCardBalance(String cardNumber, BigDecimal value) {
 		Card card = findByNumber(cardNumber);
 		validations(value, card);
 		card.setBalance(card.getBalance().subtract(value));
 		cardTransactionService.debitTransaction(cardNumber, value, card.getBalance());
 		repository.save(card);
+		return card;
 	}
 
 	/**

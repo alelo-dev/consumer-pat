@@ -6,10 +6,12 @@ import java.util.stream.Collectors;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsumerDTO {

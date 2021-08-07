@@ -14,10 +14,12 @@ import javax.persistence.Table;
 
 import br.com.alelo.consumer.consumerpat.enuns.AddressTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

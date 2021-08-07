@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerCreateDTO;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.exception.ObjectNotFoundException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.service.IConsumerService;
@@ -29,7 +30,7 @@ public class ConsumerServiceImpl implements IConsumerService {
 	
 	@Override
 	public ConsumerDTO findById(Long id) {
-		return ConsumerDTO.to(repository.getOne(id));
+		return ConsumerDTO.to(repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, Consumer.class)));
 	}
 
 	@Override

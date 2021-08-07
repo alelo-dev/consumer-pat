@@ -8,10 +8,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConsumerCreateDTO {

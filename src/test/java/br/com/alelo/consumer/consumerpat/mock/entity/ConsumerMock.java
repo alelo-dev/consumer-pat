@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity.mock;
+package br.com.alelo.consumer.consumerpat.mock.entity;
 
 import java.time.LocalDate;
 

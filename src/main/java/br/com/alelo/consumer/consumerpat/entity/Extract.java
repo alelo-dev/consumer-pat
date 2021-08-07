@@ -13,11 +13,13 @@ import javax.persistence.Table;
 
 import br.com.alelo.consumer.consumerpat.enuns.EstablishmentTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Data
+@Builder
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

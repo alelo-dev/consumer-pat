@@ -19,10 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.alelo.consumer.consumerpat.enuns.CardTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
