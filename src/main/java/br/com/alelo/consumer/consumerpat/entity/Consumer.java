@@ -44,7 +44,7 @@ public class Consumer {
     @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
 	private List<Address> address;
     
-    @OneToMany(mappedBy = "consumer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
 	private List<Card> cards;
     
     @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
