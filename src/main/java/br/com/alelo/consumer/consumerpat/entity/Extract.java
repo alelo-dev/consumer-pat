@@ -1,16 +1,20 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import java.util.Date;
+import br.com.alelo.consumer.consumerpat.enuns.EstablishmentTypeEnum;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
@@ -23,26 +27,16 @@ public class Extract {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer establishmentNameId;
-    private String establishmentName;
     private String productDescription;
-    private Date dateBuy;
-    private Integer cardNumber;
-    private Double value;
+    private Long establishmentId;
+    private String establishmentName;
+    private LocalDate dateBuy;
+    private BigDecimal value;
+    private String cardNumber;
+    
+    @Enumerated(EnumType.STRING)
+    private EstablishmentTypeEnum establishmentType;
+    
+    
 
-
-    public Extract(String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
 }

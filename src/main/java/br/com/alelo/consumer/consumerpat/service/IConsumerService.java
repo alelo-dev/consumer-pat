@@ -17,6 +17,13 @@ public interface IConsumerService {
 	 * @return {@link Page} of {@link ConsumerDTO}
 	 */
 	Page<ConsumerDTO> pageConsumers(Integer page, Integer size);
+	
+	/**
+	  * Método responsável por resgatar um consumidor cadastrado através do ID.
+	  * 
+	  * @param id
+	  */
+	 ConsumerDTO findById(Long id);
 
 	/**
 	 * Método responsável por realizar o cadastro de um novo consumidor.
@@ -32,11 +39,5 @@ public interface IConsumerService {
 	 */
 	 Consumer update(ConsumerDTO consumerDTO);
 	 
-	 /**
-	  * Método responsável por resgatar um consumidor cadastrado através do ID.
-	  * 
-	  * @param id
-	  */
-	 ConsumerDTO findById(Long id);
 	
 }

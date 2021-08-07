@@ -26,6 +26,11 @@ public class ConsumerServiceImpl implements IConsumerService {
 		Page<Consumer> listConsumers = repository.findAll(PageRequest.of(page, size));
 		return listConsumers.map(ConsumerDTO::to);
 	}
+	
+	@Override
+	public ConsumerDTO findById(Long id) {
+		return ConsumerDTO.to(repository.getOne(id));
+	}
 
 	@Override
 	public Consumer create(ConsumerCreateDTO consumerCreateDTO) {
@@ -56,9 +61,5 @@ public class ConsumerServiceImpl implements IConsumerService {
 		return repository.save(consumer);
 	}
 
-	@Override
-	public ConsumerDTO findById(Long id) {
-		return ConsumerDTO.to(repository.getOne(id));
-	}
 
 }
