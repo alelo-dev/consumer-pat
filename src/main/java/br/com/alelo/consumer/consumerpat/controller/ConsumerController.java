@@ -19,22 +19,28 @@ import br.com.alelo.consumer.consumerpat.dto.ConsumerCreateDTO;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.IConsumerService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 
 @RestController
 @RequestMapping("/consumer")
+@Api(value = "Consumidores")
 public class ConsumerController {
 	
 	@Autowired
 	IConsumerService service;
 
-    @GetMapping
+	@Operation(summary = "Listagem paginada dos Consumidores", description = "Utilize a listagem paginada para exibição dos consumidores cadastrados no banco de dados.")
+	@GetMapping
     public Page<ConsumerDTO> pageConsumers(
-    		@RequestParam(value="page", defaultValue="0") Integer page, 
-			@RequestParam(value="linesPerPage", defaultValue="10") Integer linesPerPage) {
+    		@Parameter(description = "Número da página", required = false) @RequestParam(value="page", defaultValue="0") Integer page, 
+    		@Parameter(description = "Quantidade de itens por página", required = false) @RequestParam(value="linesPerPage", defaultValue="10") Integer linesPerPage) {
         return service.pageConsumers(page, linesPerPage);
     }
 
+	@Operation(summary = "Criar um novo Consumidor", description = "Utilize este endpoint para criação de um novo consumidor.")
     @PostMapping
     public ResponseEntity<Void> createConsumer(@RequestBody ConsumerCreateDTO consumerCreateDTO) {
         Consumer consumer = service.create(consumerCreateDTO);
@@ -43,13 +49,15 @@ public class ConsumerController {
     }
 
     
+	@Operation(summary = "Atualizar Consumidor", description = "Utilize este endpoint para atualizar os dados de um consumidor existente.")
     @PutMapping
     public void updateConsumer(@RequestBody ConsumerDTO consumerDTO) {
         service.update(consumerDTO);
     }
     
+	@Operation(summary = "Buscar consumidor através do seu ID.", description = "Utilize este endpoint para buscar o consumidor através do seu ID.")
     @GetMapping(value = "/{id}")
-    public ConsumerDTO findById(@PathVariable Long id) {
+    public ConsumerDTO findById(@Parameter(description = "ID do consumidor", example = "1", required = false) @PathVariable Long id) {
         return service.findById(id);
     }
 }
