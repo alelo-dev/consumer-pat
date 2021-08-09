@@ -1,16 +1,23 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 
 @Controller
@@ -25,22 +32,23 @@ public class ConsumerController {
 
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
+    @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+        return repository.findAll();
     }
 
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @PostMapping("/create")
+    @ResponseStatus(code = HttpStatus.CREATED)
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @PutMapping("/update")
+    @ResponseStatus(code = HttpStatus.OK)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
@@ -51,8 +59,9 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
+    @PutMapping("/setcardbalance/{id}&{value}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public void setBalance(@PathVariable int cardNumber, @PathVariable double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
@@ -75,8 +84,8 @@ public class ConsumerController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @PostMapping("/buy")
+    @ResponseStatus(code = HttpStatus.OK)    
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
