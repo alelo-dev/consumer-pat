@@ -1,6 +1,8 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.request.BalanceChangeRequest;
+import br.com.alelo.consumer.consumerpat.request.BuyRequest;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import br.com.alelo.consumer.consumerpat.service.ConsumerServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -46,13 +48,15 @@ public class ConsumerController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
-    public void setBalance(int cardNumber, double value) {
-        service.setBalance(cardNumber,value);
+    public void setBalance(@RequestBody BalanceChangeRequest request) {
+        service.setBalance(request.getCardNumber(), request.getValue());
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        service.buy(establishmentType,establishmentName,cardNumber,productDescription,value);
+    public void buy(@RequestBody BuyRequest request) {
+        service.buy(request.getEstablishmentType(),request.getEstablishmentName(),
+                request.getCardNumber(),request.getProductDescription(), request.getValue()
+        );
     }
 }
