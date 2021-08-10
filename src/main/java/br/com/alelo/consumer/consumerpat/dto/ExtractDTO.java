@@ -4,13 +4,17 @@ import br.com.alelo.consumer.consumerpat.entity.Extract;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 
 @Data
-@Component
 public class ExtractDTO {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     int establishmentNameId;
     String establishmentName;

@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

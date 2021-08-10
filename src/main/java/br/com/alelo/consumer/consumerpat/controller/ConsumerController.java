@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,25 +30,28 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getConsumers());
     }
 
-
     /* Cadastrar novos clientes */
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody ConsumerDTO consumer) {
         service.saveConsumer(consumer);
     }
 
+    @ResponseBody
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody ConsumerDTO consumer) {
         service.updateConsumer(consumer);
     }
 
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
     public void setBalance(int cardNumber, double value) {
         service.setBalance(cardNumber,value);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         service.buy(establishmentType,establishmentName,cardNumber,productDescription,value);
     }

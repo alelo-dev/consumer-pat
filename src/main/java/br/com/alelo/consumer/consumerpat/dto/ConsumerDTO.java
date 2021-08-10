@@ -5,14 +5,18 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
 
 
 @Data
-@Component
 public class ConsumerDTO {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
     int documentNumber;

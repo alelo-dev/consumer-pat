@@ -7,11 +7,13 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,23 +37,29 @@ public class ConsumerServiceImpl implements ConsumerService {
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    public void updateConsumer (ConsumerDTO consumer){
+    public void updateConsumer (ConsumerDTO consumer) throws ResponseStatusException{
 
         var consumerExistent =  repository.findById(consumer.getId());
 
         /*
             Validando se os valores dos cartões não sofreram alterações
          */
-        if(consumerExistent.isPresent() &&
-                (consumer.getFoodCardBalance() == consumerExistent.get().getFoodCardBalance()
-                        && consumer.getDrugstoreCardBalance() == consumerExistent.get().getDrugstoreCardBalance()
-                        && consumer.getFuelCardBalance() == consumerExistent.get().getFuelCardBalance()
-                )
-        ) {
-            repository.save(consumer.mapToEntity());
+        if(consumerExistent.isPresent()){
+            if(isBalanceNotChanged(consumer, consumerExistent.get())) {
+                repository.save(consumer.mapToEntity());
+            } else
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"O saldo não pode ser alterado");
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"O saldo não pode ser alterado");
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"O consumer não foi encontrado");
         }
+
+    }
+
+    private boolean isBalanceNotChanged(ConsumerDTO consumer, Consumer consumerExistent) {
+        return consumer.getFoodCardBalance() == consumerExistent.getFoodCardBalance()
+                && consumer.getDrugstoreCardBalance() == consumerExistent.getDrugstoreCardBalance()
+                && consumer.getFuelCardBalance() == consumerExistent.getFuelCardBalance();
     }
 
     /*
