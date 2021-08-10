@@ -1,23 +1,18 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.dto;
 
 
-import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
 
 
 @Data
-@Entity
-public class Consumer {
+@Component
+public class ConsumerDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
     int documentNumber;
@@ -50,7 +45,7 @@ public class Consumer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
+        ConsumerDTO consumer = (ConsumerDTO) o;
         return documentNumber == consumer.documentNumber
                 && mobilePhoneNumber == consumer.mobilePhoneNumber
                 && residencePhoneNumber == consumer.residencePhoneNumber
@@ -66,34 +61,35 @@ public class Consumer {
                 && Objects.equals(country, consumer.country);
     }
 
-    public ConsumerDTO mapToDTO(){
-        ConsumerDTO dto = new ConsumerDTO();
+    public Consumer mapToEntity(){
+        Consumer entity = new Consumer();
 
-        dto.setId(this.getId());
-        dto.setName(this.getName());
-        dto.setDocumentNumber(this.getDocumentNumber());
-        dto.setBirthDate(this.getBirthDate());
+        entity.setId(this.getId());
+        entity.setName(this.getName());
+        entity.setDocumentNumber(this.getDocumentNumber());
+        entity.setBirthDate(this.getBirthDate());
 
-        dto.setMobilePhoneNumber(this.getMobilePhoneNumber());
-        dto.setResidencePhoneNumber(this.getResidencePhoneNumber());
-        dto.setPhoneNumber(this.getPhoneNumber());
-        dto.setEmail(this.getEmail());
+        entity.setMobilePhoneNumber(this.getMobilePhoneNumber());
+        entity.setResidencePhoneNumber(this.getResidencePhoneNumber());
+        entity.setPhoneNumber(this.getPhoneNumber());
+        entity.setEmail(this.getEmail());
 
-        dto.setStreet(this.getStreet());
-        dto.setNumber(this.getNumber());
-        dto.setCity(this.getCity());
-        dto.setCountry(this.getCountry());
-        dto.setPortalCode(this.getPortalCode());
+        entity.setStreet(this.getStreet());
+        entity.setNumber(this.getNumber());
+        entity.setCity(this.getCity());
+        entity.setCountry(this.getCountry());
+        entity.setPortalCode(this.getPortalCode());
 
-        dto.setFoodCardNumber(this.getFoodCardNumber());
-        dto.setFoodCardBalance(this.getFoodCardBalance());
+        entity.setFoodCardNumber(this.getFoodCardNumber());
+        entity.setFoodCardBalance(this.getFoodCardBalance());
 
-        dto.setFuelCardNumber(this.getFuelCardNumber());
-        dto.setFuelCardBalance(this.getFuelCardBalance());
+        entity.setFuelCardNumber(this.getFuelCardNumber());
+        entity.setFuelCardBalance(this.getFuelCardBalance());
 
-        dto.setDrugstoreNumber(this.getDrugstoreNumber());
-        dto.setDrugstoreCardBalance(this.getDrugstoreCardBalance());
+        entity.setDrugstoreNumber(this.getDrugstoreNumber());
+        entity.setDrugstoreCardBalance(this.getDrugstoreCardBalance());
 
-        return dto;
+        return entity;
     }
+
 }
