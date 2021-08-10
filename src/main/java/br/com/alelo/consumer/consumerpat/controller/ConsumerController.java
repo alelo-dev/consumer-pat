@@ -40,8 +40,8 @@ public class ConsumerController {
         service.saveConsumer(consumer);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
     public void updateConsumer(@RequestBody ConsumerDTO consumer) {
         service.updateConsumer(consumer);
     }
