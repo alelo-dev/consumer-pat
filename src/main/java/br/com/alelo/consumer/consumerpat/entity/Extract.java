@@ -1,10 +1,11 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
+
+import lombok.Data;
 
 
 @Data
@@ -21,6 +22,15 @@ public class Extract {
     double value;
 
 
+    /**
+     * @param id
+     * @param establishmentNameId
+     * @param establishmentName
+     * @param productDescription
+     * @param dateBuy
+     * @param cardNumber
+     * @param value
+     */
     public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
@@ -31,6 +41,12 @@ public class Extract {
         this.value = value;
     }
 
+    /**
+     * @param productDescription
+     * @param dateBuy
+     * @param cardNumber
+     * @param value
+     */
     public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
@@ -38,8 +54,14 @@ public class Extract {
         this.value = value;
     }
 
+    /**
+     * @param establishmentName
+     * @param productDescription
+     * @param dateBuy
+     * @param cardNumber
+     * @param value
+     */
     public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;

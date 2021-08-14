@@ -1,15 +1,15 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
+import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+
+import lombok.Data;
 
 
 @Data
@@ -46,6 +46,9 @@ public class Consumer {
     int drugstoreNumber;
     double drugstoreCardBalance;
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,6 +68,51 @@ public class Consumer {
                 && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
                 && Objects.equals(country, consumer.country);
     }
-
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{id: ");
+		builder.append(id);
+		builder.append(", name: ");
+		builder.append(name);
+		builder.append(", documentNumber: ");
+		builder.append(documentNumber);
+		builder.append(", birthDate: ");
+		builder.append(birthDate);
+		builder.append(", mobilePhoneNumber: ");
+		builder.append(mobilePhoneNumber);
+		builder.append(", residencePhoneNumber: ");
+		builder.append(residencePhoneNumber);
+		builder.append(", phoneNumber: ");
+		builder.append(phoneNumber);
+		builder.append(", email: ");
+		builder.append(email);
+		builder.append(", street: ");
+		builder.append(street);
+		builder.append(", number: ");
+		builder.append(number);
+		builder.append(", city: ");
+		builder.append(city);
+		builder.append(", country: ");
+		builder.append(country);
+		builder.append(", portalCode: ");
+		builder.append(portalCode);
+		builder.append(", foodCardNumber: ");
+		builder.append(foodCardNumber);
+		builder.append(", foodCardBalance: ");
+		builder.append(foodCardBalance);
+		builder.append(", fuelCardNumber: ");
+		builder.append(fuelCardNumber);
+		builder.append(", fuelCardBalance: ");
+		builder.append(fuelCardBalance);
+		builder.append(", drugstoreNumber: ");
+		builder.append(drugstoreNumber);
+		builder.append("}");
+		return builder.toString();
+	}
 
 }
