@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 
-@RestController("/card")
+@RestController
+@RequestMapping("/card")
 public class CardController {
     @Autowired
     CardService cardService;
