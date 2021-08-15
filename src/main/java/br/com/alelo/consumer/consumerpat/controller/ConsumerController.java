@@ -19,7 +19,8 @@ import java.net.URI;
 import java.util.Objects;
 
 
-@RestController("/consumer")
+@RestController
+@RequestMapping("/consumer")
 public class ConsumerController {
 
     @Autowired
