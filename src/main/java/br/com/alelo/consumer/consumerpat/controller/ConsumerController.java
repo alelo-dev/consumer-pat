@@ -43,7 +43,7 @@ public class ConsumerController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateConsumer(@PathParam("id") Long id, @RequestBody UpdateConsumerDTO consumer) {
         Consumer consumerResponse = consumerService.updateConsumer(id, consumer);
 
