@@ -6,6 +6,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.CardType;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.exceptions.CardNotFoundException;
+import br.com.alelo.consumer.consumerpat.exceptions.InvalidBalanceException;
 import br.com.alelo.consumer.consumerpat.mapper.ConsumerMapper;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
@@ -26,7 +27,7 @@ public class CardService {
     ExtractRepository extractRepository;
 
     public Card getByCardNumberAndType(Integer cardNumber, CardType cardType) {
-        return repository.findByCardNumberAndCardType(cardNumber, cardType).orElseThrow(() -> new CardNotFoundException("Card not found."));
+        return repository.findByCardNumberAndCardType(cardNumber, cardType).orElseThrow(() -> new CardNotFoundException());
     }
 
     public Card updateCardBalance(CardUpdateBalanceDTO cardUpdateBalanceDTO) {
@@ -36,12 +37,14 @@ public class CardService {
     }
 
     public void buy(BuyDTO buy) {
-
-        Card card = cardService.getByCardNumberAndType(buy.getCardNumber(), CardType.toEnum(buy.getEstablishmentType()));
+        Card card = cardService.getByCardNumberAndType(buy.getCardNumber(), buy.getCardType());
         Double calculatedValue = card.getCardType().getRuleCard().calcular(buy.getValue());
-        card.setCardBalance(calculatedValue);
+        if (card.getCardBalance().compareTo(calculatedValue) < 1 && card.getCardBalance().compareTo(calculatedValue) != 0) {
+            throw new InvalidBalanceException();
+        }
+        card.setCardBalance(card.getCardBalance() - calculatedValue);
         cardService.updateCardBalance(ConsumerMapper.INSTANCE.cardEntityToDto(card));
-        Extract extract = Extract.builder().establishmentName(buy.getEstablishmentName())
+        Extract extract = Extract.builder().cardType(buy.getCardType())
                 .productDescription(buy.getProductDescription())
                 .dateBuy(new Date())
                 .cardNumber(buy.getCardNumber())

@@ -19,8 +19,7 @@ public class Extract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer establishmentNameId;
-    private String establishmentName;
+    private CardType cardType;
     private String productDescription;
     private Date dateBuy;
     private Integer cardNumber;

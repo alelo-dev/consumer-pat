@@ -3,10 +3,11 @@ package br.com.alelo.consumer.consumerpat.dto;
 import br.com.alelo.consumer.consumerpat.entity.CardType;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class BuyDTO {
-    private CardType cardType;
+public class UpdateCardDTO implements Serializable {
+    private Long id;
     private Integer cardNumber;
-    private String productDescription;
-    private Double value;
+    private CardType cardType;
 }
