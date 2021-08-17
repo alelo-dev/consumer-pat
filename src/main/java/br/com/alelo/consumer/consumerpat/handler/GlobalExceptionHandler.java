@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.handler;
 import br.com.alelo.consumer.consumerpat.dto.response.BaseResponse;
 import br.com.alelo.consumer.consumerpat.exceptions.AppErrors;
 import br.com.alelo.consumer.consumerpat.exceptions.BaseException;
+import br.com.alelo.consumer.consumerpat.exceptions.CardExistsException;
 import br.com.alelo.consumer.consumerpat.exceptions.CardNotFoundException;
 import br.com.alelo.consumer.consumerpat.exceptions.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.exceptions.InvalidBalanceException;
@@ -35,6 +36,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return handleException(AppErrors.SERVER_ERROR, e.getMessage(), e);
+    }
+
+    @ExceptionHandler(CardExistsException.class)
+    public ResponseEntity<Object> handleCardExistsException(CardExistsException e, WebRequest request) {
+        return handleException(AppErrors.CARD_ALREADY_EXISTS, e.getMessage(), e);
     }
 
     @ExceptionHandler(CardNotFoundException.class)

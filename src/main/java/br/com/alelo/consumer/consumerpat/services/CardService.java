@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -26,8 +27,12 @@ public class CardService {
     @Autowired
     ExtractRepository extractRepository;
 
+    public Optional<Card> findByCardNumberAndType(Integer cardNumber, CardType cardType) {
+        return repository.findByCardNumberAndCardType(cardNumber, cardType);
+    }
+
     public Card getByCardNumberAndType(Integer cardNumber, CardType cardType) {
-        return repository.findByCardNumberAndCardType(cardNumber, cardType).orElseThrow(() -> new CardNotFoundException());
+        return findByCardNumberAndType(cardNumber, cardType).orElseThrow(() -> new CardNotFoundException());
     }
 
     public Card updateCardBalance(CardUpdateBalanceDTO cardUpdateBalanceDTO) {

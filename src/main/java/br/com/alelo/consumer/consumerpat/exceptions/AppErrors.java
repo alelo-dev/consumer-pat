@@ -21,6 +21,7 @@ public enum AppErrors {
     // Application Errors
     INVALID_BALANCE(HttpStatus.BAD_REQUEST, 400, "error.invalidBalance"),
     CARD_NOT_FOUND(HttpStatus.NOT_FOUND, 400, "error.cardNotFound"),
+    CARD_ALREADY_EXISTS(HttpStatus.NOT_FOUND, 400, "error.cardExists"),
     CONSUMER_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "error.consumerNotFound")
     ;
 

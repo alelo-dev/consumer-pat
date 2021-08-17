@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.services;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.dto.UpdateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.exceptions.CardExistsException;
 import br.com.alelo.consumer.consumerpat.exceptions.CardNotFoundException;
 import br.com.alelo.consumer.consumerpat.mapper.ConsumerMapper;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
@@ -19,7 +20,15 @@ public class ConsumerService {
     @Autowired
     ConsumerRepository repository;
 
+    @Autowired
+    CardService cardService;
+
     public Consumer saveConsumer(ConsumerDTO consumerDTO) {
+        consumerDTO.getCards()
+                .forEach(card -> {
+                    boolean cardExist = cardService.findByCardNumberAndType(card.getCardNumber(), card.getCardType()).isPresent();
+                    if (cardExist) throw new CardExistsException();
+                });
         return repository.save(ConsumerMapper.INSTANCE.dtoToConsumer(consumerDTO));
     }
 
