@@ -33,7 +33,7 @@ public class CardController {
     }
 
     @PostMapping("/buy")
-    public ResponseEntity<?> buy(@RequestBody BuyDTO buyDTO) {
+    public ResponseEntity<?> buy(@RequestBody @Valid BuyDTO buyDTO) {
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
          *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
          *
