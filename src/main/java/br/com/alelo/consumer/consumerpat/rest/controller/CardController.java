@@ -20,7 +20,7 @@ import br.com.alelo.consumer.consumerpat.service.CardService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/card")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CardController {
 	

@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @Controller
-@RequestMapping("/consumer")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ConsumerController {
 
