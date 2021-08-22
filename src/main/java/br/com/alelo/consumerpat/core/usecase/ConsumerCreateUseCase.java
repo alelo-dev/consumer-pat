@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.usecase;
 
-import br.com.alelo.consumerpat.core.v1.request.ConsumerCreateV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
 
 public interface ConsumerCreateUseCase {

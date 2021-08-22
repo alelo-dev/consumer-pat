@@ -1,7 +1,7 @@
 package br.com.alelo.consumerpat.core.mapper.domain;
 
 import br.com.alelo.consumerpat.core.domain.ContactDomain;
-import br.com.alelo.consumerpat.core.v1.request.ContactV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ContactV1RequestDto;
 
 public class ContactDomainMapper {
 

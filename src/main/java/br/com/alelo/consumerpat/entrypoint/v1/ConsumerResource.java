@@ -1,10 +1,10 @@
 package br.com.alelo.consumerpat.entrypoint.v1;
 
-import br.com.alelo.consumerpat.core.v1.request.ConsumerCreateV1RequestDto;
-import br.com.alelo.consumerpat.core.v1.request.ConsumerPaginatedV1RequestDto;
-import br.com.alelo.consumerpat.core.v1.request.ConsumerUpdateV1RequestDto;
-import br.com.alelo.consumerpat.core.v1.response.ConsumerV1ResponseDto;
-import br.com.alelo.consumerpat.core.v1.response.PaginatedResponseDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerPaginatedV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
+import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;

@@ -1,7 +1,7 @@
 package br.com.alelo.consumerpat.core.mapper.response;
 
 import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.core.v1.response.CardV1ResponseDto;
+import br.com.alelo.consumerpat.core.dto.v1.response.CardV1ResponseDto;
 
 import java.util.Set;
 import java.util.stream.Collectors;

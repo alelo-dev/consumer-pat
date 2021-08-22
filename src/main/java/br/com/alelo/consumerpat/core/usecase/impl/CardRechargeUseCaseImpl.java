@@ -8,7 +8,7 @@ import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;
 import br.com.alelo.consumerpat.core.exception.InvalidRechargeException;
 import br.com.alelo.consumerpat.core.mapper.domain.CardDomainMapper;
 import br.com.alelo.consumerpat.core.usecase.CardRechargeUseCase;
-import br.com.alelo.consumerpat.core.v1.request.CardRechargeV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

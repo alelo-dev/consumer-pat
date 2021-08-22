@@ -11,4 +11,8 @@ public class BadRequestException extends Exception {
     public BadRequestException(Map<String, String> fieldsAndMessages) {
         this.fieldsAndMessages = fieldsAndMessages;
     }
+
+    public Map<String, String> getFieldsAndMessages() {
+        return fieldsAndMessages;
+    }
 }

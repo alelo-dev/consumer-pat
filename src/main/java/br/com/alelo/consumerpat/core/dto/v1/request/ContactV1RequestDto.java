@@ -1,15 +1,13 @@
-package br.com.alelo.consumerpat.core.v1.response;
+package br.com.alelo.consumerpat.core.dto.v1.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
 @Getter
-public class ContactV1ResponseDto {
+public class ContactV1RequestDto {
 
     private String mobilePhone;
     private String residencePhone;

@@ -1,4 +1,4 @@
-package br.com.alelo.consumerpat.core.v1.request;
+package br.com.alelo.consumerpat.core.dto.v1.request;
 
 import br.com.alelo.consumerpat.core.enumeration.CardType;
 import lombok.Data;

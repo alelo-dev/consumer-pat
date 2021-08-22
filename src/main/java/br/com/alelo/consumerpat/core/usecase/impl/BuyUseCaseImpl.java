@@ -12,7 +12,7 @@ import br.com.alelo.consumerpat.core.mapper.domain.CardDomainMapper;
 import br.com.alelo.consumerpat.core.mapper.entity.CardEntityMapper;
 import br.com.alelo.consumerpat.core.mapper.entity.ExtractEntityMapper;
 import br.com.alelo.consumerpat.core.usecase.BuyUseCase;
-import br.com.alelo.consumerpat.core.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,8 +6,8 @@ import br.com.alelo.consumerpat.core.exception.InvalidEstablishmentForCardExcept
 import br.com.alelo.consumerpat.core.exception.InvalidRechargeException;
 import br.com.alelo.consumerpat.core.usecase.BuyUseCase;
 import br.com.alelo.consumerpat.core.usecase.CardRechargeUseCase;
-import br.com.alelo.consumerpat.core.v1.request.CardBuyV1RequestDto;
-import br.com.alelo.consumerpat.core.v1.request.CardRechargeV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

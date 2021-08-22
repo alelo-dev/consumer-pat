@@ -2,9 +2,9 @@ package br.com.alelo.consumerpat.core.usecase.impl;
 
 import br.com.alelo.consumerpat.core.dataprovider.dao.ConsumerDao;
 import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
-import br.com.alelo.consumerpat.core.v1.request.ConsumerPaginatedV1RequestDto;
-import br.com.alelo.consumerpat.core.v1.response.ConsumerV1ResponseDto;
-import br.com.alelo.consumerpat.core.v1.response.PaginatedResponseDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerPaginatedV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
+import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
 import br.com.alelo.consumerpat.core.mapper.response.pagination.PaginatedBaseMapper;
 import br.com.alelo.consumerpat.core.mapper.response.ConsumerV1ResponseMapperPaginated;
 import br.com.alelo.consumerpat.core.mapper.response.pagination.PaginatedResponseMapper;

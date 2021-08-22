@@ -7,7 +7,7 @@ import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
 import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
 import br.com.alelo.consumerpat.core.usecase.ConsumerUpdateUseCase;
-import br.com.alelo.consumerpat.core.v1.request.ConsumerUpdateV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

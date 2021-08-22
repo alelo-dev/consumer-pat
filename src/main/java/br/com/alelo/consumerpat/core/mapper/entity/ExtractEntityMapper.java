@@ -3,7 +3,7 @@ package br.com.alelo.consumerpat.core.mapper.entity;
 import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
 import br.com.alelo.consumerpat.core.dataprovider.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
-import br.com.alelo.consumerpat.core.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 
 import java.time.LocalDateTime;
 

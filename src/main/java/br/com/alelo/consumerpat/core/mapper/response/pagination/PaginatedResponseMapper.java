@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.mapper.response.pagination;
 
-import br.com.alelo.consumerpat.core.v1.response.PaginatedResponseDto;
+import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package br.com.alelo.consumerpat.core.usecase;
 
 import br.com.alelo.consumerpat.core.exception.InvalidEstablishmentForCardException;
-import br.com.alelo.consumerpat.core.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.CardNotFoundException;
 import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;
 

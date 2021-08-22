@@ -2,7 +2,7 @@ package br.com.alelo.consumerpat.core.mapper.domain;
 
 import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
-import br.com.alelo.consumerpat.core.v1.request.CardV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardV1RequestDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;

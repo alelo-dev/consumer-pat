@@ -12,7 +12,7 @@ import br.com.alelo.consumerpat.core.exception.ConsumerEmptyException;
 import br.com.alelo.consumerpat.core.mapper.domain.ConsumerDomainMapper;
 import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;
-import br.com.alelo.consumerpat.core.v1.request.ConsumerCreateV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
