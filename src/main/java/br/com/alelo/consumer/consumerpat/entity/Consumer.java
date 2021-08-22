@@ -1,50 +1,54 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
+import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Data
 @Entity
+@Getter
+@Setter
 public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Integer id;
+    private String name;
+    private int documentNumber;
+    private Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    private int mobilePhoneNumber;
+    private int residencePhoneNumber;
+    private int phoneNumber;
+    private String email;
 
     //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    private String street;
+    private int number;
+    private String city;
+    private String country;
+    private int portalCode;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    private int foodCardNumber;
+    private double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    private int fuelCardNumber;
+    private double fuelCardBalance;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    private int drugstoreNumber;
+    private double drugstoreCardBalance;
 
     @Override
     public boolean equals(Object o) {
