@@ -49,8 +49,8 @@ public class CardDomain {
 
         Card card = strategy.get(establishmentType).getDeclaredConstructor().newInstance();
         BigDecimal newBalance = card.calculateBalance(this.balance, value);
-        this.balance = newBalance;
         this.valueBuy = this.balance.subtract(newBalance);
+        this.balance = newBalance;
         this.validateBalance();
     }
 

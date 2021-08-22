@@ -32,11 +32,11 @@ public class ConsumerDomain {
     public void validateRequiredFields() throws BadRequestException {
         Map<String, String> fieldErrors = new HashMap<>();
 
-        if (this.name == null) {
+        if (this.name == null || this.name.equals("")) {
             fieldErrors.put("name", "invalid.item");
         }
 
-        if (this.document == null) {
+        if (this.document == null || this.document.equals("")) {
             fieldErrors.put("document", "invalid.item");
         }
 

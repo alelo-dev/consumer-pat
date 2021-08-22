@@ -8,6 +8,9 @@ import br.com.alelo.consumerpat.core.usecase.BuyUseCase;
 import br.com.alelo.consumerpat.core.usecase.CardRechargeUseCase;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,13 @@ public class CardResource {
     private BuyUseCase buyUseCase;
 
     @PutMapping("/recharge/{cardNumber}")
+    @ApiOperation(value = "Realizar a recarga do cartão")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Server Internal Error")
+    })
     public ResponseEntity<Void> recharge(@PathVariable("cardNumber") String cardNumber, @RequestBody CardRechargeV1RequestDto request) {
         try {
             this.rechargeUseCase.recharge(cardNumber, request);
@@ -36,6 +46,13 @@ public class CardResource {
     }
 
     @PutMapping("/buys/{cardNumber}")
+    @ApiOperation(value = "Realizar o débito da compra")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Server Internal Error")
+    })
     public ResponseEntity<Void> buys(@PathVariable("cardNumber") String cardNumber, @RequestBody CardBuyV1RequestDto request)
             throws InvalidBalanceException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidEstablishmentForCardException, CardNotFoundException {
         try {

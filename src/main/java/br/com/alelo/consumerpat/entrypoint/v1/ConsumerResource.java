@@ -10,6 +10,7 @@ import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;
 import br.com.alelo.consumerpat.core.usecase.ConsumerFindUseCase;
 import br.com.alelo.consumerpat.core.usecase.ConsumerUpdateUseCase;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,11 @@ public class ConsumerResource {
     private ConsumerUpdateUseCase consumerUpdateUseCase;
 
     @GetMapping
+    @ApiOperation(value = "Buscar todos os clientes por paginação")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "No Content"),
+            @ApiResponse(code = 500, message = "Server Internal Error")
+    })
     public ResponseEntity<PaginatedResponseDto<ConsumerV1ResponseDto>> findAll(@ModelAttribute ConsumerPaginatedV1RequestDto requestDto) {
         PaginatedResponseDto<ConsumerV1ResponseDto> responseDto = this.consumerFindUseCase.findAll(requestDto);
 
@@ -39,6 +45,12 @@ public class ConsumerResource {
     }
 
     @PostMapping
+    @ApiOperation(value = "Criar um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "No Content", responseHeaders = {@ResponseHeader(name = "Location", description = "Retorna url para consultar o recurso")}),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "Server Internal Error")
+    })
     public ResponseEntity<Void> create(@RequestBody ConsumerCreateV1RequestDto request) throws BadRequestException {
         String consumerCode = this.consumerCreateUseCase.create(request);
 
@@ -52,6 +64,13 @@ public class ConsumerResource {
     }
 
     @PutMapping("/{consumerCode}")
+    @ApiOperation(value = "Atualizar um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Server Internal Error")
+    })
     public ResponseEntity<Void> update(@PathVariable("consumerCode") UUID consumerCode, @RequestBody ConsumerUpdateV1RequestDto request) {
         try {
             this.consumerUpdateUseCase.update(consumerCode.toString(), request);

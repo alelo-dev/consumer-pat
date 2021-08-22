@@ -18,7 +18,7 @@ import java.util.Locale;
 
 @Slf4j
 @RestControllerAdvice
-public class AdviceResource {
+public class RestAdvice {
 
     @Autowired
     private MessageSource messageSource;
