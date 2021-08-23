@@ -32,7 +32,6 @@ public class ConsumerPatTestApplication {
     @Autowired
     protected ContactJpaRepository contactJpaRepository;
 
-
     @LocalServerPort
     private int port;
 

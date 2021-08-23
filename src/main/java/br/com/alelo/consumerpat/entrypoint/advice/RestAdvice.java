@@ -3,7 +3,6 @@ package br.com.alelo.consumerpat.entrypoint.advice;
 import br.com.alelo.consumerpat.core.dto.error.ErrorMessageDto;
 import br.com.alelo.consumerpat.core.dto.error.ErrorResponseDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
-import br.com.alelo.consumerpat.core.exception.ForbiddenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -61,8 +60,4 @@ public class RestAdvice {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<Void> forbidden(ForbiddenException exception) {
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    }
 }
