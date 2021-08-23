@@ -1,11 +1,11 @@
 package br.com.alelo.consumer.integration.consumer;
 
 import br.com.alelo.consumer.ConsumerPatTestApplication;
-import br.com.alelo.consumerpat.dataprovider.jpa.entity.ConsumerEntity;
-import br.com.alelo.consumerpat.core.dto.v1.request.*;
-import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
-import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
-import br.com.alelo.consumerpat.core.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.core.dto.v1.request.*;
+import br.com.alelo.consumer.consumerpat.dataprovider.jpa.entity.ConsumerEntity;
+import br.com.alelo.consumer.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
+import br.com.alelo.consumer.consumerpat.core.dto.v1.response.PaginatedResponseDto;
+import br.com.alelo.consumer.consumerpat.core.enumeration.CardType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

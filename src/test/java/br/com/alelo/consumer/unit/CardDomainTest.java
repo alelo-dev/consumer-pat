@@ -1,12 +1,12 @@
 package br.com.alelo.consumer.unit;
 
-import br.com.alelo.consumerpat.core.domain.CardDomain;
-import br.com.alelo.consumerpat.core.enumeration.CardType;
-import br.com.alelo.consumerpat.core.enumeration.EstablishmentType;
-import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;
-import br.com.alelo.consumerpat.core.exception.InvalidEstablishmentForCardException;
-import br.com.alelo.consumerpat.core.exception.InvalidRechargeException;
-import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
+import br.com.alelo.consumer.consumerpat.core.domain.CardDomain;
+import br.com.alelo.consumer.consumerpat.core.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.core.enumeration.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.core.exception.InvalidBalanceException;
+import br.com.alelo.consumer.consumerpat.core.exception.InvalidEstablishmentForCardException;
+import br.com.alelo.consumer.consumerpat.core.exception.InvalidRechargeException;
+import br.com.alelo.consumer.consumerpat.core.exception.RequiredFieldsException;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;

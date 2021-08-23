@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.unit;
 
-import br.com.alelo.consumerpat.core.domain.ContactDomain;
-import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
+import br.com.alelo.consumer.consumerpat.core.domain.ContactDomain;
+import br.com.alelo.consumer.consumerpat.core.exception.RequiredFieldsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,9 +1,9 @@
 package br.com.alelo.consumer.unit;
 
-import br.com.alelo.consumerpat.core.domain.CardDomain;
-import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
-import br.com.alelo.consumerpat.core.enumeration.CardType;
-import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
+import br.com.alelo.consumer.consumerpat.core.domain.CardDomain;
+import br.com.alelo.consumer.consumerpat.core.domain.ConsumerDomain;
+import br.com.alelo.consumer.consumerpat.core.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.core.exception.RequiredFieldsException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
