@@ -48,10 +48,8 @@ public class ConsumerController {
 
 	// Não deve ser possível alterar o saldo do cartão
 	@PutMapping
-	public void updateConsumer(@RequestBody ConsumerDto consumerDto) {
-		Consumer consumer = repository.findById(consumerDto.getId()).get();
-		BeanUtils.copyProperties(consumerDto, consumer, "id");
-		repository.save(consumer);
+	public ResponseEntity<?> updateConsumer(@RequestBody ConsumerDto consumerDto) {
+		return consumerService.updateConsumer(consumerDto);
 	}
 
 	/*

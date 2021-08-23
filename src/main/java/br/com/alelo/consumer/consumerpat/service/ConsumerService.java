@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +31,19 @@ public class ConsumerService {
 				throw new BusinessException("All card numbers are needed!");
 			}
 
-			if (repository.isNewCardNumbers(consumerDto.getFoodCardNumber(), consumerDto.getFuelCardNumber(),
+			if (repository.existsCardNumbers(consumerDto.getFoodCardNumber(), consumerDto.getFuelCardNumber(),
 					consumerDto.getDrugstoreNumber())) {
-
-				Consumer consumer = new Consumer();
-				BeanUtils.copyProperties(consumerDto, consumer, "id");
-				repository.save(consumer);
-
-				body.put("data", consumer);
-
-				output = ResponseEntity.status(HttpStatus.CREATED).body(body);
-			} else {
 				throw new BusinessException("One of the cards has already been registered!");
 			}
+
+			Consumer consumer = new Consumer();
+			BeanUtils.copyProperties(consumerDto, consumer, "id");
+			repository.save(consumer);
+
+			body.put("data", consumer);
+
+			output = ResponseEntity.status(HttpStatus.CREATED).body(body);
+			
 		} catch (BusinessException e) {
 			output = ResponseUtil.getBadRequestResponse(e);
 		} catch (Exception e) {
@@ -52,6 +53,38 @@ public class ConsumerService {
 		return output;
 	}
 
+	public ResponseEntity<?> updateConsumer(ConsumerDto consumerDto) {
+		ResponseEntity<?> output = null;
+		try {
+			if (isNull(consumerDto.getFoodCardNumber(), consumerDto.getFuelCardNumber(),
+					consumerDto.getDrugstoreNumber())) {
+				throw new BusinessException("All card numbers are needed!");
+			}
+
+			if (repository.existsCardNumbers(consumerDto.getId(), consumerDto.getFoodCardNumber(), consumerDto.getFuelCardNumber(),
+					consumerDto.getDrugstoreNumber())) {
+				throw new BusinessException("One of the cards has already been registered!");
+			}
+
+			Consumer consumer = repository.findById(consumerDto.getId())
+					.orElseThrow(() -> new BusinessException("Consumer not found!"));
+
+			String notUpdateableProps[] = { "id", "foodCardBalance", "fuelCardBalance", "drugstoreCardBalance" };
+
+			BeanUtils.copyProperties(consumerDto, consumer, notUpdateableProps);
+
+			repository.save(consumer);
+
+		} catch (BusinessException e) {
+			output = ResponseUtil.getBadRequestResponse(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			output = ResponseUtil.getInternalErrorResponse();
+		}
+
+		return output;
+	}
+	
 	private boolean isNull(Object... objects) {
 		return Arrays.stream(objects).anyMatch(obj -> obj == null);
 	}
