@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class InterceptorConfig implements HandlerInterceptor {
 
-    private AuthorizationTokenUseCase authorizationTokenUseCase;
+    private final AuthorizationTokenUseCase authorizationTokenUseCase;
 
     public InterceptorConfig(AuthorizationTokenUseCase authorizationTokenUseCase) {
         this.authorizationTokenUseCase = authorizationTokenUseCase;
