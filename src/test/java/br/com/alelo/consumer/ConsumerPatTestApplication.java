@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
+
 
 @ContextConfiguration(classes = ConsumerPatApplication.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,6 +44,12 @@ public class ConsumerPatTestApplication {
         this.addressRepository.deleteAll();
         this.contactRepository.deleteAll();
         this.consumerRepository.deleteAll();
+    }
+    protected HttpHeaders getAuthorizationHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer QjNFMkUwQzI0MDlGRUI5QTgxMDhDM0VDOTJCNDBDQTA");
+
+        return headers;
     }
 
     private String getHost() {

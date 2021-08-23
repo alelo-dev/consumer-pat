@@ -6,10 +6,7 @@ import br.com.alelo.consumerpat.core.dataprovider.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
 import br.com.alelo.consumerpat.core.enumeration.EstablishmentType;
-import br.com.alelo.consumerpat.dataprovider.repository.CardRepository;
-import br.com.alelo.consumerpat.dataprovider.repository.ExtractRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +30,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "1234432165479854";
         String uri = URI + cardNumber + "/recharge";
 
-        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(204, exchange.getStatusCode().value());
@@ -53,7 +50,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "123443165429850";
         String uri = URI + cardNumber + "/recharge";
 
-        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(404, exchange.getStatusCode().value());
@@ -73,7 +70,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "1234432165479854";
         String uri = URI + cardNumber + "/buys";
 
-        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(204, exchange.getStatusCode().value());
@@ -101,7 +98,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "43443165279854";
         String uri = URI + cardNumber + "/buys";
 
-        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(404, exchange.getStatusCode().value());

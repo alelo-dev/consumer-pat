@@ -28,6 +28,13 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
     private final String URI = "/v1/consumers";
 
     @Test
+    public void forbiddenTest() {
+        ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(URI), HttpMethod.GET, null, String.class);
+
+        assertEquals(403, exchange.getStatusCode().value());
+    }
+
+    @Test
     public void createConsumerTest() {
         Set<CardV1RequestDto> cards = Set.of(CardV1RequestDto.builder()
                         .card("1234432165479854")
@@ -65,7 +72,7 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
                 .cards(cards)
                 .build();
 
-        HttpEntity<ConsumerCreateV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<ConsumerCreateV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(URI), HttpMethod.POST, request, String.class);
 
         assertEquals(201, exchange.getStatusCode().value());
@@ -92,7 +99,7 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
                         .build())
                 .build();
 
-        HttpEntity<ConsumerUpdateV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<ConsumerUpdateV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(404, exchange.getStatusCode().value());
@@ -124,7 +131,7 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
 
         String uri = URI + "/" + byDocument.getConsumerCode();
 
-        HttpEntity<ConsumerUpdateV1RequestDto> request = new HttpEntity<>(payload);
+        HttpEntity<ConsumerUpdateV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
         byDocument = this.consumerRepository.findByDocument("95054214003");
 
@@ -147,7 +154,8 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
 
         this.createConsumerTest();
 
-        ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(URI), HttpMethod.GET, null, String.class);
+        HttpEntity<ConsumerUpdateV1RequestDto> request = new HttpEntity<>(null, this.getAuthorizationHeader());
+        ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(URI), HttpMethod.GET, request, String.class);
 
         PaginatedResponseDto<ConsumerV1ResponseDto> dto = objectMapper.readValue(exchange.getBody(), new TypeReference<>() {
         });
