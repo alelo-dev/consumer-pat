@@ -1,19 +1,23 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerBuyDto;
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
+import br.com.alelo.consumer.consumerpat.dto.ConsumerSetBalanceDto;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
@@ -25,23 +29,26 @@ public class ConsumerController {
 
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
+    @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
 
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
+    @PostMapping
+    public void createConsumer(@RequestBody ConsumerDto consumerDto) {
+    	Consumer consumer = new Consumer();
+    	BeanUtils.copyProperties(consumerDto, consumer, "id");
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
+    @PutMapping
+    public void updateConsumer(@RequestBody ConsumerDto consumerDto) {
+    	Consumer consumer = repository.findById(consumerDto.getId()).get();
+    	BeanUtils.copyProperties(consumerDto, consumer, "id");
         repository.save(consumer);
     }
 
@@ -51,8 +58,12 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
+    @PostMapping(value = "/balance")
+    public void setBalance(@RequestBody ConsumerSetBalanceDto consumerBalanceDto) {
+    	
+    	Integer cardNumber = consumerBalanceDto.getCardNumber();
+    	Double value = consumerBalanceDto.getValue().doubleValue();
+
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
@@ -75,9 +86,15 @@ public class ConsumerController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    @PostMapping(value = "/buy")
+    public void buy(@RequestBody ConsumerBuyDto consumerBuyDto) {
+    	
+    	Integer establishmentType = consumerBuyDto.getEstablishmentType();
+    	String establishmentName = consumerBuyDto.getEstablishmentName();
+    	Integer cardNumber = consumerBuyDto.getCardNumber();
+    	String productDescription = consumerBuyDto.getProductDescription();
+    	Double value = consumerBuyDto.getValue().doubleValue();
+    	
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
