@@ -7,28 +7,19 @@ import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
 import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
-import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;
 import br.com.alelo.consumerpat.core.usecase.ConsumerFindUseCase;
 import br.com.alelo.consumerpat.core.usecase.ConsumerUpdateUseCase;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Base64;
 import java.util.UUID;
 
 @RestController
@@ -83,7 +74,7 @@ public class ConsumerResource {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server Internal Error")
     })
-    public ResponseEntity<Void> update(@PathVariable("consumerCode") UUID consumerCode, @RequestBody ConsumerUpdateV1RequestDto request) throws RequiredFieldsException {
+    public ResponseEntity<Void> update(@PathVariable("consumerCode") UUID consumerCode, @RequestBody ConsumerUpdateV1RequestDto request) {
         try {
             this.consumerUpdateUseCase.update(consumerCode.toString(), request);
 

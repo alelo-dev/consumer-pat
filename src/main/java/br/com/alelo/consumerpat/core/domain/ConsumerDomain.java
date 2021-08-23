@@ -1,6 +1,5 @@
 package br.com.alelo.consumerpat.core.domain;
 
-import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,10 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -19,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ConsumerDomain {
 
+    private Long id;
     private String consumerCode;
     private String name;
     private String document;
@@ -31,6 +29,18 @@ public class ConsumerDomain {
         this.consumerCode = UUID.randomUUID().toString();
 
         return this.consumerCode;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<String> getAllCardNumber() {
+        if (this.cards == null) {
+            return null;
+        }
+
+        return this.cards.stream().map(CardDomain::getCard).collect(Collectors.toList());
     }
 
     public void validateRequiredFields() throws RequiredFieldsException {

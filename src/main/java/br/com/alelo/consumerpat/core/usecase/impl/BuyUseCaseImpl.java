@@ -1,18 +1,15 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
-import br.com.alelo.consumerpat.dataprovider.dao.CardDao;
-import br.com.alelo.consumerpat.dataprovider.dao.ExtractDao;
-import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
+import br.com.alelo.consumerpat.core.domain.ExtractDomain;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.CardNotFoundException;
 import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;
 import br.com.alelo.consumerpat.core.exception.InvalidEstablishmentForCardException;
-import br.com.alelo.consumerpat.core.mapper.domain.CardDomainMapper;
-import br.com.alelo.consumerpat.core.mapper.entity.CardEntityMapper;
-import br.com.alelo.consumerpat.core.mapper.entity.ExtractEntityMapper;
+import br.com.alelo.consumerpat.core.mapper.domain.ExtractDomainMapper;
 import br.com.alelo.consumerpat.core.usecase.BuyUseCase;
-import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.dataprovider.repository.CardRepository;
+import br.com.alelo.consumerpat.dataprovider.repository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,30 +20,24 @@ import java.lang.reflect.InvocationTargetException;
 public class BuyUseCaseImpl implements BuyUseCase {
 
     @Autowired
-    private CardDao cardDao;
+    private CardRepository cardRepository;
 
     @Autowired
-    private ExtractDao extractDao;
+    private ExtractRepository extractRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void calculateBalance(String cardNumber, CardBuyV1RequestDto requestDto) throws CardNotFoundException, InvalidBalanceException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidEstablishmentForCardException {
-        CardEntity cardEntity = this.cardDao.findByCardNumber(cardNumber);
+        CardDomain cardDomain = this.cardRepository.findByCardNumber(cardNumber);
 
-        if (cardEntity == null) {
+        if (cardDomain == null) {
             throw new CardNotFoundException();
         }
 
-        CardDomain cardDomain = CardDomainMapper.convert(cardEntity);
         cardDomain.calculateBalance(requestDto.getEstablishmentType(), requestDto.getValue());
+        ExtractDomain extractDomain = ExtractDomainMapper.convert(requestDto, cardDomain);
 
-        CardEntity newCardEntity = CardEntityMapper.convert(cardDomain);
-        newCardEntity.setId(cardEntity.getId());
-        newCardEntity.setCardNumber(cardNumber);
-        newCardEntity.setConsumer(cardEntity.getConsumer());
-        ExtractEntity extractEntity = ExtractEntityMapper.convert(requestDto, cardEntity, cardDomain);
-
-        this.cardDao.save(newCardEntity);
-        this.extractDao.save(extractEntity);
+        this.cardRepository.save(cardDomain);
+        this.extractRepository.save(extractDomain);
     }
 }

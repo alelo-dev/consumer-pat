@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.integration.card;
 
 import br.com.alelo.consumer.integration.consumer.ConsumerIntegrationTest;
-import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
+import br.com.alelo.consumerpat.dataprovider.jpa.entity.CardEntity;
+import br.com.alelo.consumerpat.dataprovider.jpa.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
 import br.com.alelo.consumerpat.core.enumeration.EstablishmentType;
@@ -35,7 +35,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
 
         assertEquals(204, exchange.getStatusCode().value());
 
-        CardEntity byCardNumber = cardRepository.findByCardNumber(cardNumber);
+        CardEntity byCardNumber = cardJpaRepository.findByCardNumber(cardNumber);
 
         assertEquals(1100L, byCardNumber.getBalance().longValue());
     }
@@ -75,7 +75,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
 
         assertEquals(204, exchange.getStatusCode().value());
 
-        ExtractEntity extractEntity = this.extractRepository.findAll().get(0);
+        ExtractEntity extractEntity = this.extractJpaRepository.findAll().get(0);
 
         assertNotNull(extractEntity.getDateBuy());
         assertEquals("Name", extractEntity.getEstablishmentName());

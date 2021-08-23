@@ -1,4 +1,4 @@
-package br.com.alelo.consumerpat.dataprovider.entity;
+package br.com.alelo.consumerpat.dataprovider.jpa.entity;
 
 import lombok.*;
 

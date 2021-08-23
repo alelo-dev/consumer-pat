@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.integration.consumer;
 
 import br.com.alelo.consumer.ConsumerPatTestApplication;
-import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.jpa.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.core.dto.v1.request.*;
 import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
 import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
@@ -102,7 +102,7 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
     void updateConsumerTest() {
         this.createConsumerTest();
 
-        ConsumerEntity byDocument = this.consumerRepository.findByDocument("95054214003");
+        ConsumerEntity byDocument = this.consumerJpaRepository.findByDocument("95054214003");
 
         ConsumerUpdateV1RequestDto payload = ConsumerUpdateV1RequestDto.
                 builder()
@@ -126,7 +126,7 @@ public class ConsumerIntegrationTest extends ConsumerPatTestApplication {
 
         HttpEntity<ConsumerUpdateV1RequestDto> request = new HttpEntity<>(payload);
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
-        byDocument = this.consumerRepository.findByDocument("95054214003");
+        byDocument = this.consumerJpaRepository.findByDocument("95054214003");
 
         assertEquals(204, exchange.getStatusCode().value());
         assertEquals("Luis Gustavo", byDocument.getName());

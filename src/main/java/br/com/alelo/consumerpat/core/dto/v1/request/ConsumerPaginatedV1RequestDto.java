@@ -1,11 +1,14 @@
 package br.com.alelo.consumerpat.core.dto.v1.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 public class ConsumerPaginatedV1RequestDto {
 
     private Integer page = 0;

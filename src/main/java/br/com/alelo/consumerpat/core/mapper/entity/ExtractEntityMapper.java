@@ -1,26 +1,25 @@
 package br.com.alelo.consumerpat.core.mapper.entity;
 
-import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
-import br.com.alelo.consumerpat.core.domain.CardDomain;
-import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.core.domain.ExtractDomain;
+import br.com.alelo.consumerpat.dataprovider.jpa.entity.ExtractEntity;
 
 import java.time.LocalDateTime;
 
 public class ExtractEntityMapper {
 
-    public static ExtractEntity convert(CardBuyV1RequestDto requestDto, CardEntity cardEntity, CardDomain cardDomain) {
-        if (requestDto == null || cardEntity == null || cardDomain == null) {
+    public static ExtractEntity convert(ExtractDomain domain) {
+        if (domain == null) {
             return null;
         }
 
         return ExtractEntity.builder()
-                .card(cardEntity)
+                .id(domain.getId())
+                .card(CardEntityMapper.convert(domain.getCard()))
                 .dateBuy(LocalDateTime.now())
-                .establishmentName(requestDto.getEstablishmentName())
-                .establishmentType(requestDto.getEstablishmentType())
-                .productDescription(requestDto.getProductDescription())
-                .value(cardDomain.getValueForExtract())
+                .establishmentName(domain.getEstablishmentName())
+                .establishmentType(domain.getEstablishmentType())
+                .productDescription(domain.getProductDescription())
+                .value(domain.getValue())
                 .build();
     }
 }

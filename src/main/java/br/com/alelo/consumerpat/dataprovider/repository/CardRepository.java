@@ -1,11 +1,12 @@
 package br.com.alelo.consumerpat.dataprovider.repository;
 
-import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import br.com.alelo.consumerpat.core.domain.CardDomain;
 
-@Repository
-public interface CardRepository extends JpaRepository<CardEntity, Long> {
+import java.util.List;
 
-    CardEntity findByCardNumber(String cardNumber);
+public interface CardRepository extends BaseRepository<CardDomain> {
+
+    CardDomain findByCardNumber(String cardNumber);
+
+    List<CardDomain> findByCardNumberIn(List<String> cardsNumber);
 }

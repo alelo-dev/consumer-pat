@@ -1,13 +1,14 @@
 package br.com.alelo.consumerpat.dataprovider.repository;
 
-import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-@Repository
-public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> {
+public interface ConsumerRepository extends BaseRepository<ConsumerDomain> {
 
-    ConsumerEntity findByConsumerCode(String consumerCode);
+    Page<ConsumerDomain> findAll(Pageable pageable);
 
-    ConsumerEntity findByDocument(String document);
+    ConsumerDomain findByConsumerCode(String customerCode);
+
+    ConsumerDomain findByDocument(String document);
 }

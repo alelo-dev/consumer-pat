@@ -3,6 +3,7 @@ package br.com.alelo.consumerpat.core.mapper.domain;
 import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
 import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
 import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
+import br.com.alelo.consumerpat.dataprovider.jpa.entity.ConsumerEntity;
 
 public class ConsumerDomainMapper {
 
@@ -21,16 +22,47 @@ public class ConsumerDomainMapper {
                 .build();
     }
 
-    public static ConsumerDomain convert(ConsumerUpdateV1RequestDto request) {
-        if (request == null) {
+    public static ConsumerDomain convert(ConsumerEntity entity) {
+        if (entity == null) {
             return null;
         }
 
         return ConsumerDomain.builder()
-                .address(AddressDomainMapper.convert(request.getAddress()))
-                .contact(ContactDomainMapper.convert(request.getContact()))
-                .birthDate(request.getBirthDate())
+                .id(entity.getId())
+                .address(AddressDomainMapper.convert(entity.getAddress()))
+                .birthDate(entity.getBirthDate())
+                .contact(ContactDomainMapper.convert(entity.getContact()))
+                .name(entity.getName())
+                .consumerCode(entity.getConsumerCode())
+                .document(entity.getDocument())
+                .cards(CardDomainMapper.convertToDomain(entity.getCards()))
+                .build();
+    }
+
+    public static ConsumerDomain convertOnlyConsumer(ConsumerEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        return ConsumerDomain.builder()
+                .id(entity.getId())
+                .birthDate(entity.getBirthDate())
+                .name(entity.getName())
+                .consumerCode(entity.getConsumerCode())
+                .document(entity.getDocument())
+                .build();
+    }
+
+    public static ConsumerDomain convert(ConsumerUpdateV1RequestDto request, ConsumerDomain consumerDomain) {
+        return ConsumerDomain.builder()
+                .consumerCode(consumerDomain.getConsumerCode())
+                .id(consumerDomain.getId())
                 .name(request.getName())
+                .document(consumerDomain.getDocument())
+                .contact(ContactDomainMapper.convert(request.getContact(), consumerDomain.getContact()))
+                .birthDate(request.getBirthDate())
+                .cards(consumerDomain.getCards())
+                .address(AddressDomainMapper.convert(request.getAddress(), consumerDomain.getAddress()))
                 .build();
     }
 }

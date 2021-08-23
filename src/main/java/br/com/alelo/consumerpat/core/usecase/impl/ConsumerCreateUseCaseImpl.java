@@ -1,37 +1,38 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
+import br.com.alelo.consumerpat.core.domain.CardDomain;
 import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
 import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
+import br.com.alelo.consumerpat.core.exception.CardAlreadyRegisteredException;
 import br.com.alelo.consumerpat.core.exception.ConsumerAlreadyRegisteredException;
 import br.com.alelo.consumerpat.core.exception.ConsumerEmptyException;
-import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import br.com.alelo.consumerpat.core.mapper.domain.ConsumerDomainMapper;
-import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;
-import br.com.alelo.consumerpat.dataprovider.dao.AddressDao;
-import br.com.alelo.consumerpat.dataprovider.dao.CardDao;
-import br.com.alelo.consumerpat.dataprovider.dao.ConsumerDao;
-import br.com.alelo.consumerpat.dataprovider.dao.ContactDao;
-import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.repository.AddressRepository;
+import br.com.alelo.consumerpat.dataprovider.repository.CardRepository;
+import br.com.alelo.consumerpat.dataprovider.repository.ConsumerRepository;
+import br.com.alelo.consumerpat.dataprovider.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ConsumerCreateUseCaseImpl implements ConsumerCreateUseCase {
 
     @Autowired
-    private ConsumerDao consumerDao;
+    private ConsumerRepository consumerDao;
 
     @Autowired
-    private AddressDao addressDao;
+    private AddressRepository addressRepository;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactDao;
 
     @Autowired
-    private CardDao cardDao;
+    private CardRepository cardDao;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -42,27 +43,33 @@ public class ConsumerCreateUseCaseImpl implements ConsumerCreateUseCase {
             throw new ConsumerEmptyException();
         }
 
-        ConsumerEntity consumerEntity = this.consumerDao.findByDocument(request.getDocument());
+        ConsumerDomain consumerDomainFromDB = this.consumerDao.findByDocument(request.getDocument());
 
-        if (consumerEntity != null) {
+        if (consumerDomainFromDB != null) {
             throw new ConsumerAlreadyRegisteredException();
+        }
+
+        List<CardDomain> byCardNumberIn = this.cardDao.findByCardNumberIn(consumerDomain.getAllCardNumber());
+
+        if (byCardNumberIn.size() > 0) {
+            throw new CardAlreadyRegisteredException();
         }
 
         consumerDomain.validateRequiredFields();
         consumerDomain.generateConsumerCode();
 
-        ConsumerEntity consumer = ConsumerEntityMapper.convert(consumerDomain);
-        consumer.getAddress().setConsumer(consumer);
-        consumer.getContact().setConsumer(consumer);
+        consumerDomainFromDB = this.consumerDao.save(consumerDomain);
 
-        this.consumerDao.save(consumer);
-        this.addressDao.save(consumer.getAddress());
-        this.contactDao.save(consumer.getContact());
+        consumerDomain.getAddress().setConsumer(consumerDomainFromDB);
+        consumerDomain.getContact().setConsumer(consumerDomainFromDB);
 
-        consumer.getCards().forEach(card -> {
-            card.setConsumer(consumer);
+        this.addressRepository.save(consumerDomain.getAddress());
+        this.contactDao.save(consumerDomain.getContact());
+
+        for (CardDomain card : consumerDomain.getCards()) {
+            card.setConsumer(consumerDomainFromDB);
             this.cardDao.save(card);
-        });
+        }
 
         return consumerDomain.getConsumerCode();
     }

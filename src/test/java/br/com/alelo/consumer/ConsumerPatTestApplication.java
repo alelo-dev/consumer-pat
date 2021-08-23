@@ -1,13 +1,12 @@
 package br.com.alelo.consumer;
 
 import br.com.alelo.consumerpat.ConsumerPatApplication;
-import br.com.alelo.consumerpat.dataprovider.repository.*;
+import br.com.alelo.consumerpat.dataprovider.jpa.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ContextConfiguration;
 
 
@@ -19,19 +18,19 @@ public class ConsumerPatTestApplication {
     protected TestRestTemplate testRestTemplate;
 
     @Autowired
-    protected ConsumerRepository consumerRepository;
+    protected ConsumerJpaRepository consumerJpaRepository;
 
     @Autowired
-    protected CardRepository cardRepository;
+    protected CardJpaRepository cardJpaRepository;
 
     @Autowired
-    protected ExtractRepository extractRepository;
+    protected ExtractJpaRepository extractJpaRepository;
 
     @Autowired
-    protected AddressRepository addressRepository;
+    protected AddressJpaRepository addressJpaRepository;
 
     @Autowired
-    protected ContactRepository contactRepository;
+    protected ContactJpaRepository contactJpaRepository;
 
 
     @LocalServerPort
@@ -39,11 +38,11 @@ public class ConsumerPatTestApplication {
 
     @BeforeEach
     void beforeEach() {
-        this.extractRepository.deleteAll();
-        this.cardRepository.deleteAll();
-        this.addressRepository.deleteAll();
-        this.contactRepository.deleteAll();
-        this.consumerRepository.deleteAll();
+        this.extractJpaRepository.deleteAll();
+        this.cardJpaRepository.deleteAll();
+        this.addressJpaRepository.deleteAll();
+        this.contactJpaRepository.deleteAll();
+        this.consumerJpaRepository.deleteAll();
     }
 
     private String getHost() {

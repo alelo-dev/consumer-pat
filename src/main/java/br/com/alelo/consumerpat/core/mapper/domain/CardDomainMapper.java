@@ -1,8 +1,9 @@
 package br.com.alelo.consumerpat.core.mapper.domain;
 
-import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardV1RequestDto;
+import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
+import br.com.alelo.consumerpat.dataprovider.jpa.entity.CardEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -30,9 +31,20 @@ public class CardDomainMapper {
         }
 
         return CardDomain.builder()
+                .id(entity.getId())
                 .card(entity.getCardNumber())
                 .type(entity.getType())
                 .balance(entity.getBalance())
+                .consumer(ConsumerDomainMapper.convertOnlyConsumer(entity.getConsumer()))
                 .build();
+    }
+
+    public static Set<CardDomain> convertToDomain(Set<CardEntity> entities) {
+        if (entities == null) {
+            return null;
+        }
+
+        return entities.stream().map(CardDomainMapper::convert)
+                .collect(Collectors.toSet());
     }
 }

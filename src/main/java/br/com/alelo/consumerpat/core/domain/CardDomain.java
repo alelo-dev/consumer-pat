@@ -26,10 +26,20 @@ import java.util.Map;
 @AllArgsConstructor
 public class CardDomain {
 
+    private Long id;
     private String card;
     private BigDecimal balance;
     private CardType type;
     private BigDecimal valueForExtract;
+    private ConsumerDomain consumer;
+
+    public void setConsumer(ConsumerDomain consumer) {
+        this.consumer = consumer;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void validateBalance() throws InvalidBalanceException {
         if (this.balance == null || this.balance.compareTo(BigDecimal.ZERO) < 0) {

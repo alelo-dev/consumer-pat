@@ -1,13 +1,13 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
+import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
 import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
-import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
+import br.com.alelo.consumerpat.core.mapper.domain.ConsumerDomainMapper;
 import br.com.alelo.consumerpat.core.usecase.ConsumerUpdateUseCase;
-import br.com.alelo.consumerpat.dataprovider.dao.AddressDao;
-import br.com.alelo.consumerpat.dataprovider.dao.ConsumerDao;
-import br.com.alelo.consumerpat.dataprovider.dao.ContactDao;
-import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.repository.AddressRepository;
+import br.com.alelo.consumerpat.dataprovider.repository.ConsumerRepository;
+import br.com.alelo.consumerpat.dataprovider.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,36 +16,31 @@ import org.springframework.transaction.annotation.Transactional;
 public class ConsumerUpdateUseCaseImpl implements ConsumerUpdateUseCase {
 
     @Autowired
-    private ConsumerDao consumerDao;
+    private ConsumerRepository consumerDao;
 
     @Autowired
-    private AddressDao addressDao;
+    private AddressRepository addressRepository;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactDao;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void update(String consumerCode, ConsumerUpdateV1RequestDto request) throws ConsumerNotFound {
-        ConsumerEntity byConsumerCode = this.consumerDao.findByConsumerCode(consumerCode);
+        ConsumerDomain consumerDomain = this.consumerDao.findByConsumerCode(consumerCode);
 
-        if (byConsumerCode == null) {
+        if (consumerDomain == null) {
             throw new ConsumerNotFound();
         }
 
-        ConsumerEntity consumerEntity = ConsumerEntityMapper.convert(request);
-        consumerEntity.setId(byConsumerCode.getId());
-        consumerEntity.setConsumerCode(byConsumerCode.getConsumerCode());
-        consumerEntity.setDocument(byConsumerCode.getDocument());
+        consumerDomain = ConsumerDomainMapper.convert(request, consumerDomain);
 
-        consumerEntity.getAddress().setId(byConsumerCode.getAddress().getId());
-        consumerEntity.getAddress().setConsumer(consumerEntity);
+        this.consumerDao.save(consumerDomain);
 
-        consumerEntity.getContact().setId(byConsumerCode.getContact().getId());
-        consumerEntity.getContact().setConsumer(consumerEntity);
+        consumerDomain.getAddress().setConsumer(consumerDomain);
+        consumerDomain.getContact().setConsumer(consumerDomain);
 
-        this.consumerDao.save(consumerEntity);
-        this.addressDao.save(consumerEntity.getAddress());
-        this.contactDao.save(consumerEntity.getContact());
+        this.addressRepository.save(consumerDomain.getAddress());
+        this.contactDao.save(consumerDomain.getContact());
     }
 }

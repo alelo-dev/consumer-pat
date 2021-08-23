@@ -1,13 +1,13 @@
 package br.com.alelo.consumerpat.entrypoint.v1;
 
+import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
+import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
+import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.CardNotFoundException;
 import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;
 import br.com.alelo.consumerpat.core.exception.InvalidEstablishmentForCardException;
-import br.com.alelo.consumerpat.core.exception.InvalidRechargeException;
 import br.com.alelo.consumerpat.core.usecase.BuyUseCase;
 import br.com.alelo.consumerpat.core.usecase.CardRechargeUseCase;
-import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
-import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -35,12 +35,12 @@ public class CardResource {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server Internal Error")
     })
-    public ResponseEntity<Void> recharge(@PathVariable("cardNumber") String cardNumber, @RequestBody CardRechargeV1RequestDto request) {
+    public ResponseEntity<Void> recharge(@PathVariable("cardNumber") String cardNumber, @RequestBody CardRechargeV1RequestDto request) throws BadRequestException {
         try {
             this.rechargeUseCase.recharge(cardNumber, request);
 
             return ResponseEntity.noContent().build();
-        } catch (CardNotFoundException | InvalidBalanceException | InvalidRechargeException e) {
+        } catch (CardNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

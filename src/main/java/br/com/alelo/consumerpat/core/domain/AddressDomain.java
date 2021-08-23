@@ -1,6 +1,5 @@
 package br.com.alelo.consumerpat.core.domain;
 
-import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +15,21 @@ import java.util.Map;
 @AllArgsConstructor
 public class AddressDomain {
 
+    private Long id;
     private String street;
     private Integer number;
     private String city;
     private String country;
     private String postalCode;
+    private ConsumerDomain consumer;
+
+    public void setConsumer(ConsumerDomain consumer) {
+        this.consumer = consumer;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void validateRequiredFields() throws RequiredFieldsException {
         Map<String, String> fieldErrors = new HashMap<>();

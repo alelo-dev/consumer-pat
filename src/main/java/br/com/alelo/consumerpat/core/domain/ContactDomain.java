@@ -15,9 +15,19 @@ import java.util.Map;
 @AllArgsConstructor
 public class ContactDomain {
 
+    private Long id;
     private String mobilePhone;
     private String residencePhone;
     private String email;
+    private ConsumerDomain consumer;
+
+    public void setConsumer(ConsumerDomain consumer) {
+        this.consumer = consumer;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void validateRequiredFields() throws RequiredFieldsException {
         Map<String, String> fieldErrors = new HashMap<>();
