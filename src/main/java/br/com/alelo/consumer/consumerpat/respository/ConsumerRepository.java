@@ -19,4 +19,7 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
     Consumer findByDrugstoreNumber(int cardNumber);
+
+    @Query(nativeQuery = true, value = "select count(*) = 0 from Consumer where FOOD_CARD_NUMBER = ? or FUEL_CARD_NUMBER = ? or DRUGSTORE_NUMBER = ? ")
+	Boolean isNewCardNumbers(Integer foodCardNumber, Integer fuelCardNumber, Integer drugstoreNumber);
 }
