@@ -30,7 +30,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "1234432165479854";
         String uri = URI + cardNumber + "/recharge";
 
-        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
+        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload);
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(204, exchange.getStatusCode().value());
@@ -50,7 +50,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "123443165429850";
         String uri = URI + cardNumber + "/recharge";
 
-        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
+        HttpEntity<CardRechargeV1RequestDto> request = new HttpEntity<>(payload);
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(404, exchange.getStatusCode().value());
@@ -70,7 +70,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "1234432165479854";
         String uri = URI + cardNumber + "/buys";
 
-        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
+        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload);
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(204, exchange.getStatusCode().value());
@@ -98,7 +98,7 @@ public class CardIntegrationTest extends ConsumerIntegrationTest {
         String cardNumber = "43443165279854";
         String uri = URI + cardNumber + "/buys";
 
-        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload, this.getAuthorizationHeader());
+        HttpEntity<CardBuyV1RequestDto> request = new HttpEntity<>(payload);
         ResponseEntity<String> exchange = this.testRestTemplate.exchange(this.getUrl(uri), HttpMethod.PUT, request, String.class);
 
         assertEquals(404, exchange.getStatusCode().value());

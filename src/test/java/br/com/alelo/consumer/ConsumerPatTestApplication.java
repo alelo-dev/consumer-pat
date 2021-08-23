@@ -45,12 +45,6 @@ public class ConsumerPatTestApplication {
         this.contactRepository.deleteAll();
         this.consumerRepository.deleteAll();
     }
-    protected HttpHeaders getAuthorizationHeader() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer QjNFMkUwQzI0MDlGRUI5QTgxMDhDM0VDOTJCNDBDQTA");
-
-        return headers;
-    }
 
     private String getHost() {
         return "http://localhost:" + port;
