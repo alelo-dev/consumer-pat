@@ -7,6 +7,7 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.CustomerService;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class ConsumerController {
 
 	@Autowired
 	ExtractRepository extractRepository;
+	
+	@Autowired
+	CustomerService customerService;
 
 	/* Deve listar todos os clientes (cerca de 500) */
 	@GetMapping
@@ -39,29 +43,7 @@ public class ConsumerController {
 	/* Cadastrar novos clientes */
 	@PostMapping
 	public ResponseEntity<?> createConsumer(@RequestBody ConsumerDto consumerDto) {
-		ResponseEntity<?> output = null;
-		try {
-			HashMap<String, Object> body = new HashMap<>();
-
-			if (repository.isNewCardNumbers(consumerDto.getFoodCardNumber(), consumerDto.getFuelCardNumber(),
-					consumerDto.getDrugstoreNumber())) {
-
-				Consumer consumer = new Consumer();
-				BeanUtils.copyProperties(consumerDto, consumer, "id");
-				repository.save(consumer);
-
-				body.put("data", consumer);
-
-				output = ResponseEntity.status(HttpStatus.CREATED).body(body);
-			} else {
-				body.put("message", "One of the cards has already been registered!");
-				output = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			output = getInternalErrorResponse();
-		}
-		return output;
+		return customerService.createConsumer(consumerDto);
 	}
 
 	// Não deve ser possível alterar o saldo do cartão
@@ -151,13 +133,5 @@ public class ConsumerController {
 
 		Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
 		extractRepository.save(extract);
-	}
-
-	private ResponseEntity<?> getInternalErrorResponse() {
-		ResponseEntity<?> output;
-		HashMap<String, Object> body = new HashMap<>();
-		body.put("message", "An unknown error has occurred");
-		output = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
-		return output;
 	}
 }
