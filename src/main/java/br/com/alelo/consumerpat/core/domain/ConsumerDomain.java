@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,8 @@ public class ConsumerDomain {
     private ContactDomain contact;
     private AddressDomain address;
     private Set<CardDomain> cards;
+    private LocalDateTime creationDate;
+    private LocalDateTime updateDate;
 
     public String generateConsumerCode() {
         this.consumerCode = UUID.randomUUID().toString();

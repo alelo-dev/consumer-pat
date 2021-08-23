@@ -36,6 +36,8 @@ public class ConsumerDomainMapper {
                 .consumerCode(entity.getConsumerCode())
                 .document(entity.getDocument())
                 .cards(CardDomainMapper.convertToDomain(entity.getCards()))
+                .creationDate(entity.getCreationDate())
+                .updateDate(entity.getUpdateDate())
                 .build();
     }
 
@@ -63,6 +65,8 @@ public class ConsumerDomainMapper {
                 .birthDate(request.getBirthDate())
                 .cards(consumerDomain.getCards())
                 .address(AddressDomainMapper.convert(request.getAddress(), consumerDomain.getAddress()))
+                .creationDate(consumerDomain.getCreationDate())
+                .updateDate(consumerDomain.getUpdateDate())
                 .build();
     }
 }

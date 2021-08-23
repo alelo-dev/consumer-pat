@@ -16,6 +16,8 @@ public class ConsumerEntityMapper {
                 .birthDate(domain.getBirthDate())
                 .document(domain.getDocument())
                 .name(domain.getName())
+                .creationDate(domain.getCreationDate())
+                .updateDate(domain.getUpdateDate())
                 .build();
     }
 }
