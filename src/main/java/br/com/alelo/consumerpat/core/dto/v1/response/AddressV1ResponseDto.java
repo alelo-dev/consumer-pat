@@ -15,5 +15,5 @@ public class AddressV1ResponseDto {
     private Integer number;
     private String city;
     private String country;
-    private String portalCode;
+    private String postalCode;
 }

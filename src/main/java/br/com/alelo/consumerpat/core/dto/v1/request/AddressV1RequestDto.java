@@ -1,10 +1,9 @@
 package br.com.alelo.consumerpat.core.dto.v1.request;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class AddressV1RequestDto {

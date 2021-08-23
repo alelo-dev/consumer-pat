@@ -1,13 +1,12 @@
 package br.com.alelo.consumerpat.core.dto.v1.request;
 
 import br.com.alelo.consumerpat.core.enumeration.CardType;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class CardV1RequestDto {

@@ -31,7 +31,7 @@ public class AddressEntity {
     private String country;
 
     @Column(length = 8, nullable = false)
-    private String portalCode;
+    private String postalCode;
 
     @OneToOne
     @JoinColumn(name = "consumer_id", referencedColumnName = "consumer_id")

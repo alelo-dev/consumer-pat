@@ -14,7 +14,7 @@ public class AddressDomainMapper {
                 .city(request.getCity())
                 .country(request.getCountry())
                 .number(request.getNumber())
-                .portalCode(request.getPostalCode())
+                .postalCode(request.getPostalCode())
                 .street(request.getStreet())
                 .build();
     }

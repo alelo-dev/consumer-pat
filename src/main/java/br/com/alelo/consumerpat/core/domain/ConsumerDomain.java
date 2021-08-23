@@ -1,13 +1,17 @@
 package br.com.alelo.consumerpat.core.domain;
 
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
+import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -29,7 +33,7 @@ public class ConsumerDomain {
         return this.consumerCode;
     }
 
-    public void validateRequiredFields() throws BadRequestException {
+    public void validateRequiredFields() throws RequiredFieldsException {
         Map<String, String> fieldErrors = new HashMap<>();
 
         if (this.name == null || this.name.equals("")) {
@@ -56,8 +60,15 @@ public class ConsumerDomain {
             fieldErrors.put("card", "invalid.item");
         }
 
-        if(fieldErrors.size() > 0) {
-            throw new BadRequestException(fieldErrors);
+        if (fieldErrors.size() > 0) {
+            throw new RequiredFieldsException(fieldErrors);
+        }
+
+        this.address.validateRequiredFields();
+        this.contact.validateRequiredFields();
+
+        for (CardDomain card : this.cards) {
+            card.validateRequiredFields();
         }
     }
 }

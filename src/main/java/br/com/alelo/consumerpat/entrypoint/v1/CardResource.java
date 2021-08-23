@@ -27,7 +27,7 @@ public class CardResource {
     @Autowired
     private BuyUseCase buyUseCase;
 
-    @PutMapping("/recharge/{cardNumber}")
+    @PutMapping("/{cardNumber}/recharge")
     @ApiOperation(value = "Realizar a recarga do cartão")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No Content"),
@@ -45,7 +45,7 @@ public class CardResource {
         }
     }
 
-    @PutMapping("/buys/{cardNumber}")
+    @PutMapping("/{cardNumber}/buys")
     @ApiOperation(value = "Realizar o débito da compra")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No Content"),

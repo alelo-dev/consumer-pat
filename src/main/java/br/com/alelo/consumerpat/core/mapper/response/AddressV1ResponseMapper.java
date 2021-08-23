@@ -14,7 +14,7 @@ public class AddressV1ResponseMapper {
                 .city(addressEntity.getCity())
                 .country(addressEntity.getCountry())
                 .number(addressEntity.getNumber())
-                .portalCode(addressEntity.getPortalCode())
+                .postalCode(addressEntity.getPostalCode())
                 .street(addressEntity.getStreet())
                 .build();
     }

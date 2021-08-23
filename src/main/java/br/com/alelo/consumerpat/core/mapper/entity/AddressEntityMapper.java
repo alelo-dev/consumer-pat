@@ -14,7 +14,7 @@ public class AddressEntityMapper {
                 .city(domain.getCity())
                 .country(domain.getCountry())
                 .number(domain.getNumber())
-                .portalCode(domain.getPortalCode())
+                .postalCode(domain.getPostalCode())
                 .street(domain.getStreet())
                 .build();
     }

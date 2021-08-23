@@ -9,6 +9,7 @@ import br.com.alelo.consumerpat.core.enumeration.EstablishmentType;
 import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;
 import br.com.alelo.consumerpat.core.exception.InvalidEstablishmentForCardException;
 import br.com.alelo.consumerpat.core.exception.InvalidRechargeException;
+import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class CardDomain {
         strategy.put(EstablishmentType.DRUGSTORE, DrugstoreCardDomain.class);
         strategy.put(EstablishmentType.FUEL, FuelCardDomain.class);
 
-        if (!establishmentType.name().equals(this.type.name())) {
+        if (!establishmentType.equals(EstablishmentType.valueOf(this.type.name()))) {
             throw new InvalidEstablishmentForCardException();
         }
 
@@ -64,5 +65,25 @@ public class CardDomain {
         this.validateRecharge(value);
 
         this.balance = this.balance.add(value);
+    }
+
+    public void validateRequiredFields() throws RequiredFieldsException {
+        Map<String, String> fieldErrors = new HashMap<>();
+
+        if (this.card == null || this.card.equals("")) {
+            fieldErrors.put("card", "invalid.item");
+        }
+
+        if (this.balance == null) {
+            fieldErrors.put("balance", "invalid.item");
+        }
+
+        if (this.type == null) {
+            fieldErrors.put("type", "invalid.item");
+        }
+
+        if (fieldErrors.size() > 0) {
+            throw new RequiredFieldsException(fieldErrors);
+        }
     }
 }

@@ -1,12 +1,11 @@
 package br.com.alelo.consumerpat.core.dto.v1.request;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class ConsumerUpdateV1RequestDto {
