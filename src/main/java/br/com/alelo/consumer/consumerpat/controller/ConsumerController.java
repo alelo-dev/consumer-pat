@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -62,25 +63,25 @@ public class ConsumerController {
     public void setBalance(@RequestBody ConsumerSetBalanceDto consumerBalanceDto) {
     	
     	Integer cardNumber = consumerBalanceDto.getCardNumber();
-    	Double value = consumerBalanceDto.getValue().doubleValue();
+    	BigDecimal value = consumerBalanceDto.getValue();
 
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
         if(consumer != null) {
             // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance().add(value));
             repository.save(consumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
             if(consumer != null) {
                 // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+                consumer.setFoodCardBalance(consumer.getFoodCardBalance().add(value));
                 repository.save(consumer);
             } else {
                 // É cartão de combustivel
                 consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+                consumer.setFuelCardBalance(consumer.getFuelCardBalance().add(value));
                 repository.save(consumer);
             }
         }
@@ -93,7 +94,7 @@ public class ConsumerController {
     	String establishmentName = consumerBuyDto.getEstablishmentName();
     	Integer cardNumber = consumerBuyDto.getCardNumber();
     	String productDescription = consumerBuyDto.getProductDescription();
-    	Double value = consumerBuyDto.getValue().doubleValue();
+    	BigDecimal value = consumerBuyDto.getValue();
     	
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -107,25 +108,29 @@ public class ConsumerController {
 
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
+            BigDecimal cashback = value
+            		.divide(BigDecimal.valueOf(100l))
+            		.multiply(BigDecimal.valueOf(10l));
+            value = value.subtract(cashback);
 
             consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance().subtract(value));
             repository.save(consumer);
 
         }else if(establishmentType == 2) {
             consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance().subtract(value));
             repository.save(consumer);
 
         } else {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
+        	BigDecimal tax =value
+        			.divide(BigDecimal.valueOf(100l))
+            		.multiply(BigDecimal.valueOf(35l));
+            value = value.add(tax);
 
             consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+            consumer.setFuelCardBalance(consumer.getFuelCardBalance().subtract(value));
             repository.save(consumer);
         }
 
