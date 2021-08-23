@@ -1,7 +1,7 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
-import br.com.alelo.consumerpat.core.dataprovider.dao.ConsumerDao;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.dao.ConsumerDao;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerPaginatedV1RequestDto;
 import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
 import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;

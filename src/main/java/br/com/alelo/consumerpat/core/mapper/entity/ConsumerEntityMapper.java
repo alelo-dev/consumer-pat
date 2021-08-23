@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.mapper.entity;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
 import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
 import br.com.alelo.consumerpat.core.mapper.domain.ConsumerDomainMapper;

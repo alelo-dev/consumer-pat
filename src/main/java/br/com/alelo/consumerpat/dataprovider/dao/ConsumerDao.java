@@ -1,6 +1,6 @@
-package br.com.alelo.consumerpat.core.dataprovider.dao;
+package br.com.alelo.consumerpat.dataprovider.dao;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

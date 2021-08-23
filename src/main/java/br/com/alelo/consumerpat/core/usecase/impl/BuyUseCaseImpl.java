@@ -1,9 +1,9 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
-import br.com.alelo.consumerpat.core.dataprovider.dao.CardDao;
-import br.com.alelo.consumerpat.core.dataprovider.dao.ExtractDao;
-import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ExtractEntity;
+import br.com.alelo.consumerpat.dataprovider.dao.CardDao;
+import br.com.alelo.consumerpat.dataprovider.dao.ExtractDao;
+import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
 import br.com.alelo.consumerpat.core.exception.CardNotFoundException;
 import br.com.alelo.consumerpat.core.exception.InvalidBalanceException;

@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.mapper.entity;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
 import org.springframework.stereotype.Component;
 

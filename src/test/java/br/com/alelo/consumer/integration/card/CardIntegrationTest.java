@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.integration.card;
 
 import br.com.alelo.consumer.integration.consumer.ConsumerIntegrationTest;
-import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ExtractEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardRechargeV1RequestDto;
 import br.com.alelo.consumerpat.core.enumeration.EstablishmentType;

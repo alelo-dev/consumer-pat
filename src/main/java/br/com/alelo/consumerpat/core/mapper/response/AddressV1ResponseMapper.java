@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.mapper.response;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.AddressEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.AddressEntity;
 import br.com.alelo.consumerpat.core.dto.v1.response.AddressV1ResponseDto;
 
 public class AddressV1ResponseMapper {

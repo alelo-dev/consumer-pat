@@ -1,7 +1,7 @@
-package br.com.alelo.consumerpat.dataprovider.dao;
+package br.com.alelo.consumerpat.dataprovider.dao.impl;
 
-import br.com.alelo.consumerpat.core.dataprovider.dao.ConsumerDao;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.dao.ConsumerDao;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.dataprovider.repository.ConsumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

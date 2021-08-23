@@ -1,4 +1,4 @@
-package br.com.alelo.consumerpat.core.dataprovider.dao;
+package br.com.alelo.consumerpat.dataprovider.dao;
 
 public interface BaseDao<T> {
 

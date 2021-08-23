@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.dataprovider.repository;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.ExtractEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

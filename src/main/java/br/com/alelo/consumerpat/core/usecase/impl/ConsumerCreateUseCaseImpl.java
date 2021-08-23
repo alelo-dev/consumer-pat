@@ -1,18 +1,19 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
-import br.com.alelo.consumerpat.core.dataprovider.dao.AddressDao;
-import br.com.alelo.consumerpat.core.dataprovider.dao.CardDao;
-import br.com.alelo.consumerpat.core.dataprovider.dao.ConsumerDao;
-import br.com.alelo.consumerpat.core.dataprovider.dao.ContactDao;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.core.domain.ConsumerDomain;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.ConsumerAlreadyRegisteredException;
 import br.com.alelo.consumerpat.core.exception.ConsumerEmptyException;
+import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import br.com.alelo.consumerpat.core.mapper.domain.ConsumerDomainMapper;
 import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;
-import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerCreateV1RequestDto;
+import br.com.alelo.consumerpat.dataprovider.dao.AddressDao;
+import br.com.alelo.consumerpat.dataprovider.dao.CardDao;
+import br.com.alelo.consumerpat.dataprovider.dao.ConsumerDao;
+import br.com.alelo.consumerpat.dataprovider.dao.ContactDao;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

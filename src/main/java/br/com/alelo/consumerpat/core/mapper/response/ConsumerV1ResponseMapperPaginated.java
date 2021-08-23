@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.mapper.response;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
 import br.com.alelo.consumerpat.core.mapper.response.pagination.PaginatedBaseMapper;
 

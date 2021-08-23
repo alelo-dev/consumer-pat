@@ -1,6 +1,6 @@
 package br.com.alelo.consumerpat.core.mapper.entity;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.ContactEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ContactEntity;
 import br.com.alelo.consumerpat.core.domain.ContactDomain;
 
 public class ContactEntityMapper {

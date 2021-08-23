@@ -1,7 +1,7 @@
-package br.com.alelo.consumerpat.dataprovider.dao;
+package br.com.alelo.consumerpat.dataprovider.dao.impl;
 
-import br.com.alelo.consumerpat.core.dataprovider.dao.CardDao;
-import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
+import br.com.alelo.consumerpat.dataprovider.dao.CardDao;
+import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
 import br.com.alelo.consumerpat.dataprovider.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

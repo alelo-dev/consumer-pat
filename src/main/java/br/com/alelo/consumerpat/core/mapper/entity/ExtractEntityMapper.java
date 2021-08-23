@@ -1,7 +1,7 @@
 package br.com.alelo.consumerpat.core.mapper.entity;
 
-import br.com.alelo.consumerpat.core.dataprovider.entity.CardEntity;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ExtractEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.CardEntity;
+import br.com.alelo.consumerpat.dataprovider.entity.ExtractEntity;
 import br.com.alelo.consumerpat.core.domain.CardDomain;
 import br.com.alelo.consumerpat.core.dto.v1.request.CardBuyV1RequestDto;
 
@@ -20,7 +20,7 @@ public class ExtractEntityMapper {
                 .establishmentName(requestDto.getEstablishmentName())
                 .establishmentType(requestDto.getEstablishmentType())
                 .productDescription(requestDto.getProductDescription())
-                .value(cardDomain.getValueBuy())
+                .value(cardDomain.getValueForExtract())
                 .build();
     }
 }

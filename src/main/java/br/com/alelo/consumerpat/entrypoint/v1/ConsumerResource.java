@@ -7,6 +7,7 @@ import br.com.alelo.consumerpat.core.dto.v1.response.ConsumerV1ResponseDto;
 import br.com.alelo.consumerpat.core.dto.v1.response.PaginatedResponseDto;
 import br.com.alelo.consumerpat.core.exception.BadRequestException;
 import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
+import br.com.alelo.consumerpat.core.exception.RequiredFieldsException;
 import br.com.alelo.consumerpat.core.usecase.ConsumerCreateUseCase;
 import br.com.alelo.consumerpat.core.usecase.ConsumerFindUseCase;
 import br.com.alelo.consumerpat.core.usecase.ConsumerUpdateUseCase;
@@ -82,7 +83,7 @@ public class ConsumerResource {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server Internal Error")
     })
-    public ResponseEntity<Void> update(@PathVariable("consumerCode") UUID consumerCode, @RequestBody ConsumerUpdateV1RequestDto request) {
+    public ResponseEntity<Void> update(@PathVariable("consumerCode") UUID consumerCode, @RequestBody ConsumerUpdateV1RequestDto request) throws RequiredFieldsException {
         try {
             this.consumerUpdateUseCase.update(consumerCode.toString(), request);
 

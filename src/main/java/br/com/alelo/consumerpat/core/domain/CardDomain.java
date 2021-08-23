@@ -29,7 +29,7 @@ public class CardDomain {
     private String card;
     private BigDecimal balance;
     private CardType type;
-    private BigDecimal valueBuy;
+    private BigDecimal valueForExtract;
 
     public void validateBalance() throws InvalidBalanceException {
         if (this.balance == null || this.balance.compareTo(BigDecimal.ZERO) < 0) {
@@ -50,7 +50,7 @@ public class CardDomain {
 
         Card card = strategy.get(establishmentType).getDeclaredConstructor().newInstance();
         BigDecimal newBalance = card.calculateBalance(this.balance, value);
-        this.valueBuy = this.balance.subtract(newBalance);
+        this.valueForExtract = this.balance.subtract(newBalance);
         this.balance = newBalance;
         this.validateBalance();
     }

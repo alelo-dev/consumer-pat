@@ -1,13 +1,13 @@
 package br.com.alelo.consumerpat.core.usecase.impl;
 
-import br.com.alelo.consumerpat.core.dataprovider.dao.AddressDao;
-import br.com.alelo.consumerpat.core.dataprovider.dao.ConsumerDao;
-import br.com.alelo.consumerpat.core.dataprovider.dao.ContactDao;
-import br.com.alelo.consumerpat.core.dataprovider.entity.ConsumerEntity;
+import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
 import br.com.alelo.consumerpat.core.exception.ConsumerNotFound;
 import br.com.alelo.consumerpat.core.mapper.entity.ConsumerEntityMapper;
 import br.com.alelo.consumerpat.core.usecase.ConsumerUpdateUseCase;
-import br.com.alelo.consumerpat.core.dto.v1.request.ConsumerUpdateV1RequestDto;
+import br.com.alelo.consumerpat.dataprovider.dao.AddressDao;
+import br.com.alelo.consumerpat.dataprovider.dao.ConsumerDao;
+import br.com.alelo.consumerpat.dataprovider.dao.ContactDao;
+import br.com.alelo.consumerpat.dataprovider.entity.ConsumerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +37,11 @@ public class ConsumerUpdateUseCaseImpl implements ConsumerUpdateUseCase {
         consumerEntity.setId(byConsumerCode.getId());
         consumerEntity.setConsumerCode(byConsumerCode.getConsumerCode());
         consumerEntity.setDocument(byConsumerCode.getDocument());
+
         consumerEntity.getAddress().setId(byConsumerCode.getAddress().getId());
-        consumerEntity.getContact().setId(byConsumerCode.getContact().getId());
         consumerEntity.getAddress().setConsumer(consumerEntity);
+
+        consumerEntity.getContact().setId(byConsumerCode.getContact().getId());
         consumerEntity.getContact().setConsumer(consumerEntity);
 
         this.consumerDao.save(consumerEntity);

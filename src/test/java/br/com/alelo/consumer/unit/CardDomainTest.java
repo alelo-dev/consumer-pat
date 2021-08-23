@@ -65,8 +65,8 @@ public class CardDomainTest {
 
         cardDomain.calculateBalance(EstablishmentType.FOOD, BigDecimal.valueOf(50L));
 
-        assertEquals(55L, cardDomain.getBalance().longValue());
-        assertEquals(45L, cardDomain.getValueBuy().longValue());
+        assertEquals(BigDecimal.valueOf(55L), cardDomain.getBalance());
+        assertEquals(BigDecimal.valueOf(45L), cardDomain.getValueForExtract());
     }
 
     @Test
@@ -78,8 +78,8 @@ public class CardDomainTest {
 
         cardDomain.calculateBalance(EstablishmentType.DRUGSTORE, BigDecimal.valueOf(50L));
 
-        assertEquals(50L, cardDomain.getBalance().longValue());
-        assertEquals(50L, cardDomain.getValueBuy().longValue());
+        assertEquals(BigDecimal.valueOf(50L), cardDomain.getBalance());
+        assertEquals(BigDecimal.valueOf(50L), cardDomain.getValueForExtract());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class CardDomainTest {
         cardDomain.calculateBalance(EstablishmentType.FUEL, BigDecimal.valueOf(50L));
 
         assertEquals(new BigDecimal("32.5"), cardDomain.getBalance());
-        assertEquals(new BigDecimal("67.5"), cardDomain.getValueBuy());
+        assertEquals(new BigDecimal("67.5"), cardDomain.getValueForExtract());
     }
 
     @Test
