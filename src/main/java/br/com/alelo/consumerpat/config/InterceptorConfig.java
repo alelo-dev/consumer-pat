@@ -7,6 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Configuration
 public class InterceptorConfig implements HandlerInterceptor {
@@ -21,6 +22,14 @@ public class InterceptorConfig implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         try {
+            final List<String> whiteList = List.of("swagger", "/v2/api-docs", "/error");
+            boolean result = whiteList.stream()
+                    .anyMatch(v -> request.getRequestURI().contains(v) || "/".equals(request.getRequestURI()));
+
+            if (result) {
+                return true;
+            }
+
             String authorization = request.getHeader("Authorization");
             this.authorizationTokenUseCase.validateToken(authorization);
 
