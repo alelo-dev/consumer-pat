@@ -16,7 +16,7 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.util.ResponseUtil;
 
 @Service
-public class CustomerService {
+public class ConsumerService {
 	@Autowired
 	ConsumerRepository repository;
 
