@@ -8,5 +8,6 @@ public interface IConsumerBusiness {
      
     Optional<List<ConsumerDTO>> listAllConsumers();
     Optional<ConsumerDTO> create(ConsumerDTO consumer);
+    Optional<ConsumerDTO> update(ConsumerDTO consumer);
 
 }

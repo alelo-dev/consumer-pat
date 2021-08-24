@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -63,15 +64,28 @@ public class ConsumerControllerV2 {
         return ResponseEntity.status(HttpStatus.OK).body(iConsumerBusiness.create(consumer).get());
     }
 
-    // // Não deve ser possível alterar o saldo do cartão
-    // @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    // @ApiResponses(value = {
-    //     @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
-    //     @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
-    // })
-    // public ResponseEntity<ConsumerEntity> updateConsumer(@RequestBody ConsumerEntity consumer) {
-    //     return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
-    // }
+    // Não deve ser possível alterar o saldo do cartão
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Cliente alterado com sucesso!"),
+        @ApiResponse(code = 204, message = "Nenhum cliente encontrado com o ID informado!"),
+        @ApiResponse(code = 400, message = "Parâmetro de requisição inválido!"),
+        @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
+    })
+    public ResponseEntity<ConsumerDTO> updateConsumer(@RequestBody ConsumerDTO consumer) {
+
+        if (consumer != null && consumer.getId() != null) {
+            Optional<ConsumerDTO> dto = iConsumerBusiness.update(consumer);
+
+            if (dto.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(dto.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(dto.get());
+            }
+
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 
     // /*
     //  * Deve creditar(adicionar) um valor(value) em um no cartão.
