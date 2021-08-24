@@ -1,7 +1,9 @@
 package br.com.alelo.consumer.consumerpat.dto.v2;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import br.com.alelo.consumer.consumerpat.entity.ConsumerEntity;
@@ -36,5 +38,15 @@ public class ConsumerDTO {
     private ContactDTO contactDTO;
     private AddressDTO addressDTO;
     private Set<CardDTO> cards;
+
+    // Usaria Mapstruct
+    public static List<ConsumerDTO> converter(List<ConsumerEntity> entities) {
+
+        if (entities != null && !entities.isEmpty()) {
+            return entities.stream().map(ConsumerDTO::new).collect(Collectors.toList());
+        }
+
+        return null;
+    }
 
 }

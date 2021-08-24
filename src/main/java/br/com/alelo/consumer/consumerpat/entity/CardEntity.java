@@ -6,9 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
-
 import br.com.alelo.consumer.consumerpat.dto.v2.CardDTO;
-import br.com.alelo.consumer.consumerpat.enuns.CardTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

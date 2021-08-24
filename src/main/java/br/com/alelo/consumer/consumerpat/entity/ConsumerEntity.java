@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity 
 public class ConsumerEntity {
 
     @Id
@@ -39,7 +39,7 @@ public class ConsumerEntity {
     
     //cards 
     //SET performance na inserção e elimina cartões duplicados
-    @OneToMany(mappedBy = "ConsumerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "consumerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CardEntity> cards;
 
 }
