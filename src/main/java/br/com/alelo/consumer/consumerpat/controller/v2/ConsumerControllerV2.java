@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -86,39 +85,6 @@ public class ConsumerControllerV2 {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
-    // /*
-    //  * Deve creditar(adicionar) um valor(value) em um no cartão.
-    //  * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-    //  * para isso deve usar o número do cartão(cardNumber) fornecido.
-    //  */
-    // @PutMapping(path = "/cardbalance", produces = MediaType.APPLICATION_JSON_VALUE)
-    // @ApiResponses(value = {
-    //     @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
-    //     @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
-    // })
-    // public ResponseEntity<ConsumerEntity> updateBalance(int cardNumber, double value) {
-    //     ConsumerEntity consumer = null;
-    //     consumer = repository.findByDrugstoreNumber(cardNumber);
-
-    //     if(consumer != null) {
-    //         // é cartão de farmácia
-    //         consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-    //         return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
-    //     } else {
-    //         consumer = repository.findByFoodCardNumber(cardNumber);
-    //         if(consumer != null) {
-    //             // é cartão de refeição
-    //             consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-    //             return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
-    //         } else {
-    //             // É cartão de combustivel
-    //             consumer = repository.findByFuelCardNumber(cardNumber);
-    //             consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-    //             return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
-    //         }
-    //     }
-    // }
 
     // @ResponseBody
     // @PostMapping(path = "/buy" ,produces = MediaType.APPLICATION_JSON_VALUE)
