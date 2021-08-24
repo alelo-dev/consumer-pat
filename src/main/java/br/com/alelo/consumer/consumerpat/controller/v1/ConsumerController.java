@@ -1,7 +1,8 @@
 package br.com.alelo.consumer.consumerpat.controller.v1;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.dtos.v1.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.ConsumerEntity;
+import br.com.alelo.consumer.consumerpat.entity.ExtractEntity;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,7 @@ public class ConsumerController {
             repository.save(consumer);
         }
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+        ExtractEntity extract = new ExtractEntity(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
     }
 

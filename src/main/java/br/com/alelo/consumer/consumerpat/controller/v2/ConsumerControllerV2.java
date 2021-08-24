@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller.v2;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.entity.ConsumerEntity;
+import br.com.alelo.consumer.consumerpat.entity.ExtractEntity;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +38,7 @@ public class ConsumerControllerV2 {
         @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
         @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
     })
-    public ResponseEntity<List<Consumer>> listAllConsumers() {
+    public ResponseEntity<List<ConsumerEntity>> listAllConsumers() {
         return ResponseEntity.status(HttpStatus.OK).body(repository.getAllConsumersList());
     }
 
@@ -49,7 +49,7 @@ public class ConsumerControllerV2 {
         @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
         @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
     })
-    public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+    public ResponseEntity<ConsumerEntity> createConsumer(@RequestBody ConsumerEntity consumer) {
         return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
     }
 
@@ -59,7 +59,7 @@ public class ConsumerControllerV2 {
         @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
         @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
     })
-    public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
+    public ResponseEntity<ConsumerEntity> updateConsumer(@RequestBody ConsumerEntity consumer) {
         return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
     }
 
@@ -73,8 +73,8 @@ public class ConsumerControllerV2 {
         @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
         @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
     })
-    public ResponseEntity<Consumer> updateBalance(int cardNumber, double value) {
-        Consumer consumer = null;
+    public ResponseEntity<ConsumerEntity> updateBalance(int cardNumber, double value) {
+        ConsumerEntity consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
         if(consumer != null) {
@@ -102,8 +102,8 @@ public class ConsumerControllerV2 {
         @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
         @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
     })
-    public ResponseEntity<Extract> buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
+    public ResponseEntity<ExtractEntity> buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+        ConsumerEntity consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -137,7 +137,7 @@ public class ConsumerControllerV2 {
             repository.save(consumer);
         }
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+        ExtractEntity extract = new ExtractEntity(establishmentName, productDescription, new Date(), cardNumber, value);
         return ResponseEntity.status(HttpStatus.OK).body(extractRepository.save(extract));
     }
 
