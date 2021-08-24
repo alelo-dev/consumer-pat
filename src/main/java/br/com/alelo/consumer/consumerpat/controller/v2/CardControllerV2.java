@@ -36,14 +36,14 @@ public class CardControllerV2 {
             @ApiResponse(code = 400, message = "Parâmetro de requisição inválido!"),
             @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.") })
     public ResponseEntity<CardDTO> updateConsumer(@PathVariable("number") Integer number,
-            @PathVariable("value") BigDecimal value, @PathVariable("cardType") CardTypeEnum type) {
+            @PathVariable("value") Double value, @PathVariable("cardType") CardTypeEnum type) {
 
-        Optional<CardDTO> dto = cardBusiness.updateBalance(number, value, type);
+        Optional<CardDTO> dto = cardBusiness.updateBalance(number, BigDecimal.valueOf(value), type);
 
         if (dto.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(dto.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(dto.get());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
 
     }
