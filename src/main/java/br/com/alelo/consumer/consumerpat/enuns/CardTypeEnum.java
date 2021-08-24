@@ -5,11 +5,17 @@ import lombok.Getter;
 @Getter
 public enum CardTypeEnum {
 
-    FOOD(1), FUEL(2), DRUGSTORE(3);
+    INDEFINIDO(0) , FOOD(1), FUEL(2), DRUGSTORE(3);
 
-    private int value;
+    private Integer value;
 
-    CardTypeEnum(int value) {
+    private CardTypeEnum(Integer value) {
         this.value = value;
+    }
+
+    public static CardTypeEnum getEnum(Integer value) {
+        for(CardTypeEnum v : values())
+            if(v.getValue().equals(value)) return v;
+        throw new IllegalArgumentException();
     }
 }

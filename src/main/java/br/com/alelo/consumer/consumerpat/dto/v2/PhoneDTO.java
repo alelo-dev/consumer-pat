@@ -17,7 +17,7 @@ public class PhoneDTO {
     public PhoneDTO (PhoneEntity entity){
         this.id = entity.getId();
         this.number = entity.getNumber();
-        this.type = entity.getType();
+        this.type = PhoneTypeEnum.getEnum(entity.getType());
     }
 
     @EqualsAndHashCode.Exclude

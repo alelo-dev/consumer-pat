@@ -27,7 +27,7 @@ public class CardEntity {
         this.id = dto.getId();
         this.number = dto.getNumber();
         this.cardBalance = dto.getCardBalance();
-        this.type = dto.getType();
+        this.type = dto.getType() != null ? dto.getType().getValue() : 0;
     }
 
     @Id
@@ -37,7 +37,7 @@ public class CardEntity {
     private Integer number;
     @EqualsAndHashCode.Exclude
     private BigDecimal cardBalance;
-    private CardTypeEnum type;
+    private Integer type;
 
     //Default EAGER
     @ManyToOne

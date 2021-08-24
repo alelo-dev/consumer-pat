@@ -21,8 +21,7 @@ public class CardDTO {
         this.id = entity.getId();
         this.number = entity.getNumber();
         this.cardBalance = entity.getCardBalance();
-        this.type = entity.getType();
-
+        this.type = CardTypeEnum.getEnum(entity.getType());
     }
 
     @EqualsAndHashCode.Exclude

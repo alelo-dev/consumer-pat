@@ -24,7 +24,7 @@ public class PhoneEntity {
     public PhoneEntity (PhoneDTO dto){
         this.id = dto.getId();
         this.number = dto.getNumber();
-        this.type = dto.getType();
+        this.type = dto.getType() != null ? dto.getType().getValue() : 0;
     }
 
     @Id
@@ -32,5 +32,5 @@ public class PhoneEntity {
     @EqualsAndHashCode.Exclude
     private Integer id;
     private String number;
-    private PhoneTypeEnum type;
+    private Integer type;
 }

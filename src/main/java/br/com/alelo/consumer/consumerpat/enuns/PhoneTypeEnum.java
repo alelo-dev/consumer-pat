@@ -5,12 +5,18 @@ import lombok.Getter;
 @Getter
 public enum PhoneTypeEnum {
 
-    RESIDENCIAL(1), COMERCIAL(2), MOBILE(3);
+    INDEFINIDO(0) , RESIDENCIAL(1), COMERCIAL(2), MOBILE(3);
 
-    private int value;
+    private Integer value;
 
-    PhoneTypeEnum(int value) {
+    private PhoneTypeEnum(Integer value) {
         this.value = value;
+    }
+
+    public static PhoneTypeEnum getEnum(Integer value) {
+        for(PhoneTypeEnum v : values())
+            if(v.getValue().equals(value)) return v;
+        throw new IllegalArgumentException();
     }
 
 }
