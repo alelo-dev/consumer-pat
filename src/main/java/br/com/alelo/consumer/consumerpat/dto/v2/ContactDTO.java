@@ -16,15 +16,18 @@ import br.com.alelo.consumer.consumerpat.entity.ContactEntity;
 public class ContactDTO {
 
     // Usaria MapperStruct
-    public ContactDTO (ContactEntity entity){
-        this.id = entity.getId();
-        this.phones = entity.getPhones() != null
-                ? entity.getPhones().stream().map(PhoneDTO::new).collect(Collectors.toSet())
-                : null;
-        this.email = entity.getEmail();
+    public ContactDTO(ContactEntity entity) {
+
+        if (entity != null) {
+            this.id = entity.getId();
+            this.phones = entity.getPhones() != null
+                    ? entity.getPhones().stream().map(PhoneDTO::new).collect(Collectors.toSet())
+                    : null;
+            this.email = entity.getEmail();
+        }
     }
 
     private Integer id;
-    private Set<PhoneDTO> phones; 
+    private Set<PhoneDTO> phones;
     private String email;
 }

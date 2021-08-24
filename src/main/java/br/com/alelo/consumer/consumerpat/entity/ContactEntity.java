@@ -24,14 +24,16 @@ import lombok.NoArgsConstructor;
 public class ContactEntity {
 
     // Usaria MapperStruct
-    public ContactEntity (ContactDTO dto){
-        this.id = dto.getId();
-        this.phones = dto.getPhones() != null
-                ? dto.getPhones().stream().map(PhoneEntity::new).collect(Collectors.toSet())
-                : null;
-        this.email = dto.getEmail();
+    public ContactEntity(ContactDTO dto) {
+        if (dto != null) {
+            this.id = dto.getId();
+            this.phones = dto.getPhones() != null
+                    ? dto.getPhones().stream().map(PhoneEntity::new).collect(Collectors.toSet())
+                    : null;
+            this.email = dto.getEmail();
+        }
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

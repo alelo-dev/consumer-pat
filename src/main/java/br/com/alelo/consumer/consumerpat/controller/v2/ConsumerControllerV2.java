@@ -34,7 +34,7 @@ public class ConsumerControllerV2 {
     //Usaria uma solução reativa utilizando ,WebFlux com Reactor, retornando APPLICATION_JSON_STREAM_VALUE
     /* Deve listar todos os clientes (cerca de 500) */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Deve Listar todos os clientes", code = 200)
+    @ApiOperation(value = "Listar todos os clientes", code = 200)
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
         @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
@@ -51,16 +51,17 @@ public class ConsumerControllerV2 {
 
     }
 
-    // /* Cadastrar novos clientes */
-    // @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    // @ApiOperation(value = "Deve Listar todos os clientes", code = 200)
-    // @ApiResponses(value = {
-    //     @ApiResponse(code = 204, message = "Nenhum cliente encontrado!"),
-    //     @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
-    // })
-    // public ResponseEntity<ConsumerEntity> createConsumer(@RequestBody ConsumerEntity consumer) {
-    //     return ResponseEntity.status(HttpStatus.OK).body(repository.save(consumer));
-    // }
+    /* Cadastrar novos clientes */
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Criar Cliente.", code = 201)
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Cliente criado com sucesso!"),
+        @ApiResponse(code = 400, message = "Parâmetros Inválidos!"),
+        @ApiResponse(code = 500, message = "Erro não tratado pelo servidor.")
+    })
+    public ResponseEntity<ConsumerDTO> createConsumer(@RequestBody final ConsumerDTO consumer) {
+        return ResponseEntity.status(HttpStatus.OK).body(iConsumerBusiness.create(consumer).get());
+    }
 
     // // Não deve ser possível alterar o saldo do cartão
     // @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)

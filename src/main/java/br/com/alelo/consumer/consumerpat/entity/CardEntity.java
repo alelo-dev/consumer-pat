@@ -22,10 +22,13 @@ public class CardEntity {
 
     // Usaria MapperStruct
     public CardEntity (CardDTO dto){
-        this.id = dto.getId();
-        this.number = dto.getNumber();
-        this.cardBalance = dto.getCardBalance();
-        this.type = dto.getType() != null ? dto.getType().getValue() : 0;
+
+        if (dto != null) {
+            this.id = dto.getId();
+            this.number = dto.getNumber();
+            this.cardBalance = dto.getCardBalance();
+            this.type = dto.getType() != null ? dto.getType().getValue() : 0;
+        }
     }
 
     @Id

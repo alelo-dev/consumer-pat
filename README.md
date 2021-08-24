@@ -17,3 +17,7 @@ Faça um fork do projeto, clone o mesmo, abra na sua IDE de preferência e execu
 Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
 
  ***Atenção: Não inclua nenhuma lib ou framework***  
+ Como definido no teste não adicionei nenhum framework ... 
+ Iria fazer as validações usando import javax.validation.constraints e spring-boot-starter-validation.
+ Sem cobertura de testes.
+ Sem Controller versionado funcionando.

@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import br.com.alelo.consumer.consumerpat.dto.v2.ExtractDTO;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -18,6 +21,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 public class ExtractEntity {
+
+    // Usaria MApstruct
+    public ExtractEntity(ExtractDTO dto) {
+
+        if (dto != null) {
+            this.id = dto.getId();
+            this.cardNumber = dto.getCardNumber();
+            this.dateBuy = dto.getDateBuy();
+            this.establishmentName = dto.getEstablishmentName();
+            this.establishmentNameId = dto.getEstablishmentNameId();
+            this.productDescription = dto.getProductDescription();
+            this.value = dto.getValue();
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

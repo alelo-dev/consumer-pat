@@ -19,12 +19,15 @@ public class AddressEntity {
 
     // Usaria MapperStruct
     public AddressEntity(AddressDTO dto) {
-        this.id = dto.getId();
-        this.street = dto.getStreet();
-        this.number = dto.getNumber();
-        this.city = dto.getCity();
-        this.country = dto.getCity();
-        this.portalCode = dto.getPortalCode();
+
+        if (dto != null) {
+            this.id = dto.getId();
+            this.street = dto.getStreet();
+            this.number = dto.getNumber();
+            this.city = dto.getCity();
+            this.country = dto.getCity();
+            this.portalCode = dto.getPortalCode();
+        }
     }
 
     @Id

@@ -18,10 +18,13 @@ public class CardDTO {
 
     // Usaria MapperStruct
     public CardDTO(CardEntity entity) {
-        this.id = entity.getId();
-        this.number = entity.getNumber();
-        this.cardBalance = entity.getCardBalance();
-        this.type = CardTypeEnum.getEnum(entity.getType());
+
+        if (entity != null) {
+            this.id = entity.getId();
+            this.number = entity.getNumber();
+            this.cardBalance = entity.getCardBalance();
+            this.type = CardTypeEnum.getEnum(entity.getType());
+        }
     }
 
     @EqualsAndHashCode.Exclude

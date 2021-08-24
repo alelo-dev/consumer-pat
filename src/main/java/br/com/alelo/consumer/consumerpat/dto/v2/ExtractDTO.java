@@ -14,16 +14,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExtractDTO {
-    
-    //Usaria MApstruct
-    public ExtractDTO (ExtractEntity entity){
-        this.id = entity.getId();
-        this.cardNumber = entity.getCardNumber();
-        this.dateBuy = entity.getDateBuy();
-        this.establishmentName = entity.getEstablishmentName();
-        this.establishmentNameId = entity.getEstablishmentNameId();
-        this.productDescription = entity.getProductDescription();
-        this.value = entity.getValue();
+
+    // Usaria MApstruct
+    public ExtractDTO(ExtractEntity entity) {
+
+        if (entity != null) {
+            this.id = entity.getId();
+            this.cardNumber = entity.getCardNumber();
+            this.dateBuy = entity.getDateBuy();
+            this.establishmentName = entity.getEstablishmentName();
+            this.establishmentNameId = entity.getEstablishmentNameId();
+            this.productDescription = entity.getProductDescription();
+            this.value = entity.getValue();
+        }
     }
 
     private Integer id;

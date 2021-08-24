@@ -7,5 +7,6 @@ import br.com.alelo.consumer.consumerpat.dto.v2.ConsumerDTO;
 public interface IConsumerBusiness {
      
     Optional<List<ConsumerDTO>> listAllConsumers();
+    Optional<ConsumerDTO> create(ConsumerDTO consumer);
 
 }

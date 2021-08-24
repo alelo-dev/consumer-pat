@@ -14,12 +14,15 @@ public class AddressDTO {
 
     // Usaria MapperStruct
     public AddressDTO(AddressEntity entity) {
-        this.id = entity.getId();
-        this.street = entity.getStreet();
-        this.number = entity.getNumber();
-        this.city = entity.getCity();
-        this.country = entity.getCity();
-        this.portalCode = entity.getPortalCode();
+
+        if (entity != null) {
+            this.id = entity.getId();
+            this.street = entity.getStreet();
+            this.number = entity.getNumber();
+            this.city = entity.getCity();
+            this.country = entity.getCity();
+            this.portalCode = entity.getPortalCode();
+        }
     }
 
     private Integer id;

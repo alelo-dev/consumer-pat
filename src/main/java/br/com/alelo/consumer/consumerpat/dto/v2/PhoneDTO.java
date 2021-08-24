@@ -14,15 +14,18 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PhoneDTO {
 
-    public PhoneDTO (PhoneEntity entity){
-        this.id = entity.getId();
-        this.number = entity.getNumber();
-        this.type = PhoneTypeEnum.getEnum(entity.getType());
+    public PhoneDTO(PhoneEntity entity) {
+
+        if (entity != null) {
+            this.id = entity.getId();
+            this.number = entity.getNumber();
+            this.type = PhoneTypeEnum.getEnum(entity.getType());
+        }
     }
 
     @EqualsAndHashCode.Exclude
     private Integer id;
     private String number;
     private PhoneTypeEnum type;
-    
+
 }

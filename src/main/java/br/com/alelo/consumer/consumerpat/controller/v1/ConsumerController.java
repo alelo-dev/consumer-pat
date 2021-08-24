@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -16,33 +17,31 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
-    // @Autowired
-    // ConsumerRepository repository;
+    /**
+     * Sem tempo para fazer o versionamento funcionar...
+     * @return
+     */
 
-    // @Autowired
-    // ExtractRepository extractRepository;
-
-
-    // /* Deve listar todos os clientes (cerca de 500) */
-    // @ResponseBody
-    // @ResponseStatus(code = HttpStatus.OK)
-    // @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    // public List<Consumer> listAllConsumers() {
-    //     return repository.getAllConsumersList();
-    // }
+    /* Deve listar todos os clientes (cerca de 500) */
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    public List<Consumer> listAllConsumers() {
+        return Arrays.asList(new Consumer());
+    }
 
 
-    // /* Cadastrar novos clientes */
-    // @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    // public void createConsumer(@RequestBody Consumer consumer) {
-    //     repository.save(consumer);
-    // }
+    /* Cadastrar novos clientes */
+    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    public void createConsumer(@RequestBody Consumer consumer) {
+        
+    }
 
-    // // Não deve ser possível alterar o saldo do cartão
-    // @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    // public void updateConsumer(@RequestBody Consumer consumer) {
-    //     repository.save(consumer);
-    // }
+    // Não deve ser possível alterar o saldo do cartão
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    public void updateConsumer(@RequestBody Consumer consumer) {
+       
+    }
 
 
     // /*
