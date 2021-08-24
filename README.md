@@ -21,3 +21,4 @@ Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
  Iria fazer as validações usando import javax.validation.constraints e spring-boot-starter-validation.
  Sem cobertura de testes.
  Sem Controller versionado funcionando.
+ Por favor altere a versão da API em "Select a definition" na documentação do Swagger para ver a nova versão.
