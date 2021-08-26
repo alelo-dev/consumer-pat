@@ -1,20 +1,17 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.*;
 
 
-@Data
 @Entity
 public class Consumer {
+
+    protected Consumer() {
+
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,48 +20,89 @@ public class Consumer {
     int documentNumber;
     Date birthDate;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    @OneToMany(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<Contact> contacts = new ArrayList<>();
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @OneToMany(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<Address> addresses = new ArrayList<>();
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    @OneToMany(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL)
+    List<Card> cards = new ArrayList<>();
 
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
+    public Consumer(String name, int documentNumber, Date birthDate) {
+        this.name = name;
+        this.documentNumber = documentNumber;
+        this.birthDate = birthDate;
     }
 
+    public boolean addAddress(Address address){
+        address.setConsumer(this);
+        return this.addresses.add(address);
+    }
 
+    public boolean addContact(Contact contact){
+        contact.setConsumer(this);
+        return this.contacts.add(contact);
+    }
+
+    public boolean addCard(Card card){
+        card.setConsumer(this);
+        return this.cards.add(card);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(int documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
 }
