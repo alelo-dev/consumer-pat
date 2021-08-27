@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
 import java.math.BigDecimal;
 
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
+import br.com.alelo.consumer.consumerpat.domain.enums.CardType;
 import lombok.Data;
 
 @Data

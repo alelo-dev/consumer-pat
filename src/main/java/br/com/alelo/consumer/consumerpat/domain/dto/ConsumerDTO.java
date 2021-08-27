@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.dto;
+package br.com.alelo.consumer.consumerpat.domain.dto;
 
 import java.util.Date;
 import java.util.Set;

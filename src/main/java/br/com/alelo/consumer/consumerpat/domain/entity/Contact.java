@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Address {
+public class Contact {
 	
 	@Id
 	private Integer id;
@@ -21,10 +21,9 @@ public class Address {
 	@JoinColumn(name = "consumer_id")
 	private Consumer consumer;
 	
-    private String street;
-    private String number;
-    private String city;
-    private String country;
-    private String postalCode;
-    
+    private int mobilePhoneNumber;
+    private int residencePhoneNumber;
+    private int phoneNumber;
+    private String email;
+
 }
