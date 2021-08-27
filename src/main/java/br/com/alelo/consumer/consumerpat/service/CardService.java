@@ -22,13 +22,11 @@ public class CardService {
     private final ExtractRepository extractRepository;
 	
 	public void setBalance(String cardNumber, BigDecimal value) {
-        repository.findById(cardNumber)
-        		.ifPresentOrElse(
-    				card -> {
-        			card.add(value);
-        			repository.save(card);
-        		}, 
-				() -> new CardNotFoundException());
+        final var card = repository.findById(cardNumber).orElseThrow(() -> new CardNotFoundException(cardNumber));
+        		
+		card.add(value);
+		repository.save(card);
+        		
     }
 
 	 /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -40,7 +38,7 @@ public class CardService {
      * 3 - Posto de combustivel (Fuel)
      */
     public void buy(String cardNumber, BuyDTO buyDTO) {
-        final var card = repository.findById(cardNumber).orElseThrow(CardNotFoundException::new);
+        final var card = repository.findById(cardNumber).orElseThrow(() -> new CardNotFoundException(cardNumber));
         
         if(card.getType() != buyDTO.getEstablishmentType())
         	throw new InvalidEstablishmentException();

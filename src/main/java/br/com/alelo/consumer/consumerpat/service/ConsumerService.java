@@ -14,7 +14,6 @@ import br.com.alelo.consumer.consumerpat.domain.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.entity.Contact;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class ConsumerService {
 	
     private final ConsumerRepository repository;
-
-    private final ExtractRepository extractRepository;
 
 
     /* Deve listar todos os clientes (cerca de 500) */
