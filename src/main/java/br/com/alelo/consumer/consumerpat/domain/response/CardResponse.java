@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.domain.dto;
+package br.com.alelo.consumer.consumerpat.domain.response;
 
 import java.math.BigDecimal;
 
@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardDTO {
-
+public class CardResponse {
+	
 	private String number;
 	private CardType type;
 	private BigDecimal balance;
-	
+
 }

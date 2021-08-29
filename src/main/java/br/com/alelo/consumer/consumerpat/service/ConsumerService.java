@@ -1,18 +1,26 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.domain.dto.AddressDTO;
-import br.com.alelo.consumer.consumerpat.domain.dto.CardDTO;
-import br.com.alelo.consumer.consumerpat.domain.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.domain.dto.ContactDTO;
 import br.com.alelo.consumer.consumerpat.domain.entity.Address;
 import br.com.alelo.consumer.consumerpat.domain.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.entity.Contact;
+import br.com.alelo.consumer.consumerpat.domain.payload.CardPayload;
+import br.com.alelo.consumer.consumerpat.domain.payload.ConsumerPayload;
+import br.com.alelo.consumer.consumerpat.domain.response.CardResponse;
+import br.com.alelo.consumer.consumerpat.domain.response.ConsumerResponse;
+import br.com.alelo.consumer.consumerpat.exception.CardAlreadyExistsException;
+import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -21,19 +29,101 @@ import lombok.RequiredArgsConstructor;
 public class ConsumerService {
 	
     private final ConsumerRepository repository;
+    private final CardRepository cardRepository;
 
 
     /* Deve listar todos os clientes (cerca de 500) */
-    public List<ConsumerDTO> listAllConsumers() {
-    	return repository.getAllConsumersList()
-    		.stream()
-    		.map(this::asConsumerDTO)
-    		.collect(Collectors.toList());
-    	
+    public Page<ConsumerResponse> listAllConsumers(Pageable page) {
+    	return repository.findAll(page)
+    		.map(this::asConsumerResponse);
     }
 
-    private ConsumerDTO asConsumerDTO(Consumer consumer) {
-    	return ConsumerDTO
+    /* Cadastrar novos clientes */
+    public void createConsumer(ConsumerPayload payload) {
+        repository.save(asConsumer(payload));
+    }
+
+    // Não deve ser possível alterar o saldo do cartão
+    public void updateConsumer(Integer id, ConsumerPayload payload) {
+        final var consumer = repository.findById(id).orElseThrow(() -> new ConsumerNotFoundException(id));
+        
+        final var updatedConsumer = asConsumer(payload, consumer);
+        updatedConsumer.setId(id);
+        
+        repository.save(updatedConsumer);
+    }
+    
+    //Utilitários
+    private Consumer asConsumer(ConsumerPayload payload, Consumer consumer) {
+    	consumer.setName(payload.getName());
+    	consumer.setDocumentNumber(payload.getDocumentNumber());
+    	consumer.setBirthDate(consumer.getBirthDate());
+    	consumer.setAddress(asAddress(payload.getAddress(), consumer));
+    	consumer.setContact(asContact(payload.getContact(), consumer));
+    	consumer.setCards(asCards(payload, consumer));
+    	return consumer;
+    }
+
+    private Consumer asConsumer(ConsumerPayload payload) {
+    	return asConsumer(payload, new Consumer());
+    }
+    
+    private Address asAddress(AddressDTO addressDTO, Consumer consumer) {
+    	final var address = new Address();
+    	address.setStreet(addressDTO.getStreet());
+    	address.setNumber(addressDTO.getNumber());
+    	address.setCity(addressDTO.getCity());
+    	address.setCountry(addressDTO.getCountry());
+    	address.setPostalCode(addressDTO.getPostalCode());
+    	address.setConsumer(consumer);
+    	return address;
+    }
+    
+    private Contact asContact(ContactDTO contactDTO, Consumer consumer) {
+    	final var contact = new Contact();
+    	contact.setMobilePhoneNumber(contactDTO.getMobilePhoneNumber());
+    	contact.setPhoneNumber(contactDTO.getPhoneNumber());
+    	contact.setResidencePhoneNumber(contactDTO.getResidencePhoneNumber());
+    	contact.setEmail(contactDTO.getEmail());
+    	contact.setConsumer(consumer);
+    	return contact;
+    }
+
+    private Set<Card> asCards(ConsumerPayload payload, Consumer consumer) {
+    	final var cardSet = consumer.getCards();
+    	final var prevCards = consumer.getCards()
+    			.stream()
+    			.collect(Collectors.toMap(Card::getNumber, Function.identity()));
+    	
+    	payload.getCards().forEach(cardPayload -> {
+    		var card = prevCards.get(cardPayload.getNumber());
+    		
+    		if(card != null) {
+    			card.setType(cardPayload.getType());
+    			card.setConsumer(consumer);
+    		} else {
+    			if(cardRepository.existsById(cardPayload.getNumber())) {
+    				throw new CardAlreadyExistsException(cardPayload.getNumber());
+    			}
+    			
+    			card = asCard(cardPayload, consumer);
+    			cardSet.add(card);
+    		}
+    	});
+    	
+    	return cardSet;
+    }
+    
+    private Card asCard(CardPayload cardPayload, Consumer consumer) {
+    	final var card = new Card();
+    	card.setNumber(cardPayload.getNumber());
+    	card.setType(cardPayload.getType());
+    	card.setConsumer(consumer);
+    	return card;
+    }
+    
+    private ConsumerResponse asConsumerResponse(Consumer consumer) {
+    	return ConsumerResponse
     				.builder()
     				.id(consumer.getId())
     				.name(consumer.getName())
@@ -43,7 +133,7 @@ public class ConsumerService {
     				.contact(asContactDTO(consumer.getContact()))
     				.cards(consumer.getCards()
     						.stream()
-    						.map(this::asCardDTO)
+    						.map(this::asCardResponse)
     						.collect(Collectors.toSet()))
     				.build();
     }
@@ -69,21 +159,8 @@ public class ConsumerService {
     			.build();
     }
     
-    private CardDTO asCardDTO(Card card) {
-    	return new CardDTO(card.getNumber(), card.getType(), card.getBalance());
+    private CardResponse asCardResponse(Card card) {
+    	return new CardResponse(card.getNumber(), card.getType(), card.getBalance());
     }
-
-    /* Cadastrar novos clientes */
-    public void createConsumer(Consumer consumer) {
-    	consumer.getAddress().setConsumer(consumer);
-    	consumer.getContact().setConsumer(consumer);
-        repository.save(consumer);
-    }
-
-    // Não deve ser possível alterar o saldo do cartão
-    public void updateConsumer(Consumer consumer) {
-        repository.save(consumer);
-    }
-
 
 }

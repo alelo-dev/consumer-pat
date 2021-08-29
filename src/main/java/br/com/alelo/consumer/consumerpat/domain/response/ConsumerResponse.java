@@ -1,8 +1,10 @@
-package br.com.alelo.consumer.consumerpat.domain.dto;
+package br.com.alelo.consumer.consumerpat.domain.response;
 
 import java.util.Date;
 import java.util.Set;
 
+import br.com.alelo.consumer.consumerpat.domain.dto.AddressDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.ContactDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,15 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ConsumerDTO {
-
+public class ConsumerResponse {
+	
     private Integer id;
     private String name;
     private int documentNumber;
     private Date birthDate;
     private ContactDTO contact;
     private AddressDTO address;
-    private Set<CardDTO> cards;
+    private Set<CardResponse> cards;
 
-	
+
 }

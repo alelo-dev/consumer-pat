@@ -29,11 +29,11 @@ public class Consumer {
     private int documentNumber;
     private Date birthDate;
     
-    @OneToOne(mappedBy = "consumer", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Contact contact;
     
-    @OneToOne(mappedBy = "consumer", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Address address;
 
