@@ -16,6 +16,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiErrorDTO> handleGenericErrors(Exception ex, WebRequest request) {
+		ex.printStackTrace();
+		
 		var status = 500;
 		
 		if(ex.getClass().isAnnotationPresent(ResponseStatus.class)) {

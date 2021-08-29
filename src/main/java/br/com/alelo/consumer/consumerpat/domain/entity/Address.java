@@ -8,9 +8,11 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(exclude = "consumer")
 public class Address {
 	
 	@Id

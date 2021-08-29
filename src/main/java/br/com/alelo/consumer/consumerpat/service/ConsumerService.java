@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -57,7 +58,7 @@ public class ConsumerService {
     private Consumer asConsumer(ConsumerPayload payload, Consumer consumer) {
     	consumer.setName(payload.getName());
     	consumer.setDocumentNumber(payload.getDocumentNumber());
-    	consumer.setBirthDate(consumer.getBirthDate());
+    	consumer.setBirthDate(payload.getBirthDate());
     	consumer.setAddress(asAddress(payload.getAddress(), consumer));
     	consumer.setContact(asContact(payload.getContact(), consumer));
     	consumer.setCards(asCards(payload, consumer));
@@ -69,23 +70,39 @@ public class ConsumerService {
     }
     
     private Address asAddress(AddressDTO addressDTO, Consumer consumer) {
-    	final var address = new Address();
+    	final var address = Optional.ofNullable(consumer.getAddress())
+    			.orElseGet(() -> {
+    				final var newAddress = new Address();
+    				newAddress.setConsumer(consumer);
+    				return newAddress;
+    				});
+    	return asAddress(addressDTO, address);
+    }
+    
+    private Address asAddress(AddressDTO addressDTO, Address address) {
     	address.setStreet(addressDTO.getStreet());
     	address.setNumber(addressDTO.getNumber());
     	address.setCity(addressDTO.getCity());
     	address.setCountry(addressDTO.getCountry());
     	address.setPostalCode(addressDTO.getPostalCode());
-    	address.setConsumer(consumer);
     	return address;
     }
     
     private Contact asContact(ContactDTO contactDTO, Consumer consumer) {
-    	final var contact = new Contact();
+    	final var contact = Optional.ofNullable(consumer.getContact())
+    			.orElseGet(() -> {
+    				final var newContact = new Contact();
+    				newContact.setConsumer(consumer);
+    				return newContact;
+    				});
+    	return asContact(contactDTO, contact);
+    }
+    
+    private Contact asContact(ContactDTO contactDTO, Contact contact) {
     	contact.setMobilePhoneNumber(contactDTO.getMobilePhoneNumber());
     	contact.setPhoneNumber(contactDTO.getPhoneNumber());
     	contact.setResidencePhoneNumber(contactDTO.getResidencePhoneNumber());
     	contact.setEmail(contactDTO.getEmail());
-    	contact.setConsumer(consumer);
     	return contact;
     }
 
