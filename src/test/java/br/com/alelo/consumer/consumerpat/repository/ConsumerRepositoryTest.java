@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringBootTest
 public class ConsumerRepositoryTest {
@@ -44,7 +45,7 @@ public class ConsumerRepositoryTest {
         Consumer entrada = new Consumer("windson",6661,new Date());
         entrada.addCard(new Card(66666,CardType.FOOD));
         Consumer retornoEntrada = repository.save(entrada);
-        List<Card> load = repository.findById(retornoEntrada.getId()).get().getCards();
+        Set<Card> load = repository.findById(retornoEntrada.getId()).get().getCards();
         Assert.isTrue(load.size() > 0,"O endereço deve receber id do SGBD");
     }
 }

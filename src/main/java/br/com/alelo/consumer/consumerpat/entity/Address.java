@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Address {
     String country;
     int portalCode;
     @ManyToOne
+    @JsonBackReference
     private Consumer consumer;
 
     public Address(String street, int number, String city, String country, int portalCode) {

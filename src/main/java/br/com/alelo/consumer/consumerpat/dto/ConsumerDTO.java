@@ -43,11 +43,11 @@ public class ConsumerDTO {
         return consumer;
     }
 
-    public Consumer parseConsumerWithoutCard() {
+    public Consumer parseConsumerWithoutCard(Integer id) {
         Consumer consumer = new Consumer(name, documentNumber, birthDate);
+        consumer.setId(id);
         consumer.addAddress(parseAddress());
         parseContacts().forEach(consumer::addContact);
-        parseCard().forEach(consumer::addCard);
         return consumer;
     }
 

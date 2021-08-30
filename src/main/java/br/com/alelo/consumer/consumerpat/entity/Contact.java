@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class Contact {
     ContactType type;
     String value;
     @ManyToOne
+    @JsonBackReference
     private Consumer consumer;
 
     public Contact(ContactType type, String value) {

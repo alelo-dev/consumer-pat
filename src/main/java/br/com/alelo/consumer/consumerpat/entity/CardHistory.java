@@ -2,8 +2,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,13 +19,14 @@ public class CardHistory {
     Date date;
     BigDecimal value;
     @ManyToOne
-    Card cardNumber;
+    @JsonIgnore
+    Card card;
 
-    public CardHistory(String name, String description, Card cardNumber, BigDecimal value) {
+    public CardHistory(String name, String description, Card card, BigDecimal value) {
         this.name = name;
         this.description = description;
         this.date = new Date();
-        this.cardNumber = cardNumber;
+        this.card = card;
         this.value = value;
     }
 
@@ -74,11 +74,11 @@ public class CardHistory {
         this.value = value;
     }
 
-    public Card getCardNumber() {
-        return cardNumber;
+    public Card getCard() {
+        return card;
     }
 
-    public void setCardNumber(Card cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setCard(Card card) {
+        this.card = card;
     }
 }

@@ -2,6 +2,10 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -20,14 +24,17 @@ public class Consumer {
     int documentNumber;
     Date birthDate;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL)
     List<Contact> contacts = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL)
     List<Address> addresses = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "consumer", orphanRemoval = true, cascade = CascadeType.ALL)
-    List<Card> cards = new ArrayList<>();
+    Set<Card> cards = new HashSet<>();
 
     public Consumer(String name, int documentNumber, Date birthDate) {
         this.name = name;
@@ -98,11 +105,18 @@ public class Consumer {
         this.addresses = addresses;
     }
 
-    public List<Card> getCards() {
+    public Set<Card> getCards() {
         return cards;
     }
 
-    public void setCards(List<Card> cards) {
+    public void setCards(Set<Card> cards) {
         this.cards = cards;
+    }
+
+    public Consumer update(ConsumerDTO consumerDTO) {
+        this.name = consumerDTO.getName();
+        this.documentNumber = consumerDTO.getDocumentNumber();
+        this.birthDate = consumerDTO.getBirthDate();
+        return this;
     }
 }

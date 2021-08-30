@@ -1,8 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import br.com.alelo.consumer.consumerpat.dto.EstablishmentTypeParse;
-import lombok.Getter;
-import lombok.Setter;
+import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,7 +18,7 @@ public class Card {
     @ManyToOne
     private Consumer consumer;
 
-    @OneToMany(mappedBy = "cardNumber", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<CardHistory> cardHistory = new ArrayList();
 
     public Card(int number, CardType type) {
@@ -32,27 +30,26 @@ public class Card {
     protected Card() {
     }
 
-    public void addBalance(double value) throws Exception {
-        addBalance(new BigDecimal(value));
+    public void deposit(double value) throws Exception {
+        deposit(new BigDecimal(value));
     }
-    public void addBalance(BigDecimal value) throws Exception {
+    public void deposit(BigDecimal value) throws Exception {
         if(value.doubleValue() < 0)
             throw new Exception("Não é permitido adicionar saldo negativo a conta");
         cardHistory.add(new CardHistory("Adição saldo","Adição saldo descrição",this,value));
         balance = balance.add(value);
     }
 
-    public void buy(String establishmentName, String productDescription, BigDecimal value, int establishmentType) throws Exception {
-        if(value.doubleValue() > 0)
+    public void buy(BuyDTO buy) throws Exception {
+        if(buy.value.doubleValue() > 0)
             throw new Exception("Não é possivel realizar compras valor da transação positivo");
-        if(!EstablishmentTypeParse.parse(establishmentType).equals(this.getType()))
+        if(!buy.getEstablishmentType().equals(this.getType()))
             throw new Exception("Não é possivel realizar compras nesse estabelecimento com esse tipo de cartão");
-        if(this.balance.add(value).doubleValue() < 0)
+        if(this.balance.add(buy.value).doubleValue() < 0)
             throw new Exception("Saldo insuficiente");
-
-
-        balance = balance.add(value);
-        cardHistory.add(new CardHistory("Compra "+establishmentName,productDescription,this,value));
+        final BigDecimal finalValue = this.getType().discountAndTax.apply(buy.value);
+        balance = balance.add(finalValue);
+        cardHistory.add(new CardHistory("Compra "+buy.establishmentName,buy.productDescription,this,finalValue));
     }
 
     public Integer getNumber() {
