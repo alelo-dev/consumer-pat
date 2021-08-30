@@ -11,10 +11,12 @@ import javax.persistence.ManyToOne;
 import br.com.alelo.consumer.consumerpat.domain.enums.CardType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
 @EqualsAndHashCode(exclude = "consumer")
+@ToString(exclude = "consumer")
 public class Card {
 	
 	@Id

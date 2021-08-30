@@ -11,7 +11,9 @@ import br.com.alelo.consumer.consumerpat.exception.CardTypeMismatchException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CardService {
@@ -24,8 +26,8 @@ public class CardService {
         final var card = repository.findById(cardNumber).orElseThrow(() -> new CardNotFoundException(cardNumber));
         		
 		card.add(value);
-		repository.save(card);
-        		
+		final var savedCard = repository.save(card);
+		log.info("Credit added to card: {}", savedCard);
     }
 
 	 /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -46,7 +48,8 @@ public class CardService {
         card.remove(adjustedValue);
         repository.save(card);
         
-        extractRepository.save(new Extract(payload.getEstablishmentName(), payload.getProductDescription(), cardNumber, adjustedValue));
+        final var extract = extractRepository.save(new Extract(payload.getEstablishmentName(), payload.getProductDescription(), cardNumber, adjustedValue));
+        log.info("Extract from transaction: {}", extract);
     }
 
 }

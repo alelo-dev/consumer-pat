@@ -9,10 +9,12 @@ import javax.persistence.OneToOne;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
 @EqualsAndHashCode(exclude = "consumer")
+@ToString(exclude = "consumer")
 public class Contact {
 	
 	@Id

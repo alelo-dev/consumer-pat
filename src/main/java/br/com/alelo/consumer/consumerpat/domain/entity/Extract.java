@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import lombok.Data;
 
 
@@ -19,15 +17,13 @@ public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
     
     private String establishmentName;
     private String productDescription;
     private String cardNumber;
     private BigDecimal value;
-
-    @CreatedDate
-    private LocalDateTime buyDate;
+    private LocalDateTime buyDate = LocalDateTime.now();
 
     public Extract(String establishmentName, String productDescription, String cardNumber, BigDecimal value) {
         this.establishmentName = establishmentName;

@@ -25,7 +25,9 @@ import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ConsumerService {
@@ -36,23 +38,28 @@ public class ConsumerService {
 
     /* Deve listar todos os clientes (cerca de 500) */
     public Page<ConsumerResponse> listAllConsumers(Pageable page) {
-    	return repository.findAll(page)
-    		.map(this::asConsumerResponse);
+    	final var result = repository.findAll(page);
+    	
+    	log.info("Search returned with {} element(s): {}", result.getTotalElements(), result.getContent());
+    	
+    	return result.map(this::asConsumerResponse);
     }
 
     /* Cadastrar novos clientes */
     public void createConsumer(ConsumerPayload payload) {
-        repository.save(asConsumer(payload));
+        final var createdConsumer = repository.save(asConsumer(payload));
+        log.info("Consumer was created: {}", createdConsumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
     public void updateConsumer(Integer id, ConsumerPayload payload) {
         final var consumer = repository.findById(id).orElseThrow(() -> new ConsumerNotFoundException(id));
         
-        final var updatedConsumer = asConsumer(payload, consumer);
+        var updatedConsumer = asConsumer(payload, consumer);
         updatedConsumer.setId(id);
         
-        repository.save(updatedConsumer);
+        updatedConsumer = repository.save(updatedConsumer);
+        log.info("Consumer was updated: {}", updatedConsumer); 
     }
     
     //Utilitários

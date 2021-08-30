@@ -10,13 +10,16 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.alelo.consumer.consumerpat.domain.response.ApiErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiErrorResponse> handleGenericErrors(Exception ex, WebRequest request) {
-		ex.printStackTrace();
+		
+		log.warn("Exception handled globally", ex);
 		
 		var status = 500;
 		
