@@ -12,10 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.alelo.consumer.consumerpat.config.SwaggerConfig.ApiPageable;
 import br.com.alelo.consumer.consumerpat.domain.payload.ConsumerPayload;
+import br.com.alelo.consumer.consumerpat.domain.response.ApiErrorResponse;
 import br.com.alelo.consumer.consumerpat.domain.response.ConsumerResponse;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 @RestController
@@ -27,7 +34,12 @@ public class ConsumerController {
 
     /* Deve listar todos os clientes (cerca de 500) */
     @GetMapping
-    public Page<ConsumerResponse> listAllConsumers(Pageable page) {
+    @ApiPageable
+    @ApiOperation(value = "List all clients")
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Success", response = ConsumerResponse.class)
+	})	 
+    public Page<ConsumerResponse> listAllConsumers(@ApiIgnore Pageable page) {
         return service.listAllConsumers(page);
     }
 
@@ -35,6 +47,11 @@ public class ConsumerController {
     /* Cadastrar novos clientes */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
+    @ApiOperation(value = "Create new Consumer")
+   	@ApiResponses(value = {
+   		@ApiResponse(code = 201, message = "Success", response = Void.class),
+   		@ApiResponse(code = 409, message = "Card with given number already exists", response = ApiErrorResponse.class)
+   	})
     public void createConsumer(@RequestBody ConsumerPayload consumer) {
         service.createConsumer(consumer);
     }
@@ -42,7 +59,13 @@ public class ConsumerController {
     // Não deve ser possível alterar o saldo do cartão
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public void updateConsumer(@PathVariable("id") Integer id, @RequestBody ConsumerPayload consumer) {
+    @ApiOperation(value = "Create new Consumer")
+   	@ApiResponses(value = {
+   		@ApiResponse(code = 202, message = "Success", response = Void.class),
+   		@ApiResponse(code = 404, message = "Consumer with given id not found", response = ApiErrorResponse.class),
+   		@ApiResponse(code = 409, message = "Card with given number already exists binded to another consumer", response = ApiErrorResponse.class)
+   	})
+    public void updateConsumer(@PathVariable("id") @ApiParam(example = "1") Integer id, @RequestBody ConsumerPayload consumer) {
         service.updateConsumer(id, consumer);
     }
 
