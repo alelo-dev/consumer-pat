@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.domain.entity;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,8 +26,8 @@ public class Consumer {
     private Integer id;
     
     private String name;
-    private int documentNumber;
-    private Date birthDate;
+    private String documentNumber;
+    private LocalDate birthDate;
     
     @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

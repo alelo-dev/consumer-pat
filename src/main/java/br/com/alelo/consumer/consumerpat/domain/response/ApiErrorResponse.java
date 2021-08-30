@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.domain.dto;
+package br.com.alelo.consumer.consumerpat.domain.response;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiErrorDTO {
+public class ApiErrorResponse {
 
 	private LocalDateTime timestamp;
 	private String message;

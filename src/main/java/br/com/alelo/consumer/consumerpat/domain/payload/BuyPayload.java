@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.domain.dto;
+package br.com.alelo.consumer.consumerpat.domain.payload;
 
 import java.math.BigDecimal;
 
@@ -6,7 +6,7 @@ import br.com.alelo.consumer.consumerpat.domain.enums.CardType;
 import lombok.Data;
 
 @Data
-public class BuyDTO {
+public class BuyPayload {
 	
 	private CardType establishmentType;
 	private String establishmentName;

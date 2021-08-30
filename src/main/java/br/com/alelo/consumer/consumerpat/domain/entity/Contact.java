@@ -23,9 +23,9 @@ public class Contact {
 	@JoinColumn(name = "consumer_id")
 	private Consumer consumer;
 	
-    private int mobilePhoneNumber;
-    private int residencePhoneNumber;
-    private int phoneNumber;
+    private String mobilePhoneNumber;
+    private String residencePhoneNumber;
+    private String phoneNumber;
     private String email;
 
 }

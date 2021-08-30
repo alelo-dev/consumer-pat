@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -107,7 +108,7 @@ public class ConsumerService {
     }
 
     private Set<Card> asCards(ConsumerPayload payload, Consumer consumer) {
-    	final var cardSet = consumer.getCards();
+    	final var cardSet = new LinkedHashSet<Card>();
     	final var prevCards = consumer.getCards()
     			.stream()
     			.collect(Collectors.toMap(Card::getNumber, Function.identity()));
@@ -124,8 +125,8 @@ public class ConsumerService {
     			}
     			
     			card = asCard(cardPayload, consumer);
-    			cardSet.add(card);
     		}
+    		cardSet.add(card);
     	});
     	
     	return cardSet;

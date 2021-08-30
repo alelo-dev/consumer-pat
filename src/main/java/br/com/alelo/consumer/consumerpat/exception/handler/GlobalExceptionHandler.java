@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.alelo.consumer.consumerpat.domain.dto.ApiErrorDTO;
+import br.com.alelo.consumer.consumerpat.domain.response.ApiErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ApiErrorDTO> handleGenericErrors(Exception ex, WebRequest request) {
+	public ResponseEntity<ApiErrorResponse> handleGenericErrors(Exception ex, WebRequest request) {
 		ex.printStackTrace();
 		
 		var status = 500;
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		
 		return ResponseEntity.status(status).body(
-				ApiErrorDTO
+				ApiErrorResponse
 				.builder()
 				.timestamp(LocalDateTime.now())
 				.message(ex.getMessage())
