@@ -62,7 +62,10 @@ public class ConsumerService {
     	consumer.setBirthDate(payload.getBirthDate());
     	consumer.setAddress(asAddress(payload.getAddress(), consumer));
     	consumer.setContact(asContact(payload.getContact(), consumer));
-    	consumer.setCards(asCards(payload, consumer));
+    	
+    	final var cards = asCards(payload, consumer);
+    	consumer.getCards().clear();
+    	consumer.getCards().addAll(cards);
     	return consumer;
     }
 
