@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,8 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/consumer")
+@Api(tags = "Consumers")
+@RequestMapping("/consumers")
 public class ConsumerController {
 
     @Autowired
