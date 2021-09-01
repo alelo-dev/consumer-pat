@@ -9,9 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.List;
@@ -28,35 +26,33 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
-
-    /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @ApiOperation(value = "Deve listar todos os clientes (cerca de 500).")
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
 
-
-    /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @ApiOperation(value = "Cadastrar novos clientes.")
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
-    // Não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @ApiOperation(value = "Não deve ser possível alterar o saldo do cartão")
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
 
     /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @ApiOperation(value = "Deve creditar(adicionar) um valor(value) em um no cartão.")
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
@@ -82,19 +78,20 @@ public class ConsumerController {
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @ApiOperation(value = "Os valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do " +
+            " estabelecimento da compra.")
     public void buy(int establishmentType, String establishmentName, int cardNumber,
                     String productDescription, double value) {
         Consumer consumer = null;
-       /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do
-        * estabelecimento da compra.
-        * Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser
-        * debitado do cartão e alimentação
-        *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
-        */
+        /*
+         * Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser
+         * debitado do cartão e alimentação
+         *
+         * Tipos de estabelcimentos
+         * 1 - Alimentação (food)
+         * 2 - Farmácia (DrugStore)
+         * 3 - Posto de combustivel (Fuel)
+         */
 
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
