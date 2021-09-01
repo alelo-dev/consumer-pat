@@ -1,21 +1,24 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.config.SwaggerConfig;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.List;
 
-
-@Controller
-@Api(tags = "Consumers")
+@RestController
+@ApiOperation(value = "Teste unitário", hidden = true)
+@Api(tags = { SwaggerConfig.TAG })
 @RequestMapping("/consumers")
 public class ConsumerController {
 
@@ -79,10 +82,13 @@ public class ConsumerController {
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    public void buy(int establishmentType, String establishmentName, int cardNumber,
+                    String productDescription, double value) {
         Consumer consumer = null;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+       /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do
+        * estabelecimento da compra.
+        * Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser
+        * debitado do cartão e alimentação
         *
         * Tipos de estabelcimentos
         * 1 - Alimentação (food)
