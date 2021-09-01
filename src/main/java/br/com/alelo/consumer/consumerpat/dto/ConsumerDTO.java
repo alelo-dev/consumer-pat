@@ -1,70 +1,36 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.dto;
 
 import java.util.Date;
-import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public class ConsumerDTO {
 
-import lombok.Data;
-
-@Data
-@Entity
-public class Consumer {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	Integer id;
-	String name;
-	int documentNumber;
-	Date birthDate;
+	private Integer id;
+	private String name;
+	private int documentNumber;
+	private Date birthDate;
 
 	// contacts
-	Long mobilePhoneNumber;
-	Long residencePhoneNumber;
-	Long phoneNumber;
-	String email;
+	private Long mobilePhoneNumber;
+	private Long residencePhoneNumber;
+	private Long phoneNumber;
+	private String email;
 
 	// Address
-	String street;
-	int number;
-	String city;
-	String country;
-	int portalCode;
+	private String street;
+	private int number;
+	private String city;
+	private String country;
+	private int portalCode;
 
 	// cards
-	Long foodCardNumber;
-	double foodCardBalance;
+	private Long foodCardNumber;
+	private double foodCardBalance;
 
-	Long fuelCardNumber;
-	double fuelCardBalance;
+	private Long fuelCardNumber;
+	private double fuelCardBalance;
 
-	Long drugstoreNumber;
-	double drugstoreCardBalance;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Consumer consumer = (Consumer) o;
-		return documentNumber == consumer.documentNumber && mobilePhoneNumber == consumer.mobilePhoneNumber
-				&& residencePhoneNumber == consumer.residencePhoneNumber && phoneNumber == consumer.phoneNumber
-				&& number == consumer.number && portalCode == consumer.portalCode
-				&& foodCardNumber == consumer.foodCardNumber
-				&& Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-				&& fuelCardNumber == consumer.fuelCardNumber
-				&& Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-				&& drugstoreNumber == consumer.drugstoreNumber
-				&& Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-				&& Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name)
-				&& Objects.equals(birthDate, consumer.birthDate) && Objects.equals(email, consumer.email)
-				&& Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-				&& Objects.equals(country, consumer.country);
-	}
+	private Long drugstoreNumber;
+	private double drugstoreCardBalance;
 
 	public Integer getId() {
 		return id;
