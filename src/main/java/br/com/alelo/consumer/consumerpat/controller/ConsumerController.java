@@ -42,13 +42,13 @@ public class ConsumerController {
 
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     @ApiOperation(value = "Cadastrar novos clientes.")
-    public void createConsumer(@RequestBody Consumer consumer) {
+    public void createConsumer(@RequestBody Consumer consumer, String xTransactionId) {
         consumerService.save(consumer);
     }
 
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     @ApiOperation(value = "Não deve ser possível alterar o saldo do cartão")
-    public void updateConsumer(@RequestBody Consumer consumer) {
+    public void updateConsumer(@RequestBody Consumer consumer, String xTransactionId) {
         consumerService.update(consumer);
     }
 
@@ -60,7 +60,7 @@ public class ConsumerController {
 
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     @ApiOperation(value = "Deve creditar(adicionar) um valor(value) em um no cartão.")
-    public void setBalance(Integer cardNumber, BigDecimal value) {
+    public void setBalance(Integer cardNumber, BigDecimal value, String xTransactionId) {
         Consumer consumer = null;
         consumer = consumerService.findByDrugstoreNumber(cardNumber);
 
@@ -89,7 +89,7 @@ public class ConsumerController {
             " estabelecimento da compra.")
 
     public void buy(int establishmentType, String establishmentName, int cardNumber,
-                    String productDescription, BigDecimal value) {
+                    String productDescription, BigDecimal value, String xTransactionId) {
         var consumer = new Consumer();
         /**
          * Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser
