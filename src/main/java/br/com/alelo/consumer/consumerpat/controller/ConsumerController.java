@@ -3,13 +3,12 @@ package br.com.alelo.consumer.consumerpat.controller;
 import br.com.alelo.consumer.consumerpat.config.SwaggerConfig;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import br.com.alelo.consumer.consumerpat.service.ExtractService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,30 +23,33 @@ public class ConsumerController {
 
     public static final Logger logger = LoggerFactory.getLogger(ConsumerController.class);
 
-    @Autowired
-    ConsumerRepository repository;
+    private final ConsumerService consumerService;
 
-    @Autowired
-    ExtractRepository extractRepository;
+    private final ExtractService extractService;
+
+    public ConsumerController(ConsumerService consumerService, ExtractService extractService) {
+        this.consumerService = consumerService;
+        this.extractService = extractService;
+    }
 
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     @ApiOperation(value = "Deve listar todos os clientes (cerca de 500).")
     public List<Consumer> listAllConsumers() {
-        return repository.findAll();
+        return consumerService.findAll();
     }
 
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     @ApiOperation(value = "Cadastrar novos clientes.")
     public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+        consumerService.save(consumer);
     }
 
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     @ApiOperation(value = "Não deve ser possível alterar o saldo do cartão")
     public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+        consumerService.update(consumer);
     }
 
 
@@ -60,23 +62,23 @@ public class ConsumerController {
     @ApiOperation(value = "Deve creditar(adicionar) um valor(value) em um no cartão.")
     public void setBalance(Integer cardNumber, BigDecimal value) {
         Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+        consumer = consumerService.findByDrugstoreNumber(cardNumber);
 
         if (consumer != null) {
             /** é cartão de farmácia */
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance().add(value));
-            repository.save(consumer);
+            consumerService.save(consumer);
         } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
+            consumer = consumerService.findByFoodCardNumber(cardNumber);
             if (consumer != null) {
                 /** é cartão de refeição */
                 consumer.setFoodCardBalance(consumer.getFoodCardBalance().add(value));
-                repository.save(consumer);
+                consumerService.save(consumer);
             } else {
                 /** É cartão de combustivel */
-                consumer = repository.findByFuelCardNumber(cardNumber);
+                consumer = consumerService.findByFuelCardNumber(cardNumber);
                 consumer.setFuelCardBalance(consumer.getFuelCardBalance().add(value));
-                repository.save(consumer);
+                consumerService.save(consumer);
             }
         }
     }
@@ -104,16 +106,16 @@ public class ConsumerController {
             BigDecimal cashback = value.divide(BigDecimal.valueOf(100L)).multiply(BigDecimal.TEN);
             value = value.subtract(cashback);
 
-            consumer = repository.findByFoodCardNumber(cardNumber);
+            consumer = consumerService.findByFoodCardNumber(cardNumber);
             if (consumer != null) {
                 consumer.setFoodCardBalance(consumer.getFoodCardBalance().subtract(value));
-                repository.save(consumer);
+                consumerService.save(consumer);
             }
         } else if (establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
+            consumer = consumerService.findByDrugstoreNumber(cardNumber);
             if (consumer != null) {
                 consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance().subtract(value));
-                repository.save(consumer);
+                consumerService.save(consumer);
             }
         } else {
             /** Nas compras com o cartão de combustivel existe um acrescimo de 35%; */
@@ -121,14 +123,14 @@ public class ConsumerController {
             BigDecimal tax = value.divide(BigDecimal.valueOf(100L).multiply(BigDecimal.valueOf(35L)));
             value = value.add(tax);
 
-            consumer = repository.findByFuelCardNumber(cardNumber);
+            consumer = consumerService.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance().subtract(value));
-            repository.save(consumer);
+            consumerService.save(consumer);
         }
 
         Extract extract = new Extract(establishmentName, productDescription, LocalDateTime.now(), cardNumber, value);
-        extractRepository.save(extract);
-        logger.info("Compra efetuada com sucesso - {}",HttpStatus.OK);
+        extractService.save(extract);
+        logger.info("Compra efetuada com sucesso - {}", HttpStatus.OK);
     }
 
 }
