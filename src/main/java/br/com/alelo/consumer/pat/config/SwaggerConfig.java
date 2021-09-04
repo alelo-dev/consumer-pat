@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.config;
+package br.com.alelo.consumer.pat.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +15,10 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("br.com.alelo.consumer"))
+            .paths(PathSelectors.any())
+            .build();
     }
+
 }

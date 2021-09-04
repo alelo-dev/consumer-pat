@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat;
+package br.com.alelo.consumer.pat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
