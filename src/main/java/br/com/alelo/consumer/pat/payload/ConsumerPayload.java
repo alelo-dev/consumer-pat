@@ -1,34 +1,16 @@
-package br.com.alelo.consumer.pat.entity;
+package br.com.alelo.consumer.pat.payload;
 
-
-import br.com.alelo.consumer.pat.payload.CreateConsumerPayload;
-import lombok.AllArgsConstructor;
+import br.com.alelo.consumer.pat.entity.Consumer;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class Consumer {
+public class ConsumerPayload {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    private Long consumerId;
     private String name;
     private String documentNumber;
     private LocalDate birthDate;
@@ -46,13 +28,9 @@ public class Consumer {
     private String country;
     private Integer portalCode;
 
-    //cards
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "consumer_id")
-    private List<Card> cards = new ArrayList<>();
-
-    public static Consumer from(CreateConsumerPayload consumer) {
-        return Consumer.builder()
+    public static ConsumerPayload from(Consumer consumer) {
+        return ConsumerPayload.builder()
+            .consumerId(consumer.getId())
             .name(consumer.getName())
             .documentNumber(consumer.getDocumentNumber())
             .birthDate(consumer.getBirthDate())
