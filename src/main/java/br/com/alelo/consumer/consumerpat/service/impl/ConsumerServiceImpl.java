@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.enums.CashBackOrTax;
 import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
@@ -73,7 +74,7 @@ public class ConsumerServiceImpl implements ConsumerServiceApi{
 
         if (establishmentType == EstablishmentType.FOOD) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
+            Double cashback  = (value / 100) * CashBackOrTax.FOOD_CASHBACK.percent;
             value = value - cashback;
 
             consumer = repository.findByFoodCardNumber(cardNumber);
@@ -87,7 +88,7 @@ public class ConsumerServiceImpl implements ConsumerServiceApi{
 
         } else {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
+            Double tax  = (value / 100) * CashBackOrTax.FUEL_TAX.percent;
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);
