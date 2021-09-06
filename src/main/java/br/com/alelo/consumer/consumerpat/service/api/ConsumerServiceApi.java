@@ -1,10 +1,9 @@
 package br.com.alelo.consumer.consumerpat.service.api;
 
 import java.util.List;
-
 import org.springframework.stereotype.Component;
-
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
 
 @Component
 public interface ConsumerServiceApi {
@@ -17,6 +16,6 @@ public interface ConsumerServiceApi {
 
     public void setBalance(int cardNumber, double value);
 
-    public void but(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value);
+    public void but(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value);
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.api.ConsumerServiceApi;
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
 
 @Controller
 @RequestMapping("/consumer")
@@ -55,7 +56,7 @@ public class ConsumerController {
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    public void buy(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         ConsumerService.but(establishmentType, establishmentName, cardNumber, productDescription, value);
     }
 

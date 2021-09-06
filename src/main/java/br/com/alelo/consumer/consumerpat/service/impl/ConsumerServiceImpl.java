@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.api.ConsumerServiceApi;
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentType;
 
 @Service
 public class ConsumerServiceImpl implements ConsumerServiceApi{
@@ -62,18 +64,14 @@ public class ConsumerServiceImpl implements ConsumerServiceApi{
     }
 
     @Override
-    public void but(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value){
+    public void but(EstablishmentType establishmentType, String establishmentName, int cardNumber, String productDescription, double value){
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
         */
 
-        if (establishmentType == 1) {
+        if (establishmentType == EstablishmentType.FOOD) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             Double cashback  = (value / 100) * 10;
             value = value - cashback;
@@ -82,7 +80,7 @@ public class ConsumerServiceImpl implements ConsumerServiceApi{
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
 
-        }else if(establishmentType == 2) {
+        }else if(establishmentType == EstablishmentType.DRUGSTORE) {
             consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
