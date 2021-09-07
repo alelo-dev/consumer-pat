@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,10 +9,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import br.com.alelo.consumer.consumerpat.constants.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.respository.filter.BuyFilter;
 
 @Service
@@ -23,7 +21,7 @@ public class ConsumerService {
 	private ConsumerRepository consumerRepository;
 
 	@Autowired
-	private ExtractRepository extractRepository;
+	private ExtractService extractService;
 
 	public List<Consumer> listConsumers() {
 		return consumerRepository.findAll();
@@ -31,6 +29,11 @@ public class ConsumerService {
 
 	public Consumer salvar(Consumer consumer) {
 
+		if (consumer.getId() != null) {
+			if (!consumerRepository.findById(consumer.getId()).isEmpty()) {
+				throw new DataIntegrityViolationException("consumidor.existente");
+			}
+		}
 		if (consumer.getFoodCardNumber() != 0) {
 			if (consumerRepository.findByFoodCardNumber(consumer.getFoodCardNumber()) != null) {
 				throw new DataIntegrityViolationException("cartao.alimentacao.existente");
@@ -51,10 +54,22 @@ public class ConsumerService {
 	}
 
 	public Consumer atualizar(Consumer consumer) {
-		Consumer consumerSaved = buscarConsumidorPorId(consumer.getId());
 
-		BeanUtils.copyProperties(consumer, consumerSaved, "id");
-		return consumerRepository.save(consumerSaved);
+		if (consumer.getId() == null) {
+			throw new EmptyResultDataAccessException("consumidor.nao-encontrado", 1);
+		}
+
+		Consumer consumerUpdate = buscarConsumidorPorId(consumer.getId());
+
+		return updateConsumer(consumerUpdate);
+	}
+
+	private Consumer updateConsumer(Consumer consumer) {
+
+		String[] ignoreProperties = { "id", "foodCardBalance", "fuelCardBalance", "drugstoreCardBalance" };
+		BeanUtils.copyProperties(consumer, consumer, ignoreProperties);
+		return consumerRepository.save(consumer);
+
 	}
 
 	public Consumer buscarConsumidorPorId(Integer id) {
@@ -91,6 +106,23 @@ public class ConsumerService {
 
 	}
 
+	public Consumer setBalance(int cardNumber, double value) {
+
+		Consumer consumer = null;
+
+		if ((consumer = consumerRepository.findByDrugstoreNumber(cardNumber)) != null) {
+			consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+		} else if ((consumer = consumerRepository.findByFoodCardNumber(cardNumber)) != null) {
+			consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+		} else if ((consumer = consumerRepository.findByFuelCardNumber(cardNumber)) != null) {
+			consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+		} else {
+			throw new EmptyResultDataAccessException("cartao.nao-encontrado", 1);
+		}
+		return updateConsumer(consumer);
+
+	}
+
 	private Consumer buyFood(BuyFilter buyFilter) {
 
 		Consumer consumer = consumerRepository.findByFoodCardNumber(buyFilter.getCardNumber());
@@ -100,11 +132,11 @@ public class ConsumerService {
 		}
 
 		Double value = buyFilter.getValue();
-		value = (value - (value * .10));
+		value = roundDoubleValue(value - (value * .10));
 
-		consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+		consumer.setFoodCardBalance(roundDoubleValue(consumer.getFoodCardBalance() - value));
 		consumerRepository.save(consumer);
-		saveExtract(buyFilter, consumer.getId(), value);
+		extractService.saveExtract(buyFilter, consumer.getId(), EstablishmentType.FOOD.getId(), value);
 
 		return consumer;
 	}
@@ -117,10 +149,11 @@ public class ConsumerService {
 			throw new EmptyResultDataAccessException("cartao.nao-encontrado", 1);
 		}
 
-		Double value = consumer.getDrugstoreCardBalance() - buyFilter.getValue();
+		Double value = roundDoubleValue(consumer.getDrugstoreCardBalance() - buyFilter.getValue());
 		consumer.setDrugstoreCardBalance(value);
 		consumerRepository.save(consumer);
-		saveExtract(buyFilter, consumer.getId(), value);
+		extractService.saveExtract(buyFilter, consumer.getId(), EstablishmentType.DRUGSTORE.getId(),
+				buyFilter.getValue());
 
 		return consumer;
 
@@ -135,23 +168,17 @@ public class ConsumerService {
 		}
 
 		Double value = buyFilter.getValue();
-		value = (value * 1.35);
+		value = roundDoubleValue(value * 1.35);
 
-		consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+		consumer.setFuelCardBalance(roundDoubleValue(consumer.getFuelCardBalance() - value));
 		consumerRepository.save(consumer);
-		saveExtract(buyFilter, consumer.getId(), value);
+		extractService.saveExtract(buyFilter, consumer.getId(), EstablishmentType.FUEL.getId(), value);
 
 		return consumer;
 
 	}
 
-	private void saveExtract(BuyFilter buyFilter, int id, Double value) {
-
-		Extract extract = new Extract(buyFilter.getEstablishmentName(), buyFilter.getProductDescription(), new Date(),
-				buyFilter.getCardNumber(), value);
-
-		extractRepository.save(extract);
-
+	private Double roundDoubleValue(Double value) {
+		return Math.round(value * 100) / 100.0;
 	}
-
 }
