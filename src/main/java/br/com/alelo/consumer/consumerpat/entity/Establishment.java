@@ -1,20 +1,19 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-
 
 @Data
 @Entity
-@Builder
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Consumer implements Serializable {
+public class Establishment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,16 +22,12 @@ public class Consumer implements Serializable {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "DOCUMENT_NUMBER")
-    private String documentNumber;
-
-    @Column(name = "BIRTH_DATE")
-    private LocalDate birthDate;
-
-    @Embedded
-    private Contact contact;
+    @Column(name = "TYPE")
+    private BusinessType type;
 
     @Embedded
     private Address address;
 
+    @Embedded
+    private Contact contact;
 }
