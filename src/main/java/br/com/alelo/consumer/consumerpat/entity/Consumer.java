@@ -1,15 +1,26 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import br.com.alelo.consumer.consumerpat.helper.RequestConsumerUpdate;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 
 @Data
@@ -18,53 +29,36 @@ public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Long id;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    @NotEmpty
+    private String name;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @NotEmpty
+    private String documentNumber;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    @Email
+    private String email;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) 
+    private LocalDateTime birthDate;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Phone> phones;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Address address;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Card> cards;
+
+    public Consumer(RequestConsumerUpdate requestConsumerUpdate) {
+        this.name = requestConsumerUpdate.getName();
+        this.documentNumber = requestConsumerUpdate.getDocumentNumber();
+        this.email = requestConsumerUpdate.getEmail();
+        this.birthDate = requestConsumerUpdate.getBirthDate();
+        this.phones = requestConsumerUpdate.getPhones();
+        this.address = requestConsumerUpdate.getAddress();
     }
-
-
 }
