@@ -42,6 +42,7 @@ public class ConsumerController {
     // Não deve ser possível alterar o saldo do cartão
     @PutMapping("/updateConsumer/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Update consumers", nickname = "updateConsumer")
     public void updateConsumer(@PathVariable("id") Integer id, @RequestBody @Valid Consumer consumer) {
         consumerService.updateConsumer(id, consumer);
     }
@@ -53,12 +54,14 @@ public class ConsumerController {
      */
     @GetMapping("/setcardbalance")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Set Balance", nickname = "setBalance")
     public void setBalance(@RequestBody CardDTO cardDTO) {
         consumerService.setBalance(cardDTO);
     }
 
     @GetMapping("/buy")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Buy", nickname = "buy")
     public void buy(@RequestBody BuyDTO buyDTO) {
         consumerService.buy(buyDTO);
     }
