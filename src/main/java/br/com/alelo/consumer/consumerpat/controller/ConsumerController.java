@@ -7,11 +7,10 @@ import br.com.alelo.consumer.consumerpat.utils.Constants;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.exceptions.validateException;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
@@ -60,7 +59,7 @@ public class ConsumerController {
                 findConsumer.setBirthDate(consumer.getBirthDate());
                 findConsumer.setDocumentNumber(consumer.getDocumentNumber());
                 findConsumer.setEmail(consumer.getEmail());
-                findConsumer.setDrugstoreNumber(consumer.getDrugstoreNumber());
+                findConsumer.setDrugstoreCardNumber(consumer.getDrugstoreCardNumber());
                 findConsumer.setFoodCardNumber(consumer.getFoodCardNumber());
                 findConsumer.setMobilePhoneNumber(consumer.getMobilePhoneNumber());
                 findConsumer.setFuelCardNumber(consumer.getFuelCardNumber());

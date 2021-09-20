@@ -58,7 +58,7 @@ public class ConsumerDTO implements Serializable {
         this.foodCardBalance = c.getFoodCardBalance();
         this.fuelCardNumber = c.getFuelCardNumber();
         this.fuelCardBalance = c.getFuelCardBalance();
-        this.drugstoreNumber = c.getDrugstoreNumber();
+        this.drugstoreNumber = c.getDrugstoreCardNumber();
         this.drugstoreCardBalance = c.getDrugstoreCardBalance();
     }
 }

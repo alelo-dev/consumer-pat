@@ -15,13 +15,13 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
-    int documentNumber;
+    String documentNumber;
     Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
+    String mobilePhoneNumber;
     int residencePhoneNumber;
-    int phoneNumber;
+    String phoneNumber;
     String email;
 
     //Address
@@ -32,13 +32,13 @@ public class Consumer {
     int portalCode;
 
     //cards
-    int foodCardNumber;
+    String foodCardNumber;
     double foodCardBalance;
 
-    int fuelCardNumber;
+    String fuelCardNumber;
     double fuelCardBalance;
 
-    int drugstoreNumber;
+    String drugstoreCardNumber;
     double drugstoreCardBalance;
 
 }
