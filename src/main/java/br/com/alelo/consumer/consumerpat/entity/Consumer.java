@@ -1,70 +1,55 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
-
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Data;
 
 @Data
 @Entity
-public class Consumer {
+@Table(name = "consumer")
+public class Consumer implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+	private static final long serialVersionUID = 1L;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+	@Column(name = "name", length = 80, nullable = false)
+	private String name;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+	@Column(name = "documentNumber")
+	private int documentNumber;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+	private LocalDateTime birthDate;
+	
+	@Embedded
+	private Address address;
+	
+	@Embedded
+	private Contacts contacts;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+	// cards
+	
+	private int foodCardNumber;
+	private double foodCardBalance; 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
-    }
+	private int fuelCardNumber;
+	private double fuelCardBalance;
 
+	private int drugstoreNumber;
+	private double drugstoreCardBalance;
 
 }
