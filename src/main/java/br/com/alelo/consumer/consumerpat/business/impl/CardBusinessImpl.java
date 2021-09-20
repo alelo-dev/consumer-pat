@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
-import java.util.Objects;
 
 @Service
 public class CardBusinessImpl implements CardBusiness {
@@ -43,9 +42,6 @@ public class CardBusinessImpl implements CardBusiness {
 
   public void buy(DtoBuy dtoBuy) throws ProcessException {
     var establishment = EstablishmentTypeEnum.getEstablishmentType(dtoBuy.getEstablishmentType());
-    if (Objects.isNull(establishment)) {
-      throw new ProcessException("Establishment type invalid");
-    }
 
     TransactionCardBusiness transactionCardBusiness = getTransactionCardBusiness(establishment);
     var value = transactionCardBusiness.value(dtoBuy);

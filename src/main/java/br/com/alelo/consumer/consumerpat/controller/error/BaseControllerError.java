@@ -2,9 +2,11 @@ package br.com.alelo.consumer.consumerpat.controller.error;
 
 import br.com.alelo.consumer.consumerpat.utils.exception.ProcessException;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,9 +25,9 @@ public class BaseControllerError {
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
-  @ResponseBody
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorMessage> exception(final EntityNotFoundException ex) {
-    return ResponseEntity.badRequest().body(
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
             ErrorMessage.builder()
                     .message(ex.getMessage())
                     .build());

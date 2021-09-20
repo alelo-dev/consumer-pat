@@ -1,0 +1,21 @@
+{
+  "id": 1,
+  "name": "string",
+  "documentNumber": 0,
+  "birthDate": "2021-09-20",
+  "mobilePhoneNumber": 0,
+  "residencePhoneNumber": 0,
+  "phoneNumber": 0,
+  "email": "string@alelo.com.br",
+  "street": "string",
+  "number": 0,
+  "city": "string",
+  "country": "string",
+  "portalCode": 0,
+  "foodCardNumber": 1234567890123459,
+  "foodCardBalance": 150.5,
+  "fuelCardNumber": 0,
+  "fuelCardBalance": 0,
+  "drugstoreNumber": 0,
+  "drugstoreCardBalance": 0
+}

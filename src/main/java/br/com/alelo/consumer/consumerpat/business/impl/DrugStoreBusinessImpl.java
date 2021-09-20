@@ -47,7 +47,7 @@ public class DrugStoreBusinessImpl implements TransactionCardBusiness {
 
 
   public boolean existsNumber(Consumer consumer) {
-    if (Objects.isNull(consumer.getDrugstoreNumber())){
+    if (consumer.getDrugstoreNumber() == 0){
       return false;
     }
     return cardRepository.findByCardTypeAndCardNumber(EstablishmentTypeEnum.DRUG_STONE.getType(), consumer.getDrugstoreNumber()).isPresent();

@@ -42,7 +42,7 @@ public class FoodCardBusinessImpl implements TransactionCardBusiness {
 
 
   public boolean existsNumber(Consumer consumer) {
-    if (Objects.isNull(consumer.getFoodCardNumber())){
+    if (consumer.getFoodCardNumber() == 0){
       return false;
     }
     return cardRepository.findByCardTypeAndCardNumber(EstablishmentTypeEnum.FOOD.getType(), consumer.getFoodCardNumber()).isPresent();

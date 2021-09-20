@@ -44,7 +44,7 @@ public class FuelBusinessImpl implements TransactionCardBusiness {
 
 
   public boolean existsNumber(Consumer consumer) {
-    if (Objects.isNull(consumer.getFuelCardNumber())){
+    if (consumer.getFuelCardNumber() == 0){
       return false;
     }
     return cardRepository.findByCardTypeAndCardNumber(EstablishmentTypeEnum.FUEL.getType(), consumer.getFuelCardNumber()).isPresent();

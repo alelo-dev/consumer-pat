@@ -3,17 +3,19 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Consumer {
 
     @Id
@@ -21,12 +23,12 @@ public class Consumer {
     Integer id;
     String name;
     int documentNumber;
-    Date birthDate;
+    LocalDate birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    long mobilePhoneNumber;
+    long residencePhoneNumber;
+    long phoneNumber;
     @NotNull
     String email;
 

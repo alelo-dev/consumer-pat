@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public class ConsumerBusinessImpl implements ConsumerBusiness {
 
   public void updateConsumer(Consumer consumer) throws ProcessException {
     if (!repository.findById(consumer.getId()).isPresent()) {
-      throw  new ProcessException("Consumer not exists");
+      throw  new EntityNotFoundException("Consumer not found");
     }
     var consumerSaved = repository.save(consumer);
     consumer.setId(consumerSaved.getId());
