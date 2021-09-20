@@ -26,8 +26,7 @@ public class ConsumerController {
 
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping(value = "/consumerList")
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
