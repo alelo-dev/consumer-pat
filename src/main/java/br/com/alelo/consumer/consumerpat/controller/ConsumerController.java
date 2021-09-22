@@ -1,16 +1,22 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 
 @Controller
@@ -35,8 +41,8 @@ public class ConsumerController {
 
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+        return ResponseEntity.ok(repository.save(consumer));
     }
 
     // Não deve ser possível alterar o saldo do cartão
