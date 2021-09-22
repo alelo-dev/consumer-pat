@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Cards {
-    int cardNumber;
+    String cardNumber;
     double cardBalanceValue;
 }

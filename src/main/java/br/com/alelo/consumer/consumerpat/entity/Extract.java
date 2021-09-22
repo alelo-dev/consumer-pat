@@ -17,10 +17,10 @@ public class Extract {
     String establishmentName;
     String productDescription;
     Date dateBuy;
-    int cardNumber;
+    String cardNumber;
     double value;
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(String establishmentName, String productDescription, Date dateBuy, String cardNumber, double value) {
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;

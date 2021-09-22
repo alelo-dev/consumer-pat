@@ -14,13 +14,13 @@ public class ConsumerDTO implements Serializable {
 
     Integer id;
     String name;
-    int documentNumber;
+    String documentNumber;
     Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
+    String mobilePhoneNumber;
     int residencePhoneNumber;
-    int phoneNumber;
+    String phoneNumber;
     String email;
 
     //Address
@@ -31,14 +31,16 @@ public class ConsumerDTO implements Serializable {
     int portalCode;
 
     //cards
-    int foodCardNumber;
+    String foodCardNumber;
     double foodCardBalance;
 
-    int fuelCardNumber;
+    String fuelCardNumber;
     double fuelCardBalance;
 
-    int drugstoreNumber;
+    String drugstoreCardNumber;
     double drugstoreCardBalance;
+
+    ResultadoDTO resultadoDTO;
 
     public ConsumerDTO(Consumer c) {
         this.id = c.getId();
@@ -58,7 +60,7 @@ public class ConsumerDTO implements Serializable {
         this.foodCardBalance = c.getFoodCardBalance();
         this.fuelCardNumber = c.getFuelCardNumber();
         this.fuelCardBalance = c.getFuelCardBalance();
-        this.drugstoreNumber = c.getDrugstoreCardNumber();
+        this.drugstoreCardNumber = c.getDrugstoreCardNumber();
         this.drugstoreCardBalance = c.getDrugstoreCardBalance();
     }
 }
