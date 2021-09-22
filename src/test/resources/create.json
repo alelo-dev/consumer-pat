@@ -1,0 +1,21 @@
+{
+"addressNumber": 123,
+"addressStreet": "Rua XPTO",
+"birthDate": "2021-09-22T12:05:33.685Z",
+"city": "Sao Paulo",
+"country": "Brasil",
+"documentNumber": 12345,
+"drugstoreCardBalance": 0.00,
+"drugstoreCardNumber": 10,
+"email": "test@email.com",
+"foodCardBalance": 0.00,
+"foodCardNumber": 20,
+"fuelCardBalance": 0.00,
+"fuelCardNumber": 30,
+"id": 0,
+"mobilePhoneNumber": 12345,
+"name": "Usuario2",
+"phoneNumber": 12345,
+"postalCode": 12345,
+"residencePhoneNumber": 12345
+}
