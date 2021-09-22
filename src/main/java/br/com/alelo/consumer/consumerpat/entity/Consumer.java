@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
+
 import lombok.Data;
 
 import javax.persistence.Entity;
