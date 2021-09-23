@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import br.com.alelo.consumer.consumerpat.controller.dto.BuyDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.CardBalanceDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 
@@ -36,12 +39,19 @@ public class ConsumerController {
     /* Cadastrar novos clientes */
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+    	if(consumer.getId() !=  null) {
+    		throw new IllegalArgumentException("Id informado para novo consumer");
+    	}
     	return ResponseEntity.ok(this.cusomerService.createOrUpdateConsumer(consumer));
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "", method = RequestMethod.PUT)
-    public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Consumer> updateConsumer(@PathVariable Integer id, @RequestBody Consumer consumer) {
+    	if (consumer.getId() != null && !consumer.getId().equals(id)) {
+    		throw new IllegalArgumentException("Id do recurso diferente do informado no corpo");
+    	}
+    	consumer.setId(id);
         return ResponseEntity.ok(this.cusomerService.updateConsumer(consumer));
     }
 
@@ -51,15 +61,15 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        this.cusomerService.setBalance(cardNumber, value);
+    @RequestMapping(value = "/setcardbalance/{number}", method = RequestMethod.PUT)
+    public void setBalance(@PathVariable int number, @RequestBody CardBalanceDTO cardBalance) {
+        this.cusomerService.setBalance(number, cardBalance.getValue());
     }
 
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        this.cusomerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+    @RequestMapping(value = "/buy/{number}", method = RequestMethod.PUT)
+    public void buy(@PathVariable int number, @RequestBody BuyDTO buy) {
+        this.cusomerService.buy(buy.getEstablishmentType(), buy.getEstablishmentName(), number, buy.getProductDescription(), buy.getValue());
     }
 
 }

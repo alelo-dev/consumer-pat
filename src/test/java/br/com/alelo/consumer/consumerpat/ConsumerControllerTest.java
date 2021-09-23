@@ -11,23 +11,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.alelo.consumer.consumerpat.controller.dto.BuyDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.CardBalanceDTO;
+import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.CardType;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = ConsumerTestApplication.class)
 public class ConsumerControllerTest {
+	
+	private static Random random = new Random();
+	
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -36,6 +46,9 @@ public class ConsumerControllerTest {
 	
 	@Autowired
 	private ConsumerRepository consumerRespository;
+	
+	@Autowired
+	private CardRepository cardRespository;
 
 	@Test
 	@Transactional
@@ -55,34 +68,122 @@ public class ConsumerControllerTest {
 	}
 	
 	@Test
+	@Transactional
 	void updateValidConsumer() throws Exception, Throwable {
 		Consumer consumer = createEntity();
 		this.consumerRespository.save(consumer);
 		
 		consumer.setNumber(Integer.MIN_VALUE);
-		consumer.setDrugstoreCardBalance(Double.MIN_VALUE);
-		consumer.setFuelCardBalance(Double.MIN_VALUE);
-		consumer.setFoodCardBalance(Double.MIN_VALUE);
 
 		mockMvc.perform(
-				put("/consumer").contentType("application/json").content(objectMapper.writeValueAsString(consumer)))
+				put("/consumer/{id}", consumer.getId()).contentType("application/json").content(objectMapper.writeValueAsString(consumer)))
 				.andExpect(status().isOk());
 		
 		Consumer updated = this.consumerRespository.findById(consumer.getId()).get();
 		assertThat(updated.getNumber()).isEqualTo(Integer.MIN_VALUE);
 		
-		//NOT ALLOW TO CHANGE BALANCES BY METHOD PUT
-		assertThat(updated.getDrugstoreCardBalance()).isEqualTo(Double.MAX_VALUE);
-		assertThat(updated.getFoodCardBalance()).isEqualTo(Double.MAX_VALUE);
-		assertThat(updated.getFuelCardBalance()).isEqualTo(Double.MAX_VALUE);
-		this.consumerRespository.delete(updated);
 
 	}
 	
+	@Test
+	@Transactional
+	void setCardBalance() throws Exception, Exception {
+		Consumer consumer = createEntity();
+		this.consumerRespository.save(consumer);
+		
+		CardBalanceDTO cardBalance = new CardBalanceDTO(1000.0);
+		
+		mockMvc.perform(
+				put("/consumer/setcardbalance/{number}", consumer.getCards().get(0).getNumber()).contentType("application/json").content(objectMapper.writeValueAsString(cardBalance)))
+				.andExpect(status().isOk());
+		
+		Card card = this.cardRespository.findOneByNumber(consumer.getCards().get(0).getNumber());
+		
+		assertThat(card.getBalance()).isEqualTo(2000.0);
+			
+	}
 	
+	@Test
+	@Transactional
+	void buyFood() throws Exception, Exception {
+		Consumer consumer = createEntity();
+		this.consumerRespository.save(consumer);
+		
+		BuyDTO buy = new BuyDTO(1, "Restaurante Pé Sujo", "Prato Feito",  100.0);
+		
+		mockMvc.perform(
+				put("/consumer/buy/{number}", consumer.getCards().get(0).getNumber()).contentType("application/json").content(objectMapper.writeValueAsString(buy)))
+				.andExpect(status().isOk());
+		
+		Card card = this.cardRespository.findOneByNumber(consumer.getCards().get(0).getNumber());
+		
+		assertThat(card.getBalance()).isEqualTo(910.0);
+			
+	}
 	
+	@Test
+	@Transactional
+	void buyDrug() throws Exception, Exception {
+		Consumer consumer = createEntity();
+		this.consumerRespository.save(consumer);
+		
+		BuyDTO buy = new BuyDTO(2, "Droga Mais", "Uma Pírula da Cor do Céu",  100.0);
+		
+		mockMvc.perform(
+				put("/consumer/buy/{number}", consumer.getCards().get(1).getNumber()).contentType("application/json").content(objectMapper.writeValueAsString(buy)))
+				.andExpect(status().isOk());
+		
+		Card card = this.cardRespository.findOneByNumber(consumer.getCards().get(1).getNumber());
+		
+		assertThat(card.getBalance()).isEqualTo(900.0);
+			
+	}
 	
+	@Test
+	@Transactional
+	void buyFuel() throws Exception, Exception {
+		Consumer consumer = createEntity();
+		this.consumerRespository.save(consumer);
+		
+		BuyDTO buy = new BuyDTO(3, "Posto Enche Mais", "10% Gas + 90% Ar",  100.0);
+		
+		mockMvc.perform(
+				put("/consumer/buy/{number}", consumer.getCards().get(2).getNumber()).contentType("application/json").content(objectMapper.writeValueAsString(buy)))
+				.andExpect(status().isOk());
+		
+		Card card = this.cardRespository.findOneByNumber(consumer.getCards().get(2).getNumber());
+		
+		assertThat(card.getBalance()).isEqualTo(865.0);
+			
+	}
 	
+	@Test
+	@Transactional
+	void errorBuyFuelInFoodEstashiment() throws Exception, Exception {
+		Consumer consumer = createEntity();
+		this.consumerRespository.save(consumer);
+		
+		BuyDTO buy = new BuyDTO(1, "Restaurante Pé Sujo", "10% Gas + 90% Ar",  100.0);
+		
+		mockMvc.perform(
+				put("/consumer/buy/{number}", consumer.getCards().get(2).getNumber()).contentType("application/json").content(objectMapper.writeValueAsString(buy)))
+				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+	
+	@Test
+	@Transactional
+	void errorCardNotFound() throws Exception, Exception {
+		Consumer consumer = createEntity();
+		this.consumerRespository.save(consumer);
+		
+		BuyDTO buy = new BuyDTO(1, "Restaurante Pé Sujo", "10% Gas + 90% Ar",  100.0);
+		
+		mockMvc.perform(
+				put("/consumer/buy/{number}", consumer.getCards().get(2).getNumber() + 1).contentType("application/json").content(objectMapper.writeValueAsString(buy)))
+				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+	}
+	
+
 	@Test
 	@Transactional
 	void listConsumers() throws Exception, Throwable {
@@ -95,8 +196,6 @@ public class ConsumerControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$.[*].id").value(hasItem(consumer.getId().intValue())));
-		
-		
 
 	}
 	
@@ -108,13 +207,7 @@ public class ConsumerControllerTest {
 		consumer.setCity("New York");
 		consumer.setCountry("USA");
 		consumer.setDocumentNumber(Integer.MAX_VALUE);
-		consumer.setDrugstoreCardBalance(Double.MAX_VALUE);
-		consumer.setDrugstoreNumber(Integer.MAX_VALUE);
 		consumer.setEmail("email@email.com");
-		consumer.setFoodCardBalance(Double.MAX_VALUE);
-		consumer.setFoodCardNumber(Integer.MAX_VALUE);
-		consumer.setFuelCardBalance(Double.MAX_VALUE);
-		consumer.setFuelCardNumber(Integer.MAX_VALUE);
 		consumer.setMobilePhoneNumber(Integer.MAX_VALUE);
 		consumer.setName("Biden Trump");
 		consumer.setNumber(Integer.MAX_VALUE);
@@ -122,7 +215,19 @@ public class ConsumerControllerTest {
 		consumer.setPortalCode(Integer.MAX_VALUE);
 		consumer.setResidencePhoneNumber(Integer.MAX_VALUE);
 		consumer.setStreet("13th Avenue");
+		consumer.getCards().add(createCard(CardType.FOOD, consumer));
+		consumer.getCards().add(createCard(CardType.DRUG, consumer));		
+		consumer.getCards().add(createCard(CardType.FUEL, consumer));
 		return consumer;
+	}
+	
+	private Card createCard(CardType type, Consumer consumer) {
+		Card card = new Card();
+		card.setBalance(1000.0);
+		card.setConsumer(consumer);
+		card.setNumber(random.nextInt());
+		card.setType(type);
+		return card;
 	}
 
 }

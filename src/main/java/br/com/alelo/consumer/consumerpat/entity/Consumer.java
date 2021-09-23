@@ -1,12 +1,16 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 
@@ -33,16 +37,11 @@ public class Consumer {
 	String city;
 	String country;
 	int portalCode;
+	
+	@OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
+	List<Card> cards = new ArrayList<>();
 
-	// cards
-	int foodCardNumber;
-	double foodCardBalance;
 
-	int fuelCardNumber;
-	double fuelCardBalance;
-
-	int drugstoreNumber;
-	double drugstoreCardBalance;
 
 	public Consumer() {
 		super();
@@ -151,53 +150,14 @@ public class Consumer {
 	public void setPortalCode(int portalCode) {
 		this.portalCode = portalCode;
 	}
+	
 
-	public int getFoodCardNumber() {
-		return foodCardNumber;
+	public List<Card> getCards() {
+		return cards;
 	}
 
-	public void setFoodCardNumber(int foodCardNumber) {
-		this.foodCardNumber = foodCardNumber;
-	}
-
-	public double getFoodCardBalance() {
-		return foodCardBalance;
-	}
-
-	public void setFoodCardBalance(double foodCardBalance) {
-		this.foodCardBalance = foodCardBalance;
-	}
-
-	public int getFuelCardNumber() {
-		return fuelCardNumber;
-	}
-
-	public void setFuelCardNumber(int fuelCardNumber) {
-		this.fuelCardNumber = fuelCardNumber;
-	}
-
-	public double getFuelCardBalance() {
-		return fuelCardBalance;
-	}
-
-	public void setFuelCardBalance(double fuelCardBalance) {
-		this.fuelCardBalance = fuelCardBalance;
-	}
-
-	public int getDrugstoreNumber() {
-		return drugstoreNumber;
-	}
-
-	public void setDrugstoreNumber(int drugstoreNumber) {
-		this.drugstoreNumber = drugstoreNumber;
-	}
-
-	public double getDrugstoreCardBalance() {
-		return drugstoreCardBalance;
-	}
-
-	public void setDrugstoreCardBalance(double drugstoreCardBalance) {
-		this.drugstoreCardBalance = drugstoreCardBalance;
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
 	}
 
 	@Override
@@ -210,12 +170,6 @@ public class Consumer {
 		return documentNumber == consumer.documentNumber && mobilePhoneNumber == consumer.mobilePhoneNumber
 				&& residencePhoneNumber == consumer.residencePhoneNumber && phoneNumber == consumer.phoneNumber
 				&& number == consumer.number && portalCode == consumer.portalCode
-				&& foodCardNumber == consumer.foodCardNumber
-				&& Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-				&& fuelCardNumber == consumer.fuelCardNumber
-				&& Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-				&& drugstoreNumber == consumer.drugstoreNumber
-				&& Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
 				&& Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name)
 				&& Objects.equals(birthDate, consumer.birthDate) && Objects.equals(email, consumer.email)
 				&& Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
