@@ -2,12 +2,14 @@ package br.com.alelo.consumer.consumerpat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+@EnableJpaAuditing
 @SpringBootApplication
-public class ConsumerTestApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConsumerTestApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }
