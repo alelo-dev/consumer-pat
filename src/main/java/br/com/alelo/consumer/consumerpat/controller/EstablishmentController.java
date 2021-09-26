@@ -1,7 +1,8 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.dto.ClientDTO;
-import br.com.alelo.consumer.consumerpat.service.ClientService;
+import br.com.alelo.consumer.consumerpat.dto.EstablishmentDTO;
+import br.com.alelo.consumer.consumerpat.service.EstablishmentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,21 +14,21 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Log4j2
-@RequestMapping(ClientController.ClIENT_ENDPOINT)
-public class ClientController {
-    public static final String ClIENT_ENDPOINT = "/client";
+@RequestMapping(EstablishmentController.EST_ENDPOINT)
+public class EstablishmentController {
+
+    public static final String EST_ENDPOINT = "/establishment";
 
     @Autowired
-    private ClientService service;
+    EstablishmentService service;
 
     @PostMapping
-    ClientDTO createClient(@RequestBody @Validated ClientDTO dto) {
+    EstablishmentDTO create(@RequestBody @Validated EstablishmentDTO dto) {
         return service.save(dto);
     }
 
     @GetMapping()
-    Page<ClientDTO> findAll(@PageableDefault @SortDefault final Pageable pageable) {
+    Page<EstablishmentDTO> findAll(@PageableDefault @SortDefault final Pageable pageable) {
         return service.findPaginated(pageable);
     }
-
 }

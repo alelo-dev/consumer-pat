@@ -29,7 +29,7 @@ public class Card implements Serializable {
     private CardType type;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idt_client", nullable = false, unique = true)
+    @JoinColumn(name = "idt_client", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Client client;

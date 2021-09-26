@@ -18,16 +18,16 @@ public class CardController {
     CardService service;
 
     @PostMapping("/add/{cardNumber}")
-    public CardDTO addCard(@PathVariable("cardNumber") final Integer cardNumber,
-                    @RequestParam final CardType type,
-                    @RequestParam final String documentNumber) {
+    public ResponseEntity addCard(@PathVariable("cardNumber") final Integer cardNumber,
+                                  @RequestParam final CardType type,
+                                  @RequestParam final String documentNumber) {
         return service.add(cardNumber,
                             type,
                             documentNumber);
     }
 
     @PutMapping("/balance/{cardNumber}")
-    public ResponseEntity<CardDTO> setBalance(@PathVariable("cardNumber") final Integer cardNumber,
+    public ResponseEntity setBalance(@PathVariable("cardNumber") final Integer cardNumber,
                                               @RequestParam final Double value) {
          return service.setBalance(cardNumber, value);
     }
