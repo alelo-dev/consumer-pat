@@ -21,7 +21,6 @@ public class CardMapper {
     public CardDTO toDTO(Card entity) {
         return CardDTO.builder()
                         .cardNumber(entity.getCardNumber())
-                       // .id(Optional.ofNullable(entity.getId()).orElse(null))
                         .client(Optional.ofNullable(entity.getClient()).isPresent() ?
                                                     this.clientMapper.toDTO(entity.getClient()) : ClientDTO.builder().build())
                         .type(entity.getType())
@@ -32,7 +31,6 @@ public class CardMapper {
     public Card toEntity(CardDTO dto) {
         return Card.builder()
                 .cardNumber(dto.getCardNumber())
-                //.id(Optional.ofNullable(dto.getId()).orElse(null))
                 .client(Optional.ofNullable(dto.getClient()).isPresent() ?
                         this.clientMapper.toEntity(dto.getClient()) : Client.builder().build())
                 .type(dto.getType())

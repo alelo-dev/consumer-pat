@@ -10,8 +10,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -26,12 +30,18 @@ public class ClientService {
     ClientMapper mapper;
 
     @Transactional
-    public ClientDTO save(final ClientDTO dto) {
+    public ResponseEntity save(final ClientDTO dto) {
         try {
-            Client entity = this.mapper.toEntity(dto);
-            return  this.mapper.toDTO(clientRepository.save(entity));
-        } catch ( DataIntegrityViolationException ex) {
-            throw new DuplicatedRegistry("client");
+            if (this.clientRepository.findByDocumentNumber(Optional.ofNullable(dto.getDocumentNumber()).orElse(null)).isEmpty()) {
+                Client entity = this.mapper.toEntity(dto);
+                return  ResponseEntity.status(HttpStatus.CREATED)
+                        .body(this.mapper.toDTO(clientRepository.save(entity)));
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Client Already exist");
+            }
+
+        } catch ( Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 

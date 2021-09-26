@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.domain.Client;
 import br.com.alelo.consumer.consumerpat.domain.Establishment;
 import br.com.alelo.consumer.consumerpat.dto.ClientDTO;
 import br.com.alelo.consumer.consumerpat.dto.EstablishmentDTO;
+import br.com.alelo.consumer.consumerpat.enumerator.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.exception.DuplicatedRegistry;
 import br.com.alelo.consumer.consumerpat.mapper.EstablishmentMapper;
 import br.com.alelo.consumer.consumerpat.repository.EstablishmentRepository;
@@ -25,12 +26,17 @@ public class EstablishmentService {
     EstablishmentMapper mapper;
 
     @Transactional
-    public EstablishmentDTO save(final EstablishmentDTO dto) {
+    public EstablishmentDTO save(final String cnpj,
+                                 final String name,
+                                 final EstablishmentType type) {
         try {
-            Establishment entity = this.mapper.toEntity(dto);
+            Establishment entity = this.mapper.toEntity(EstablishmentDTO.builder()
+                                                                        .cnpj(cnpj)
+                                                                        .type(type)
+                                                                        .name(name).build());
             return  this.mapper.toDTO(repository.save(entity));
         } catch ( DataIntegrityViolationException ex) {
-            throw new DuplicatedRegistry("client");
+            throw new DuplicatedRegistry("Error Duplicated establishment");
         }
     }
 

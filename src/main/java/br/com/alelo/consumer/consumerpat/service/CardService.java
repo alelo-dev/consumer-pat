@@ -46,7 +46,7 @@ public class CardService {
 
             if (optionalClient.isPresent()) {
                 if (optionalCard.isEmpty()) {
-                    return  ResponseEntity.ok().body(this.cardMapper.toDTO(cardRepository.save(Card.builder()
+                    return  ResponseEntity.status(HttpStatus.CREATED).body(this.cardMapper.toDTO(cardRepository.save(Card.builder()
                                                                                         .cardNumber(cardNumber)
                                                                                         .client(optionalClient.get())
                                                                                         .balance(0L)

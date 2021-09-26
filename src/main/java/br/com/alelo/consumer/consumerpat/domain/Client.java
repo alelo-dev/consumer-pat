@@ -33,7 +33,7 @@ public class Client implements Serializable {
     @Column(name="name")
     private String name;
 
-    @Column(name="doc_number", unique = true)
+    @Column(name="doc_number", unique = true, nullable = false)
     private String documentNumber;
 
     @Column(name="birth_date")
