@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -21,8 +20,6 @@ public class ClientDTO {
     private String name;
     private String documentNumber;
     private Date birthDate;
-   // private LocalDateTime creationDate;
-   // private LocalDateTime updateDate;
 
     private String street;
     private int number;

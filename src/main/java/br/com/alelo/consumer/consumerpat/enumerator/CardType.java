@@ -4,5 +4,4 @@ public enum CardType {
     FOOD,
     DRUGSTORE,
     FUEL;
-
 }

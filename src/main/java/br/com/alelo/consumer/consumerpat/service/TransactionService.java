@@ -2,7 +2,6 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.domain.Card;
 import br.com.alelo.consumer.consumerpat.domain.Establishment;
-import br.com.alelo.consumer.consumerpat.domain.Transaction;
 import br.com.alelo.consumer.consumerpat.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.dto.EstablishmentDTO;
 import br.com.alelo.consumer.consumerpat.dto.TransactionDTO;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

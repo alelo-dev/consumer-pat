@@ -1,8 +1,6 @@
 package br.com.alelo.consumer.consumerpat.mapper;
 
-import br.com.alelo.consumer.consumerpat.domain.Client;
 import br.com.alelo.consumer.consumerpat.domain.Establishment;
-import br.com.alelo.consumer.consumerpat.dto.ClientDTO;
 import br.com.alelo.consumer.consumerpat.dto.EstablishmentDTO;
 import org.springframework.stereotype.Component;
 

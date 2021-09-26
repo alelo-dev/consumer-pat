@@ -12,7 +12,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @NoArgsConstructor
