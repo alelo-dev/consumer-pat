@@ -1,49 +1,45 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentTypeEnum;
+import lombok.Data;
 
 
 @Data
-@Entity
+@Entity(name = "extract")
 public class Extract {
 
-    @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
-
-
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+    private Long id; 
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "establishmentType")
+    private EstablishmentTypeEnum establishmentType;
+    
+	@Column(name = "establishmentName")
+    private String establishmentName;
+    
+	@Column(name = "productDescription")
+    private String productDescription;
+    
+	@Column(name = "dateBuy")
+    private Date dateBuy;
+    
+	@Column(name = "cardNumber")
+    private int cardNumber;
+    
+	@Column(name = "value")
+    private double value;
+    
 }
