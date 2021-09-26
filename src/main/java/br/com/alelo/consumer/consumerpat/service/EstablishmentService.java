@@ -1,18 +1,16 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.domain.Client;
 import br.com.alelo.consumer.consumerpat.domain.Establishment;
-import br.com.alelo.consumer.consumerpat.dto.ClientDTO;
 import br.com.alelo.consumer.consumerpat.dto.EstablishmentDTO;
 import br.com.alelo.consumer.consumerpat.enumerator.EstablishmentType;
-import br.com.alelo.consumer.consumerpat.exception.DuplicatedRegistry;
 import br.com.alelo.consumer.consumerpat.mapper.EstablishmentMapper;
 import br.com.alelo.consumer.consumerpat.repository.EstablishmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,17 +24,24 @@ public class EstablishmentService {
     EstablishmentMapper mapper;
 
     @Transactional
-    public EstablishmentDTO save(final String cnpj,
+    public ResponseEntity save(final String cnpj,
                                  final String name,
                                  final EstablishmentType type) {
         try {
-            Establishment entity = this.mapper.toEntity(EstablishmentDTO.builder()
-                                                                        .cnpj(cnpj)
-                                                                        .type(type)
-                                                                        .name(name).build());
-            return  this.mapper.toDTO(repository.save(entity));
-        } catch ( DataIntegrityViolationException ex) {
-            throw new DuplicatedRegistry("Error Duplicated establishment");
+            if ( repository.findByCnpj(cnpj).isPresent() ) {
+                this.mapper.toDTO(repository.save(this.mapper.toEntity(EstablishmentDTO.builder()
+                        .cnpj(cnpj)
+                        .type(type)
+                        .name(name).build())));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            } else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.mapper.toDTO(repository.save(this.mapper.toEntity(EstablishmentDTO.builder()
+                        .cnpj(cnpj)
+                        .type(type)
+                        .name(name).build()))));
+            }
+        } catch ( Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 

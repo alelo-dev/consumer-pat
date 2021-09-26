@@ -2,19 +2,18 @@ package br.com.alelo.consumer.consumerpat.domain;
 
 import br.com.alelo.consumer.consumerpat.enumerator.CardType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import static javax.persistence.EnumType.STRING;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +27,10 @@ public class Card implements Serializable {
     @Column(name = "card_number", unique = true, nullable = false)
     private Integer cardNumber;
 
-    @Column(name = "type")
+
+    @NotNull
+    @Enumerated(STRING)
+    @Column(name = "type", nullable = false)
     private CardType type;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

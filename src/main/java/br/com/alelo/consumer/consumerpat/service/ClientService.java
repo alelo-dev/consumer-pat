@@ -2,11 +2,9 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.domain.Client;
 import br.com.alelo.consumer.consumerpat.dto.ClientDTO;
-import br.com.alelo.consumer.consumerpat.exception.DuplicatedRegistry;
 import br.com.alelo.consumer.consumerpat.mapper.ClientMapper;
 import br.com.alelo.consumer.consumerpat.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,18 +22,14 @@ public class ClientService {
     ClientRepository clientRepository;
 
     @Autowired
-    AddressService addressService;
-
-    @Autowired
     ClientMapper mapper;
 
     @Transactional
     public ResponseEntity save(final ClientDTO dto) {
         try {
             if (this.clientRepository.findByDocumentNumber(Optional.ofNullable(dto.getDocumentNumber()).orElse(null)).isEmpty()) {
-                Client entity = this.mapper.toEntity(dto);
                 return  ResponseEntity.status(HttpStatus.CREATED)
-                        .body(this.mapper.toDTO(clientRepository.save(entity)));
+                        .body(this.mapper.toDTO(clientRepository.save(this.mapper.toEntity(dto))));
             } else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Client Already exist");
             }

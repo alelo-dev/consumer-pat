@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.enumerator.CardType;
 import br.com.alelo.consumer.consumerpat.service.CardService;
 import lombok.extern.log4j.Log4j2;

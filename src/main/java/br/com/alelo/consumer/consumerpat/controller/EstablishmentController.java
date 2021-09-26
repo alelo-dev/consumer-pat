@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +26,9 @@ public class EstablishmentController {
     EstablishmentService service;
 
     @PostMapping
-    EstablishmentDTO create(@RequestParam @NonNull @Validated  final String cnpj,
-                            @RequestParam @NonNull @Validated final String name,
-                            @RequestParam @NonNull @Validated final EstablishmentType type) {
+    ResponseEntity create(@RequestParam @NonNull @Validated  final String cnpj,
+                                           @RequestParam @NonNull @Validated final String name,
+                                           @RequestParam @NonNull @Validated final EstablishmentType type) {
         return service.save(cnpj,
                             name,
                             type);

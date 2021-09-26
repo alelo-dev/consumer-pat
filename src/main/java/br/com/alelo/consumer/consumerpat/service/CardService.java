@@ -4,9 +4,7 @@ import br.com.alelo.consumer.consumerpat.domain.Card;
 import br.com.alelo.consumer.consumerpat.domain.Client;
 import br.com.alelo.consumer.consumerpat.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.enumerator.CardType;
-import br.com.alelo.consumer.consumerpat.exception.DuplicatedRegistry;
 import br.com.alelo.consumer.consumerpat.mapper.CardMapper;
-import br.com.alelo.consumer.consumerpat.mapper.ClientMapper;
 import br.com.alelo.consumer.consumerpat.repository.CardRepository;
 import br.com.alelo.consumer.consumerpat.repository.ClientRepository;
 import javassist.NotFoundException;
@@ -33,9 +31,6 @@ public class CardService {
     @Autowired
     CardMapper cardMapper;
 
-    @Autowired
-    ClientMapper clientMapper;
-
     @Transactional
     public ResponseEntity add(final Integer cardNumber,
                        final CardType type,
@@ -57,8 +52,6 @@ public class CardService {
             } else {
                 throw new NotFoundException("Not found Client");
             }
-        } catch ( DataIntegrityViolationException ex) {
-            throw new DuplicatedRegistry("card");
         } catch ( NotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch ( Exception ex) {
