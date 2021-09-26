@@ -27,7 +27,7 @@ public class SwaggerConfig {
 
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
-                .title("API - ALELO DESAFIO - TERCIO NASCIMENTO")
+                .title("API - ALELO DESAFIO ")
                 .version("1.0.0-SNAPSHOT")
                 .build();
     }
