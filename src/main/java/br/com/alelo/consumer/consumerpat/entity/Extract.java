@@ -1,49 +1,33 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import lombok.Builder;
+import lombok.Data;
 
 
 @Data
 @Entity
-public class Extract {
-
-    @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
+@Builder
+@Table(name = "TB_EXTRACT")
+public class Extract extends BaseEntity{
 
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+	@JoinColumn(name = "ESTABLISHMENT_IDe", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	Establishment establishment;
+	
+	@JoinColumn(name = "CARD_CONSUMER_ID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    CardConsumer cardConsumer;
+	
+	
+	@Column(name = "PURCHASE_VALUE")
+	private Double purchaseValue;
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
 }
