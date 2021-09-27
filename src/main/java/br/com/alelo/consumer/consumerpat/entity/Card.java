@@ -7,28 +7,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-public class Extract {
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    private Integer cardNumber;
+    private Double cardBalance;
 
-    @Enumerated(value = EnumType.ORDINAL)
-    private EstablishmentType establishment;
-
-    private String productDescription;
-    private Date dateBuy;
-    private Double value;
+    @Enumerated(EnumType.ORDINAL)
+    private EstablishmentType establishmentType;
 
     @ManyToOne
-    @JoinColumn(name = "CARD_ID")
-    private Card card;
+    @JoinColumn(name = "CONSUMER_ID")
+    private Consumer consumer;
+
 }
