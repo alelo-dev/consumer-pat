@@ -8,10 +8,10 @@
 		<version>2.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.alelo.consumer</groupId>
-	<artifactId>consumer-pat</artifactId>
+	<groupId>br.com.alelo.consumerEntity</groupId>
+	<artifactId>consumerEntity-pat</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>consumer-test</name>
+	<name>consumerEntity-test</name>
 	<description>Teste para programadores Alelo Adquirencia</description>
 	<properties>
 		<java.version>11</java.version>
