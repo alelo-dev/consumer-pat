@@ -53,24 +53,28 @@ public class ConsumerController {
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+    	
+        Consumer consumerDrugstore = null;  // Farmácia
+        Consumer consumerFood = null;		// Refeição
+        Consumer consumerFuel = null;       // Combustivel
+        
+        consumerDrugstore = repository.findByDrugstoreNumber(cardNumber);
 
-        if(consumer != null) {
+        if(consumerDrugstore != null) {
             // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
+        	consumerDrugstore.setDrugstoreCardBalance(consumerDrugstore.getDrugstoreCardBalance() + value);
+            repository.save(consumerDrugstore);
         } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
+        	consumerFood = repository.findByFoodCardNumber(cardNumber);
+            if(consumerFood != null) {
                 // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
+            	consumerFood.setFoodCardBalance(consumerFood.getFoodCardBalance() + value);
+                repository.save(consumerFood);
             } else {
                 // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
+            	consumerFuel = repository.findByFuelCardNumber(cardNumber);
+            	consumerFuel.setFuelCardBalance(consumerFuel.getFuelCardBalance() + value);
+                repository.save(consumerFuel);
             }
         }
     }
@@ -88,7 +92,9 @@ public class ConsumerController {
         * 3 - Posto de combustivel (Fuel)
         */
 
-        if (establishmentType == 1) {
+        switch(establishmentType) {
+        
+        case 1: // 1 - Alimentação (food)
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             Double cashback  = (value / 100) * 10;
             value = value - cashback;
@@ -96,13 +102,15 @@ public class ConsumerController {
             consumer = repository.findByFoodCardNumber(cardNumber);
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
-
-        }else if(establishmentType == 2) {
+            break;	
+            
+        case 2: // 2 - Farmácia (DrugStore)
             consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
-
-        } else {
+            break;
+            
+        case 3: // 3 - Posto de combustivel (Fuel)
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
             Double tax  = (value / 100) * 35;
             value = value + tax;
@@ -110,6 +118,10 @@ public class ConsumerController {
             consumer = repository.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
             repository.save(consumer);
+            break;
+            
+        default:
+        	return;
         }
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
