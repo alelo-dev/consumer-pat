@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Address {
     private String country;
     private String portalCode;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "consumer_id")
     private Consumer consumer;

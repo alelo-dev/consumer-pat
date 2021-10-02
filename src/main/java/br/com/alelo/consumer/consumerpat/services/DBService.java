@@ -17,6 +17,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+/**
+ * Classe criada para iniciar uma carga no banco sempre que
+ * projeto estiver compilando. Algumas instancias serão criadas
+ * e persistidas no banco de dados h2
+ */
 @Service
 public class DBService {
 

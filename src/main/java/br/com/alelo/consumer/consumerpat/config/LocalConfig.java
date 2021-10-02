@@ -8,6 +8,12 @@ import org.springframework.context.annotation.Profile;
 
 import java.text.ParseException;
 
+/**
+ * Profile sempre que ativa no arquivo  application.properties
+ * irá em forma de bean subir um metodo que faz uma chamada para
+ * servico que inicia a carga inicial do banco
+ *
+ */
 @Configuration
 @Profile("local")
 public class LocalConfig {

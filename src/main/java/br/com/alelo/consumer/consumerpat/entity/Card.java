@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 import br.com.alelo.consumer.consumerpat.entity.enums.TypeCard;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Card {
     private Double cardBalance;
     private TypeCard typeCard;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "consumer_id")
     private Consumer consumer;
