@@ -6,6 +6,7 @@ import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ContactRepository;
+import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,8 @@ public class ConsumerService {
     private ConsumerRepository repository;
 
     public Consumer findById(Integer id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(() ->
+                new ObjectNotFoundException("Objeto Não encontrado. Tipo: " + Consumer.class.getSimpleName()));
     }
 
     public List<Consumer> findAll() {
