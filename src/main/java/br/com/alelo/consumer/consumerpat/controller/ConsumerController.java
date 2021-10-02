@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/consumer")
@@ -25,13 +27,18 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
-    /**
-     * Deixando as regras de negócio sob responsebilidade de um service
-     */
+    // Busca consumer por id
     @GetMapping(value = "/{id}")
     public ResponseEntity<Consumer> findById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
+
+    // Lista consumer
+    @GetMapping(value = "/consumerList")
+    public ResponseEntity<List<Consumer>> findAll() {
+        return ResponseEntity.ok().body(service.findAll());
+    }
+
 //
 //    /* Deve listar todos os clientes (cerca de 500) */
 //    @ResponseBody
