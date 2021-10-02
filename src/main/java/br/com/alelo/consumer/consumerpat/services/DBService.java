@@ -4,7 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Contact;
-import br.com.alelo.consumer.consumerpat.entity.enums.TypeCard;
+import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
@@ -39,7 +39,7 @@ public class DBService {
 
         Consumer consumer = new Consumer(null, "Valdir", "09129161923", sdf.parse("12/02/1993"), null, null, null);
         Contact contact = new Contact(null, "5543984634308", "3333-3333", "5543984634308", "valdircezar312@gmail.com", consumer);
-        Card card = new Card(null, "0000000000000000", 500.5, TypeCard.FOOD, consumer);
+        Card card = new Card(null, "0000000000000000", 500.5, CardType.FOOD, consumer);
         Address address = new Address(null, "Rua dos testes", "123", "Londrina", "Brasil", "86085530", consumer);
 
         consumer.setContact(contact);

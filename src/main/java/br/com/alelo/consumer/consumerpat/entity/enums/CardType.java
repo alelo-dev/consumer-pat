@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TypeCard {
+public enum CardType {
 
     FOOD(0, "FOOD"),
     FUEL(1, "FUEL"),
@@ -14,12 +14,12 @@ public enum TypeCard {
     private Integer code;
     private String description;
 
-    public static TypeCard toEnum(Integer cod) {
+    public static CardType toEnum(Integer cod) {
         if(cod == null) {
             return null;
         }
 
-        for(TypeCard x : TypeCard.values()) {
+        for(CardType x : CardType.values()) {
             if(x.getCode().equals(cod)) {
                 return x;
             }

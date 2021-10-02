@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import br.com.alelo.consumer.consumerpat.entity.enums.TypeCard;
+import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Card implements Serializable {
     private Integer id;
     private String cardNumber;
     private Double cardBalance;
-    private TypeCard typeCard;
+    private CardType cardType;
 
     @JsonIgnore
     @ManyToOne
