@@ -23,6 +23,8 @@ public class Consumer implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
+
+    @Column(unique = true)
     private String documentNumber;
     private Date birthDate;
 

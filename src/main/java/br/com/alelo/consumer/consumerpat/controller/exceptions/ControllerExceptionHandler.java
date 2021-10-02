@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller.exceptions;
 
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,13 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<StandardError> illegalArgumen(IllegalArgumentException ex, HttpServletRequest request) {
+        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(), ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> dataIntegratyViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
         StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now(), ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);

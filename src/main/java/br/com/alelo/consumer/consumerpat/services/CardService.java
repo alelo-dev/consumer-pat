@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.services;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
@@ -8,6 +9,7 @@ import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -82,6 +84,21 @@ public class CardService {
                 LocalDateTime.now(),
                 purchase.getCardNumber(),
                 purchase.getValue()));
+    }
+
+    /**
+     * Método verifica se existe um cartão com o numero
+     * passado como parâmetro na criação de um novo usuario
+     * If true uma exceção será lançada informando o usuario
+     */
+    public void validIfCardNumberAlreadyExists(Consumer consumer) {
+        for(Card x : consumer.getCards()) {
+            Card card = repository.findByCardNumber(x.getCardNumber());
+            if(card != null) {
+                throw new DataIntegrityViolationException
+                        ("Cartão já cadastrado no sistema. Número: " + x.getCardNumber());
+            }
+        }
     }
 
 }
