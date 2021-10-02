@@ -39,7 +39,7 @@ public class DBService {
 
         Consumer consumer = new Consumer(null, "Valdir", "09129161923", sdf.parse("12/02/1993"), null, null, null);
         Contact contact = new Contact(null, "5543984634308", "3333-3333", "5543984634308", "valdircezar312@gmail.com", consumer);
-        Card card = new Card(null, "0000000000000000", 500.5, TypeCard.FOOD_CARD, consumer);
+        Card card = new Card(null, "0000000000000000", 500.5, TypeCard.FOOD, consumer);
         Address address = new Address(null, "Rua dos testes", "123", "Londrina", "Brasil", "86085530", consumer);
 
         consumer.setContact(contact);

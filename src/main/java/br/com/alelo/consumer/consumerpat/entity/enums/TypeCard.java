@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TypeCard {
 
-    FOOD_CARD(0, "FOOD_CARD"),
-    FUEL_CARD(1, "FUEL_CARD"),
+    FOOD(0, "FOOD"),
+    FUEL(1, "FUEL"),
     DRUG_STORE(2, "DRUG_STORE");
 
     private Integer code;
