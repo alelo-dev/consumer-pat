@@ -5,6 +5,8 @@ import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
+import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ public class CardService {
             obj.setCardBalance(obj.getCardBalance() + value);
             return repository.save(obj);
         }
-        throw new RuntimeException("Objeto nao encontrado");
+        throw new ObjectNotFoundException("Objeto Não encontrado. Tipo: " + Card.class.getSimpleName());
     }
 
     /**
@@ -61,10 +63,12 @@ public class CardService {
                 repository.save(card);
 
             } else {
-                throw new RuntimeException("Cartão não valido para este estabelecimento");
+                throw new IllegalArgumentException("Cartão não valido para este estabelecimento");
             }
             generateStatement(purchase);
-        } else { throw new RuntimeException("Objeto nao encontrado"); }
+        } else {
+            throw new ObjectNotFoundException("Objeto Não encontrado. Tipo: " + Card.class.getSimpleName());
+        }
     }
 
     /**
