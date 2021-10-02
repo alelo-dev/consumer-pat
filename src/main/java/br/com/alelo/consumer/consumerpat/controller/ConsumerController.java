@@ -43,6 +43,11 @@ public class ConsumerController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Consumer> update(@PathVariable Integer id, @RequestBody Consumer obj) {
+        return ResponseEntity.ok().body(service.update(id, obj));
+    }
+
 //
 //    /* Deve listar todos os clientes (cerca de 500) */
 //    @ResponseBody

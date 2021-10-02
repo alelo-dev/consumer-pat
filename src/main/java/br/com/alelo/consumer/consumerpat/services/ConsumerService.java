@@ -16,10 +16,13 @@ public class ConsumerService {
 
     @Autowired
     private ContactRepository contactRepository;
+
     @Autowired
     private CardRepository cardRepository;
+
     @Autowired
     private AddressRepository addressRepository;
+
     @Autowired
     private ConsumerRepository repository;
 
@@ -35,8 +38,12 @@ public class ConsumerService {
         return saveConsumer(obj);
     }
 
+    public Consumer update(Integer id, Consumer obj) {
+        obj.setId(id);
+        return saveConsumer(obj);
+    }
+
     private Consumer saveConsumer(Consumer obj) {
-        obj.setId(null);
         obj = repository.save(obj);
         obj.getContact().setConsumer(obj);
         obj.getAddress().setConsumer(obj);
