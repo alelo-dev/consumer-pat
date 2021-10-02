@@ -13,18 +13,4 @@ public enum EstablishmentType {
 
     private Integer code;
     private String description;
-
-    public static EstablishmentType toEnum(Integer cod) {
-        if(cod == null) {
-            return null;
-        }
-
-        for(EstablishmentType x : EstablishmentType.values()) {
-            if(x.getCode().equals(cod)) {
-                return x;
-            }
-        }
-
-        throw new IllegalArgumentException("Código inválido");
-    }
 }

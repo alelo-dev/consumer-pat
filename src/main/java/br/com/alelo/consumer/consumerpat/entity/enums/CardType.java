@@ -13,18 +13,4 @@ public enum CardType {
 
     private Integer code;
     private String description;
-
-    public static CardType toEnum(Integer cod) {
-        if(cod == null) {
-            return null;
-        }
-
-        for(CardType x : CardType.values()) {
-            if(x.getCode().equals(cod)) {
-                return x;
-            }
-        }
-
-        throw new IllegalArgumentException("Código inválido");
-    }
 }
