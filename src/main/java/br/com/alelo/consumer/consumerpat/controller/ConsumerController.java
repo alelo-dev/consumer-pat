@@ -7,15 +7,15 @@ import br.com.alelo.consumer.consumerpat.services.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
 @Controller
-@RequestMapping("/consumer")
+@RequestMapping("/consumers")
 public class ConsumerController {
 
     @Autowired
@@ -27,16 +27,20 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
-    // Busca consumer por id
     @GetMapping(value = "/{id}")
     public ResponseEntity<Consumer> findById(@PathVariable Integer id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
-    // Lista consumer
-    @GetMapping(value = "/consumerList")
+    @GetMapping
     public ResponseEntity<List<Consumer>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<Consumer> create(@RequestBody Consumer obj) {
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(service.create(obj).getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
 //

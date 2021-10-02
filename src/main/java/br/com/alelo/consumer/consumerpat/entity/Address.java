@@ -25,7 +25,7 @@ public class Address implements Serializable {
     private String number;
     private String city;
     private String country;
-    private String portalCode;
+    private String postalCode;
 
     @JsonIgnore
     @OneToOne
