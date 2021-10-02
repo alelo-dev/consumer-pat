@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 
@@ -26,6 +23,10 @@ public class Contact {
     private String residencePhoneNumber;
     private String phoneNumber;
     private String email;
+
+    @OneToOne
+    @JoinColumn(name = "consumer_id")
+    private Consumer consumer;
 
     @Override
     public boolean equals(Object o) {

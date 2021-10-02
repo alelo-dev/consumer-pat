@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Getter @Setter
@@ -26,6 +23,10 @@ public class Address {
     private String city;
     private String country;
     private String portalCode;
+
+    @OneToOne
+    @JoinColumn(name = "consumer_id")
+    private Consumer consumer;
 
     @Override
     public boolean equals(Object o) {
