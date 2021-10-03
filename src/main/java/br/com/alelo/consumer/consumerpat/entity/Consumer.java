@@ -28,12 +28,12 @@ public class Consumer implements Serializable {
     private String documentNumber;
     private Date birthDate;
 
-    @OneToOne(mappedBy = "consumer", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL)
     private Contact contact;
 
-    @OneToOne(mappedBy = "consumer", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "consumer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
     private List<Card> cards = new ArrayList<>();
 }
