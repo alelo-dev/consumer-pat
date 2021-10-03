@@ -14,7 +14,7 @@ public class CardController {
     @Autowired
     private CardService service;
 
-    @PostMapping(value = "/setcardbalance")
+    @PostMapping(value = "/setCardbalance")
     public ResponseEntity<Card> setBalance(@RequestParam String cardNumber,
                                            @RequestParam Double value) {
 
