@@ -82,7 +82,14 @@ class ConsumerControllerTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnListOfConsumers() {
+        when(service.findAll()).thenReturn(List.of(consumer));
+
+        List<Consumer> response = service.findAll();
+
+        assertEquals(1, response.size());
+        assertEquals(Consumer.class, response.get(0).getClass());
+        assertEquals(ID, response.get(0).getId());
     }
 
     @Test
