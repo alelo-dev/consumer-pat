@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,8 +25,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -128,6 +128,18 @@ class ConsumerServiceTest {
         assertEquals(STREET, response.getAddress().getStreet());
         assertEquals(CARD_NUMBER, response.getCards().get(INDEX).getCardNumber());
         assertEquals(MOBILE_PHONE_NUMBER, response.getContact().getMobilePhoneNumber());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findUserByDocumentNumber(anyString())).thenReturn(optionalConsumer);
+
+        try {
+            service.create(consumer);
+        } catch (Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("Documento já cadastrado no sistema", ex.getMessage());
+        }
     }
 
     @Test
