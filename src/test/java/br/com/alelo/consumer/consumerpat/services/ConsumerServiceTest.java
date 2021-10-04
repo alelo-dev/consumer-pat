@@ -101,6 +101,20 @@ class ConsumerServiceTest {
     }
 
     @Test
+    void whenFindAllThenReturnListOfConsumer() {
+        when(repository.findAll()).thenReturn(List.of(consumer));
+
+        List<Consumer> response = service.findAll();
+
+        assertEquals(1, response.size());
+        assertEquals(Consumer.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(ID, response.get(INDEX).getContact().getId());
+        assertEquals(ID, response.get(INDEX).getAddress().getId());
+        assertEquals(ID, response.get(INDEX).getCards().get(INDEX).getId());
+    }
+
+    @Test
     void create() {
     }
 
