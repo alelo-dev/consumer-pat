@@ -1,0 +1,177 @@
+------- Link para import da collection -----------
+
+https://www.getpostman.com/collections/38b9d58342c66dd31bc5
+
+
+
+
+---------------- Collection Json -----------------
+
+{
+	"info": {
+		"_postman_id": "b474833f-e3ba-49f1-a026-bb1741012ce7",
+		"name": "Alelo Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Consumer",
+			"item": [
+				{
+					"name": "GET ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/consumers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/consumers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Teste CREATE\",\n    \"documentNumber\": \"09129161923\",\n    \"birthDate\": \"1993-02-12T03:00:00.000+00:00\",\n    \"contact\": {\n        \"mobilePhoneNumber\": \"5543984634308\",\n        \"residencePhoneNumber\": \"3333-3333\",\n        \"phoneNumber\": \"5543984634308\",\n        \"email\": \"valdircezar312@gmail.com\"\n    },\n    \"address\": {\n        \"street\": \"Rua dos testes\",\n        \"number\": \"123\",\n        \"city\": \"Londrina\",\n        \"country\": \"Brasil\",\n        \"postalCode\": \"86085530\"\n    },\n    \"cards\": [\n        {\n            \"cardNumber\": \"1000000000000000\",\n            \"cardBalance\": 1000,\n            \"cardType\": \"FOOD\"\n        },\n        {\n            \"cardNumber\": \"1200000000000000\",\n            \"cardBalance\": 1000,\n            \"cardType\": \"FUEL\"\n        },\n        {\n            \"cardNumber\": \"1230000000000000\",\n            \"cardBalance\": 1000,\n            \"cardType\": \"DRUG_STORE\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/consumers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Teste UPDATE\",\n    \"documentNumber\": \"09129161923\",\n    \"birthDate\": \"1993-02-12T03:00:00.000+00:00\",\n    \"contact\": {\n        \"mobilePhoneNumber\": \"5543984634308\",\n        \"residencePhoneNumber\": \"3333-3333\",\n        \"phoneNumber\": \"5543984634308\",\n        \"email\": \"valdircezar312@gmail.com\"\n    },\n    \"address\": {\n        \"street\": \"Rua dos testes\",\n        \"number\": \"123\",\n        \"city\": \"Londrina\",\n        \"country\": \"Brasil\",\n        \"postalCode\": \"86085530\"\n    },\n    \"cards\": [\n        {\n            \"cardNumber\": \"0000000000000000\",\n            \"cardBalance\": 1150,\n            \"cardType\": \"FOOD\"\n        },\n        {\n            \"cardNumber\": \"0000000000000000\",\n            \"cardBalance\": 1000,\n            \"cardType\": \"FUEL\"\n        },\n        {\n            \"cardNumber\": \"0000000000000000\",\n            \"cardBalance\": 150,\n            \"cardType\": \"DRUG_STORE\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/consumers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Card",
+			"item": [
+				{
+					"name": "Set Balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/cards/setcardbalance?cardNumber=0000111122223333&value=100",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cards",
+								"setcardbalance"
+							],
+							"query": [
+								{
+									"key": "cardNumber",
+									"value": "0000111122223333"
+								},
+								{
+									"key": "value",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"establishmentType\": \"DRUG_STORE\",\n    \"establishmentName\": \"Teste BUY Establishment\",\n    \"cardNumber\": \"1230000000000000\",\n    \"productDescription\": \"Teste buy a product on system\",\n    \"value\": 50\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cards/buy",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cards",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
