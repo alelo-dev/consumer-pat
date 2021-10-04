@@ -48,7 +48,7 @@ public class CardService {
             if(purchase.getEstablishmentType().getDescription().equals("FOOD")
                     && card.getCardType().getDescription().equals("FOOD")) {
                 // Para compras com cartão alimentação haverá um desconto de 10%
-                card.setCardBalance(card.getCardBalance() - ((purchase.getValue() * .1)));
+                card.setCardBalance(card.getCardBalance() - ((purchase.getValue() * .9)));
                 card = repository.save(card);
 
             } else if(purchase.getEstablishmentType().getDescription().equals("DRUG_STORE")

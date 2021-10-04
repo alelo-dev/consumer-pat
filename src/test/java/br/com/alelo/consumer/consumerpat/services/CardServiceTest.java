@@ -83,7 +83,20 @@ class CardServiceTest {
 
         assertEquals(Card.class, response.getClass());
         assertEquals(CardType.FOOD, response.getCardType());
-        assertEquals((VALUE - VALUE * .1), response.getCardBalance());
+        assertEquals((VALUE - VALUE * .9), response.getCardBalance());
+    }
+
+    @Test
+    void whenBuyWithDrugStoreCardThenReturnSuccess() {
+        when(repository.findByCardNumber(anyString())).thenReturn(DRUG_STORE_CARD);
+        when(repository.save(any())).thenReturn(DRUG_STORE_CARD);
+
+        PURCHASE.setEstablishmentType(EstablishmentType.DRUG_STORE);
+        Card response = service.buy(PURCHASE);
+
+        assertEquals(Card.class, response.getClass());
+        assertEquals(CardType.DRUG_STORE, response.getCardType());
+        assertEquals(0, response.getCardBalance());
     }
 
     @Test
