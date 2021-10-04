@@ -20,10 +20,16 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+
 @SpringBootTest
 class ConsumerServiceTest {
 
-    private static final int ID = 1;
+    private static final Integer INDEX                  = 0;
+    private static final Integer ID                     = 1;
     private static final String MOBILE_PHONE_NUMBER     = "43984634308";
     private static final String RESIDENCE_PHONE_NUMBER  = "4333393876";
     private static final String PHONE_NUMBER            = "43984990811";
@@ -38,8 +44,9 @@ class ConsumerServiceTest {
     private static final String BIRTH_DATE              = "12/02/1993";
     private static final String NAME                    = "Valdir";
     private static final String DOCUMENT_NUMBER         = "09129161925";
-    private static final double CARD_BALANCE            = 1000.0;
+    private static final Double CARD_BALANCE            = 1000.0;
     private static final CardType CARD_TYPE             = CardType.FOOD;
+    private static final String OBJECT_NOT_FOUND_EXCEPTION = "Objeto Não encontrado. Tipo: " + Consumer.class.getSimpleName();
 
     @InjectMocks
     private ConsumerService service;
@@ -52,23 +59,30 @@ class ConsumerServiceTest {
     @Mock
     private CardService cardService;
 
-    private Consumer consumer;
+    private Consumer consumer = new Consumer();
     private Optional<Consumer> optionalConsumer;
     private Contact contact;
     private Address address;
     private Card card;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws ParseException {
         MockitoAnnotations.openMocks(this);
+        startConsumers();
     }
 
     @Test
-    void findById() {
-    }
+    void whenFindByIdThenReturnAnConsumerInstance() {
+        when(repository.findById(anyInt())).thenReturn(optionalConsumer);
 
-    @Test
-    void findAll() {
+        Consumer response = service.findById(ID);
+
+        assertNotNull(response);
+        assertEquals(Consumer.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(DOCUMENT_NUMBER, response.getDocumentNumber());
+        assertEquals(BIRTH_DATE, response.getBirthDate().toString());
     }
 
     @Test

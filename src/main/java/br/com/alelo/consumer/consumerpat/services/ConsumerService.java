@@ -36,7 +36,8 @@ public class ConsumerService {
      * Busca Consumer por id
      */
     public Consumer findById(Integer id) {
-        return repository.findById(id).orElseThrow(() ->
+        Optional<Consumer> obj = repository.findById(id);
+        return obj.orElseThrow(() ->
                 new ObjectNotFoundException("Objeto Não encontrado. Tipo: " + Consumer.class.getSimpleName()));
     }
 
