@@ -1,7 +1,9 @@
 package br.com.alelo.consumer.consumerpat.services;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
+import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
@@ -20,9 +22,12 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class CardServiceTest {
 
-    private static final String CARD_NUMBER = "1111-2222-3333-4444";
-    private static final double VALUE = 1000.00;
+    private static final double VALUE                    = 1000.00;
+    private static final String FOOD_CARD_NUMBER         = "1111-2222-3333-4444";
+    private static final String FUEL_CARD_NUMBER         = "1111-2222-3333-4444";
+    private static final String DRUG_STORE_CARD_NUMBER   = "1111-2222-3333-4444";
     private static final String OBJECT_NOT_FOUND_MESSAGE = "Objeto Não encontrado. Tipo: " + Card.class.getSimpleName();
+    
     @InjectMocks
     private CardService service;
 
@@ -32,23 +37,27 @@ class CardServiceTest {
     @Mock
     private ExtractRepository extractRepository;
 
-    private Card card;
+    private Card FOOD_CARD;
+    private Card FUEL_CARD;
+    private Card DRUG_STORE_CARD;
+    private Purchase PURCHASE;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         startCard();
+        startPurchase();
     }
 
     @Test
     void whenSetBalanceThenReturnSuccess() {
-        when(repository.findByCardNumber(anyString())).thenReturn(card);
-        when(repository.save(any())).thenReturn(card);
+        when(repository.findByCardNumber(anyString())).thenReturn(FOOD_CARD);
+        when(repository.save(any())).thenReturn(FOOD_CARD);
 
-        Card response = service.setBalance(CARD_NUMBER, VALUE);
+        Card response = service.setBalance(FOOD_CARD_NUMBER, VALUE);
 
         assertEquals(Card.class, response.getClass());
-        assertEquals(CARD_NUMBER, response.getCardNumber());
+        assertEquals(FOOD_CARD_NUMBER, response.getCardNumber());
         assertEquals(VALUE, response.getCardBalance());
     }
 
@@ -58,7 +67,7 @@ class CardServiceTest {
                 .thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND_MESSAGE));
 
         try {
-            service.setBalance(CARD_NUMBER, VALUE);
+            service.setBalance(FOOD_CARD_NUMBER, VALUE);
         } catch (Exception ex) {
             assertEquals(ObjectNotFoundException.class, ex.getClass());
             assertEquals(OBJECT_NOT_FOUND_MESSAGE, ex.getMessage());
@@ -66,7 +75,15 @@ class CardServiceTest {
     }
 
     @Test
-    void buy() {
+    void whenBuyWithFoodCardThenReturnSuccess() {
+        when(repository.findByCardNumber(anyString())).thenReturn(FOOD_CARD);
+        when(repository.save(any())).thenReturn(FOOD_CARD);
+
+        Card response = service.buy(PURCHASE);
+
+        assertEquals(Card.class, response.getClass());
+        assertEquals(CardType.FOOD, response.getCardType());
+        assertEquals((VALUE - VALUE * .1), response.getCardBalance());
     }
 
     @Test
@@ -74,6 +91,17 @@ class CardServiceTest {
     }
 
     private void startCard() {
-        card = new Card(1, "0000000000000000", VALUE, CardType.FOOD, null);
+        FOOD_CARD = new Card(1, FOOD_CARD_NUMBER, VALUE, CardType.FOOD, null);
+        FUEL_CARD = new Card(2, FUEL_CARD_NUMBER, VALUE, CardType.FUEL, null);
+        DRUG_STORE_CARD = new Card(3, DRUG_STORE_CARD_NUMBER, VALUE, CardType.DRUG_STORE, null);
+    }
+
+    private void startPurchase() {
+        PURCHASE = new Purchase(
+                EstablishmentType.FOOD,
+                "Estabelecimento",
+                FOOD_CARD_NUMBER,
+                "Descrição do produto",
+                VALUE);
     }
 }

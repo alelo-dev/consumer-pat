@@ -41,28 +41,28 @@ public class CardService {
      * Método responsável por realizar o débito do cartão do
      * usuário de acordo com o tipo de compra realizada
      */
-    public void buy(Purchase purchase) {
+    public Card buy(Purchase purchase) {
         Card card = repository.findByCardNumber(purchase.getCardNumber());
 
         if(Objects.nonNull(card)) {
             if(purchase.getEstablishmentType().getDescription().equals("FOOD")
                     && card.getCardType().getDescription().equals("FOOD")) {
                 // Para compras com cartão alimentação haverá um desconto de 10%
-                card.setCardBalance(card.getCardBalance() - ((purchase.getValue() * .9)));
-                repository.save(card);
+                card.setCardBalance(card.getCardBalance() - ((purchase.getValue() * .1)));
+                card = repository.save(card);
 
             } else if(purchase.getEstablishmentType().getDescription().equals("DRUG_STORE")
                     && card.getCardType().getDescription().equals("DRUG_STORE")) {
                 // Para compras com cartão de farmácia não haverá desconto ou acréscimo
                 card.setCardBalance(card.getCardBalance() - purchase.getValue());
-                repository.save(card);
+                card = repository.save(card);
 
             } else if(purchase.getEstablishmentType().getDescription().equals("FUEL")
                     && card.getCardType().getDescription().equals("FUEL")){
                 // Para compras com cartão combustível haverá um acréscimo de 35%
                 purchase.setValue(purchase.getValue() + purchase.getValue() * .35);
                 card.setCardBalance(card.getCardBalance() - purchase.getValue());
-                repository.save(card);
+                card = repository.save(card);
 
             } else {
                 throw new IllegalArgumentException("Cartão não valido para este estabelecimento");
@@ -71,6 +71,7 @@ public class CardService {
         } else {
             throw new ObjectNotFoundException("Objeto Não encontrado. Tipo: " + Card.class.getSimpleName());
         }
+        return card;
     }
 
     /**

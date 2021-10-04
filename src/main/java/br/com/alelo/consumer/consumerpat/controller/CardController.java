@@ -23,8 +23,7 @@ public class CardController {
 
     @PostMapping(value = "/buy")
     public ResponseEntity<Card> buy(@RequestBody Purchase obj) {
-        service.buy(obj);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(service.buy(obj));
     }
 
 }
