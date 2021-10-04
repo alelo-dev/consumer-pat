@@ -6,6 +6,7 @@ import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
+import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,9 @@ class CardServiceTest {
 
     @Mock
     private CardRepository repository;
+
+    @Mock
+    private ExtractRepository extractRepository;
 
     private Card FOOD_CARD;
     private Card FUEL_CARD;
