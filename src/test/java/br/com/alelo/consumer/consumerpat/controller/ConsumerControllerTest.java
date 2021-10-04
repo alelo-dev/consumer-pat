@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
@@ -85,15 +86,12 @@ class ConsumerControllerTest {
     void whenFindAllThenReturnListOfConsumers() {
         when(service.findAll()).thenReturn(List.of(consumer));
 
-        List<Consumer> response = service.findAll();
+        ResponseEntity<List<Consumer>> response = controller.findAll();
 
-        assertEquals(1, response.size());
-        assertEquals(Consumer.class, response.get(0).getClass());
-        assertEquals(ID, response.get(0).getId());
-    }
-
-    @Test
-    void create() {
+        assertEquals(1, Objects.requireNonNull(response.getBody()).size());
+        assertEquals(Consumer.class, response.getBody().get(0).getClass());
+        assertEquals(ID, response.getBody().get(0).getId());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
