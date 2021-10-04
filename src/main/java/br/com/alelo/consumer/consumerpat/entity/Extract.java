@@ -2,48 +2,38 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 
 @Data
 @Entity
+@Table(name = "EXTRACT")
 public class Extract {
 
     @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
+    @Column(name = "ID_EXTRACT")
+    private Long id;
 
+    @Column(name = "ESTABLISHMENT_NAME_ID")
+    private int establishmentNameId;
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+    @Column(name = "ESTABLISHMENT_NAME")
+    private String establishmentName;
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+    @Column(name = "PRODUCT_DESCRIPTION")
+    private String productDescription;
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+    @Column(name = "DATE_BUY")
+    private Date dateBuy;
+
+    @Column(name = "CARD_NUMBER")
+    private int cardNumber;
+
+    @Column(name = "VALUE")
+    private double value;
+
 }
