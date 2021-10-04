@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -92,6 +94,17 @@ class ConsumerControllerTest {
         assertEquals(Consumer.class, response.getBody().get(0).getClass());
         assertEquals(ID, response.getBody().get(0).getId());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void whenCreateThenReturnSuccess() {
+        when(service.create(any())).thenReturn(consumer);
+
+        ResponseEntity<Consumer> response = controller.create(consumer);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
     }
 
     @Test
