@@ -108,7 +108,15 @@ class ConsumerControllerTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccessOperation() {
+        when(service.update(anyInt(), any())).thenReturn(consumer);
+
+        ResponseEntity<Consumer> response = controller.update(ID, consumer);
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(Consumer.class, Objects.requireNonNull(response.getBody()).getClass());
+        assertEquals(ID, response.getBody().getId());
     }
 
     private void startConsumer() throws ParseException {
