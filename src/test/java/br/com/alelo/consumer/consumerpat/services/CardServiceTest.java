@@ -1,11 +1,11 @@
 package br.com.alelo.consumer.consumerpat.services;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,9 +36,6 @@ class CardServiceTest {
 
     @Mock
     private CardRepository repository;
-
-    @Mock
-    private ExtractRepository extractRepository;
 
     private Card FOOD_CARD;
     private Card FUEL_CARD;
@@ -126,6 +124,18 @@ class CardServiceTest {
             assertEquals(CARTAO_NAO_VALIDO_PARA_ESTE_ESTABELECIMENTO, ex.getMessage());
         }
 
+    }
+
+    @Test
+    void validIfCardNumberAlreadyExistsTest() {
+        when(repository.findByCardNumber(anyString())).thenReturn(FOOD_CARD);
+
+        try {
+            service.validIfCardNumberAlreadyExists(new Consumer());
+        } catch (Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("Cartão já cadastrado no sistema. Número: " + FOOD_CARD_NUMBER, ex.getMessage());
+        }
     }
 
     @Test
