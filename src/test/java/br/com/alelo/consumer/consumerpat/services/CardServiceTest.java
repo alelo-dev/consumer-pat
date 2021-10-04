@@ -100,6 +100,19 @@ class CardServiceTest {
     }
 
     @Test
+    void whenBuyWithFuelCardThenReturnSuccess() {
+        when(repository.findByCardNumber(anyString())).thenReturn(FUEL_CARD);
+        when(repository.save(any())).thenReturn(FUEL_CARD);
+
+        PURCHASE.setEstablishmentType(EstablishmentType.FUEL);
+        Card response = service.buy(PURCHASE);
+
+        assertEquals(Card.class, response.getClass());
+        assertEquals(CardType.FUEL, response.getCardType());
+        assertEquals((VALUE * .65 - VALUE), response.getCardBalance());
+    }
+
+    @Test
     void validIfCardNumberAlreadyExists() {
     }
 
