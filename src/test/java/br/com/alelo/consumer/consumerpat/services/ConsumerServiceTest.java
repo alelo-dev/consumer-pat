@@ -8,6 +8,7 @@ import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.respository.ContactRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -51,6 +53,8 @@ class ConsumerServiceTest {
 
     @InjectMocks
     private ConsumerService service;
+    @Mock
+    private ContactRepository contactRepository;
     @Mock
     private CardRepository cardRepository;
     @Mock
@@ -115,7 +119,16 @@ class ConsumerServiceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnAnConsumerInstance() {
+        when(repository.save(any())).thenReturn(consumer);
+
+        Consumer response = service.create(consumer);
+
+        assertEquals(Consumer.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(STREET, response.getAddress().getStreet());
+        assertEquals(CARD_NUMBER, response.getCards().get(INDEX).getCardNumber());
+        assertEquals(MOBILE_PHONE_NUMBER, response.getContact().getMobilePhoneNumber());
     }
 
     @Test

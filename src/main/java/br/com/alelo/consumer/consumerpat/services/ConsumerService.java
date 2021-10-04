@@ -53,7 +53,7 @@ public class ConsumerService {
      */
     public Consumer create(Consumer obj) {
         verifyIfConsumerAlreadyExists(obj);
-       cardService.validIfCardNumberAlreadyExists(obj);
+        cardService.validIfCardNumberAlreadyExists(obj);
         return saveConsumer(obj);
     }
 
