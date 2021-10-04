@@ -6,6 +6,7 @@ import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,8 @@ class CardServiceTest {
     private static final String FUEL_CARD_NUMBER         = "1111-2222-3333-4444";
     private static final String DRUG_STORE_CARD_NUMBER   = "1111-2222-3333-4444";
     private static final String OBJECT_NOT_FOUND_MESSAGE = "Objeto Não encontrado. Tipo: " + Card.class.getSimpleName();
-    
+    private static final String CARTAO_NAO_VALIDO_PARA_ESTE_ESTABELECIMENTO = "Cartão não valido para este estabelecimento";
+
     @InjectMocks
     private CardService service;
 
@@ -58,7 +60,7 @@ class CardServiceTest {
 
         assertEquals(Card.class, response.getClass());
         assertEquals(FOOD_CARD_NUMBER, response.getCardNumber());
-        assertEquals(VALUE, response.getCardBalance());
+        assertEquals(VALUE + VALUE, response.getCardBalance());
     }
 
     @Test
@@ -110,6 +112,20 @@ class CardServiceTest {
         assertEquals(Card.class, response.getClass());
         assertEquals(CardType.FUEL, response.getCardType());
         assertEquals((VALUE * .65 - VALUE), response.getCardBalance());
+    }
+
+    @Test
+    void whenBuyWithTypeCardDifferentOfEstablishmentTypeThenReturnException() {
+        when(repository.findByCardNumber(anyString()))
+                .thenThrow(new IllegalArgumentException(CARTAO_NAO_VALIDO_PARA_ESTE_ESTABELECIMENTO));
+
+        try{
+            service.buy(PURCHASE);
+        } catch (Exception ex) {
+            assertEquals(IllegalArgumentException.class, ex.getClass());
+            assertEquals(CARTAO_NAO_VALIDO_PARA_ESTE_ESTABELECIMENTO, ex.getMessage());
+        }
+
     }
 
     @Test
