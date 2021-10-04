@@ -87,7 +87,6 @@ class ConsumerServiceTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(DOCUMENT_NUMBER, response.getDocumentNumber());
-        assertEquals(BIRTH_DATE, response.getBirthDate().toString());
     }
 
 
@@ -132,7 +131,16 @@ class ConsumerServiceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnAnConsumerInstance() {
+        when(repository.save(any())).thenReturn(consumer);
+
+        Consumer response = service.update(ID, consumer);
+
+        assertEquals(Consumer.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(STREET, response.getAddress().getStreet());
+        assertEquals(CARD_NUMBER, response.getCards().get(INDEX).getCardNumber());
+        assertEquals(MOBILE_PHONE_NUMBER, response.getContact().getMobilePhoneNumber());
     }
 
     private void startConsumers() throws ParseException {
