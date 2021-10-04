@@ -21,10 +21,10 @@ public class ConsumerController {
     private ConsumerService service;
 
     @Autowired
-    ConsumerRepository repository;
+    private ConsumerRepository repository;
 
     @Autowired
-    ExtractRepository extractRepository;
+    private ExtractRepository extractRepository;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Consumer> findById(@PathVariable Integer id) {
