@@ -8,6 +8,7 @@ import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -83,6 +84,20 @@ class ConsumerServiceTest {
         assertEquals(NAME, response.getName());
         assertEquals(DOCUMENT_NUMBER, response.getDocumentNumber());
         assertEquals(BIRTH_DATE, response.getBirthDate().toString());
+    }
+
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+        when(repository.findById(anyInt()))
+                .thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND_EXCEPTION));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJECT_NOT_FOUND_EXCEPTION, ex.getMessage());
+        }
     }
 
     @Test
