@@ -42,7 +42,7 @@ class CardControllerTest {
     }
 
     @Test
-    void WhenSetBalanceEndpointThenReturnSuccessOperation() {
+    void whenSetBalanceEndpointThenReturnSuccessOperation() {
         when(service.setBalance(anyString(), any())).thenReturn(card);
 
         ResponseEntity<Card> response = controller.setBalance(FOOD_CARD_NUMBER, VALUE);
