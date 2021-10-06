@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Controller
 @RequestMapping("/consumer")
@@ -22,7 +23,9 @@ public class ConsumerController {
 
     @Autowired
     ExtractRepository extractRepository;
-
+    
+    private static final Logger LOGGER = LogManager.getLogger();
+	private static final String MSG_ERRO ="Causa da  erro ";
 
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
@@ -53,26 +56,29 @@ public class ConsumerController {
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
-        }
+        Consumer consumer = null;  
+        try {
+        	consumer = repository.findByDrugstoreNumber(cardNumber);
+        	if(consumer.getDrugstoreNumber() == cardNumber ) {
+        		// é cartão de farmácia
+        		consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+        		repository.save(consumer);
+        	} else {
+        		consumer = repository.findByFoodCardNumber(cardNumber);
+        		if(consumer.getFoodCardNumber() == cardNumber) {
+        			// é cartão de refeição
+        			consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+        			repository.save(consumer);
+        		} else {
+        			// É cartão de combustivel
+        			consumer = repository.findByFuelCardNumber(cardNumber);
+        			consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+        			repository.save(consumer);
+        		}
+        	}
+        }catch (Exception e) {
+        	LOGGER.error(MSG_ERRO + e);
+		}
     }
 
     @ResponseBody
