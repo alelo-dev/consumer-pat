@@ -5,8 +5,8 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Contact;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
+import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.resource.impl.ConsumerResourceImpl;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.impl.ConsumerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class ConsumerResourceImplTest {
+class ConsumerControllerTest {
 
     private static final Integer INDEX                  = 0;
     private static final Integer ID                     = 1;

@@ -2,10 +2,10 @@ package br.com.alelo.consumer.consumerpat.services.impl;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
-import br.com.alelo.consumer.consumerpat.respository.CardRepository;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ContactRepository;
+import br.com.alelo.consumer.consumerpat.repository.AddressRepository;
+import br.com.alelo.consumer.consumerpat.repository.CardRepository;
+import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.repository.ContactRepository;
 import br.com.alelo.consumer.consumerpat.services.ConsumerService;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import lombok.extern.log4j.Log4j2;

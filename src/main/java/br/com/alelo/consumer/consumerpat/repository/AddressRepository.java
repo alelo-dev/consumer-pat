@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.respository;
+package br.com.alelo.consumer.consumerpat.repository;
 
 import br.com.alelo.consumer.consumerpat.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
