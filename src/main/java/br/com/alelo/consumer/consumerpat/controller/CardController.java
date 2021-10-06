@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Purchase;
-import br.com.alelo.consumer.consumerpat.services.CardService;
+import br.com.alelo.consumer.consumerpat.services.impl.CardServiceImpl;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.log4j.Log4j2;
@@ -21,7 +21,7 @@ public class CardController {
     private static final String CARD_SERVICE_METODO   = "CARD_SERVICE ::: Entrou no método";
 
     @Autowired
-    private CardService service;
+    private CardServiceImpl service;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = RETORNA_SUCESSO),

@@ -6,7 +6,7 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Contact;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import br.com.alelo.consumer.consumerpat.services.ConsumerService;
+import br.com.alelo.consumer.consumerpat.services.impl.ConsumerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -59,7 +59,7 @@ class ConsumerControllerTest {
     private ConsumerController controller;
 
     @Mock
-    private ConsumerService service;
+    private ConsumerServiceImpl service;
 
     @Mock
     private ExtractRepository extractRepository;

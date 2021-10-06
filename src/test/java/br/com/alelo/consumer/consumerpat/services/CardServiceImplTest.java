@@ -9,6 +9,7 @@ import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
+import br.com.alelo.consumer.consumerpat.services.impl.CardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class CardServiceTest {
+class CardServiceImplTest {
 
     private static final double VALUE                    = 1000.00;
     private static final String FOOD_CARD_NUMBER         = "1111-2222-3333-4444";
@@ -33,7 +34,7 @@ class CardServiceTest {
     private static final String CARTAO_NAO_VALIDO_PARA_ESTE_ESTABELECIMENTO = "Cartão não valido para este estabelecimento";
 
     @InjectMocks
-    private CardService service;
+    private CardServiceImpl service;
 
     @Mock
     private CardRepository repository;

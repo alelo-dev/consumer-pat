@@ -10,6 +10,8 @@ import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ContactRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
+import br.com.alelo.consumer.consumerpat.services.impl.CardServiceImpl;
+import br.com.alelo.consumer.consumerpat.services.impl.ConsumerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,7 +31,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class ConsumerServiceTest {
+class ConsumerServiceImplTest {
 
     private static final Integer INDEX                  = 0;
     private static final Integer ID                     = 1;
@@ -52,7 +54,7 @@ class ConsumerServiceTest {
     private static final String OBJECT_NOT_FOUND_EXCEPTION = "Objeto Não encontrado. Tipo: " + Consumer.class.getSimpleName();
 
     @InjectMocks
-    private ConsumerService service;
+    private ConsumerServiceImpl service;
     @Mock
     private ContactRepository contactRepository;
     @Mock
@@ -62,7 +64,7 @@ class ConsumerServiceTest {
     @Mock
     private ConsumerRepository repository;
     @Mock
-    private CardService cardService;
+    private CardServiceImpl cardServiceImpl;
 
     private Consumer consumer = new Consumer();
     private Optional<Consumer> optionalConsumer;

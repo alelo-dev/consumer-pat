@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.services.ConsumerService;
+import br.com.alelo.consumer.consumerpat.services.impl.ConsumerServiceImpl;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.log4j.Log4j2;
@@ -26,7 +26,7 @@ public class ConsumerController {
     private static final String CONSUMER_CONTROLLER_METODO = "CONSUMER_CONTROLLER ::: Entrou no método";
 
     @Autowired
-    private ConsumerService service;
+    private ConsumerServiceImpl service;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = RETORNA_SUCESSO),

@@ -4,7 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
-import br.com.alelo.consumer.consumerpat.services.CardService;
+import br.com.alelo.consumer.consumerpat.services.impl.CardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -33,7 +33,7 @@ class CardControllerTest {
     private CardController controller;
 
     @Mock
-    private CardService service;
+    private CardServiceImpl service;
 
     @BeforeEach
     void setUp() {
