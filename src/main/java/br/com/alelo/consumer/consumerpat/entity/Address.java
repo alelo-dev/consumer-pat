@@ -32,6 +32,12 @@ public class Address implements Serializable {
     @JoinColumn(name = "consumer_id")
     private Consumer consumer;
 
+    /**
+     * Nao foi utilizado a anotacao @Data do lombok pois seu Hashcode and Equals
+     * torna a API menos performatica, uma vez que fará a comparacao de todos os
+     * atributos da classe, e em classes com muitos atributos isso se torna um
+     * problema de performance
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
