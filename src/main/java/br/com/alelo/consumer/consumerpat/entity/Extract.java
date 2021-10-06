@@ -38,7 +38,7 @@ public class Extract {
         this.value = value;
     }
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
