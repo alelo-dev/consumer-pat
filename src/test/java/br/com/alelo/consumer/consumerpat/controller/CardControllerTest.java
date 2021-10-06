@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Purchase;
 import br.com.alelo.consumer.consumerpat.entity.enums.CardType;
+import br.com.alelo.consumer.consumerpat.resource.impl.CardController;
 import br.com.alelo.consumer.consumerpat.services.impl.CardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

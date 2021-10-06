@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.controller.exceptions;
+package br.com.alelo.consumer.consumerpat.resource.exceptions;
 
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;

@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.controller.exceptions;
+package br.com.alelo.consumer.consumerpat.resource.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

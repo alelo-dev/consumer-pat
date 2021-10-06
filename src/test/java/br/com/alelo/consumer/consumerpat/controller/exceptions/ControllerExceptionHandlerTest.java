@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller.exceptions;
 
+import br.com.alelo.consumer.consumerpat.resource.exceptions.ControllerExceptionHandler;
+import br.com.alelo.consumer.consumerpat.resource.exceptions.StandardError;
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
