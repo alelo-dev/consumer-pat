@@ -93,32 +93,34 @@ public class ConsumerController {
         * 2 - Farmácia (DrugStore)
         * 3 - Posto de combustivel (Fuel)
         */
+        switch (establishmentType) {
+		case 1: // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+			 Double cashback  = (value / 100) * 10;
+	         value = value - cashback;
 
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
+	         consumer = repository.findByFoodCardNumber(cardNumber);
+	         consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+	         repository.save(consumer);
+			break;
+		case 2:
+			consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
+			break;
+		case 3: // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
+			Double tax  = (value / 100) * 35;
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
             repository.save(consumer);
-        }
+			break;
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+		default:
+			break;
+		}
+
+        Extract extract = new Extract( establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
     }
 
