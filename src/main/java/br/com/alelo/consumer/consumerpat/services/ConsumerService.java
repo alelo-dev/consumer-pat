@@ -1,8 +1,7 @@
 package br.com.alelo.consumer.consumerpat.services;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ConsumerService {
 
@@ -12,9 +11,9 @@ public interface ConsumerService {
     Consumer findById(Integer id);
 
     /**
-     * Listar Consumers
+     * Lista os consumers com paginação
      */
-    List<Consumer> findAll();
+    Page<Consumer> search(Integer page, Integer linesPerPage, String orderBy, String direction);
 
     /**
      * Criar novo consumer
@@ -25,4 +24,4 @@ public interface ConsumerService {
      * Atualiza Consumer
      */
     Consumer update(Integer id, Consumer obj);
-}
+ }

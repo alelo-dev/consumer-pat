@@ -11,9 +11,10 @@ import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundExcep
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -37,6 +38,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Autowired
     private CardServiceImpl cardServiceImpl;
 
+    @Override
     public Consumer findById(Integer id) {
         log.info(CONSUMER_SERVICE_METODO + "findById");
         Optional<Consumer> obj = repository.findById(id);
@@ -44,11 +46,13 @@ public class ConsumerServiceImpl implements ConsumerService {
                 new ObjectNotFoundException("Objeto Não encontrado. Tipo: " + Consumer.class.getSimpleName()));
     }
 
-    public List<Consumer> findAll() {
-        log.info(CONSUMER_SERVICE_METODO + "findAll");
-        return repository.findAll();
+    @Override
+    public Page<Consumer> search(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, org.springframework.data.domain.Sort.Direction.valueOf(direction), orderBy);
+        return repository.findAll(pageRequest);
     }
 
+    @Override
     public Consumer create(Consumer obj) {
         log.info(CONSUMER_SERVICE_METODO + "create");
         verifyIfConsumerAlreadyExists(obj);
@@ -56,6 +60,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         return saveConsumer(obj);
     }
 
+    @Override
     public Consumer update(Integer id, Consumer obj) {
         log.info(CONSUMER_SERVICE_METODO + "update");
         obj.setId(id);
