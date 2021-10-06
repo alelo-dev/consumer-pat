@@ -8,6 +8,7 @@ import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.services.exceptions.IllegalArgumentException;
 import br.com.alelo.consumer.consumerpat.services.exceptions.ObjectNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Log4j2
 @Service
 public class CardService {
+
+    private static final String CARD_SERVICE_METODO = "CARD_SERVICE ::: Entrou no método ";
 
     @Autowired
     private CardRepository repository;
@@ -28,6 +32,7 @@ public class CardService {
      * Método responsável por creditar um valor ao cartão do usuário
      */
     public Card setBalance(String cardNumber, Double value) {
+        log.info(CARD_SERVICE_METODO + "setBalance");
         Card obj = repository.findByCardNumber(cardNumber);
 
         if(Objects.nonNull(obj)) {
@@ -42,6 +47,7 @@ public class CardService {
      * usuário de acordo com o tipo de compra realizada
      */
     public Card buy(Purchase purchase) {
+        log.info(CARD_SERVICE_METODO + "buy");
         Card card = repository.findByCardNumber(purchase.getCardNumber());
 
         if(Objects.nonNull(card)) {
@@ -78,6 +84,7 @@ public class CardService {
      * Método que irá gerar o extrato da compra realizada
      */
     private void generateStatement(Purchase purchase) {
+        log.info(CARD_SERVICE_METODO + "generateStatement");
         extractRepository.save(new Extract(
                 null,
                 purchase.getEstablishmentName(),
@@ -93,6 +100,7 @@ public class CardService {
      * If true uma exceção será lançada informando o usuario
      */
     public void validIfCardNumberAlreadyExists(Consumer consumer) {
+        log.info(CARD_SERVICE_METODO + "validIfCardNumberAlreadyExists");
         for(Card x : consumer.getCards()) {
             Card card = repository.findByCardNumber(x.getCardNumber());
             if(card != null) {
