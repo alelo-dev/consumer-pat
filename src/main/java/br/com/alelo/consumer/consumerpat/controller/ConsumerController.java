@@ -120,7 +120,7 @@ public class ConsumerController {
 			break;
 		}
 
-        Extract extract = new Extract( establishmentName, productDescription, new Date(), cardNumber, value);
+        Extract extract = new Extract(establishmentType, establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
     }
 
