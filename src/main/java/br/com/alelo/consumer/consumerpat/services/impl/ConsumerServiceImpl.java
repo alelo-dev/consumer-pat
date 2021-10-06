@@ -48,6 +48,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     public Page<Consumer> search(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        log.info(CONSUMER_SERVICE_METODO + "search");
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, org.springframework.data.domain.Sort.Direction.valueOf(direction), orderBy);
         return repository.findAll(pageRequest);
     }

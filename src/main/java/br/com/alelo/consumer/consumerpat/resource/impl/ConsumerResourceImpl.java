@@ -33,6 +33,7 @@ public class ConsumerResourceImpl implements ConsumerResource {
 
     @Override
     public ResponseEntity<Page<Consumer>> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        log.info(CONSUMER_CONTROLLER_METODO + " findPage");
         return ResponseEntity.ok().body(service.search(page, linesPerPage, orderBy, direction));
     }
 
