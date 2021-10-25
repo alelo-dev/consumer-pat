@@ -1,17 +1,26 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import lombok.Data;
+
+/**
+ *  - Retirado establishmentNameId do construtor pois nao esta sendo utilizado.
+ * @author HLJunior
+ *
+ */
 
 @Data
 @Entity
 public class Extract {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     int establishmentNameId;
     String establishmentName;
@@ -39,7 +48,6 @@ public class Extract {
     }
 
     public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
