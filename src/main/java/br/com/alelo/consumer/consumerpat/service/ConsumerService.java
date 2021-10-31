@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
@@ -20,8 +22,9 @@ public class ConsumerService {
 	@Autowired
 	private ExtractRepository extractRepository;
 	
-	public List<Consumer> listAllConsumers() {
-		return repository.getAllConsumersList();
+	public List<Consumer> listAllConsumers(Pageable pageable) {
+		Page<Consumer> recordsPage = repository.findAll(pageable);
+	    return recordsPage.getContent();
 	}
 	
 	public void createConsumer(Consumer consumer) {

@@ -3,6 +3,8 @@ package br.com.alelo.consumer.consumerpat.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,8 +31,11 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
-        return service.listAllConsumers();
+    public List<Consumer> listAllConsumers(			
+    		@RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size) {
+		Pageable pageable = PageRequest.of(page, size);
+        return service.listAllConsumers(pageable);
     }
 
     @SuppressWarnings("rawtypes")
