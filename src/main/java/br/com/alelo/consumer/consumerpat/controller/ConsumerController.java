@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import io.swagger.annotations.ApiOperation;
 
@@ -63,7 +64,7 @@ public class ConsumerController {
         try {
 			service.setBalance(cardNumber, value);
 			return ResponseEntity.ok().build();
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			return ResponseEntity
 		            .status(HttpStatus.BAD_REQUEST)
 		            .body(e.getMessage());
@@ -82,7 +83,7 @@ public class ConsumerController {
         try {
 			service.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
 			return ResponseEntity.ok().build();
-		} catch (Exception e) {
+		} catch (BusinessException e) {
 			return ResponseEntity
 					.status(HttpStatus.BAD_REQUEST)
 		            .body(e.getMessage());

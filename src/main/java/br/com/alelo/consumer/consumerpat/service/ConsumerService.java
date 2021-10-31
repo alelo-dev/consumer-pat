@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
 
@@ -41,7 +42,7 @@ public class ConsumerService {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-	public void setBalance(int cardNumber, double value) throws Exception {
+	public void setBalance(int cardNumber, double value) throws BusinessException {
 		Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
         
@@ -60,14 +61,14 @@ public class ConsumerService {
                 	consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
                 }
                 else {
-                	throw new Exception("ERROR: Card not found.");
+                	throw new BusinessException("ERROR: Card not found.");
                 }
             }
         }
         repository.save(consumer);
 	}
 	
-	public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws Exception {
+	public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws BusinessException {
 		 Consumer consumer = null;
 	        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
 	        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
@@ -103,7 +104,7 @@ public class ConsumerService {
 		            }
 	        	}
 	        	else{
-	        		throw new Exception("ERROR: Invalid establishment.");
+	        		throw new BusinessException("ERROR: Invalid establishment.");
 	            }
 	        }
 	        
@@ -111,7 +112,7 @@ public class ConsumerService {
 	        	repository.save(consumer);	
 	        }
 	        else {
-	        	throw new Exception("ERROR: Consumer not found.");	
+	        	throw new BusinessException("ERROR: Consumer not found.");	
 	        }
 
 	        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
@@ -130,21 +131,21 @@ public class ConsumerService {
 		return value;
 	}
 
-	private void checkFuelFunds(double value, Consumer consumer) throws Exception {
+	private void checkFuelFunds(double value, Consumer consumer) throws BusinessException {
 		if(value > consumer.getFuelCardBalance()) {
-			throw new Exception("ERROR: Insufficient funds.");
+			throw new BusinessException("ERROR: Insufficient funds.");
 		}
 	}
 	
-	private void checkFoodFunds(double value, Consumer consumer) throws Exception {
+	private void checkFoodFunds(double value, Consumer consumer) throws BusinessException {
 		if(value > consumer.getFoodCardBalance()) {
-			throw new Exception("ERROR: Insufficient funds.");
+			throw new BusinessException("ERROR: Insufficient funds.");
 		}
 	}
 	
-	private void checkDrugstoreFunds(double value, Consumer consumer) throws Exception {
+	private void checkDrugstoreFunds(double value, Consumer consumer) throws BusinessException {
 		if(value > consumer.getDrugstoreCardBalance()) {
-			throw new Exception("ERROR: Insufficient funds.");
+			throw new BusinessException("ERROR: Insufficient funds.");
 		}
 	}
 	
