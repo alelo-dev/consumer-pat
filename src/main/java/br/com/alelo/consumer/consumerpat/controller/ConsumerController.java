@@ -64,21 +64,22 @@ public class ConsumerController {
 
         switch (establishmentType) {
         case 1:
-
+        	
             consumer = repository.findByFoodCardNumber(cardNumber);
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
             repository.save(consumer);
 
 			break;
 		case 2:
+			
             consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
             repository.save(consumer);
 			
 			break;
 		case 3:
-            // É cartão de combustivel
-            consumer = repository.findByFuelCardNumber(cardNumber);
+           
+			consumer = repository.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
             repository.save(consumer);
 			
@@ -92,6 +93,7 @@ public class ConsumerController {
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.PUT)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value)  throws CosumerException {
+    	
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
