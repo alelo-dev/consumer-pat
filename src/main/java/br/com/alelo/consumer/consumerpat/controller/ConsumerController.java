@@ -53,7 +53,7 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.PATCH)
-    public void setBalance(int establishmentType, int cardNumber, double value) {
+    public void setBalance(int establishmentType, int cardNumber, double value) throws CosumerException{
         Consumer consumer = null;
         /*
         * Tipos de estabelcimentos
@@ -84,14 +84,14 @@ public class ConsumerController {
 			
 			break;
 		default:
-			throw new CosumerException("Tipo inválido!");
+			throw new CosumerException("Tipo de estabelecimento inválido!");
         }
         consumer = repository.findByDrugstoreNumber(cardNumber);
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.PUT)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value)  throws CosumerException {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
@@ -129,7 +129,7 @@ public class ConsumerController {
             repository.save(consumer);
 			break;
 		default:
-			throw new CosumerException("Tipo inválido!");
+			throw new CosumerException("Tipo de estabelecimento inválido!");
 		}
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
