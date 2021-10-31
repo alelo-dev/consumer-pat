@@ -8,9 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,7 +32,7 @@ public class ConsumerController {
     @ApiOperation(value="Returns all customers")
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping(value = "/consumerList")
     public List<Consumer> listAllConsumers(			
     		@RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "10") int size) {
@@ -40,7 +42,7 @@ public class ConsumerController {
 
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value="Creates a new customer")
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.PUT)
+    @PutMapping(value = "/createConsumer")
     public ResponseEntity createConsumer(@RequestBody Consumer consumer) {
         service.createConsumer(consumer);
         return ResponseEntity.ok().build();
@@ -48,7 +50,7 @@ public class ConsumerController {
     
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value="Updates customer")
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @PostMapping(value = "/updateConsumer")
     public ResponseEntity updateConsumer(@RequestBody Consumer consumer) {
         service.updateConsumer(consumer);
         return ResponseEntity.ok().build();
@@ -56,7 +58,7 @@ public class ConsumerController {
 
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value="Sets card balance")
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
+    @PostMapping(value = "/setcardbalance")
     public ResponseEntity setBalance(@RequestParam(required = true) int cardNumber, @RequestParam(required = true) double value) {
         try {
 			service.setBalance(cardNumber, value);
@@ -71,7 +73,7 @@ public class ConsumerController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value="Registers a buying")
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.POST)
+    @PostMapping(value = "/buy")
     public ResponseEntity buy(@RequestParam(required = true) int establishmentType, 
     		@RequestParam(required = true) String establishmentName, 
     		@RequestParam(required = true) int cardNumber, 
