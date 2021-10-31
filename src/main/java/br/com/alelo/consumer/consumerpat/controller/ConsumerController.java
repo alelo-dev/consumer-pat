@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.CosumerException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,18 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+        return repository.findAll();
     }
 
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @RequestMapping(value = "/createConsumer", method = RequestMethod.PUT)
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
@@ -51,32 +52,45 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.PATCH)
+    public void setBalance(int establishmentType, int cardNumber, double value) {
         Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+        /*
+        * Tipos de estabelcimentos
+        * 1 - Alimentação (food)
+        * 2 - Farmácia (DrugStore)
+        * 3 - Posto de combustivel (Fuel)
+        */
 
-        if(consumer != null) {
-            // é cartão de farmácia
+        switch (establishmentType) {
+        case 1:
+
+            consumer = repository.findByFoodCardNumber(cardNumber);
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+            repository.save(consumer);
+
+			break;
+		case 2:
+            consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
             repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
+			
+			break;
+		case 3:
+            // É cartão de combustivel
+            consumer = repository.findByFuelCardNumber(cardNumber);
+            consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+            repository.save(consumer);
+			
+			break;
+		default:
+			throw new CosumerException("Tipo inválido!");
         }
+        consumer = repository.findByDrugstoreNumber(cardNumber);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @RequestMapping(value = "/buy", method = RequestMethod.PUT)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -88,7 +102,8 @@ public class ConsumerController {
         * 3 - Posto de combustivel (Fuel)
         */
 
-        if (establishmentType == 1) {
+        switch (establishmentType) {
+		case 1:
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             Double cashback  = (value / 100) * 10;
             value = value - cashback;
@@ -96,13 +111,15 @@ public class ConsumerController {
             consumer = repository.findByFoodCardNumber(cardNumber);
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
-
-        }else if(establishmentType == 2) {
+			
+			break;
+		case 2:
             consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
 
-        } else {
+			break;
+		case 3:
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
             Double tax  = (value / 100) * 35;
             value = value + tax;
@@ -110,7 +127,10 @@ public class ConsumerController {
             consumer = repository.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
             repository.save(consumer);
-        }
+			break;
+		default:
+			throw new CosumerException("Tipo inválido!");
+		}
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
