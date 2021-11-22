@@ -1,22 +1,45 @@
 package br.com.alelo.consumer.consumerpat.respository;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import java.util.List;
 
-public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-    @Query(nativeQuery = true, value = "select * from Consumer")
-    List<Consumer> getAllConsumersList();
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.respository.interfaces.IConsumerRepository;
+import br.com.alelo.consumer.consumerpat.respository.jpa.ConsumerJPA;
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
-    Consumer findByFoodCardNumber(int cardNumber);
+@Repository
+public class ConsumerRepository implements IConsumerRepository{
+	
+	@Autowired
+	private ConsumerJPA consumerJPA;
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
-    Consumer findByFuelCardNumber(int cardNumber);
+	@Override
+	public List<Consumer> getAllConsumersList() {		
+		return consumerJPA.getAllConsumersList();
+	}
 
-    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
-    Consumer findByDrugstoreNumber(int cardNumber);
+	@Override
+	public Consumer findByFoodCardNumber(int cardNumber) {		
+		return consumerJPA.findByFoodCardNumber(cardNumber);
+	}
+
+	@Override
+	public Consumer findByFuelCardNumber(int cardNumber) {		
+		return consumerJPA.findByFuelCardNumber(cardNumber);
+	}
+
+	@Override
+	public Consumer findByDrugstoreNumber(int cardNumber) {		
+		return consumerJPA.findByDrugstoreNumber(cardNumber);
+	}
+
+	@Override
+	public void gravarConsumer(Consumer consumer) {
+		consumerJPA.save(consumer);
+		
+	}
+
+    
 }

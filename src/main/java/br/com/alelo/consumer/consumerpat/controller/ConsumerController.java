@@ -36,13 +36,13 @@ public class ConsumerController {
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+        repository.gravarConsumer(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+        repository.gravarConsumer(consumer);
     }
 
 
@@ -58,19 +58,19 @@ public class ConsumerController {
 
         if(consumer != null) {
             // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
+            consumer.setDrugStoreCardBalance(consumer.getDrugStoreCardBalance() + value);
+            repository.gravarConsumer(consumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
             if(consumer != null) {
                 // é cartão de refeição
                 consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
+                repository.gravarConsumer(consumer);
             } else {
                 // É cartão de combustivel
                 consumer = repository.findByFuelCardNumber(cardNumber);
                 consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
+                repository.gravarConsumer(consumer);
             }
         }
     }
@@ -90,30 +90,30 @@ public class ConsumerController {
 
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
+            double cashback  = (value / 100) * 10;
             value = value - cashback;
-
             consumer = repository.findByFoodCardNumber(cardNumber);
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
+            repository.gravarConsumer(consumer);
 
         }else if(establishmentType == 2) {
             consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
+            consumer.setDrugStoreCardBalance(consumer.getDrugStoreCardBalance() - value);
+            repository.gravarConsumer(consumer);
 
         } else {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
+            double tax  = (value / 100) * 35;
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+            repository.gravarConsumer(consumer);
         }
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
+        
+        extractRepository.gravarExtract(extract);
     }
 
 }
