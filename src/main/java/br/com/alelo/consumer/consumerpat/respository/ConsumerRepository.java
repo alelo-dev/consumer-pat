@@ -8,15 +8,21 @@ import java.util.List;
 
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
-    @Query(nativeQuery = true, value = "select * from Consumer")
-    List<Consumer> getAllConsumersList();
+	@Query(nativeQuery = true, value = "select * from Consumer")
+	List<Consumer> getAllConsumersList();
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
-    Consumer findByFoodCardNumber(int cardNumber);
+	@Query(nativeQuery = true, value = "select * from Consumer where id = ?")
+	Consumer getConsumerById(int id);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
-    Consumer findByFuelCardNumber(int cardNumber);
+	@Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
+	Consumer findByFoodCardNumber(long cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
-    Consumer findByDrugstoreNumber(int cardNumber);
+	@Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
+	Consumer findByFuelCardNumber(long cardNumber);
+
+	@Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_CARD_NUMBER = ? ")
+	Consumer findByDrugstoreNumber(long cardNumber);
+
+	@Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_CARD_NUMBER = ?1 OR FUEL_CARD_NUMBER = ?1 OR FOOD_CARD_NUMBER = ?1")
+	Consumer findCardNumberForAnyType(long cardNumber);
 }
