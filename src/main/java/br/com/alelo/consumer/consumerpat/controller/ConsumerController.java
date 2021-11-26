@@ -42,10 +42,29 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public @ResponseBody String createConsumer(@RequestBody Consumer consumer) throws Exception{
-        if (!consumerRepository.existsById(consumer.getId())){
-            consumerRepository.save(consumer);
+
+        Optional<Consumer> newConsumer = consumerRepository.findById(consumer.getId());
+
+        if (null != newConsumer) {
+            return "Consumidor já existe";
         }
-        return "Cadastrado com Sucesso";
+        if (null == newConsumer) {
+            Consumer foodConsumer = consumerRepository.findCardNumberAllTypes(consumer.getFoodCardNumber());
+            if (null != foodConsumer) {
+                return "Este cartão de Alimentção já existe por favor utilize outro número";
+            } else {
+                Consumer drugConsumer = consumerRepository.findCardNumberAllTypes(consumer.getDrugstoreCardNumber());
+                if (null != drugConsumer) {
+                    return "Este cartão Farmacia já existe por favor utilize outro número";
+                } else {
+                    Consumer fuelConsumer = consumerRepository.findCardNumberAllTypes(consumer.getFuelCardNumber());
+                    if (null != fuelConsumer) {
+                        return "Este cartão de Combustivel já existe por favor utilize outro numero";
+                    }
+                }
+            }
+        }
+        return consumer.getName() +" cadastrado com sucesso";
     }
 
     // Não deve ser possível alterar o saldo do cartão
@@ -53,7 +72,12 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
     public @ResponseBody String updateConsumer(@RequestBody Consumer consumerUpdate) {
-        Optional<Consumer> consurmer = consumerRepository.findById(consumerUpdate.getId());
+        Optional<Consumer> consumer = consumerRepository.findById(consumerUpdate.getId());
+
+        if (null == consumer) {
+            return "Consumidor Invalido";
+        }
+
         if (consumerUpdate.getFoodCardBalance() != consumerUpdate.getFuelCardBalance()) {
            return ("Saldo do cartão Alimentação não pode ser alterado");
         }
@@ -103,8 +127,8 @@ public class ConsumerController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public @ResponseBody String buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) throws Exception {
-        Consumer consumer = null;
+    public @ResponseBody String buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -113,43 +137,51 @@ public class ConsumerController {
         * 2 - Farmácia (DrugStore)
         * 3 - Posto de combustivel (Fuel)
         */
+        Consumer consumer;
 
         if ((establishmentType < ConsumerEnum.FOOD_CARD.getValue()) || (establishmentType > ConsumerEnum.FUEL_CARD.getValue())){
             throw new InvalidParameterException("Tipo de estabelecimento invalido");
         }
 
         if (establishmentType == ConsumerEnum.FOOD_CARD.getValue()) {
+
             consumer = consumerRepository.findByFoodCardNumber(cardNumber);
-            if(cardNumber == consumer.getFoodCardNumber()){
+
+            if (null == consumer){
+             return "Cartão Alimentação não encontrado" + "Cartão numero: " + cardNumber;
+            }
+            if (consumer.getFoodCardBalance() < value) {
+                return "Saldo no cartão é insuficiente" + "Saldo: " + consumer.getFoodCardBalance() ;
+            }
                 // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-                Double cashback  = (value / 100) * 10;
-                value = value - cashback;
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-                consumerRepository.save(consumer);
-            } else {
-                return "Número do cartão Alimentação invalido";
-            }
-
-        }else if(establishmentType ==  ConsumerEnum.DRUG_STORE_CARD.getValue()) {
-            consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
-            if(cardNumber == consumer.getDrugstoreNumber()) {
-                consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-                consumerRepository.save(consumer);
-            } else {
-                return "Número do cartão Farmácia invalido";
-            }
-
-        } else if (establishmentType == ConsumerEnum.FUEL_CARD.getValue()){
+            Double cashback  = (value / 100) * 10;
+            value = value - cashback;
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            consumerRepository.save(consumer);
+            } else if(establishmentType ==  ConsumerEnum.DRUG_STORE_CARD.getValue()) {
+                consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
+                if (null == consumer){
+                    return "Cartão Farmacia não encontrado" + "Cartão numero: " + cardNumber;
+                }
+                if (consumer.getDrugstoreCardBalance() < value) {
+                    return "Saldo no cartão é insuficiente" + "Saldo: " + consumer.getDrugstoreCardBalance() ;
+                }
+                    consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+                    consumerRepository.save(consumer);
+            } else if (establishmentType == ConsumerEnum.FUEL_CARD.getValue()){
             consumer = consumerRepository.findByFuelCardNumber(cardNumber);
-            if(cardNumber == consumer.getFuelCardNumber()) {
+
+                if (null == consumer){
+                    return "Cartão Combustivel não encontrado" + "Cartão numero: " + cardNumber;
+                }
+                if (consumer.getFuelCardBalance() < value) {
+                    return "Saldo no cartão é insuficiente" + "Saldo: " + consumer.getFuelCardBalance() ;
+                }
                 // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
                 Double tax = (value / 100) * 35;
                 value = value + tax;
                 consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
                 consumerRepository.save(consumer);
-            } else {
-                return "Número do cartão Combustivel invalido";
-            }
         }
 
         Extract extract = new Extract(establishmentType, establishmentName, productDescription, new Date(), cardNumber, value);
