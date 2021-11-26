@@ -43,7 +43,7 @@ public class ConsumerController {
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public @ResponseBody String createConsumer(@RequestBody Consumer consumer) throws Exception{
 
-        Optional<Consumer> newConsumer = consumerRepository.findById(consumer.getId());
+       Consumer newConsumer = consumerRepository.getById(consumer.getId());
 
         if (null != newConsumer) {
             return "Consumidor já existe";
@@ -64,6 +64,7 @@ public class ConsumerController {
                 }
             }
         }
+        consumerRepository.save(consumer);
         return consumer.getName() +" cadastrado com sucesso";
     }
 
@@ -72,7 +73,7 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
     public @ResponseBody String updateConsumer(@RequestBody Consumer consumerUpdate) {
-        Optional<Consumer> consumer = consumerRepository.findById(consumerUpdate.getId());
+        Consumer consumer = consumerRepository.getById(consumerUpdate.getId());
 
         if (null == consumer) {
             return "Consumidor Invalido";
