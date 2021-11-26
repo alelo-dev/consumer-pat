@@ -127,8 +127,7 @@ public class ConsumerController {
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@RequestMapping(value = "/buy", method = RequestMethod.POST)
-	public @ResponseBody String buy(int establishmentType, String establishmentName, int cardNumber,
-			String productDescription, double value) {
+	public @ResponseBody String buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
 
 		Consumer consumer;
 
@@ -172,8 +171,7 @@ public class ConsumerController {
 				return "O cartão combustivel nº " + cardNumber + " não foi encontrado !";
 			}
 			if (consumer.getFuelCardBalance() < value) {
-				return "Saldo insuficiente. Valor total com a taxa: R$ " + value + " .Saldo atual R$: "
-						+ consumer.getFuelCardBalance();
+				return "Saldo insuficiente. Valor total com a taxa: R$ " + value + " .Saldo atual R$: " + consumer.getFuelCardBalance();
 			}
 			consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
 			repository.save(consumer);
