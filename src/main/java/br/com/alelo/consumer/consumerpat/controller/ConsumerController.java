@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,42 +34,49 @@ public class ConsumerController {
     private final ConsumerService consumerService;
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
-    @ResponseStatus(code = HttpStatus.OK)
     @GetMapping(value = URI_LIST_CONSUMERS)
-    public List<Consumer> listAllConsumers() {
+    public ResponseEntity<List<Consumer>> listAllConsumers() {
 
         log.info("ConsumerController.listAllConsumers - Start");
         log.debug("ConsumerController.listAllConsumers - Start");
 
         List<Consumer> consumerList = consumerService.listAllConsumers();
-
         log.debug("ConsumerController.listAllConsumers - End - Output: {}", consumerList);
 
-        return consumerList; //TODO change return type to ResponseEntity maybe?
+        return ResponseEntity.ok(consumerList);
     }
 
 
     /* Cadastrar novos clientes */
     @PostMapping(value = URI_CREATE_CONSUMER)
-    public void createConsumer(@RequestBody final Consumer consumer) {
+    public ResponseEntity<Consumer> createConsumer(@RequestBody final Consumer consumer) {
 
         log.info("ConsumerController.createConsumer - Start");
-        log.debug("ConsumerController.createConsumer - Start - Input - Consumer: {}", consumer);
+        log.debug("ConsumerController.createConsumer - Start - Input: {}", consumer);
 
-        consumerService.createConsumer(consumer); //Change return type to Consumer instead of void
+        Consumer created = consumerService.createConsumer(consumer);
+        ResponseEntity<Consumer> response = ResponseEntity.status(HttpStatus.CREATED)
+                .body(created);
+
+        log.debug("ConsumerController.createConsumer - End - Input: {}, Output {}", consumer, created);
+
+        return response;
     }
 
     // Não deve ser possível alterar o saldo do cartão
     @PutMapping(value = URI_UPDATE_CONSUMER)
-    public void updateConsumer(@RequestBody final Consumer consumer) {
+    public ResponseEntity<Consumer> updateConsumer(@RequestBody final Consumer consumer) {
 
         log.info("ConsumerController.updateConsumer - Start");
-        log.debug("ConsumerController.updateConsumer - Start - Input - Consumer: {}", consumer);
+        log.debug("ConsumerController.updateConsumer - Start - Input: {}", consumer);
 
-        consumerService.updateConsumer(consumer);
+        Consumer updated = consumerService.updateConsumer(consumer);
+        ResponseEntity<Consumer> response = ResponseEntity.ok(updated);
+
+        log.debug("ConsumerController.updateConsumer - End - Input: {}, Output {}", consumer, updated);
+
+        return response;
     }
-
 
     /*
      * Deve creditar(adicionar) um valor(value) em um no cartão.
@@ -78,12 +85,12 @@ public class ConsumerController {
      */
     @PostMapping(value = URI_SET_CARD_BALANCE)
     public void setCardBalance(@Param("cardNumber") final Integer cardNumber,
-                               @Param("value") final double value) { //TODO verify if this is a query param
+                               @Param("value") final double value) {
 
         log.info("ConsumerController.setBalance - Start");
         log.debug("ConsumerController.setBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
 
-        consumerService.setBalance(cardNumber, value);
+        consumerService.setBalance(cardNumber, value); //TODO should it return the new balance?
     }
 
     @ResponseBody

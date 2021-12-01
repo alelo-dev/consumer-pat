@@ -5,12 +5,14 @@ import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
@@ -25,14 +27,22 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     @Transactional
-    public void createConsumer(final Consumer consumer) {
-        repository.save(consumer);
+    public Consumer createConsumer(final Consumer consumer) {
+
+        log.info("ConsumerServiceImpl.createConsumer - Start");
+        log.debug("ConsumerServiceImpl.createConsumer - Start - Input - Consumer: {}", consumer);
+
+        return repository.save(consumer);
     }
 
     @Override
     @Transactional
-    public void updateConsumer(final Consumer consumer) {
-        repository.save(consumer);
+    public Consumer updateConsumer(final Consumer consumer) {
+
+        log.info("ConsumerServiceImpl.updateConsumer - Start");
+        log.debug("ConsumerServiceImpl.updateConsumer - Start - Input - Consumer: {}", consumer);
+
+        return repository.save(consumer);
     }
 
     @Override

@@ -8,9 +8,9 @@ public interface ConsumerService {
 
     List<Consumer> listAllConsumers();
 
-    void createConsumer(Consumer consumer); //TODO set as final
+    Consumer createConsumer(final Consumer consumer);
 
-    void updateConsumer(Consumer consumer); //TODO set as final
+    Consumer updateConsumer(final Consumer consumer);
 
     void setBalance(final int cardNumber, final double value);
 
