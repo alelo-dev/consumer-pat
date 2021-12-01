@@ -28,7 +28,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+        return repository.findAll();
     }
 
     @Override
@@ -58,17 +58,20 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.info("ConsumerServiceImpl.setCardBalance - Start");
         log.debug("ConsumerServiceImpl.setCardBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
 
-        Consumer consumer = repository.findByDrugstoreNumber(cardNumber); //TODO VERIFY THIS - does it return null or []
+        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber); //TODO VERIFY THIS - does it return null or []
 
         if (nonNull(consumer)) {
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreNumber() + value);
+            consumer.getCard()
+                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreNumber() + value);
         } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
+            consumer = repository.findByCardFoodCardNumber(cardNumber);
             if (nonNull(consumer)) {
-                consumer.setFoodCardBalance(consumer.getFoodCardNumber() + value);
+                consumer.getCard()
+                        .setFoodCardBalance(consumer.getCard().getFoodCardNumber() + value);
             } else {
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardNumber() + value);
+                consumer = repository.findByCardFuelCardNumber(cardNumber);
+                consumer.getCard()
+                        .setFuelCardBalance(consumer.getCard().getFuelCardNumber() + value);
             }
 
         }
@@ -96,13 +99,17 @@ public class ConsumerServiceImpl implements ConsumerService {
             Double cashback  = (value / 100) * 10;
             value = value - cashback;
 
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            consumer = repository.findByCardFoodCardNumber(cardNumber);
+            consumer.getCard()
+                    .setFoodCardBalance(consumer.getCard().getFoodCardBalance() - value);
+
             repository.save(consumer);
 
         } else if (establishmentType == DRUGSTORE_ESTABLISHMENT) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+            consumer = repository.findByCardDrugstoreNumber(cardNumber);
+            consumer.getCard()
+                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreCardBalance() - value);
+
             repository.save(consumer);
 
         } else if (establishmentType == FUEL_ESTABLISHMENT) {
@@ -110,10 +117,13 @@ public class ConsumerServiceImpl implements ConsumerService {
             double tax  = (value / 100) * 35;
             value = value + tax;
 
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+            consumer = repository.findByCardFuelCardNumber(cardNumber);
+            consumer.getCard()
+                    .setFuelCardBalance(consumer.getCard().getFuelCardBalance() - value);
             repository.save(consumer);
         }
+
+        //TODO create exceptions NotFound
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);

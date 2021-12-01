@@ -4,7 +4,6 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.services.ConsumerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -84,8 +84,8 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @PostMapping(value = URI_SET_CARD_BALANCE)
-    public void setCardBalance(@Param("cardNumber") final Integer cardNumber,
-                               @Param("value") final double value) {
+    public void setCardBalance(@RequestParam("cardNumber") final Integer cardNumber,
+                               @RequestParam("value") final double value) {
 
         log.info("ConsumerController.setBalance - Start");
         log.debug("ConsumerController.setBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
@@ -95,11 +95,11 @@ public class ConsumerController {
 
     @ResponseBody
     @PostMapping(value = URI_BUY)
-    public void buy(@Param("establishmentType") final int establishmentType,
-                    @Param("establishmentName") final String establishmentName,
-                    @Param("cardNumber") final int cardNumber,
-                    @Param("productDescription") final String productDescription,
-                    @Param("value") final double value) {
+    public void buy(@RequestParam("establishmentType") final int establishmentType,
+                    @RequestParam("establishmentName") final String establishmentName,
+                    @RequestParam("cardNumber") final int cardNumber,
+                    @RequestParam("productDescription") final String productDescription,
+                    @RequestParam("value") final double value) {
 
         log.info("ConsumerController.buy - Start");
         log.debug("ConsumerController.buy - Start - Input - Establishment Type: {}, Establishment Name: {}, " +
