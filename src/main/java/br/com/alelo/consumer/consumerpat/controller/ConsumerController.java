@@ -27,20 +27,20 @@ public class ConsumerController {
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping(value = "/consumerList")
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
 
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @PostMapping(value = "/createConsumer")
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @PostMapping(value = "/updateConsumer")
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
@@ -51,12 +51,12 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @GetMapping(value = "/setcardbalance")
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
-        if(consumer != null) {
+        if (consumer != null) {
             // é cartão de farmácia
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
             repository.save(consumer);
@@ -76,7 +76,7 @@ public class ConsumerController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @GetMapping(value = "/buy")
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
