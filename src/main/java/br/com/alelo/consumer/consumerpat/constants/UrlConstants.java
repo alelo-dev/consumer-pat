@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.constants;
 public final class UrlConstants {
 
     public static final String URI_BASIC_REQUEST_MAPPING = "/consumer";
+
     public static final String URI_LIST_CONSUMERS = "/consumerList";
     public static final String URI_CREATE_CONSUMER = "/createConsumer";
     public static final String URI_UPDATE_CONSUMER = "/updateConsumer";
