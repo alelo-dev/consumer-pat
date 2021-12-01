@@ -7,17 +7,22 @@ import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Date;
 import java.util.List;
 
-import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_BUY;
-import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_SET_CARD_BALANCE;
-import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_LIST_CONSUMERS;
-import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_CREATE_CONSUMER;
-import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_UPDATE_CONSUMER;
 import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_BASIC_REQUEST_MAPPING;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_BUY;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_CREATE_CONSUMER;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_LIST_CONSUMERS;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_SET_CARD_BALANCE;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_UPDATE_CONSUMER;
 
 
 @Controller
