@@ -1,9 +1,9 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,38 +13,69 @@ import java.util.Objects;
 
 
 @Data
-@Entity
+@Entity(name = "CONSUMER")
 public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Integer id;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    @Column(name = "NAME")
+    private String name;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @Column(name = "DOCUMENT_NUMBER")
+    private int documentNumber;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    @Column(name = "BIRTH_DATE")
+    private Date birthDate;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    //contacts TODO: Change This to another model?
+    @Column(name = "MOBILE_PHONE_NUMBER")
+    private int mobilePhoneNumber;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    @Column(name = "RESIDENCE_PHONE_NUMBER")
+    private int residencePhoneNumber;
+
+    @Column(name = "PHONE_NUMBER")
+    private int phoneNumber;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    //Address TODO: Change This to another model?
+    @Column(name = "STREET")
+    private String street;
+
+    @Column(name = "NUMBER")
+    private int number;
+
+    @Column(name = "CITY")
+    private String city;
+
+    @Column(name = "COUNTRY")
+    private String country;
+
+    @Column(name = "PORTAL_CODE")
+    private int portalCode;
+
+    //cards TODO: Change This to another model?
+    @Column(name = "FOOD_CARD_NUMBER")
+    private int foodCardNumber;
+
+    @Column(name = "FOOD_CARD_BALANCE")
+    private double foodCardBalance;
+
+    @Column(name = "FUEL_CARD_NUMBER")
+    private int fuelCardNumber;
+
+    @Column(name = "FUEL_CARD_BALANCE")
+    private double fuelCardBalance;
+
+    @Column(name = "DRUGSTORE_NUMBER")
+    private int drugstoreNumber;
+
+    @Column(name = "DRUGSTORE_CARD_BALANCE")
+    private double drugstoreCardBalance;
 
     @Override
     public boolean equals(Object o) {
