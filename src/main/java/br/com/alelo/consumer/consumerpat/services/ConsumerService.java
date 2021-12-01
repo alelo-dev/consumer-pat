@@ -12,7 +12,7 @@ public interface ConsumerService {
 
     Consumer updateConsumer(final Consumer consumer);
 
-    void setBalance(final int cardNumber, final double value);
+    void setCardBalance(final int cardNumber, final double value);
 
     void buy(final int establishmentType, final String establishmentName, final int cardNumber,
              final String productDescription, double value);

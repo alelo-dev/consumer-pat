@@ -12,6 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
+import static br.com.alelo.consumer.consumerpat.constants.EstablishmentTypes.FOOD_ESTABLISHMENT;
+import static br.com.alelo.consumer.consumerpat.constants.EstablishmentTypes.DRUGSTORE_ESTABLISHMENT;
+import static br.com.alelo.consumer.consumerpat.constants.EstablishmentTypes.FUEL_ESTABLISHMENT;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -47,43 +53,45 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     @Transactional
-    public void setBalance(final int cardNumber, final double value) {
-        //save can be done at the end
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+    public void setCardBalance(final int cardNumber, final double value) {
 
-        if (consumer != null) { //TODO change to nonNull function
+        log.info("ConsumerServiceImpl.setCardBalance - Start");
+        log.debug("ConsumerServiceImpl.setCardBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
+
+        Consumer consumer = repository.findByDrugstoreNumber(cardNumber); //TODO VERIFY THIS - does it return null or []
+
+        if (nonNull(consumer)) {
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreNumber() + value);
-            repository.save(consumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
-            if (consumer != null) {
+            if (nonNull(consumer)) {
                 consumer.setFoodCardBalance(consumer.getFoodCardNumber() + value);
-                repository.save(consumer);
             } else {
                 consumer = repository.findByFuelCardNumber(cardNumber);
                 consumer.setFuelCardBalance(consumer.getFuelCardNumber() + value);
-                repository.save(consumer);
             }
+
         }
+        repository.save(consumer);
     }
 
+    /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
+     *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+     *
+     * Tipos de estabelcimentos
+     * 1 - Alimentação (food)
+     * 2 - Farmácia (DrugStore)
+     * 3 - Posto de combustivel (Fuel)
+     */
     @Override
     @Transactional
-    public void buy(final int establishmentType, final String establishmentName, final int cardNumber,
+    public void buy(final int establishmentType, final String establishmentName, final int cardNumber, //TODO verify if it can return type Extract
                     final String productDescription, double value) {
 
         Consumer consumer = null;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-         *
-         * Tipos de estabelcimentos
-         * 1 - Alimentação (food)
-         * 2 - Farmácia (DrugStore)
-         * 3 - Posto de combustivel (Fuel)
-         */
 
-        if (establishmentType == 1) {
+        //https://stackoverflow.com/questions/24944906/java-call-class-method-based-on-value-of-variable
+        if (establishmentType == FOOD_ESTABLISHMENT) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             Double cashback  = (value / 100) * 10;
             value = value - cashback;
@@ -92,14 +100,14 @@ public class ConsumerServiceImpl implements ConsumerService {
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
 
-        }else if(establishmentType == 2) {
+        } else if (establishmentType == DRUGSTORE_ESTABLISHMENT) {
             consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
 
-        } else {
+        } else if (establishmentType == FUEL_ESTABLISHMENT) {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
+            double tax  = (value / 100) * 35;
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);

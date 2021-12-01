@@ -90,7 +90,7 @@ public class ConsumerController {
         log.info("ConsumerController.setBalance - Start");
         log.debug("ConsumerController.setBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
 
-        consumerService.setBalance(cardNumber, value); //TODO should it return the new balance?
+        consumerService.setCardBalance(cardNumber, value); //TODO should it return the new balance?
     }
 
     @ResponseBody
