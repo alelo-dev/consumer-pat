@@ -12,9 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_BUY;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_SET_CARD_BALANCE;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_LIST_CONSUMERS;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_CREATE_CONSUMER;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_UPDATE_CONSUMER;
+import static br.com.alelo.consumer.consumerpat.constants.UrlConstants.URI_BASIC_REQUEST_MAPPING;
+
 
 @Controller
-@RequestMapping("/consumer")
+@RequestMapping(URI_BASIC_REQUEST_MAPPING)
 public class ConsumerController {
 
     @Autowired
@@ -27,20 +34,20 @@ public class ConsumerController {
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @GetMapping(value = "/consumerList")
+    @GetMapping(value = URI_LIST_CONSUMERS)
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
 
 
     /* Cadastrar novos clientes */
-    @PostMapping(value = "/createConsumer")
+    @PostMapping(value = URI_CREATE_CONSUMER)
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @PostMapping(value = "/updateConsumer")
+    @PostMapping(value = URI_UPDATE_CONSUMER)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
@@ -51,7 +58,7 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @GetMapping(value = "/setcardbalance")
+    @GetMapping(value = URI_SET_CARD_BALANCE)
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
@@ -76,7 +83,7 @@ public class ConsumerController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/buy")
+    @GetMapping(value = URI_BUY)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
