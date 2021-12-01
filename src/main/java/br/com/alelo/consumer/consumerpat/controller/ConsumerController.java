@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,7 +61,7 @@ public class ConsumerController {
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @PostMapping(value = URI_UPDATE_CONSUMER)
+    @PutMapping(value = URI_UPDATE_CONSUMER)
     public void updateConsumer(@RequestBody final Consumer consumer) {
 
         log.info("ConsumerController.updateConsumer - Start");
@@ -75,9 +76,9 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @GetMapping(value = URI_SET_CARD_BALANCE)
-    public void setBalance(@Param("cardNumber") final Integer cardNumber,
-                           @Param("value") final double value) { //TODO verify if this is a query param
+    @PostMapping(value = URI_SET_CARD_BALANCE)
+    public void setCardBalance(@Param("cardNumber") final Integer cardNumber,
+                               @Param("value") final double value) { //TODO verify if this is a query param
 
         log.info("ConsumerController.setBalance - Start");
         log.debug("ConsumerController.setBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
@@ -86,7 +87,7 @@ public class ConsumerController {
     }
 
     @ResponseBody
-    @GetMapping(value = URI_BUY)
+    @PostMapping(value = URI_BUY)
     public void buy(@Param("establishmentType") final int establishmentType,
                     @Param("establishmentName") final String establishmentName,
                     @Param("cardNumber") final int cardNumber,
