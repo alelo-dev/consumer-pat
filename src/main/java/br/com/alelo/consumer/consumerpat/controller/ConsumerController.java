@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.services.ConsumerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,7 +51,7 @@ public class ConsumerController {
 
     /* Cadastrar novos clientes */
     @PostMapping(value = URI_CREATE_CONSUMER)
-    public void createConsumer(@RequestBody Consumer consumer) {
+    public void createConsumer(@RequestBody final Consumer consumer) {
 
         log.info("ConsumerController.createConsumer - Start");
         log.debug("ConsumerController.createConsumer - Start - Input - Consumer: {}", consumer);
@@ -60,7 +61,7 @@ public class ConsumerController {
 
     // Não deve ser possível alterar o saldo do cartão
     @PostMapping(value = URI_UPDATE_CONSUMER)
-    public void updateConsumer(@RequestBody Consumer consumer) {
+    public void updateConsumer(@RequestBody final Consumer consumer) {
 
         log.info("ConsumerController.updateConsumer - Start");
         log.debug("ConsumerController.updateConsumer - Start - Input - Consumer: {}", consumer);
@@ -75,7 +76,8 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @GetMapping(value = URI_SET_CARD_BALANCE)
-    public void setBalance(int cardNumber, double value) { //TODO verify if this is a query param
+    public void setBalance(@Param("cardNumber") final Integer cardNumber,
+                           @Param("value") final double value) { //TODO verify if this is a query param
 
         log.info("ConsumerController.setBalance - Start");
         log.debug("ConsumerController.setBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
@@ -85,7 +87,11 @@ public class ConsumerController {
 
     @ResponseBody
     @GetMapping(value = URI_BUY)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    public void buy(@Param("establishmentType") final int establishmentType,
+                    @Param("establishmentName") final String establishmentName,
+                    @Param("cardNumber") final int cardNumber,
+                    @Param("productDescription") final String productDescription,
+                    @Param("value") final double value) {
 
         log.info("ConsumerController.buy - Start");
         log.debug("ConsumerController.buy - Start - Input - Establishment Type: {}, Establishment Name: {}, " +
