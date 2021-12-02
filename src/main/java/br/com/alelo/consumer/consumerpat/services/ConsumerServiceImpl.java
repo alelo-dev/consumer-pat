@@ -2,6 +2,8 @@ package br.com.alelo.consumer.consumerpat.services;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.helpers.purchase.factories.PurchaseFactory;
+import br.com.alelo.consumer.consumerpat.helpers.purchase.strategies.PurchaseStrategy;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import static java.util.Objects.nonNull;
 
@@ -25,6 +30,8 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     private final ConsumerRepository repository;
     private final ExtractRepository extractRepository;
+
+    private final PurchaseFactory purchaseFactory;
 
     @Override
     public List<Consumer> listAllConsumers() {
@@ -91,42 +98,13 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void buy(final int establishmentType, final String establishmentName, final int cardNumber, //TODO verify if it can return type Extract
                     final String productDescription, double value) {
 
-        Consumer consumer = null;
+        PurchaseStrategy strategy = purchaseFactory.findStrategy(establishmentType);
 
-        //https://stackoverflow.com/questions/24944906/java-call-class-method-based-on-value-of-variable
-        if (establishmentType == FOOD_ESTABLISHMENT) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByCardFoodCardNumber(cardNumber);
-            consumer.getCard()
-                    .setFoodCardBalance(consumer.getCard().getFoodCardBalance() - value);
-
-            repository.save(consumer);
-
-        } else if (establishmentType == DRUGSTORE_ESTABLISHMENT) {
-            consumer = repository.findByCardDrugstoreNumber(cardNumber);
-            consumer.getCard()
-                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreCardBalance() - value);
-
-            repository.save(consumer);
-
-        } else if (establishmentType == FUEL_ESTABLISHMENT) {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByCardFuelCardNumber(cardNumber);
-            consumer.getCard()
-                    .setFuelCardBalance(consumer.getCard().getFuelCardBalance() - value);
-            repository.save(consumer);
-        }
-
-        //TODO create exceptions NotFound
+        value = strategy.buy(cardNumber, value);
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
 
     }
+
 }
