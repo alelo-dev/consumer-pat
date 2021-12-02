@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import static br.com.alelo.consumer.consumerpat.helpers.validators.BalanceValidator.hasEnoughBalanceValidator;
+
 
 @Slf4j
 @Component
@@ -23,7 +25,7 @@ public class DrugstoreEstablishmentPurchase implements PurchaseStrategy {
 
     @Override
     public double buy(int cardNumber, double value) {
-        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber)
+        Consumer consumer = repository.findByCardDrugstoreCardNumber(cardNumber)
                 .orElseThrow(() -> {
                     log.warn("Consumer not found with Card {}", cardNumber);
                     return new PurchaseException(
@@ -32,7 +34,10 @@ public class DrugstoreEstablishmentPurchase implements PurchaseStrategy {
                             ValidationConstraints.CONSUMER_NOT_FOUND_BY_DRUGSTORE_CARD, "{}", String.valueOf(cardNumber)));
                 });
 
-        final double newBalance = consumer.getCard().getDrugstoreCardBalance() - value;
+        double currentBalance = consumer.getCard().getDrugstoreCardBalance();
+        hasEnoughBalanceValidator(currentBalance, value);
+
+        final double newBalance = currentBalance - value;
         consumer.getCard()
                 .setDrugstoreCardBalance(newBalance);
 

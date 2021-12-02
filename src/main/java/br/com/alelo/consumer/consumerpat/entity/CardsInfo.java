@@ -8,6 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
+
 @Data
 @Entity(name = "CARDS")
 public class CardsInfo {
@@ -28,10 +32,20 @@ public class CardsInfo {
     @Column(name = "FUEL_CARD_BALANCE")
     private double fuelCardBalance;
 
-    @Column(name = "DRUGSTORE_NUMBER")
-    private int drugstoreNumber;
+    @Column(name = "DRUGSTORE_CARD_NUMBER")
+    private int drugstoreCardNumber;
 
     @Column(name = "DRUGSTORE_CARD_BALANCE")
     private double drugstoreCardBalance;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (isNull(obj) || getClass() != obj.getClass()) return false;
+        CardsInfo card = (CardsInfo) obj;
+        return Objects.equals(id, card.id)
+                && Double.compare(card.foodCardBalance, foodCardBalance) == 0
+                && Double.compare(card.drugstoreCardBalance, drugstoreCardBalance) == 0
+                && Double.compare(card.fuelCardBalance, fuelCardBalance) == 0;
+
+    }
 }

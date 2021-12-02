@@ -1,7 +1,11 @@
 package br.com.alelo.consumer.consumerpat.services;
 
+import br.com.alelo.consumer.consumerpat.constants.ErrorCodeEnum;
+import br.com.alelo.consumer.consumerpat.constants.ErrorMessages;
+import br.com.alelo.consumer.consumerpat.constants.ValidationConstraints;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exceptions.PurchaseException;
 import br.com.alelo.consumer.consumerpat.helpers.purchase.factories.PurchaseFactory;
 import br.com.alelo.consumer.consumerpat.helpers.purchase.strategies.PurchaseStrategy;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
@@ -10,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -56,10 +59,26 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     @Transactional
+    // Não deve ser possível alterar o saldo do cartão
     public Consumer updateConsumer(final Consumer consumer) {
 
         log.info("ConsumerServiceImpl.updateConsumer - Start");
         log.debug("ConsumerServiceImpl.updateConsumer - Start - Input: {}", consumer);
+
+        Consumer oldRecord = repository.findById(consumer.getId())
+                .orElseThrow(() -> {
+                    throw new PurchaseException(
+                            ErrorCodeEnum.CONSUMER_NOT_FOUND,
+                            ErrorMessages.NOT_FOUND,
+                            ValidationConstraints.CONSUMER_NOT_FOUND_BY_ID);
+                });
+
+        if (!oldRecord.getCard().equals(consumer.getCard())) {
+            throw new PurchaseException(
+                    ErrorCodeEnum.BALANCE_UPDATE_NOT_ALLOWED,
+                    ErrorMessages.UNAUTHORIZED,
+                    ValidationConstraints.BALANCE_UPDATE_NOT_ALLOWED);
+        }
 
         Consumer updated = repository.save(consumer);
 
@@ -75,11 +94,11 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.info("ConsumerServiceImpl.setCardBalance - Start");
         log.debug("ConsumerServiceImpl.setCardBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
 
-        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber).orElse(null);
+        Consumer consumer = repository.findByCardDrugstoreCardNumber(cardNumber).orElse(null);
 
         if (nonNull(consumer)) {
             consumer.getCard()
-                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreNumber() + value);
+                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreCardNumber() + value);
         } else {
             consumer = repository.findByCardFoodCardNumber(cardNumber).orElse(null); //TODO Change this
             if (nonNull(consumer)) {

@@ -16,5 +16,5 @@ public interface ConsumerRepository extends CrudRepository<Consumer, Integer> {
 
     Optional<Consumer> findByCardFuelCardNumber(int cardNumber);
 
-    Optional<Consumer> findByCardDrugstoreNumber(int cardNumber);
+    Optional<Consumer> findByCardDrugstoreCardNumber(int cardNumber);
 }

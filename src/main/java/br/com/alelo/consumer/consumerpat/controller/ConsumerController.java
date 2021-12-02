@@ -47,7 +47,6 @@ public class ConsumerController {
     }
 
 
-    /* Cadastrar novos clientes */
     @PostMapping(value = URI_CREATE_CONSUMER)
     public ResponseEntity<Consumer> createConsumer(@RequestBody final Consumer consumer) {
 
@@ -63,7 +62,6 @@ public class ConsumerController {
         return response;
     }
 
-    // Não deve ser possível alterar o saldo do cartão
     @PutMapping(value = URI_UPDATE_CONSUMER)
     public ResponseEntity<Consumer> updateConsumer(@RequestBody final Consumer consumer) {
 
@@ -78,11 +76,6 @@ public class ConsumerController {
         return response;
     }
 
-    /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
-     */
     @PostMapping(value = URI_SET_CARD_BALANCE)
     public void setCardBalance(@RequestParam("cardNumber") final Integer cardNumber,
                                @RequestParam("value") final double value) {

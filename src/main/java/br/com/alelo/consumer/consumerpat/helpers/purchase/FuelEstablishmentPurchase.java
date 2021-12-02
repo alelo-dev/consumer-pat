@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import static br.com.alelo.consumer.consumerpat.helpers.validators.BalanceValidator.hasEnoughBalanceValidator;
+
 
 @Slf4j
 @Component
@@ -36,7 +38,10 @@ public class FuelEstablishmentPurchase implements PurchaseStrategy {
                             ValidationConstraints.CONSUMER_NOT_FOUND_BY_FUEL_CARD, "{}", String.valueOf(cardNumber)));
                 });
 
-        final double newBalance = consumer.getCard().getFuelCardBalance() - value;
+        double currentBalance = consumer.getCard().getFuelCardBalance();
+        hasEnoughBalanceValidator(currentBalance, value);
+
+        final double newBalance = currentBalance - value;
         consumer.getCard()
                 .setFuelCardBalance(newBalance);
 

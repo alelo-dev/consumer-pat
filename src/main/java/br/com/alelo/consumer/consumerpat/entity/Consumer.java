@@ -43,4 +43,5 @@ public class Consumer {
     @JoinColumn(name = "cards_id", referencedColumnName = "id")
     private CardsInfo card;
 
+
 }
