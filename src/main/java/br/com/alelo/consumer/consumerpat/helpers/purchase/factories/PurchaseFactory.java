@@ -20,7 +20,7 @@ public class PurchaseFactory {
         createStrategy(purchaseStrategySet);
     }
 
-    public PurchaseStrategy findStrategy(int establishmentType) {
+    public PurchaseStrategy findStrategy(final int establishmentType) {
         PurchaseNamesEnum strategyName = PurchaseNamesEnum.getPurchaseEnum(establishmentType);
         return strategies.get(strategyName);
     }

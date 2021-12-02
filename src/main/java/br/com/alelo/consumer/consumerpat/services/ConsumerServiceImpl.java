@@ -5,6 +5,7 @@ import br.com.alelo.consumer.consumerpat.constants.ErrorMessages;
 import br.com.alelo.consumer.consumerpat.constants.ValidationConstraints;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exceptions.OperationException;
 import br.com.alelo.consumer.consumerpat.exceptions.PurchaseException;
 import br.com.alelo.consumer.consumerpat.helpers.purchase.factories.PurchaseFactory;
 import br.com.alelo.consumer.consumerpat.helpers.purchase.strategies.PurchaseStrategy;
@@ -14,10 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Slf4j
@@ -106,10 +109,16 @@ public class ConsumerServiceImpl implements ConsumerService {
                         .setFoodCardBalance(consumer.getCard().getFoodCardNumber() + value);
             } else {
                 consumer = repository.findByCardFuelCardNumber(cardNumber).orElse(null);
-                consumer.getCard() //TODO verify null pointer
+                if (isNull(consumer)) {
+                    throw new OperationException(
+                            ErrorCodeEnum.CONSUMER_NOT_FOUND,
+                            ErrorMessages.NOT_FOUND,
+                            StringUtils.replace(ValidationConstraints.CONSUMER_NOT_FOUND_BY_ID, "{}", String.valueOf(cardNumber))
+                    );
+                }
+                consumer.getCard()
                         .setFuelCardBalance(consumer.getCard().getFuelCardNumber() + value);
             }
-
         }
         repository.save(consumer);
     }
@@ -140,7 +149,6 @@ public class ConsumerServiceImpl implements ConsumerService {
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
-
     }
 
 }

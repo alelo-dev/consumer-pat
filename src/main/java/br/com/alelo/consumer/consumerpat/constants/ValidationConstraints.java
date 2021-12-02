@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationConstraints {
 
-    public static final String CONSUMER_NOT_FOUND_BY_ID = "Consumer with not found";
+    public static final String CONSUMER_NOT_FOUND_BY_ID = "Consumer not found";
 
     public static final String CONSUMER_NOT_FOUND_BY_FOOD_CARD = "Consumer with Food Card Number {} not found";
     public static final String CONSUMER_NOT_FOUND_BY_FUEL_CARD = "Consumer with Fuel Card Number {} not found";
