@@ -10,18 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 import static java.util.Objects.nonNull;
-
-import static br.com.alelo.consumer.consumerpat.constants.EstablishmentTypes.FOOD_ESTABLISHMENT;
-import static br.com.alelo.consumer.consumerpat.constants.EstablishmentTypes.DRUGSTORE_ESTABLISHMENT;
-import static br.com.alelo.consumer.consumerpat.constants.EstablishmentTypes.FUEL_ESTABLISHMENT;
 
 @Slf4j
 @Service
@@ -35,7 +29,15 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     public List<Consumer> listAllConsumers() {
-        return repository.findAll();
+
+        log.info("ConsumerServiceImpl.listAllConsumers - Start - No Inputs");
+        log.debug("ConsumerServiceImpl.listAllConsumers - Start - No Inputs");
+
+        List<Consumer> consumers = repository.findAll();
+
+        log.debug("ConsumerServiceImpl.listAllConsumers - End - No Inputs. Output {}", consumers);
+
+        return consumers;
     }
 
     @Override
@@ -43,9 +45,13 @@ public class ConsumerServiceImpl implements ConsumerService {
     public Consumer createConsumer(final Consumer consumer) {
 
         log.info("ConsumerServiceImpl.createConsumer - Start");
-        log.debug("ConsumerServiceImpl.createConsumer - Start - Input - Consumer: {}", consumer);
+        log.debug("ConsumerServiceImpl.createConsumer - Start - Input: {}", consumer);
 
-        return repository.save(consumer);
+        Consumer created = repository.save(consumer);
+
+        log.debug("ConsumerServiceImpl.createConsumer - Start - Input: {}. Output: {}", consumer, created);
+
+        return created;
     }
 
     @Override
@@ -53,9 +59,13 @@ public class ConsumerServiceImpl implements ConsumerService {
     public Consumer updateConsumer(final Consumer consumer) {
 
         log.info("ConsumerServiceImpl.updateConsumer - Start");
-        log.debug("ConsumerServiceImpl.updateConsumer - Start - Input - Consumer: {}", consumer);
+        log.debug("ConsumerServiceImpl.updateConsumer - Start - Input: {}", consumer);
 
-        return repository.save(consumer);
+        Consumer updated = repository.save(consumer);
+
+        log.debug("ConsumerServiceImpl.updateConsumer - Start - Input: {}. Output: {}", consumer, updated);
+
+        return updated;
     }
 
     @Override
@@ -65,19 +75,19 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.info("ConsumerServiceImpl.setCardBalance - Start");
         log.debug("ConsumerServiceImpl.setCardBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
 
-        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber); //TODO VERIFY THIS - does it return null or []
+        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber).orElse(null);
 
         if (nonNull(consumer)) {
             consumer.getCard()
                     .setDrugstoreCardBalance(consumer.getCard().getDrugstoreNumber() + value);
         } else {
-            consumer = repository.findByCardFoodCardNumber(cardNumber);
+            consumer = repository.findByCardFoodCardNumber(cardNumber).orElse(null); //TODO Change this
             if (nonNull(consumer)) {
                 consumer.getCard()
                         .setFoodCardBalance(consumer.getCard().getFoodCardNumber() + value);
             } else {
-                consumer = repository.findByCardFuelCardNumber(cardNumber);
-                consumer.getCard()
+                consumer = repository.findByCardFuelCardNumber(cardNumber).orElse(null);
+                consumer.getCard() //TODO verify null pointer
                         .setFuelCardBalance(consumer.getCard().getFuelCardNumber() + value);
             }
 
@@ -98,9 +108,16 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void buy(final int establishmentType, final String establishmentName, final int cardNumber, //TODO verify if it can return type Extract
                     final String productDescription, double value) {
 
-        PurchaseStrategy strategy = purchaseFactory.findStrategy(establishmentType);
+        log.info("ConsumerServiceImpl.buy - Start - Input - [{}, {}, {}, {}]",
+                establishmentType, establishmentName, productDescription, value);
+        log.debug("ConsumerServiceImpl.buy - Start - Input - [{}, {}, {}, {}, {}]",
+                establishmentType, establishmentName, cardNumber, productDescription, value);
 
+        PurchaseStrategy strategy = purchaseFactory.findStrategy(establishmentType);
         value = strategy.buy(cardNumber, value);
+
+        log.debug("ConsumerServiceImpl.buy - Strategy found: {}", strategy);
+        log.debug("ConsumerServiceImpl.buy - New Value after Strategy: {}", value);
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);

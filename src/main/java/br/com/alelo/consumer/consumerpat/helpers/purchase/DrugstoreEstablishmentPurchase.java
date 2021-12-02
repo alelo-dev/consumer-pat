@@ -5,9 +5,11 @@ import br.com.alelo.consumer.consumerpat.helpers.purchase.enums.PurchaseNamesEnu
 import br.com.alelo.consumer.consumerpat.helpers.purchase.strategies.PurchaseStrategy;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DrugstoreEstablishmentPurchase implements PurchaseStrategy {
@@ -16,7 +18,11 @@ public class DrugstoreEstablishmentPurchase implements PurchaseStrategy {
 
     @Override
     public double buy(int cardNumber, double value) {
-        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber);
+        Consumer consumer = repository.findByCardDrugstoreNumber(cardNumber)
+                .orElseThrow(() -> {
+                    log.warn("Consumer not found with Card {}", cardNumber);
+                    return new IllegalArgumentException(""); //TODO Change Exception to not found
+                });
 
         final double newBalance = consumer.getCard().getDrugstoreCardBalance() - value;
         consumer.getCard()

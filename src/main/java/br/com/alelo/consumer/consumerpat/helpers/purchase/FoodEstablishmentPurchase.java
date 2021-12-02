@@ -5,9 +5,13 @@ import br.com.alelo.consumer.consumerpat.helpers.purchase.enums.PurchaseNamesEnu
 import br.com.alelo.consumer.consumerpat.helpers.purchase.strategies.PurchaseStrategy;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FoodEstablishmentPurchase implements PurchaseStrategy {
@@ -19,7 +23,12 @@ public class FoodEstablishmentPurchase implements PurchaseStrategy {
         double cashback  = (value / 100) * 10;
         value = value - cashback;
 
-        Consumer consumer = repository.findByCardFoodCardNumber(cardNumber);
+        Consumer consumer = repository.findByCardFoodCardNumber(cardNumber)
+                .orElseThrow(() -> {
+                    log.warn("Consumer not found with Card {}", cardNumber);
+                    return new IllegalArgumentException(""); //TODO Change Exception to not found
+                });
+
         final double newBalance = consumer.getCard()
                 .getFoodCardBalance() - value;
 
