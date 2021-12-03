@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.constants;
 
 public final class UrlConstants {
 
-    public static final String API_VERSION = "v1";
+    public static final String API_VERSION = "/v1";
     public static final String URI_BASIC_REQUEST_MAPPING = API_VERSION + "/consumer";
 
     public static final String URI_LIST_CONSUMERS = "/consumerList";

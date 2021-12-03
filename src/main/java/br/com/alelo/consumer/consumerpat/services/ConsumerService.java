@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.services;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.Extract;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface ConsumerService {
 
     Consumer updateConsumer(final Consumer consumer);
 
-    void setCardBalance(final int cardNumber, final double value);
+    Consumer setCardBalance(final int cardNumber, final double value);
 
-    void buy(final int establishmentType, final String establishmentName, final int cardNumber,
-             final String productDescription, double value);
+    Extract buy(final int establishmentType, final String establishmentName, final int cardNumber,
+                final String productDescription, double value);
 
 }

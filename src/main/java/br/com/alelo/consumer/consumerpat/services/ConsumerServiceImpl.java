@@ -92,7 +92,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     @Transactional
-    public void setCardBalance(final int cardNumber, final double value) {
+    public Consumer setCardBalance(final int cardNumber, final double value) {
 
         log.info("ConsumerServiceImpl.setCardBalance - Start");
         log.debug("ConsumerServiceImpl.setCardBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
@@ -101,12 +101,12 @@ public class ConsumerServiceImpl implements ConsumerService {
 
         if (nonNull(consumer)) {
             consumer.getCard()
-                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreCardNumber() + value);
+                    .setDrugstoreCardBalance(consumer.getCard().getDrugstoreCardBalance() + value);
         } else {
             consumer = repository.findByCardFoodCardNumber(cardNumber).orElse(null); //TODO Change this
             if (nonNull(consumer)) {
                 consumer.getCard()
-                        .setFoodCardBalance(consumer.getCard().getFoodCardNumber() + value);
+                        .setFoodCardBalance(consumer.getCard().getFoodCardBalance() + value);
             } else {
                 consumer = repository.findByCardFuelCardNumber(cardNumber).orElse(null);
                 if (isNull(consumer)) {
@@ -117,10 +117,12 @@ public class ConsumerServiceImpl implements ConsumerService {
                     );
                 }
                 consumer.getCard()
-                        .setFuelCardBalance(consumer.getCard().getFuelCardNumber() + value);
+                        .setFuelCardBalance(consumer.getCard().getFuelCardBalance() + value);
             }
         }
         repository.save(consumer);
+
+        return consumer;
     }
 
     /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -133,7 +135,7 @@ public class ConsumerServiceImpl implements ConsumerService {
      */
     @Override
     @Transactional
-    public void buy(final int establishmentType, final String establishmentName, final int cardNumber, //TODO verify if it can return type Extract
+    public Extract buy(final int establishmentType, final String establishmentName, final int cardNumber,
                     final String productDescription, double value) {
 
         log.info("ConsumerServiceImpl.buy - Start - Input - [{}, {}, {}, {}]",
@@ -149,6 +151,8 @@ public class ConsumerServiceImpl implements ConsumerService {
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
+
+        return extract;
     }
 
 }

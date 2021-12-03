@@ -38,13 +38,6 @@ public class Extract {
     @Column(name = "VALUE")
     private double value;
 
-    public Extract(final String productDescription, final Date dateBuy, final int cardNumber, final double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
     public Extract(final String establishmentName, final String productDescription, final Date dateBuy,
                    final int cardNumber, final double value) {
         this.establishmentName = establishmentName;

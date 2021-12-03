@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.services.ConsumerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,30 +77,42 @@ public class ConsumerController {
         return response;
     }
 
-    @PostMapping(value = URI_SET_CARD_BALANCE)
-    public void setCardBalance(@RequestParam("cardNumber") final Integer cardNumber,
+    @PutMapping(value = URI_SET_CARD_BALANCE)
+    public ResponseEntity<Consumer> setCardBalance(@RequestParam("cardNumber") final Integer cardNumber,
                                @RequestParam("value") final double value) {
 
         log.info("ConsumerController.setBalance - Start");
         log.debug("ConsumerController.setBalance - Start - Input - Card Number: {}, Value: {}", cardNumber, value);
 
-        consumerService.setCardBalance(cardNumber, value); //TODO should it return the new balance?
+        Consumer updated = consumerService.setCardBalance(cardNumber, value);
+        ResponseEntity<Consumer> response = ResponseEntity.ok(updated);
+
+        log.debug("ConsumerController.setCardBalance - End - Input: [{}, {}], Output {}", cardNumber, value, updated);
+
+        return response;
     }
 
     @ResponseBody
     @PostMapping(value = URI_BUY)
-    public void buy(@RequestParam("establishmentType") final int establishmentType,
-                    @RequestParam("establishmentName") final String establishmentName,
-                    @RequestParam("cardNumber") final int cardNumber,
-                    @RequestParam("productDescription") final String productDescription,
-                    @RequestParam("value") final double value) {
+    public ResponseEntity<Extract> buy(@RequestParam("establishmentType") final int establishmentType,
+                                       @RequestParam("establishmentName") final String establishmentName,
+                                       @RequestParam("cardNumber") final int cardNumber,
+                                       @RequestParam("productDescription") final String productDescription,
+                                       @RequestParam("value") final double value) {
 
         log.info("ConsumerController.buy - Start");
         log.debug("ConsumerController.buy - Start - Input - Establishment Type: {}, Establishment Name: {}, " +
                 "Card Number: {}, Product Description: {}, Value: {}", establishmentType, establishmentName, cardNumber,
                 productDescription, value);
 
-        consumerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+        Extract extract = consumerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+        ResponseEntity<Extract> response = ResponseEntity.ok(extract);
+
+        log.debug("ConsumerController.buy - Start - Input - Establishment Type: {}, Establishment Name: {}, " +
+                        "Card Number: {}, Product Description: {}, Value: {}. Output {}", establishmentType, establishmentName, cardNumber,
+                productDescription, value, extract);
+
+        return response;
     }
 
 }

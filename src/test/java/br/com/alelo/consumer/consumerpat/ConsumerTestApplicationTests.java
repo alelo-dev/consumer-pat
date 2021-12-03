@@ -10,4 +10,9 @@ class ConsumerTestApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	public void initApplication() {
+		ConsumerTestApplication.main(new String[]{});
+	}
+
 }
