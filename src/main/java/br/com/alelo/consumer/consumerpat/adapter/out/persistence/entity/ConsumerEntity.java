@@ -1,70 +1,154 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.adapter.out.persistence.entity;
 
-
-import jdk.jfr.DataAmount;
-import lombok.Data;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-
-@Data
 @Entity
-public class Consumer {
+@Table(name = "consumer")
+public class ConsumerEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
+  private String name;
+  private Integer documentNumber;
+  private Date birthDate;
+  private Integer mobilePhoneNumber;
+  private Integer residencePhoneNumber;
+  private Integer phoneNumber;
+  private String email;
+  private String street;
+  private Integer number;
+  private String city;
+  private String country;
+  private Integer portalCode;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+  @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CardEntity> cards = new ArrayList<CardEntity>();
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+  public Integer getId() {
+    return id;
+  }
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+  public String getName() {
+    return name;
+  }
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
-    }
+  public Integer getDocumentNumber() {
+    return documentNumber;
+  }
 
+  public void setDocumentNumber(Integer documentNumber) {
+    this.documentNumber = documentNumber;
+  }
+
+  public Date getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  public Integer getMobilePhoneNumber() {
+    return mobilePhoneNumber;
+  }
+
+  public void setMobilePhoneNumber(Integer mobilePhoneNumber) {
+    this.mobilePhoneNumber = mobilePhoneNumber;
+  }
+
+  public Integer getResidencePhoneNumber() {
+    return residencePhoneNumber;
+  }
+
+  public void setResidencePhoneNumber(Integer residencePhoneNumber) {
+    this.residencePhoneNumber = residencePhoneNumber;
+  }
+
+  public Integer getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(Integer phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getStreet() {
+    return street;
+  }
+
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  public Integer getNumber() {
+    return number;
+  }
+
+  public void setNumber(Integer number) {
+    this.number = number;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public String getCountry() {
+    return country;
+  }
+
+  public void setCountry(String country) {
+    this.country = country;
+  }
+
+  public Integer getPortalCode() {
+    return portalCode;
+  }
+
+  public void setPortalCode(Integer portalCode) {
+    this.portalCode = portalCode;
+  }
+
+  public void addCard(CardEntity card) {
+    cards.add(card);
+    card.setConsumer(this);
+  }
+  
+  public List<CardEntity> getCards() {
+    return cards;
+  }
+
+  public void setCards(List<CardEntity> cards) {
+    this.cards = cards;
+  }
 
 }

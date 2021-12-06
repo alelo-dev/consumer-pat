@@ -1,49 +1,68 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.adapter.out.persistence.entity;
 
-import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-
-@Data
 @Entity
-public class Extract {
+public class ExtractEntity {
 
-    @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
+  private String establishmentName;
+  private String productDescription;
+  private Date dateBuy;
+  private Integer cardNumber;
+  private Double value;
 
+  public Integer getId() {
+    return id;
+  }
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+  public String getEstablishmentName() {
+    return establishmentName;
+  }
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+  public void setEstablishmentName(String establishmentName) {
+    this.establishmentName = establishmentName;
+  }
+
+  public String getProductDescription() {
+    return productDescription;
+  }
+
+  public void setProductDescription(String productDescription) {
+    this.productDescription = productDescription;
+  }
+
+  public Date getDateBuy() {
+    return dateBuy;
+  }
+
+  public void setDateBuy(Date dateBuy) {
+    this.dateBuy = dateBuy;
+  }
+
+  public Integer getCardNumber() {
+    return cardNumber;
+  }
+
+  public void setCardNumber(Integer cardNumber) {
+    this.cardNumber = cardNumber;
+  }
+
+  public Double getValue() {
+    return value;
+  }
+
+  public void setValue(Double value) {
+    this.value = value;
+  }
 }
