@@ -17,3 +17,14 @@ Faça um fork do projeto, clone o mesmo, abra na sua IDE de preferência e execu
 Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
 
  ***Atenção: Não inclua nenhuma lib ou framework***  
+ 
+## Arquitetura
+
+Esse projeto adotou a Clean Architecture. Para maiores detalhes sobre a arquitetura, segue o link (https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+Esse tipo de arquitetura tem como benefícios:
+
+- Independência de frameworks
+- Independência de banco de dados.
+- Independência de interface do usuário.
+- Testável;
