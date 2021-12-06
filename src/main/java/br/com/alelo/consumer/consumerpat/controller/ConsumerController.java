@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
-import br.com.alelo.consumer.consumerpat.service.impl.ConsumerService;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 import br.com.alelo.consumer.consumerpat.dto.ExtractDTO;
 import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessSaldoException;
-import br.com.alelo.consumer.consumerpat.service.impl.ExtractFactory;
+import br.com.alelo.consumer.consumerpat.service.ExtractFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

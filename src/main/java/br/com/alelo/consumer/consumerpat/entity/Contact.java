@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Builder
 @Data
 @Entity
+@Table(name="TB_CONTACT")
 public class Contact {
 
     @Id

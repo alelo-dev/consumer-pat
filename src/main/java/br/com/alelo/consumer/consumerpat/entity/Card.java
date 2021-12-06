@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Builder
 @Data
 @Entity
+@Table(name="TB_CARD")
 public class Card {
 
     @Id

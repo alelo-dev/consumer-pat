@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.service.impl;
+package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.dto.ExtractDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
@@ -7,7 +7,6 @@ import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessSaldoException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import br.com.alelo.consumer.consumerpat.service.ExtractStrategy;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

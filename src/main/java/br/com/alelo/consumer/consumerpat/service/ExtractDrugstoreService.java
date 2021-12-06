@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.service.impl;
+package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.dto.ExtractDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
@@ -7,7 +7,6 @@ import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessSaldoException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import br.com.alelo.consumer.consumerpat.service.ExtractStrategy;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class ExtractFuelService implements ExtractStrategy {
+public class ExtractDrugstoreService implements ExtractStrategy {
 
     private final CardRepository cardRepository;
     private final ExtractRepository extractRepository;
@@ -25,12 +24,10 @@ public class ExtractFuelService implements ExtractStrategy {
     public void buy(ExtractDTO dto) throws BusinessSaldoException {
         Optional<Card> cardOp = cardRepository.findCardByCardNumber(dto.getCardNumber());
         if(cardOp.isPresent()) {
-            Card card = cardOp.get();
+            var card = cardOp.get();
             if(dto.getValue() > card.getCardBalance()) {
                 throw new BusinessSaldoException("Saldo insuficiente para efetuar a compra!");
             }
-            Double tax  = (dto.getValue() / 100) * 35;
-            dto.setValue(dto.getValue() + tax);
             card.setCardBalance(card.getCardBalance() - dto.getValue());
             cardRepository.save(card);
             extractRepository.save(Extract
@@ -38,7 +35,7 @@ public class ExtractFuelService implements ExtractStrategy {
                     .value(dto.getValue())
                     .card(card)
                     .dateBuy(new Date())
-                    .establishment(EstablishmentType.FOOD)
+                    .establishment(EstablishmentType.DRUGSTORE)
                     .productDescription(dto.getProductDescription())
                     .build());
         }
@@ -46,7 +43,6 @@ public class ExtractFuelService implements ExtractStrategy {
 
     @Override
     public EstablishmentType getStrategyName() {
-        return EstablishmentType.FUEL;
+        return EstablishmentType.DRUGSTORE;
     }
-
 }

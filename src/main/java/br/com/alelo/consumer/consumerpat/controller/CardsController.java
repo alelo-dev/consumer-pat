@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.dto.BalanceDTO;
-import br.com.alelo.consumer.consumerpat.service.impl.CardService;
+import br.com.alelo.consumer.consumerpat.service.CardService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

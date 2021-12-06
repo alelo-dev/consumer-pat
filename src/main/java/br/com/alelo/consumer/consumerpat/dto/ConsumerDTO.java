@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
+import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -34,4 +35,13 @@ public class ConsumerDTO {
     private String city;
     private String country;
     private int postalCode;
+
+    public EstablishmentType getType() {
+        if(foodCardNumber != null) {
+            return EstablishmentType.FOOD;
+        } else if(fuelCardNumber != null) {
+            return EstablishmentType.FUEL;
+        }
+        return EstablishmentType.DRUGSTORE;
+    }
 }

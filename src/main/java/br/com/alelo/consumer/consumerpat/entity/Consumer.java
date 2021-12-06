@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Table(name="TB_CONSUMER")
 public class Consumer {
 
     @Id
