@@ -1,9 +1,9 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.dto.BalanceDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,9 +14,9 @@ public class CardService {
 
     private final CardRepository cardRepository;
 
-    public void setBalance(BalanceDTO dto) {
-        var card = cardRepository.findCardByCardNumber(dto.getCardNumber()).orElseThrow();
-        card.setCardBalance(card.getCardBalance() + dto.getValue());
+    public void setBalance(Integer cardNumber , Double value) throws ChangeSetPersister.NotFoundException {
+        var card = cardRepository.findCardByCardNumber(cardNumber).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        card.setCardBalance(card.getCardBalance() + value);
         cardRepository.save(card);
     }
 
