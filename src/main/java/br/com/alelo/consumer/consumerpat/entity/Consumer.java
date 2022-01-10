@@ -1,70 +1,54 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
+import java.util.Set;
 
 
-@Data
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Consumer {
+public class Consumer implements Serializable {
 
+    private static final long serialVersionUID = 1718742452748069777L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private String idConsumer;
+    private String name;
+    private String documentNumber;
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    @OneToMany(targetEntity=Contact.class,cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "CONSUMER_ID", referencedColumnName = "idConsumer")
+    private Set<Contact> contacts;
 
     //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @OneToMany(targetEntity=Address.class,cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "CONSUMER_ID", referencedColumnName = "idConsumer")
+    private Set<Address> addresses;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    @OneToMany(targetEntity=Card.class,cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "CONSUMER_ID", referencedColumnName = "idConsumer")
+    private Set<Card> cards;
+    /*private Long foodCardNumber;
+    private BigDecimal foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    private Long fuelCardNumber;
+    private BigDecimal fuelCardBalance;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
-    }
-
-
+    private Long drugstoreNumber;
+    private BigDecimal drugstoreCardBalance;*/
 }

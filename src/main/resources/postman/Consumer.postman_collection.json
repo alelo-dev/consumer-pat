@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "93deaf2f-6da0-4f36-a060-1ed6f461290d",
+		"name": "Consumer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createConsumer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"name\" : \"Fulano de Tal\",\r\n    \"documentNumber\" : \"15954940\",\r\n    \"birthDate\" : \"25061983\",\r\n    \"contacts\" : [\r\n        {\r\n            \"mobilePhoneNumber\": \"1632568978\",\r\n            \"residencePhoneNumber\" : \"\",\r\n            \"phoneNumber\" : \"\",\r\n            \"email\" : \"fulano@gmail.com\"\r\n        }\r\n    ],\r\n    \"address\" : [\r\n        {\r\n            \"street\" : \"Rua Tal\",\r\n            \"number\" : \"10\",\r\n            \"city\" : \"São Paulo\",\r\n            \"country\" : \"Brazil\",\r\n            \"postalCode\" : \"11200000\"\r\n        }\r\n    ],\r\n    \"cards\" : [\r\n        {\r\n            \"cardNumber\" : \"1111222233334444\",\r\n            \"cardBalance\" : \"150.00\",\r\n            \"typeCard\" : {\r\n                \"idTypeCard\" : 3,\r\n                \"typeCard\" : \"COMBUSTIVEL\"\r\n            }\r\n        },\r\n         {\r\n             \"cardNumber\" : \"8888222233334444\",\r\n            \"cardBalance\" : \"50.00\",            \r\n            \"typeCard\" : {\r\n                \"idTypeCard\" : 2,\r\n                \"typeCard\" : \"FARMACIA\"\r\n            }\r\n        },\r\n         {\r\n             \"cardNumber\" : \"5555222233339999\",\r\n            \"cardBalance\" : \"150.00\",            \r\n            \"typeCard\" : {\r\n                \"idTypeCard\" : 1,\r\n                \"typeCard\" : \"ALIMENTACAO\"\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listAllConsumer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/consumers?page=0&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateConsumer",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idConsumer\": \"dedc058e-aaba-40dd-a49d-c3c96dc68bb5\",\r\n    \"name\": \"Fulano de Tal\",\r\n    \"documentNumber\": \"15954940\",\r\n    \"birthDate\": \"1985-01-01T06:57:41.983+00:00\",\r\n    \"contacts\": [\r\n        {\r\n            \"idContact\": \"893f0a49-fbd6-41c2-9a65-dfceb33961c2\",\r\n            \"mobilePhoneNumber\": \"1632568978\",\r\n            \"residencePhoneNumber\": \"\",\r\n            \"phoneNumber\": \"\",\r\n            \"email\": \"fulanoteste@gmail.com\"\r\n        }\r\n    ],\r\n    \"addresses\": [\r\n        {\r\n            \"idAdress\": \"0b307882-cec6-463d-9c76-e9e4bd7b6d9a\",\r\n            \"street\": \"Rua Tal\",\r\n            \"number\": 10,\r\n            \"city\": \"São Paulo\",\r\n            \"country\": \"Brazil\",\r\n            \"postalCode\": \"11200000\"\r\n        }\r\n    ],\r\n    \"cards\": [\r\n        {\r\n            \"idCard\": \"2b0304ec-411f-4bc7-b8bc-3dcf8e87e2f6\",\r\n            \"cardNumber\": 5555222233339999,            \r\n            \"typeCard\": {\r\n                \"idTypeCard\": 1,\r\n                \"typeCard\": \"ALIMENTACAO\"\r\n            }\r\n        },\r\n        {\r\n            \"idCard\": \"fec0cdaf-4912-417a-b772-e5a81e675635\",\r\n            \"cardNumber\": 8888222233334444,            \r\n            \"typeCard\": {\r\n                \"idTypeCard\": 2,\r\n                \"typeCard\": \"FARMACIA\"\r\n            }\r\n        },\r\n        {\r\n            \"idCard\": \"0ce607ef-cd83-44fc-8050-89e12a0bbed4\",\r\n            \"cardNumber\": 1111222233334444,            \r\n            \"typeCard\": {\r\n                \"idTypeCard\": 3,\r\n                \"typeCard\": \"COMBUSTIVEL\"\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumers/dedc058e-aaba-40dd-a49d-c3c96dc68bb5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumers",
+						"dedc058e-aaba-40dd-a49d-c3c96dc68bb5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setBalance",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/consumers/set-card-balance/5555222233339999/50.5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumers",
+						"set-card-balance",
+						"5555222233339999",
+						"50.5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"card\" : {\r\n        \"cardNumber\" : \"5555222233339999\",\r\n         \"typeCard\": \"ALIMENTACAO\"        \r\n    },\r\n    \"idEstablishment\" : \"1\",\r\n    \"productDescription\" : \"cerveja\",\r\n    \"value\" : \"50.59\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumers/buy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumers",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
