@@ -46,6 +46,15 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(consumer);
     }
 
+    @PatchMapping("/{idConsumer}")
+    public ResponseEntity<Consumer> updateConsumers(@Valid @RequestBody Consumer consumer,
+                                                    @PathVariable Long idConsumer){
+
+        consumer.setId(idConsumer);
+        consumer = service.updateConsumers(consumer);
+        return ResponseEntity.ok(consumer);
+    }
+
     // Deve atualizar o saldo dos cartoes
     @GetMapping("/setcardbalance/cardNumber/{cardNumber}/value/{value}/brands/{brands}")
     public ResponseEntity<Consumer> setBalance(@Valid
