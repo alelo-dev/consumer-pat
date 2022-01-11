@@ -6,6 +6,8 @@ import br.com.alelo.consumer.consumerpat.enums.Brands;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,8 +24,8 @@ public class ConsumerService {
     private ExtractRepository extractRepository;
 
     //listat todos os Clientes
-    public List<Consumer> listAllConsumers () {
-        return repository.findAll();
+    public Page<Consumer> listAllConsumers (Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     //salver clientes

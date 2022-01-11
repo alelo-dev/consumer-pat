@@ -6,6 +6,8 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,10 @@ public class ConsumerController {
     private ConsumerService service;
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @RequestMapping("/consumerList")
-    public ResponseEntity<List<Consumer>> listAllConsumers() {
-        List<Consumer> consumer = service.listAllConsumers();
+    @RequestMapping("/consumerList/page")
+    public ResponseEntity<Page<Consumer>> listAllConsumers(Pageable pageable) {
+        Page<Consumer> consumer = service.listAllConsumers(pageable);
+
         return ResponseEntity.ok(consumer);
     }
 
