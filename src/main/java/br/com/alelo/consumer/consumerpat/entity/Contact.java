@@ -8,33 +8,39 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "cards")
-public class Card implements Serializable {
+@Table(name = "contacts")
+public class Contact implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "consumer_id")
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private BigInteger number;
+    private String street;
 
-    @Column(nullable = false)
-    private CardType type;
+    private String city;
 
-    @Column(nullable = false)
-    private BigDecimal funds;
+    private String country;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "mobile_number")
+    private String mobileNumber;
+
+    @Column(name = "telephone_number")
+    private String telephoneNumber;
+
+    private String email;
 
     @JsonIgnore
-    @ManyToOne
+    @OneToOne
+    @MapsId
     @JoinColumn(name = "consumer_id")
     private Consumer consumer;
-
 }

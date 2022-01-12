@@ -1,64 +1,66 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Objects;
-
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.*;
 
 @Data
 @Entity
-public class Consumer {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "consumers")
+public class Consumer implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
+    @Column(name = "document_number", nullable = false)
     private String documentNumber;
 
-    private Date birthDate;
+    @Column(name = "birth_date")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate birthDate;
 
-    //contacts
-    private String mobilePhoneNumber; //+55 11 98374-2978
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Contact contact;
 
-    private String residencePhoneNumber;
+    @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cards;
 
-    private String phoneNumber;
+    public void setContact(Contact contact) {
+        if (contact == null) {
+            if (this.contact != null) {
+                this.contact.setConsumer(null);
+            }
+        } else {
+            contact.setConsumer(this);
+        }
+        this.contact = contact;
+    }
 
-    private String email;
+    public void addCard(Card card) {
+        if (card != null) {
+            if (cards == null) {
+                cards = new ArrayList<>();
+            }
+            card.setConsumer(this);
+            cards.add(card);
+        }
+    }
 
-    //Address
-    private String street;
-
-    private String number;
-
-    private String city;
-
-    private String country;
-
-    private String postalCode;
-
-    //cards 4444 5555 66667777
-    private Long foodCardNumber;
-
-    private BigDecimal foodCardBalance;
-
-    private Long fuelCardNumber;
-
-    private BigDecimal fuelCardBalance;
-
-    private String drugstoreNumber;
-
-    private BigDecimal drugstoreCardBalance;
+    public void removeCard(Card card) {
+        cards.remove(card);
+        card.setConsumer(null);
+    }
 
 
 }
