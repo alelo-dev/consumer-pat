@@ -17,12 +17,15 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
-    @Autowired
-    ConsumerRepository repository;
+    private final ConsumerRepository repository;
+
+    private final ExtractRepository extractRepository;
 
     @Autowired
-    ExtractRepository extractRepository;
-
+    public ConsumerController(ConsumerRepository repository, ExtractRepository extractRepository) {
+        this.repository = repository;
+        this.extractRepository = extractRepository;
+    }
 
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
@@ -53,8 +56,7 @@ public class ConsumerController {
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+        Consumer consumer = repository.findByDrugstoreNumber(cardNumber);
 
         if(consumer != null) {
             // é cartão de farmácia
@@ -78,7 +80,7 @@ public class ConsumerController {
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
+        Consumer consumer;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -90,7 +92,7 @@ public class ConsumerController {
 
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
+            double cashback  = (value / 100D) * 10D;
             value = value - cashback;
 
             consumer = repository.findByFoodCardNumber(cardNumber);
@@ -104,7 +106,7 @@ public class ConsumerController {
 
         } else {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
+            double tax  = (value / 100) * 35;
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);
