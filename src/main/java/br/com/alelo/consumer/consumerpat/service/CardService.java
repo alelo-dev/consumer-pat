@@ -1,20 +1,19 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Card;
-import br.com.alelo.consumer.consumerpat.entity.CardType;
-import br.com.alelo.consumer.consumerpat.entity.Transaction;
-import br.com.alelo.consumer.consumerpat.exception.ResourceNotFoundException;
+import br.com.alelo.consumer.consumerpat.model.Card;
+import br.com.alelo.consumer.consumerpat.model.CardType;
+import br.com.alelo.consumer.consumerpat.model.Transaction;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -29,7 +28,7 @@ public class CardService {
     @Autowired
     private ExtractRepository extractRepository;
 
-    private static final String CARD_NOT_FOUND_MSG = "Card number not found: ";
+    private static final String CARD_NOT_FOUND_MSG = "Card Not Found";
 
     private static final BigDecimal FUEL_TAX = BigDecimal.valueOf(0.35);
 
@@ -41,24 +40,23 @@ public class CardService {
                     entry(CardType.Drugstore, CardService::calculateDrugstoreTax),
                     entry(CardType.Fuel, CardService::caculateFuelTax));
 
-    public Card increaseBalance(BigInteger cardNumber, BigDecimal value) {
-        throwExceptionIfValueIsZeroOrNegative(value);
-        Card card = cardRepository.findByNumber(cardNumber).orElseThrow(() -> new ResourceNotFoundException(CARD_NOT_FOUND_MSG + cardNumber));;
+    public Card increaseFunds(BigInteger cardNumber, BigDecimal value) {
+        throwExceptionIfValueToIncreaseFundsIsZeroOrNegative(value);
+        Card card = cardRepository.findByNumber(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND_MSG));
         card.setFunds(card.getFunds().add(value));
         cardRepository.save(card);
         return card;
     }
 
-    private void throwExceptionIfValueIsZeroOrNegative(BigDecimal value) {
+    private void throwExceptionIfValueToIncreaseFundsIsZeroOrNegative(BigDecimal value) {
         if (BigDecimal.ZERO.compareTo(value) >= 0) {
-            throw new IllegalArgumentException("Zero or Negative value not allowed");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Zero or Negative Card funds not allowed");
         }
     }
 
     public Card charge(String establishmentName, BigInteger cardNumber, String productDescription, BigDecimal value) {
 
-        Card card = cardRepository.findByNumber(cardNumber).orElseThrow(() -> new ResourceNotFoundException(CARD_NOT_FOUND_MSG + cardNumber));
-        throwExceptionIfValueIsZeroOrNegative(value);
+        Card card = cardRepository.findByNumber(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND_MSG));
 
         BigDecimal updatedValue = CARD_RULES.get(card.getType()).apply(value);
         throwExceptionIfCardHasInsufficientFunds(card, updatedValue);
@@ -92,7 +90,7 @@ public class CardService {
 
     private void throwExceptionIfCardHasInsufficientFunds(Card card, BigDecimal value) {
         if (card.getFunds().compareTo(value) < 0) {
-            throw new IllegalArgumentException("Not enough funds");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Insufficient Funds");
         }
     }
 }

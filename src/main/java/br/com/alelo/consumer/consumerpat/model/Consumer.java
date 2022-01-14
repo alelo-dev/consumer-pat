@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.model;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,7 +33,7 @@ public class Consumer implements Serializable {
     @PrimaryKeyJoinColumn
     private Contact contact;
 
-    @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "consumer", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Card> cards;
 
     public void setContact(Contact contact) {

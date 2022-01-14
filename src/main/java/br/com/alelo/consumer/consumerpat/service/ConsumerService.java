@@ -1,13 +1,11 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Card;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.model.Consumer;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ConsumerService {
@@ -26,6 +24,7 @@ public class ConsumerService {
      }
 
     public void update(Consumer consumer) {
+        consumer.getCards().forEach(card -> card.setConsumer(consumer));
         save(consumer);
     }
 

@@ -1,13 +1,11 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.CardType;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Contact;
+import br.com.alelo.consumer.consumerpat.model.Consumer;
+import br.com.alelo.consumer.consumerpat.model.Contact;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 
