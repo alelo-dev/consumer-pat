@@ -5,6 +5,8 @@ import br.com.alelo.consumer.consumerpat.entity.*;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,6 +40,7 @@ public class ConsumerController {
 
     /* Deve listar todos os clientes (cerca de 500) */
     @GetMapping
+    @Cacheable(value = "listConsumers")
     public Page<ConsumerOutDTO> listAllConsumers(@PageableDefault(direction = Sort.Direction.ASC,
             page = 0, size = 50) Pageable pageable) {
 
@@ -51,6 +54,7 @@ public class ConsumerController {
      */
     @PostMapping
     @Transactional
+    @CacheEvict(value = "listConsumers", allEntries = true)
     public ResponseEntity<ConsumerOutDTO> createConsumer(@RequestBody ConsumerInDTO dto) {
 
         if (dto == null) {
