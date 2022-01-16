@@ -1,121 +1,188 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.dto.*;
+import br.com.alelo.consumer.consumerpat.entity.*;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Date;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import static br.com.alelo.consumer.consumerpat.enums.CardType.*;
+import static br.com.alelo.consumer.consumerpat.enums.EstablishmentType.*;
 
-@Controller
-@RequestMapping("/consumer")
+@RestController
+@RequestMapping("/consumers")
 public class ConsumerController {
 
     private final ConsumerRepository repository;
-
-    private final ExtractRepository extractRepository;
+    private final CardRepository cardRepository;
 
     @Autowired
-    public ConsumerController(ConsumerRepository repository, ExtractRepository extractRepository) {
+    public ConsumerController(ConsumerRepository repository, CardRepository cardRepository) {
         this.repository = repository;
-        this.extractRepository = extractRepository;
+        this.cardRepository = cardRepository;
     }
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+    @GetMapping
+    public Page<ConsumerOutDTO> listAllConsumers(@PageableDefault(direction = Sort.Direction.ASC,
+            page = 0, size = 50) Pageable pageable) {
+
+        Page<Consumer> consumerPage = repository.findAll(pageable);
+
+        return consumerPage.map(consumer -> new ConsumerOutDTO(consumer));
     }
 
+    /**
+     * Cadastrar novos clientes
+     */
+    @PostMapping
+    @Transactional
+    public ResponseEntity<ConsumerOutDTO> createConsumer(@RequestBody ConsumerInDTO dto) {
 
-    /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
+        if (dto == null) {
+            //TODO: implementar payload
+            return ResponseEntity.badRequest().build();
+        }
+
+        Consumer consumer = new Consumer(dto);
+
         repository.save(consumer);
+
+        URI uri = UriComponentsBuilder.newInstance() //
+                .path("/consumers/{id}") //
+                .buildAndExpand(consumer.getId()).toUri();
+
+        ConsumerOutDTO out = new ConsumerOutDTO(consumer);
+
+        return ResponseEntity.created(uri).body(out);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
-    }
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<ConsumerOutDTO> updateConsumer(@PathVariable Long id, @RequestBody ConsumerUpdateDTO dto) {
 
+        ResponseEntity response = null;
+
+        Optional<Consumer> consumer = repository.findById(id);
+
+        if (consumer.isPresent()) {
+
+            //mapstruct could save me here, leider nicht
+            if (dto.getName() != null)
+                consumer.get().setName(dto.getName());
+            if (dto.getDocumentNumber() != null)
+                consumer.get().setDocumentNumber(dto.getDocumentNumber());
+            if (dto.getBirthDate() != null)
+                consumer.get().setBirthDate(dto.getBirthDate());
+            if (dto.getEmail() != null)
+                consumer.get().setEmail(dto.getEmail());
+            if (dto.getPhone() != null)
+                consumer.get().setPhone(new Phone(dto.getPhone()));
+            if (dto.getAddress() != null)
+                consumer.get().setAddress(new Address(dto.getAddress()));
+
+            response = ResponseEntity.ok(new ConsumerOutDTO(consumer.get()));
+
+        } else {
+            response = ResponseEntity.notFound().build();
+        }
+
+        return response;
+    }
 
     /*
      * Deve creditar(adicionar) um valor(value) em um no cartão.
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = repository.findByDrugstoreNumber(cardNumber);
+    @PutMapping(value = "{id}/balances")
+    @Transactional
+    public ResponseEntity<?> setBalance(@PathVariable Long id, @RequestBody BalanceDTO balanceDTO) {
 
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
+        Optional<Consumer> consumer = repository.findById(id);
+
+        if (consumer.isPresent() && balanceDTO.validateMe()) {
+
+            Optional<Card> card = consumer.get().getCards().stream()//
+                    .filter(c -> c.getCardType().name().compareTo(balanceDTO.getCardType()) == 0) //
+                    .filter(c -> c.getNumber().compareTo(balanceDTO.getCardNumber()) == 0)
+                    .findAny();
+
+            if (card.isPresent()) {
+                card.get().addBalance(balanceDTO.getValue());
             }
         }
+        return ResponseEntity.ok().build();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-        *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
-        */
+    /**
+     * O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
+     * Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+     * <p>
+     * Tipos de estabelcimentos
+     * 1 - Alimentação (food)
+     * 2 - Farmácia (DrugStore)
+     * 3 - Posto de combustivel (Fuel)
+     */
+    @PostMapping("{id}/buy")
+    @Transactional
+    public ResponseEntity<?> buy(@PathVariable Long id, @RequestBody List<ProductBuyDTO> order) {
 
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            double cashback  = (value / 100D) * 10D;
-            value = value - cashback;
+        Optional<Consumer> consumer = repository.findById(id);
 
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
+        if (consumer.isPresent()) {
 
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
+            order.stream().forEach(
+                    p -> {
+                        Optional<Card> cardOptional = consumer.get().getCards().stream()//
+                                .filter(c -> c.getNumber().compareTo(p.getCardNumber()) == 0) //
+                                .findAny();
 
+                        if (cardOptional.isPresent()) {
+
+                            Card card = cardOptional.get();
+
+                            if ((FOOD_CARD.equals(card.getCardType()) && FOOD.name().compareTo(p.getEstablishmentType()) == 0) || //
+                                    (DRUGSTORE_CARD.equals(card.getCardType()) && DRUGSTORE.name().compareTo(p.getEstablishmentType()) == 0) || //
+                                    (FUEL_CARD.equals(card.getCardType()) && FUEL.name().compareTo(p.getEstablishmentType()) == 0)) {
+
+                                card.subtractBalance(p.getValue());
+
+                                Extract extract = Extract.builder()
+                                        .dateBuy(LocalDateTime.now())
+                                        .establishmentName(p.getEstablishmentName())
+                                        .productDescription(p.getProductDescription())
+                                        .value(p.getValue().multiply(new BigDecimal(p.getAmountBuyed()))) //TODO: sobrecarregar o builder do value
+                                        .amount(p.getAmountBuyed())
+                                        .build();
+
+                                card.getExtract().add(extract);
+
+                            } else {
+                                //TODO: implementar erro de compra negada
+                            }
+                        }
+                    }
+            );
         } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+            return ResponseEntity.notFound().build();
         }
-
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
+        return ResponseEntity.ok().build();
     }
 
 }
