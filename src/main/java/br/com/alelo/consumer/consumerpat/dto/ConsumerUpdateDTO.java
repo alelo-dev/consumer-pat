@@ -19,5 +19,5 @@ public class ConsumerUpdateDTO implements Serializable {
 
     private AddressDTO address;
 
-    
+
 }

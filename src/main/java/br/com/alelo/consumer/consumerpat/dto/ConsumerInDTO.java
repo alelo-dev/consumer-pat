@@ -1,7 +1,5 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
-import br.com.alelo.consumer.consumerpat.entity.Address;
-import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -30,7 +29,7 @@ public class ConsumerInDTO implements Serializable {
 
     private AddressDTO address;
 
-    private Set<Card> cards;
+    private Set<CardDTO> cards;
 
     public ConsumerInDTO(Consumer consumer) {
 
@@ -40,6 +39,7 @@ public class ConsumerInDTO implements Serializable {
         this.email = consumer.getEmail();
         this.phone = new PhoneDTO(consumer.getPhone());
         this.address = new AddressDTO(consumer.getAddress());
-        this.cards = consumer.getCards();
+        this.cards = (cards == null) ? new HashSet<>() : cards;
+        consumer.getCards().stream().forEach(c -> this.cards.add(new CardDTO(c)));
     }
 }
