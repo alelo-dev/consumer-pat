@@ -2,9 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.model.Card;
 import br.com.alelo.consumer.consumerpat.model.CardType;
-import br.com.alelo.consumer.consumerpat.model.Transaction;
 import br.com.alelo.consumer.consumerpat.repository.CardRepository;
-import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,8 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -24,9 +20,6 @@ public class CardService {
 
     @Autowired
     private CardRepository cardRepository;
-
-    @Autowired
-    private ExtractRepository extractRepository;
 
     private static final String CARD_NOT_FOUND_MSG = "Card Not Found";
 
@@ -54,23 +47,12 @@ public class CardService {
         }
     }
 
-    public Card charge(String establishmentName, BigInteger cardNumber, String productDescription, BigDecimal value) {
-
+    public Card charge(BigInteger cardNumber, BigDecimal value) {
         Card card = cardRepository.findByNumber(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND_MSG));
-
         BigDecimal updatedValue = CARD_RULES.get(card.getType()).apply(value);
         throwExceptionIfCardHasInsufficientFunds(card, updatedValue);
         card.setFunds(card.getFunds().subtract(updatedValue));
         cardRepository.save(card);
-
-        Transaction transaction = new Transaction();
-        transaction.setEstablishmentName(establishmentName);
-        transaction.setProductDescription(productDescription);
-        transaction.setPurchaseDateTime(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
-        transaction.setCardNumber(cardNumber);
-        transaction.setValue(updatedValue);
-        extractRepository.save(transaction);
-
         return card;
     }
 

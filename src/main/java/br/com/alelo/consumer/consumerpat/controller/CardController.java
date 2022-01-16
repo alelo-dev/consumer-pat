@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.model.Card;
 import br.com.alelo.consumer.consumerpat.service.CardService;
+import br.com.alelo.consumer.consumerpat.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +16,11 @@ public class CardController {
     @Autowired
     private CardService cardService;
 
+    @Autowired
+    private TransactionService transactionService;
+
     @PatchMapping("/{cardNumber}/funds/{value}")
-    public Card increaseBalance(@PathVariable BigInteger cardNumber, @PathVariable BigDecimal value) {
+    public Card increaseFunds(@PathVariable BigInteger cardNumber, @PathVariable BigDecimal value) {
         return cardService.increaseFunds(cardNumber, value);
     }
 
@@ -25,6 +29,8 @@ public class CardController {
                        @RequestParam(required = true) String establishmentName,
                        @RequestParam(required = true) String productDescription) {
 
-        return cardService.charge(establishmentName, cardNumber, productDescription, value);
+        Card card = cardService.charge(cardNumber, value);
+        transactionService.save(establishmentName, cardNumber, productDescription, value);
+        return card;
     }
 }
