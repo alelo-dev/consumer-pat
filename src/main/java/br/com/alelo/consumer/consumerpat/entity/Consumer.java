@@ -1,15 +1,20 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
+import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Data;
 
 
 @Data
@@ -17,54 +22,38 @@ import java.util.Objects;
 public class Consumer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     Integer id;
+    
     String name;
     int documentNumber;
+    @JsonFormat(pattern =  "dd/MM/yyyy")
     Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    String mobilePhoneNumber;
+    String residencePhoneNumber;
+    String phoneNumber;
     String email;
 
     //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @Embedded
+    private Address address;    
 
     //cards
-    int foodCardNumber;
+    String foodCardNumber;
     double foodCardBalance;
 
-    int fuelCardNumber;
+    String fuelCardNumber;
     double fuelCardBalance;
 
-    int drugstoreNumber;
+    String drugstoreNumber;
     double drugstoreCardBalance;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
-    }
-
+    
+//    @OneToMany(mappedBy = "consumer",
+//        	cascade = CascadeType.DETACH,
+//        	orphanRemoval = true
+//			)
+//	private List<Card> cards;    
 
 }
