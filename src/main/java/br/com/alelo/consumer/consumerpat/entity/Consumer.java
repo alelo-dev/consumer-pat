@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 
 import jdk.jfr.DataAmount;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -10,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
-
 
 @Data
 @Entity
