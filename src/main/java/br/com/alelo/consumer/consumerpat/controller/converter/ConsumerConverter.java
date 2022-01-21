@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller.converter;
 
-import br.com.alelo.consumer.consumerpat.controller.dto.CreateConsumerDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Phone;
@@ -52,6 +52,4 @@ public class ConsumerConverter {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
-
-
 }

@@ -1,5 +1,7 @@
-package br.com.alelo.consumer.consumerpat.controller.dto;
+package br.com.alelo.consumer.consumerpat.controller.dto.out;
 
+import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateCardDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.in.CreatePhoneDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateConsumerDTO {
+public class ResponseConsumerDTO {
 
     private String name;
     private Integer documentNumber;

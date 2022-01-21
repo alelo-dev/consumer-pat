@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.controller.dto;
+package br.com.alelo.consumer.consumerpat.controller.dto.in;
 
 import br.com.alelo.consumer.consumerpat.enums.PhoneTypeEnum;
 import lombok.*;

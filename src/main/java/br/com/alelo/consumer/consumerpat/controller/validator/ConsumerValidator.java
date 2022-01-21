@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller.validator;
 
-import br.com.alelo.consumer.consumerpat.controller.dto.CreateConsumerDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateConsumerDTO;
 
 import java.util.Objects;
 

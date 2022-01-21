@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.controller.dto;
+package br.com.alelo.consumer.consumerpat.controller.dto.in;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
