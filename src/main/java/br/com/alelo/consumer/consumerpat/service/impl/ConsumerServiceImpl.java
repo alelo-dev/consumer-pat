@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.service.impl;
 
+import br.com.alelo.consumer.consumerpat.controller.converter.ConsumerConverter;
+import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
@@ -25,7 +27,8 @@ public class ConsumerServiceImpl implements ConsumerService {
     }
 
     @Override
-    public Page<Consumer> getPageConsumer(Pageable pageable) {
-        return consumerRepository.findAll(pageable);
+    public Page<ResponseConsumerDTO> getPageConsumer(Pageable pageable) {
+
+        return consumerRepository.findAll(pageable).map(ConsumerConverter::fromEntity);
     }
 }

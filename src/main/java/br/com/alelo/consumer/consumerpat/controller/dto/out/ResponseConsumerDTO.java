@@ -1,7 +1,5 @@
 package br.com.alelo.consumer.consumerpat.controller.dto.out;
 
-import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateCardDTO;
-import br.com.alelo.consumer.consumerpat.controller.dto.in.CreatePhoneDTO;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,14 +17,13 @@ public class ResponseConsumerDTO {
     private Integer documentNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    //contacts
-    private List<CreatePhoneDTO> createPhoneDTOS;
+    private List<ResponsePhoneDTO> phoneDTOS;
     private String email;
-    //Address
     private String street;
     private Integer number;
     private String city;
     private String country;
     private Integer postalCode;
-    private List<CreateCardDTO> createCardDTOS; //cards
+    private List<ResponseCardDTO> cardDTOS; //cards
+
 }

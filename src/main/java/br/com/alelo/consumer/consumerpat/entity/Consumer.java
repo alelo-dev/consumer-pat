@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseConsumerDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -57,4 +58,5 @@ public class Consumer {
                 && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
                 && Objects.equals(country, consumer.country);
     }
+
 }

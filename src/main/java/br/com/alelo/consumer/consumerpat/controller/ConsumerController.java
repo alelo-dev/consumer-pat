@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 import br.com.alelo.consumer.consumerpat.controller.converter.ConsumerConverter;
 import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.in.UpdateConsumerDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.validator.ConsumerValidator;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
@@ -36,7 +37,7 @@ public class ConsumerController {
 
     /* Deve listar todos os clientes (cerca de 500) */
     @GetMapping()
-    public Page<Consumer> listAllConsumers(@PageableDefault(page = 0, size = 100, direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<ResponseConsumerDTO> listAllConsumers(@PageableDefault(size = 100, direction = Sort.Direction.ASC) Pageable pageable) {
 
         return consumerService.getPageConsumer(pageable);
     }
