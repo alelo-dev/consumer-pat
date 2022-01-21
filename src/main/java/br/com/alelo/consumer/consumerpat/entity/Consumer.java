@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -9,10 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Data;
 
 
-@Data
 @Entity
 public class Consumer {
 
@@ -23,7 +21,8 @@ public class Consumer {
     Integer id;
     String name;
     Long documentNumber;
-    Date birthDate;
+
+    LocalDate birthDate;
 
     //contacts
     long mobilePhoneNumber;
@@ -45,8 +44,8 @@ public class Consumer {
     Long fuelCardNumber;
     double fuelCardBalance;
 
-    Long drugstoreNumber;
-    double drugstoreCardBalance;
+    Long drugStoreNumber;
+    double drugStoreCardBalance;
 
     
     
@@ -86,13 +85,13 @@ public class Consumer {
 
 
 
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
 
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -254,26 +253,28 @@ public class Consumer {
 
 
 
-	public Long getDrugstoreNumber() {
-		return drugstoreNumber;
+
+
+	public Long getDrugStoreNumber() {
+		return drugStoreNumber;
 	}
 
 
 
-	public void setDrugstoreNumber(Long drugstoreNumber) {
-		this.drugstoreNumber = drugstoreNumber;
+	public void setDrugStoreNumber(Long drugStoreNumber) {
+		this.drugStoreNumber = drugStoreNumber;
 	}
 
 
 
-	public double getDrugstoreCardBalance() {
-		return drugstoreCardBalance;
+	public double getDrugStoreCardBalance() {
+		return drugStoreCardBalance;
 	}
 
 
 
-	public void setDrugstoreCardBalance(double drugstoreCardBalance) {
-		this.drugstoreCardBalance = drugstoreCardBalance;
+	public void setDrugStoreCardBalance(double drugStoreCardBalance) {
+		this.drugStoreCardBalance = drugStoreCardBalance;
 	}
 
 
@@ -292,7 +293,7 @@ public class Consumer {
                 && foodCardNumber == consumer.foodCardNumber
                 && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
                 && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
+                && drugStoreNumber == consumer.drugStoreNumber && Double.compare(consumer.drugStoreCardBalance, drugStoreCardBalance) == 0
                 && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
                 && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
                 && Objects.equals(country, consumer.country);

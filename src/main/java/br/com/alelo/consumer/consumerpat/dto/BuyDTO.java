@@ -15,7 +15,14 @@ public class BuyDTO implements Serializable {
 	private Long cardNumber;
 	private String establishmentName;
 	private String productDescription;
+	private int establishmentNameId;
 	
+	public int getEstablishmentNameId() {
+		return establishmentNameId;
+	}
+	public void setEstablishmentNameId(int establishmentNameId) {
+		this.establishmentNameId = establishmentNameId;
+	}
 	public int getEstablishmentType() {
 		return establishmentType;
 	}

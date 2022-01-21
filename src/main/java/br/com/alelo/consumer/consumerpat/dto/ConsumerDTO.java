@@ -1,6 +1,8 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ConsumerDTO {
 
@@ -8,7 +10,8 @@ public class ConsumerDTO {
 	Integer id;
     String name;
     Long documentNumber;
-    Date birthDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    LocalDate  birthDate;
 
     //contacts
     long mobilePhoneNumber;
@@ -30,8 +33,8 @@ public class ConsumerDTO {
     Long fuelCardNumber;
     Double fuelCardBalance;
 
-    int drugstoreNumber;
-    Double drugstoreCardBalance;
+    Long drugStoreNumber;
+    Double drugStoreCardBalance;
 	
     
     public Integer getId() {
@@ -52,10 +55,10 @@ public class ConsumerDTO {
 	public void setDocumentNumber(Long documentNumber) {
 		this.documentNumber = documentNumber;
 	}
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 	public long getMobilePhoneNumber() {
@@ -136,17 +139,17 @@ public class ConsumerDTO {
 	public void setFuelCardBalance(Double fuelCardBalance) {
 		this.fuelCardBalance = fuelCardBalance;
 	}
-	public int getDrugstoreNumber() {
-		return drugstoreNumber;
+	public Long getDrugStoreNumber() {
+		return drugStoreNumber;
 	}
-	public void setDrugstoreNumber(int drugstoreNumber) {
-		this.drugstoreNumber = drugstoreNumber;
+	public void setDrugStoreNumber(Long drugstoreNumber) {
+		this.drugStoreNumber = drugstoreNumber;
 	}
-	public Double getDrugstoreCardBalance() {
-		return drugstoreCardBalance;
+	public Double getDrugStoreCardBalance() {
+		return drugStoreCardBalance;
 	}
-	public void setDrugstoreCardBalance(Double drugstoreCardBalance) {
-		this.drugstoreCardBalance = drugstoreCardBalance;
+	public void setDrugStoreCardBalance(Double drugStoreCardBalance) {
+		this.drugStoreCardBalance = drugStoreCardBalance;
 	}
 	
 }
