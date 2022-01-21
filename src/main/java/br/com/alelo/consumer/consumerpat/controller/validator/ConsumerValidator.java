@@ -11,35 +11,17 @@ public class ConsumerValidator {
         if (Objects.isNull(createConsumerDTO.getDocumentNumber())) {
             return "documentNumber não pode ser null";
         }
-        if (Objects.isNull(createConsumerDTO.getDrugstoreCardBalance())) {
-            return "drugstoreCardBalance não pode ser null";
+        if (Objects.isNull(createConsumerDTO.getCreateCardDTOS())) {
+            return "createPhoneDTO não pode ser null";
         }
-        if (Objects.isNull(createConsumerDTO.getDrugstoreNumber())) {
-            return "drugstoreNumber não pode ser null";
+        if (createConsumerDTO.getCreateCardDTOS().stream().anyMatch(createCardDTO -> Objects.isNull(createCardDTO.getCardType()))) {
+            return "cardType não pode ser null";
         }
-        if (Objects.isNull(createConsumerDTO.getFoodCardBalance())) {
-            return "foodCardBalance não pode ser null";
+        if (Objects.isNull(createConsumerDTO.getCreatePhoneDTOS())) {
+            return "createPhoneDTO não pode ser null";
         }
-        if (Objects.isNull(createConsumerDTO.getFoodCardNumber())) {
-            return "foodCardNumber não pode ser null";
-        }
-        if (Objects.isNull(createConsumerDTO.getFuelCardBalance())) {
-            return "fuelCardBalance não pode ser null";
-        }
-        if (Objects.isNull(createConsumerDTO.getFuelCardNumber())) {
-            return "fuelCardNumber não pode ser null";
-        }
-        if (Objects.isNull(createConsumerDTO.getMobilePhoneNumber())) {
-            return "mobilePhoneNumber não pode ser null";
-        }
-        if (Objects.isNull(createConsumerDTO.getNumber())) {
-            return "number não pode ser null";
-        }
-        if (Objects.isNull(createConsumerDTO.getPhoneNumber())) {
-            return "phoneNumber não pode ser null";
-        }
-        if (Objects.isNull(createConsumerDTO.getResidencePhoneNumber())) {
-            return "residencePhoneNumber não pode ser null";
+        if (createConsumerDTO.getCreatePhoneDTOS().stream().anyMatch(createCardDTO -> Objects.isNull(createCardDTO.getPhoneType()))) {
+            return "phoneType não pode ser null";
         }
         return null;
     }

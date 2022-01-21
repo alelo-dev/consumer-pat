@@ -16,4 +16,11 @@ public class ConsumerServiceImpl implements ConsumerService {
     public Consumer createConsumer(Consumer consumer) {
         return consumerRepository.save(consumer);
     }
+
+    @Override
+    public Consumer updateConsumer(Integer id) {
+
+
+        return null;
+    }
 }

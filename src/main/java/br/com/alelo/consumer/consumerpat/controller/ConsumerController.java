@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.controller.converter.ConsumerConverter;
 import br.com.alelo.consumer.consumerpat.controller.dto.CreateConsumerDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.UpdateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.validator.ConsumerValidator;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
@@ -15,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -42,6 +42,7 @@ public class ConsumerController {
 
     /**
      * Cadastrar novos clientes
+     * @param createConsumer - Informações do cliente
      */
     @PostMapping
     public ResponseEntity<String> createConsumer(@RequestBody CreateConsumerDTO createConsumer) {
@@ -51,7 +52,7 @@ public class ConsumerController {
                 consumerService.createConsumer(ConsumerConverter.toEntity(createConsumer));
                 return ResponseEntity.ok().build();
             } else {
-                log.error("Falha validação ");
+                log.error("Falha validação");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validated);
             }
         } catch (Exception e) {
@@ -60,10 +61,14 @@ public class ConsumerController {
         }
     }
 
-    // Não deve ser possível alterar o saldo do cartão
-    @PostMapping(value = "/updateConsumer")
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    /**
+     * Atualiza dados do cliente
+     * Não deve ser possível alterar o saldo do cartão
+     * @param id - id do cliente
+     */
+    @PatchMapping(value = "/updateConsumer/{id}")
+    public void updateConsumer(@PathVariable("id") Integer id, @RequestBody UpdateConsumerDTO updateConsumerDTO) {
+        consumerService.updateConsumer(id);
     }
 
     /*
@@ -71,6 +76,8 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
+
+/*
     @GetMapping(value = "/setcardbalance")
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
@@ -94,19 +101,23 @@ public class ConsumerController {
             }
         }
     }
+*/
 
+
+    /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
+     *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+     *
+     * Tipos de estabelcimentos
+     * 1 - Alimentação (food)
+     * 2 - Farmácia (DrugStore)
+     * 3 - Posto de combustivel (Fuel)
+     */
+
+  /*
     @ResponseBody
     @GetMapping(value = "/buy")
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-         *
-         * Tipos de estabelcimentos
-         * 1 - Alimentação (food)
-         * 2 - Farmácia (DrugStore)
-         * 3 - Posto de combustivel (Fuel)
-         */
 
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
@@ -135,4 +146,5 @@ public class ConsumerController {
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
     }
+    */
 }

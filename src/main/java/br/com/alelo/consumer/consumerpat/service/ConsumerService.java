@@ -6,4 +6,6 @@ public interface ConsumerService {
 
     Consumer createConsumer(final Consumer consumer);
 
+    Consumer updateConsumer(final Integer id);
+
 }
