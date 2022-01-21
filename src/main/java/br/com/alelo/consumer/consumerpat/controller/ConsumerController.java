@@ -58,8 +58,6 @@ public class ConsumerController {
             log.error("Falha geral {}", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-
     }
 
     // Não deve ser possível alterar o saldo do cartão
