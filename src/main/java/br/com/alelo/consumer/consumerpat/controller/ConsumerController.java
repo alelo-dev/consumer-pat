@@ -1,23 +1,33 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.controller.converter.ConsumerConverter;
+import br.com.alelo.consumer.consumerpat.controller.dto.CreateConsumerDTO;
+import br.com.alelo.consumer.consumerpat.controller.validator.ConsumerValidator;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Date;
 import java.util.List;
 
-@Controller
-@RequestMapping("/consumer")
+@Slf4j
+@RestController
+@RequestMapping("/consumers")
 public class ConsumerController {
 
     @Autowired
     ConsumerRepository repository;
+
+    @Autowired
+    ConsumerService consumerService;
 
     @Autowired
     ExtractRepository extractRepository;
@@ -25,19 +35,35 @@ public class ConsumerController {
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping(value = "/consumerList")
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
 
-    /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    /**
+     * Cadastrar novos clientes
+     */
+    @PostMapping
+    public ResponseEntity<String> createConsumer(@RequestBody CreateConsumerDTO createConsumer) {
+        final String validated = ConsumerValidator.validate(createConsumer);
+        try {
+            if (Objects.isNull(validated)) {
+                consumerService.createConsumer(ConsumerConverter.toEntity(createConsumer));
+                return ResponseEntity.ok().build();
+            } else {
+                log.error("Falha validação ");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validated);
+            }
+        } catch (Exception e) {
+            log.error("Falha geral {}", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @PostMapping(value = "/updateConsumer")
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
@@ -47,7 +73,7 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @GetMapping(value = "/setcardbalance")
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
@@ -72,7 +98,7 @@ public class ConsumerController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @GetMapping(value = "/buy")
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.

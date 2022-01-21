@@ -1,16 +1,15 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Data
 @Entity
+@Builder
 public class Consumer {
 
     @Id
@@ -18,7 +17,7 @@ public class Consumer {
     Integer id;
     String name;
     int documentNumber;
-    Date birthDate;
+    private LocalDate birthDate;
 
     //contacts
     int mobilePhoneNumber;
@@ -31,7 +30,9 @@ public class Consumer {
     int number;
     String city;
     String country;
-    int portalCode;
+
+    @Column(name = "portalCode")
+    private Integer postalCode;
 
     //cards
     int foodCardNumber;
@@ -53,7 +54,7 @@ public class Consumer {
                 && residencePhoneNumber == consumer.residencePhoneNumber
                 && phoneNumber == consumer.phoneNumber
                 && number == consumer.number
-                && portalCode == consumer.portalCode
+                && postalCode == consumer.postalCode
                 && foodCardNumber == consumer.foodCardNumber
                 && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
                 && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
