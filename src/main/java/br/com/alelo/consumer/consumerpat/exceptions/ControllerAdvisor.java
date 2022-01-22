@@ -28,8 +28,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CardNumberException.class)
-    public ResponseEntity<Object> handleCardNumberException(CardNumberException cardNumberException, WebRequest webRequest) {
+    @ExceptionHandler(CardNumberAlreadyExistsException.class)
+    public ResponseEntity<Object> handleCardNumberException(CardNumberAlreadyExistsException cardNumberException, WebRequest webRequest) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

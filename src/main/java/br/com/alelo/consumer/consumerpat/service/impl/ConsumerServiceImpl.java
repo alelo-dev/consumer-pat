@@ -5,7 +5,7 @@ import br.com.alelo.consumer.consumerpat.controller.dto.in.UpdateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Phone;
-import br.com.alelo.consumer.consumerpat.exceptions.CardNumberException;
+import br.com.alelo.consumer.consumerpat.exceptions.CardNumberAlreadyExistsException;
 import br.com.alelo.consumer.consumerpat.exceptions.ConsumerDocumentException;
 import br.com.alelo.consumer.consumerpat.exceptions.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.repository.CardRepository;
@@ -36,9 +36,9 @@ public class ConsumerServiceImpl implements ConsumerService {
                 });
 
         consumer.getCardList().forEach(card -> {
-            cardRepository.findCardsByNumber(card.getNumber()).ifPresent(
+            cardRepository.findCardByNumber(card.getNumber()).ifPresent(
                     cardPresent -> {
-                        throw new CardNumberException();
+                        throw new CardNumberAlreadyExistsException();
                     });
         });
 

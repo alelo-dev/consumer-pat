@@ -21,5 +21,5 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
      * @return
      */
     @Query(nativeQuery = true, value = "SELECT * FROM Card WHERE number = ?")
-    Optional<Card> findCardsByNumber(String number);
+    Optional<Card> findCardByNumber(String number);
 }
