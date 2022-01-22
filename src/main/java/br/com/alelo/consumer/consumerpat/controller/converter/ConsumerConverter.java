@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller.converter;
 
 import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateConsumerDTO;
-import br.com.alelo.consumer.consumerpat.controller.dto.in.UpdateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseCardDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponsePhoneDTO;
@@ -21,25 +20,25 @@ public class ConsumerConverter {
         List<Card> cardList = new ArrayList<>();
         List<Phone> phoneList = new ArrayList<>();
         createConsumerDTO.getCreateCardDTOS().forEach(
-                createCardDTO -> {
-                    cardList.add(Card.builder()
-                            .id(null)
-                            .balance(createCardDTO.getBalance())
-                            .cardType(createCardDTO.getCardType().getValue())
-                            .number(createCardDTO.getNumber())
-                            .createdAt(LocalDateTime.now())
-                            .build());
-                }
+                createCardDTO ->
+                        cardList.add(Card.builder()
+                                .id(null)
+                                .balance(createCardDTO.getBalance())
+                                .cardType(createCardDTO.getCardType().getValue())
+                                .number(createCardDTO.getNumber())
+                                .createdAt(LocalDateTime.now())
+                                .build())
+
         );
         createConsumerDTO.getCreatePhoneDTOS().forEach(
-                createPhoneDTO -> {
-                    phoneList.add(Phone.builder()
-                            .id(null)
-                            .phoneType(createPhoneDTO.getPhoneType().getValue())
-                            .number(createPhoneDTO.getNumber())
-                            .createdAt(LocalDateTime.now())
-                            .build());
-                }
+                createPhoneDTO ->
+                        phoneList.add(Phone.builder()
+                                .id(null)
+                                .phoneType(createPhoneDTO.getPhoneType().getValue())
+                                .number(createPhoneDTO.getNumber())
+                                .createdAt(LocalDateTime.now())
+                                .build())
+
         );
 
         return Consumer.builder()
@@ -64,24 +63,22 @@ public class ConsumerConverter {
         List<ResponsePhoneDTO> responsePhoneDTOS = new ArrayList<>();
         List<ResponseCardDTO> responseCardDTOS = new ArrayList<>();
 
-        consumer.getPhoneList().forEach(phone -> {
-            responsePhoneDTOS.add(
-                    ResponsePhoneDTO.builder()
-                            .number(phone.getNumber())
-                            .phoneType(PhoneTypeEnum.getEnum(phone.getPhoneType()))
-                            .build());
+        consumer.getPhoneList().forEach(phone ->
+                responsePhoneDTOS.add(
+                        ResponsePhoneDTO.builder()
+                                .number(phone.getNumber())
+                                .phoneType(PhoneTypeEnum.getEnum(phone.getPhoneType()))
+                                .build())
+        );
 
-        });
-
-        consumer.getCardList().forEach(card -> {
-            responseCardDTOS.add(
-                    ResponseCardDTO.builder()
-                            .number(card.getNumber())
-                            .cardType(CardTypeEnum.getEnum(card.getCardType()))
-                            .balance(card.getBalance())
-                            .build());
-
-        });
+        consumer.getCardList().forEach(card ->
+                responseCardDTOS.add(
+                        ResponseCardDTO.builder()
+                                .number(card.getNumber())
+                                .cardType(CardTypeEnum.getEnum(card.getCardType()))
+                                .balance(card.getBalance())
+                                .build())
+        );
 
         return ResponseConsumerDTO.builder()
                 .name(consumer.getName())

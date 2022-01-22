@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.enums;
 
+import br.com.alelo.consumer.consumerpat.exceptions.enums.CardTypeNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,6 +16,6 @@ public enum CardTypeEnum {
     private Integer value;
 
     public static CardTypeEnum getEnum(final Integer cardType) {
-        return Arrays.stream(values()).filter(enumItem -> enumItem.getValue().equals(cardType)).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(enumItem -> enumItem.getValue().equals(cardType)).findFirst().orElseThrow(CardTypeNotFoundException::new);
     }
 }

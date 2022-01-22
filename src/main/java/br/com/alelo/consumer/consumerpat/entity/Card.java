@@ -27,13 +27,4 @@ public class Card {
     private Integer cardType;
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Card consumer = (Card) o;
-        return number == consumer.number
-                && Double.compare(consumer.balance, balance) == 0;
-    }
 }

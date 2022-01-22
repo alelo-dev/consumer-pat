@@ -25,8 +25,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
 
-    final private ConsumerRepository consumerRepository;
-    final private CardRepository cardRepository;
+    private final ConsumerRepository consumerRepository;
+    private final CardRepository cardRepository;
 
     @Override
     public Consumer createConsumer(Consumer consumer) {
@@ -35,12 +35,12 @@ public class ConsumerServiceImpl implements ConsumerService {
                     throw new ConsumerDocumentException();
                 });
 
-        consumer.getCardList().forEach(card -> {
-            cardRepository.findCardByNumber(card.getNumber()).ifPresent(
-                    cardPresent -> {
-                        throw new CardNumberAlreadyExistsException();
-                    });
-        });
+        consumer.getCardList().forEach(card ->
+                cardRepository.findCardByNumber(card.getNumber()).ifPresent(
+                        cardPresent -> {
+                            throw new CardNumberAlreadyExistsException();
+                        })
+        );
 
         return consumerRepository.save(consumer);
     }
@@ -53,17 +53,15 @@ public class ConsumerServiceImpl implements ConsumerService {
             Consumer consumerEntity = consumer.get();
             List<Phone> phoneList = new ArrayList<>();
 
-            updateConsumerDTO.getUpdatePhoneDTOS().forEach(updatePhoneDTO -> {
-                phoneList.add(Phone.builder()
-                        .id(null)
-                        .phoneType(updatePhoneDTO.getPhoneType().getValue())
-                        .number(updatePhoneDTO.getNumber())
-                        .createdAt(LocalDateTime.now())
-                        .build());
+            updateConsumerDTO.getUpdatePhoneDTOS().forEach(updatePhoneDTO ->
+                    phoneList.add(Phone.builder()
+                            .id(null)
+                            .phoneType(updatePhoneDTO.getPhoneType().getValue())
+                            .number(updatePhoneDTO.getNumber())
+                            .createdAt(LocalDateTime.now())
+                            .build())
 
-            });
-
-            System.out.println("SIZE "+phoneList.size());
+            );
             return consumerRepository.save(Consumer.builder()
                     .id(consumerEntity.getId())
                     .createdAt(consumerEntity.getCreatedAt())

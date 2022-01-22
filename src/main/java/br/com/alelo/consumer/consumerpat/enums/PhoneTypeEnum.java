@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.enums;
 
+import br.com.alelo.consumer.consumerpat.exceptions.enums.PhoneTypeNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,6 +15,6 @@ public enum PhoneTypeEnum {
     private Integer value;
 
     public static PhoneTypeEnum getEnum(final Integer phoneType) {
-        return Arrays.stream(values()).filter(enumItem -> enumItem.getValue().equals(phoneType)).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(enumItem -> enumItem.getValue().equals(phoneType)).findFirst().orElseThrow(PhoneTypeNotFoundException::new);
     }
 }

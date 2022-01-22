@@ -1,8 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.controller.converter.ConsumerConverter;
 import br.com.alelo.consumer.consumerpat.controller.validator.CardValidator;
-import br.com.alelo.consumer.consumerpat.controller.validator.ConsumerValidator;
 import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.CardService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,49 +43,22 @@ public class CardController {
         }
     }
 
-
-
-    /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-     *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+    /**
+     * O valor só pode ser debitado do cartão com os tipo correspondentes ao tipo do estabelecimento da compra.
+     *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(FOOD) então o valor só pode ser debitado do cartão e alimentação(FOOD)
      *
      * Tipos de estabelcimentos
      * 1 - Alimentação (food)
      * 2 - Farmácia (DrugStore)
      * 3 - Posto de combustivel (Fuel)
+     * @param establishmentType
+     * @param establishmentName
+     * @param cardNumber
+     * @param productDescription
+     * @param value
      */
-
-  /*
-    @ResponseBody
-    @GetMapping(value = "/buy")
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
-
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        } else if (establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
-        }
-
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
+    @PostMapping(value = "/buy")
+    public void buy(Integer establishmentType, String establishmentName, String cardNumber, String productDescription, Double value) {
+        cardService.buy(establishmentType,establishmentName,cardNumber,productDescription,value);
     }
-    */
 }

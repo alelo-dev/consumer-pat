@@ -22,7 +22,7 @@ public class Extract {
     @Column(name = "ESTABLISHMENT_TYPE")
     private Integer establishmentType;
     @Column(name = "OPERATION_TYPE")
-    private Integer operationTYpe;
+    private Integer operationType;
     @Column(name = "ESTABLISHMENT_NAME")
     private String establishmentName;
     @Column(name = "PRODUCT_DESCRIPTION")
@@ -33,5 +33,4 @@ public class Extract {
     private String cardNumber;
     @Column(name = "VALUE")
     private Double value;
-
 }
