@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CreateCardDTO {
 
-    private Integer number;
+    private String number;
     private Double balance;
     private CardTypeEnum cardType;
 }

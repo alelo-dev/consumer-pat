@@ -17,10 +17,15 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
-    private Integer number;
+    @Column(name = "NUMBER")
+    private String number;
+    @Column(name = "BALANCE")
     private Double balance;
+    @Column(name = "CARD_TYPE")
     private Integer cardType;
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
     @Override

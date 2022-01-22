@@ -10,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 public class CreatePhoneDTO {
 
-    private Integer number;
+    private String number;
     private PhoneTypeEnum phoneType;
 }

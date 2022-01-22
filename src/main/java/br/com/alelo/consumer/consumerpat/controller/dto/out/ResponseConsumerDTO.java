@@ -14,7 +14,7 @@ import java.util.List;
 public class ResponseConsumerDTO {
 
     private String name;
-    private Integer documentNumber;
+    private String documentNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private List<ResponsePhoneDTO> phoneDTOS;

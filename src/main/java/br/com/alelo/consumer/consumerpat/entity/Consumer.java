@@ -21,29 +21,39 @@ public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
+    @Column(name = "NAME")
     private String name;
-    private Integer documentNumber;
+    @Column(name = "DOCUMENT_NUMBER")
+    private String documentNumber;
+    @Column(name = "BIRTH_DATE")
     private LocalDate birthDate;
 
     //contacts
     @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_consumer", nullable = false)
     private List<Phone> phoneList;
+    @Column(name = "EMAIL")
     private String email;
 
     //Address
+    @Column(name = "STREET")
     private String street;
+    @Column(name = "NUMBER")
     private Integer number;
+    @Column(name = "CITY")
     private String city;
+    @Column(name = "COUNTRY")
     private String country;
-    @Column(name = "portalCode")
+    @Column(name = "PORTAL_CODE")
     private Integer postalCode;
 
     @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_consumer", nullable = false)
     private List<Card> cardList;
 
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
     @Override

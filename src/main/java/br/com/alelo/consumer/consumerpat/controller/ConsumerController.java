@@ -27,9 +27,6 @@ import java.util.Objects;
 public class ConsumerController {
 
     @Autowired
-    ConsumerRepository repository;
-
-    @Autowired
     ConsumerService consumerService;
 
     @Autowired

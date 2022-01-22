@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,8 +17,12 @@ public class Phone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Integer id;
-    private Integer number;
+    @Column(name = "NUMBER")
+    private String number;
+    @Column(name = "PHONE_TYPE")
     private Integer phoneType;
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 }
