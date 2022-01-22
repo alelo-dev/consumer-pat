@@ -18,16 +18,14 @@ public class CreateConsumerDTO {
     private String documentNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    //contacts
     @JsonProperty("phones")
     private List<CreatePhoneDTO> createPhoneDTOS;
     private String email;
-    //Address
     private String street;
     private Integer number;
     private String city;
     private String country;
     private Integer postalCode;
     @JsonProperty("cards")
-    private List<CreateCardDTO> createCardDTOS; //cards
+    private List<CreateCardDTO> createCardDTOS;
 }

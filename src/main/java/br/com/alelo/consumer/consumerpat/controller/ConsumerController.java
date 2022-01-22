@@ -30,8 +30,6 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
-    /* Deve listar todos os clientes (cerca de 500) */
-
     /**
      * Lista todos os clientes
      *

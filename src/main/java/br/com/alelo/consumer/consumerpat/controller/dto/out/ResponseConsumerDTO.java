@@ -24,6 +24,6 @@ public class ResponseConsumerDTO {
     private String city;
     private String country;
     private Integer postalCode;
-    private List<ResponseCardDTO> cardDTOS; //cards
+    private List<ResponseCardDTO> cardDTOS;
 
 }

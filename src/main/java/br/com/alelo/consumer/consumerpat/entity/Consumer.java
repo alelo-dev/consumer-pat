@@ -27,15 +27,11 @@ public class Consumer {
     private String documentNumber;
     @Column(name = "BIRTH_DATE")
     private LocalDate birthDate;
-
-    //contacts
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "id_consumer", nullable = false)
     private List<Phone> phoneList;
     @Column(name = "EMAIL")
     private String email;
-
-    //Address
     @Column(name = "STREET")
     private String street;
     @Column(name = "NUMBER")
@@ -46,14 +42,11 @@ public class Consumer {
     private String country;
     @Column(name = "PORTAL_CODE")
     private Integer postalCode;
-
     @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_consumer", nullable = false)
     private List<Card> cardList;
-
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
-
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 }
