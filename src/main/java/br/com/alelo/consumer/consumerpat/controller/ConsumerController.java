@@ -33,6 +33,13 @@ public class ConsumerController {
     ExtractRepository extractRepository;
 
     /* Deve listar todos os clientes (cerca de 500) */
+
+    /**
+     * Lista todos os clientes
+     *
+     * @param pageable
+     * @return
+     */
     @GetMapping()
     public Page<ResponseConsumerDTO> listAllConsumers(@PageableDefault(size = 100, direction = Sort.Direction.ASC) Pageable pageable) {
 
@@ -47,17 +54,12 @@ public class ConsumerController {
     @PostMapping
     public ResponseEntity<String> createConsumer(@RequestBody CreateConsumerDTO createConsumer) {
         final String validated = ConsumerValidator.validate(createConsumer);
-        try {
-            if (Objects.isNull(validated)) {
-                consumerService.createConsumer(ConsumerConverter.toEntity(createConsumer));
-                return ResponseEntity.ok().build();
-            } else {
-                log.error("Falha validação");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validated);
-            }
-        } catch (Exception e) {
-            log.error("Falha geral {}", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        if (Objects.isNull(validated)) {
+            consumerService.createConsumer(ConsumerConverter.toEntity(createConsumer));
+            return ResponseEntity.ok().build();
+        } else {
+            log.error("Falha validação");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validated);
         }
     }
 
@@ -65,12 +67,13 @@ public class ConsumerController {
      * Atualiza dados do cliente
      * Não deve ser possível alterar o saldo do cartão
      *
-     * @param id - id do cliente
+     * @param id
+     * @param updateConsumerDTO
      */
-    @PatchMapping(value = "/updateConsumer/{id}")
+    @PutMapping(value = "/{id}")
     public void updateConsumer(@PathVariable("id") Integer id, @RequestBody UpdateConsumerDTO updateConsumerDTO) {
 
-        //   consumerService.updateConsumer(id, updateConsumerDTO);
+        consumerService.updateConsumer(id, updateConsumerDTO);
     }
 
     /*

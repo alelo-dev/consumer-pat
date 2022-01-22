@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller.converter;
 
 import br.com.alelo.consumer.consumerpat.controller.dto.in.CreateConsumerDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.in.UpdateConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseCardDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponseConsumerDTO;
 import br.com.alelo.consumer.consumerpat.controller.dto.out.ResponsePhoneDTO;
@@ -68,7 +69,7 @@ public class ConsumerConverter {
                     ResponsePhoneDTO.builder()
                             .number(phone.getNumber())
                             .phoneType(PhoneTypeEnum.getEnum(phone.getPhoneType()))
-                    .build());
+                            .build());
 
         });
 

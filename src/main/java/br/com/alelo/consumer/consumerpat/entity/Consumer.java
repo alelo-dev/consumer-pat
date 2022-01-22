@@ -31,7 +31,7 @@ public class Consumer {
     private LocalDate birthDate;
 
     //contacts
-    @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval=true)
     @JoinColumn(name = "id_consumer", nullable = false)
     private List<Phone> phoneList;
     @Column(name = "EMAIL")
@@ -55,6 +55,9 @@ public class Consumer {
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
+
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object o) {

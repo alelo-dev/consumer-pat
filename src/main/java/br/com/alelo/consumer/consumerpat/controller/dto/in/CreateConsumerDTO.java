@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller.dto.in;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,6 +19,7 @@ public class CreateConsumerDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     //contacts
+    @JsonProperty("phones")
     private List<CreatePhoneDTO> createPhoneDTOS;
     private String email;
     //Address
@@ -26,5 +28,6 @@ public class CreateConsumerDTO {
     private String city;
     private String country;
     private Integer postalCode;
+    @JsonProperty("cards")
     private List<CreateCardDTO> createCardDTOS; //cards
 }
