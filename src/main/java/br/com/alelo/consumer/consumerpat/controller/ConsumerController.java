@@ -55,14 +55,14 @@ public class ConsumerController {
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public ResponseEntity<?> setBalance(int cardNumber, double value) {
         consumerService.balance(cardNumber, value);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public ResponseEntity<?> buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         extractService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
