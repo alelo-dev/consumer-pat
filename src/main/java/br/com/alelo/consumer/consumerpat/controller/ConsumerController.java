@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.ValidacaoException;
+import br.com.alelo.consumer.consumerpat.request.BuyRequest;
+import br.com.alelo.consumer.consumerpat.request.UpdateBalanceRequest;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import io.swagger.annotations.Api;
 
@@ -35,8 +37,7 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public Page<Consumer> listAllConsumers(@PageableDefault(direction = Sort.Direction.ASC,
-            page = 0, size = 50) Pageable pageable) {
+    public Page<Consumer> listAllConsumers(@PageableDefault(direction = Sort.Direction.ASC,page = 0, size = 50) Pageable pageable) {
         return (Page<Consumer>) consumerService.getAllConsumersList(pageable);
     }
 
@@ -59,27 +60,28 @@ public class ConsumerController {
     	consumerService.updateConsumer(consumer);
     }
 
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
-    public void setBalance(final Integer cardNumber, final Double value) {
-    	if(isNull(cardNumber) || isNull(value)) {
+    @RequestMapping(value = "/setCardBalance", method = RequestMethod.POST)
+    public void setBalance(@RequestBody UpdateBalanceRequest updateBalance) {
+    	if(isNull(updateBalance) || isNull(updateBalance.getCardNumber()) || isNull(updateBalance.getValue())) {
 			throw new ValidacaoException("Favor informar todos os dados necessários.");
     	}
-    	consumerService.updateBalance(cardNumber, value);
+    	
+    	if( updateBalance.getValue() < 0.0) {
+    		throw new ValidacaoException("Valor informado é invalido.");
+    	}
+    	consumerService.updateBalance(updateBalance);
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy")
     @Transactional
-    public void buy(Integer establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value) {
-    	if(isNull(establishmentType) || isNull(establishmentName) || isNull(cardNumber) || isNull(productDescription) || isNull(value) ) {
+    public void buy(@RequestBody BuyRequest buyRequest) {
+    	
+    	if(isNull(buyRequest) || isNull(buyRequest.getEstablishmentName()) || isNull(buyRequest.getCardNumber()) || isNull(buyRequest.getProductDescription()) || isNull(buyRequest.getValue())) {
 			throw new ValidacaoException("Favor informar todos os dados necessários.");
     	}
     	
-    	if( establishmentType != 1 && establishmentType != 2 && establishmentType != 3 ) {
-			throw new ValidacaoException("Favor informar o estabelecimento correto");
-    	}
-    	
-    	consumerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+    	consumerService.buy(buyRequest);
     }
 
 }

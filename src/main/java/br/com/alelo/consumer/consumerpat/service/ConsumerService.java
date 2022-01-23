@@ -4,10 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.request.BuyRequest;
+import br.com.alelo.consumer.consumerpat.request.UpdateBalanceRequest;
 
 public interface ConsumerService {
 	
-	Consumer updateBalance(Integer cardNumber, Double value);
+	Consumer updateBalance(UpdateBalanceRequest updateBalance);
 	
 	Page<Consumer> getAllConsumersList(Pageable pageable);
 	
@@ -15,6 +17,6 @@ public interface ConsumerService {
 	
 	boolean updateConsumer(Consumer consumer);
 	
-	void buy(Integer establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value);
+	void buy(BuyRequest buyRequest);
 
 }

@@ -1,7 +1,5 @@
 package br.com.alelo.consumer.consumerpat.service.impl;
 
-import static br.com.alelo.consumer.consumerpat.util.Util.isNull;
-
 import java.util.Date;
 import java.util.Optional;
 
@@ -14,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.entity.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.exception.ValidacaoException;
+import br.com.alelo.consumer.consumerpat.request.BuyRequest;
+import br.com.alelo.consumer.consumerpat.request.UpdateBalanceRequest;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
@@ -29,38 +30,33 @@ public class ConsumerServiceImpl implements ConsumerService{
     ExtractRepository extractRepository;
 
 	@Override
-	public Consumer updateBalance(Integer cardNumber, Double value) {
-		Consumer consumer = null;
+	public Consumer updateBalance(UpdateBalanceRequest updateBalance) {
+		Optional<Consumer> consumer = null;
 		
-		if(isNull(cardNumber)) {
-			throw new ValidacaoException("O parâmetro do número do cartão é obrigatório.");
-		}
+		consumer = consumerRepository.findByDrugstoreNumber(updateBalance.getCardNumber());
 		
-		consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
-		
-		if(consumer != null) {
-			consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-			consumerRepository.save(consumer);
+		if(consumer.isPresent() ) {
+			consumer.get().setDrugstoreCardBalance(consumer.get().getDrugstoreCardBalance() + updateBalance.getValue());
+			consumerRepository.save(consumer.get());
 		} else {
 
-			consumer = consumerRepository.findByFoodCardNumber(cardNumber); 
+			consumer = consumerRepository.findByFoodCardNumber(updateBalance.getCardNumber()); 
 			if(consumer != null) {
-				consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-				consumerRepository.save(consumer);
+				consumer.get().setFoodCardBalance(consumer.get().getFoodCardBalance() + updateBalance.getValue());
+				consumerRepository.save(consumer.get());
 			} else {
-				consumer = consumerRepository.findByFuelCardNumber(cardNumber);
+				consumer = consumerRepository.findByFuelCardNumber(updateBalance.getCardNumber());
 				if(consumer !=null) {
-					consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-					consumerRepository.save(consumer);
+					consumer.get().setFuelCardBalance(consumer.get().getFuelCardBalance() + updateBalance.getCardNumber());
+					consumerRepository.save(consumer.get());
 				}
 			}
 		}
 		
-		if(isNull(consumer)) {
+		if(!consumer.isPresent()) 
 			throw new ValidacaoException("O cartão não foi encontrado.");
-		}
 		
-		return consumer;
+		return consumer.get();
 	}
 
 	@Override
@@ -102,37 +98,28 @@ public class ConsumerServiceImpl implements ConsumerService{
 	}
 
 	@Override
-	public void buy(Integer establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value) {
+	public void buy(BuyRequest buyRequest) {
 		
 		Consumer consumer = null;
-		
-		if (establishmentType == 1) {
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
+				
+		if (buyRequest.getTypeEstablishment().equals(EstablishmentType.FOOD) ) {
+            Double cashback  = (buyRequest.getValue() / 100) * 10;
+            buyRequest.setValue(buyRequest.getValue() - cashback);
             
-            consumer = consumerRepository.findByFoodCardNumber(cardNumber);
-            if(isNull(consumer)) {
-    			throw new ValidacaoException("Cartão inválido para o estabelecimento.");
-    		}
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            consumer = consumerRepository.findByFoodCardNumber(buyRequest.getCardNumber()).orElseThrow(ValidacaoException::new);
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - buyRequest.getValue());
             consumer = consumerRepository.save(consumer);
 
-        }else if(establishmentType == 2) {
-            consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
-            if(isNull(consumer)) {
-    			throw new ValidacaoException("Cartão inválido para o estabelecimento.");
-    		}
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+        }else if(buyRequest.getTypeEstablishment().equals(EstablishmentType.DRUGSTORE) ) {
+            consumer = consumerRepository.findByDrugstoreNumber(buyRequest.getCardNumber()).orElseThrow(ValidacaoException::new);
+            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - buyRequest.getValue());
             consumer = consumerRepository.save(consumer);
         } else {
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = consumerRepository.findByFuelCardNumber(cardNumber);
-            if(isNull(consumer)) {
-    			throw new ValidacaoException("Cartão inválido para o estabelecimento.");
-    		}
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+            Double tax  = (buyRequest.getValue() / 100) * 35;
+            buyRequest.setValue(buyRequest.getValue()+tax);
+            
+            consumer = consumerRepository.findByFuelCardNumber(buyRequest.getCardNumber()).orElseThrow(ValidacaoException::new);
+            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - buyRequest.getValue());
             consumer = consumerRepository.save(consumer);
         }
 		
@@ -140,12 +127,11 @@ public class ConsumerServiceImpl implements ConsumerService{
 			throw new ValidacaoException("Falha ao debitar o valor do usuário.");
 		}
 		
-		Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+		Extract extract = new Extract(buyRequest.getEstablishmentName(), buyRequest.getProductDescription(), new Date(), buyRequest.getCardNumber(), buyRequest.getValue());
 		extract = extractRepository.save(extract);
         
-        if(extract==null) {
+        if(extract==null) 
 			throw new ValidacaoException("Falha ao debitar o valor do estabelecimento.");
-		}
 	}
 
 }

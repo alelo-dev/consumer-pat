@@ -7,4 +7,8 @@ public class ValidacaoException extends ConsumerException{
 	public ValidacaoException(final String message) {
 		super(message);
 	}
+	
+	public ValidacaoException() {
+        super("Falha na operação.");
+    }
 }

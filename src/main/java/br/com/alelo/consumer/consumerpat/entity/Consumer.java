@@ -21,8 +21,6 @@ public class Consumer {
     private String name;
     private Integer documentNumber;
     private Date birthDate;
-
-    //contacts
     private Integer mobilePhoneNumber;
     private Integer residencePhoneNumber;
     private Integer phoneNumber;
@@ -44,5 +42,8 @@ public class Consumer {
 
     private Integer drugstoreNumber;
     private Double drugstoreCardBalance;
+    
+//    private AddressConsumer addressConsumer;
+//    private List<CardConsumer> cards;
 
 }

@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.respository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,11 +15,11 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
     Page<Consumer> getAllConsumersList(Pageable pageable);
 	
     @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
-    Consumer findByFoodCardNumber(int cardNumber);
+    Optional<Consumer> findByFoodCardNumber(int cardNumber);
 
     @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
-    Consumer findByFuelCardNumber(int cardNumber);
+    Optional<Consumer> findByFuelCardNumber(int cardNumber);
 
     @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
-    Consumer findByDrugstoreNumber(int cardNumber);
+    Optional<Consumer> findByDrugstoreNumber(int cardNumber);
 }
