@@ -53,14 +53,16 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
+    public ResponseEntity<?> setBalance(int cardNumber, double value) {
         consumerService.balance(cardNumber, value);
+        return ResponseEntity.ok().build();
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+    public ResponseEntity<?> buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         extractService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+        return ResponseEntity.ok().build();
     }
 
 }
