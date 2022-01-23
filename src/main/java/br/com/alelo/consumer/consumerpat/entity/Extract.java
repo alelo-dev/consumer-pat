@@ -1,26 +1,35 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Extract {
 
     @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    private int establishmentNameId;
+    private String establishmentName;
+    private String productDescription;
+    private Date dateBuy;
+    private int cardNumber;
+    private double value;
 
-
+/*
     public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
@@ -46,4 +55,5 @@ public class Extract {
         this.cardNumber = cardNumber;
         this.value = value;
     }
+    */
 }
