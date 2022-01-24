@@ -58,7 +58,7 @@ public class CardServiceImpl implements CardService {
                     cardRepository.save(card);
                     break;
                 case FUEL:
-                    card.setBalance(card.getBalance() - (value + (value + 0.35)));
+                    card.setBalance(card.getBalance() - (value + (value * 0.35)));
                     cardRepository.save(card);
                     break;
                 default:
