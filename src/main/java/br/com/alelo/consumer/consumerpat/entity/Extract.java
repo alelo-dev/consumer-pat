@@ -1,13 +1,21 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Extract {
 
@@ -16,13 +24,21 @@ public class Extract {
     int establishmentNameId;
     String establishmentName;
     String productDescription;
-    Date dateBuy;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime dateBuy;
+
     int cardNumber;
-    double value;
+    BigDecimal value;
 
+    public Extract(String productDescription, LocalDateTime dateBuy, int cardNumber, BigDecimal value) {
+        this.productDescription = productDescription;
+        this.dateBuy = dateBuy;
+        this.cardNumber = cardNumber;
+        this.value = value;
+    }
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
+    public Extract(String establishmentName, String productDescription, LocalDateTime dateBuy, int cardNumber, BigDecimal value) {
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
@@ -31,19 +47,4 @@ public class Extract {
         this.value = value;
     }
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
 }

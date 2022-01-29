@@ -1,24 +1,9 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.entity.dto;
 
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.Serializable;
 import java.util.Date;
 
+public class ConsumerDTO {
 
-@Data
-@Entity
-@EqualsAndHashCode(of = "{id,documentNumber}")
-public class Consumer implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
     private  Integer documentNumber;
@@ -36,5 +21,6 @@ public class Consumer implements Serializable {
     private  String city;
     private  String country;
     private  Integer portalCode;
+
 
 }

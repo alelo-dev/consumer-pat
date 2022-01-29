@@ -3,9 +3,11 @@ package br.com.alelo.consumer.consumerpat.respository;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     @Query(nativeQuery = true, value = "select * from Consumer")
@@ -19,4 +21,7 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
     Consumer findByDrugstoreNumber(int cardNumber);
+
+    @Query("select c.consumer from Card c where c.cardNumber=:cardNumber and c.cardType=:cardType")
+    Consumer findByCardNumber(int cardNumber, int cardType);
 }
