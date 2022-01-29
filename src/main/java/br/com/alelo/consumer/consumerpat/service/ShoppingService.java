@@ -23,11 +23,17 @@ import java.util.Objects;
 @Service
 public class ShoppingService {
 
-    @Autowired
     private EstablishmenService establishmenService;
     private ExtractService extractService;
     private CardService cardService;
 
+
+    @Autowired
+    public ShoppingService(EstablishmenService establishmenService, ExtractService extractService, CardService cardService){
+        this.establishmenService = establishmenService;
+        this. extractService = extractService;
+        this.cardService = cardService;
+    }
 
     public TransactionDTO buy(BuyDTO buyDTO) throws Exception {
 
@@ -48,6 +54,8 @@ public class ShoppingService {
         return this.buy(extract, card);
 
     }
+
+
 
     @Transactional
     public TransactionDTO buy(Extract extract, Card card) {

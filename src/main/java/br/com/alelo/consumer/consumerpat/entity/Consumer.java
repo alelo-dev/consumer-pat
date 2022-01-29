@@ -1,20 +1,24 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
+
 @Data
-@Entity
+@Builder
 @EqualsAndHashCode(of = "{id,documentNumber}")
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Consumer implements Serializable {
 
     @Id
@@ -25,9 +29,9 @@ public class Consumer implements Serializable {
     private  Date birthDate;
 
     //contacts
-    private  Integer mobilePhoneNumber;
-    private Integer residencePhoneNumber;
-    private  Integer phoneNumber;
+    private  String mobilePhoneNumber;
+    private String residencePhoneNumber;
+    private  String phoneNumber;
     private  String email;
 
     //Address
@@ -36,5 +40,8 @@ public class Consumer implements Serializable {
     private  String city;
     private  String country;
     private  Integer portalCode;
+
+
+    private LocalDateTime createDate;
 
 }

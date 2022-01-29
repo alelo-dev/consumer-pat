@@ -5,6 +5,9 @@ import br.com.alelo.consumer.consumerpat.entity.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,37 +20,44 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
-    @Autowired
-    ConsumerService service;
+
+    private ConsumerService service;
 
     @Autowired
-    ExtractRepository extractRepository;
-
-    @Autowired
-    public ConsumerController(ConsumerService service, ExtractRepository extractRepository) {
-        this.extractRepository = extractRepository;
+    public ConsumerController(ConsumerService service){
         this.service = service;
     }
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/consumerList")
-    public ResponseEntity<List<Consumer>> listAllConsumers() {
-        return ResponseEntity.ok(service.getAllConsumersList(5, 1));
+    public ResponseEntity<Page<Consumer>> listAllConsumers(@RequestParam("page") int page,
+                                                           @RequestParam("size") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getAllConsumersList(pageable));
     }
+
+    /* Deve listar todos os clientes (cerca de 500) */
+
+    @GetMapping
+    public ResponseEntity<List<Consumer>> get(@RequestParam("page") int page,
+                                                           @RequestParam("size") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(service.getAllConsumersList(pageable).getContent());
+    }
+
 
 
     /* Cadastrar novos clientes */
     @PostMapping("/createConsumer")
-    public void createConsumer(@RequestBody ConsumerDTO consumer) {
-        service.save(consumer);
+    public ResponseEntity<Consumer> createConsumer(@RequestBody ConsumerDTO consumer) {
+        return ResponseEntity.ok(service.save(consumer));
     }
 
     // Não deve ser possível alterar o saldo do cartão
+    // A responsabilidade de atualização de saldo do cartão foi para o EndPoint de cartões.
     @PutMapping("/updateConsumer")
     public void updateConsumer(@RequestBody ConsumerDTO consumer) {
         service.save(consumer);
     }
-
 
 }

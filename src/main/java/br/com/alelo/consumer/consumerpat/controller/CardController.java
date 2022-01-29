@@ -23,9 +23,9 @@ public class CardController {
     private final ShoppingService shoppingService;
 
     @Autowired
-    public CardController(CardService service, ShoppingService shoppingService) {
+    public CardController(CardService cardService, ShoppingService shoppingService) {
 
-        this.service = service;
+        this.service = cardService;
         this.shoppingService = shoppingService;
     }
 
@@ -38,14 +38,13 @@ public class CardController {
     @PutMapping("/setcardbalance")
     public void setBalance(int cardNumber, BigDecimal value) {
         service.credit(cardNumber, value);
-
     }
 
 
 
 
     @PostMapping("/buy")
-    public ResponseEntity<TransactionDTO> buy(@Validated @RequestBody BuyDTO buyDTO) throws Exception {
+    public ResponseEntity<TransactionDTO> buy(@RequestBody @Validated BuyDTO buyDTO) throws Exception {
 
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
          *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação

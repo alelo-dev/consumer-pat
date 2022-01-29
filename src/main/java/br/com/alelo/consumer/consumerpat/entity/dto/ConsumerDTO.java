@@ -1,7 +1,14 @@
 package br.com.alelo.consumer.consumerpat.entity.dto;
 
+import lombok.*;
+
 import java.util.Date;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ConsumerDTO {
 
     private Integer id;
@@ -10,9 +17,9 @@ public class ConsumerDTO {
     private  Date birthDate;
 
     //contacts
-    private  Integer mobilePhoneNumber;
-    private Integer residencePhoneNumber;
-    private  Integer phoneNumber;
+    private  String mobilePhoneNumber;
+    private String residencePhoneNumber;
+    private  String phoneNumber;
     private  String email;
 
     //Address
