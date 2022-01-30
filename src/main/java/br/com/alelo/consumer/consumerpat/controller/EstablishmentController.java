@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.entity.dto.EstablishmentDTO;
 import br.com.alelo.consumer.consumerpat.service.EstablishmenService;

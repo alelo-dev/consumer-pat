@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.entity.dto.EstablishmentDTO;
 import br.com.alelo.consumer.consumerpat.entity.mapper.EstablishmentMapper;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -26,14 +26,14 @@ public class EstablishmenService implements Serializable {
 
     @Transactional
     public EstablishmentDTO save(EstablishmentDTO establishmentDTO){
-        Establishment entity = EstablishmentMapper.dtoToEntity(establishmentDTO);
+        var entity = EstablishmentMapper.dtoToEntity(establishmentDTO);
         entity.setCreateDate(LocalDateTime.now());
         entity = this.repository.save(entity);
         return EstablishmentMapper.entityToDTO(entity);
     }
 
     public Establishment findById(Integer establishmenId) {
-        return this.repository.findById(establishmenId).get();
+        return this.repository.findById(establishmenId).orElseThrow(EntityNotFoundException::new);
     }
 
     public Page<Establishment> getList(Pageable pageable) {

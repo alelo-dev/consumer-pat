@@ -39,7 +39,6 @@ public class Extract {
     }
 
     public Extract(String establishmentName, String productDescription, LocalDateTime dateBuy, int cardNumber, BigDecimal value) {
-        this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
