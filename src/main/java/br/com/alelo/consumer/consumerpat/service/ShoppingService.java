@@ -38,6 +38,7 @@ public class ShoppingService {
         this.cardService = cardService;
     }
 
+    @Transactional
     public TransactionDTO buy(BuyDTO buyDTO) throws BusinessException {
 
         validated(buyDTO);
@@ -55,13 +56,14 @@ public class ShoppingService {
                 .dateBuy(LocalDateTime.now())
                 .build();
 
+
         return this.buy(extract, card);
 
     }
 
     private void validated(BuyDTO buyDTO) throws BusinessException {
 
-        List<ErrorDTO> errorList = new ArrayList<ErrorDTO>();
+        List<ErrorDTO> errorList = new ArrayList<>();
 
         if (isNull(buyDTO.getCardNumber())) {
             errorList.add(ErrorDTO.builder().message("card number not found").build());
@@ -91,7 +93,6 @@ public class ShoppingService {
     }
 
 
-    @Transactional
     public TransactionDTO buy(Extract extract, Card card) {
 
         cardService.debtByCard(card, extract.getValue());
@@ -110,11 +111,11 @@ public class ShoppingService {
         switch (cardType) {
 
             case FOOD:
-                value = applyFoodpricerules(value);
+                    this.applyFoodpricerules(value);
                 break;
 
             case FUEL:
-                value = this.applyFuelpricerules(value);
+                    this.applyFuelpricerules(value);
                 break;
         }
 
@@ -161,30 +162,4 @@ public class ShoppingService {
         return establishment;
     }
 
-    /*    if (establishmentType == 1) {
-        // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-        Double cashback  = (value / 100) * 10;
-        value = value - cashback;
-
-        consumer = repository.findByFoodCardNumber(cardNumber);
-        consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-        service.save(consumer);
-
-    }else if(establishmentType == 2) {
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-        consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-        repository.save(consumer);
-
-    } else {
-        // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-        Double tax  = (value / 100) * 35;
-        value = value + tax;
-
-        consumer = repository.findByFuelCardNumber(cardNumber);
-        consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-        service.save(consumer);
-    }
-                }
-
-*/
 }
