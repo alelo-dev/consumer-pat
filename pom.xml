@@ -17,6 +17,8 @@
         <java.version>11</java.version>
         <io.springfox.version>3.0.0</io.springfox.version>
         <org.projectlombok.version>1.18.8</org.projectlombok.version>
+        <sonar.organization>professorfujioka</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>
         <dependency>
