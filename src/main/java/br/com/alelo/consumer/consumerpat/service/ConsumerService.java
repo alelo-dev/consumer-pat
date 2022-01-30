@@ -22,11 +22,11 @@ public class ConsumerService {
     private ConsumerRepository repository;
 
     @Transactional
-    public Consumer save(ConsumerDTO consumerDTO) {
+    public ConsumerDTO save(ConsumerDTO consumerDTO) {
 
         var consumer = ConsumerMapper.dtoToEntity(consumerDTO);
         consumer.setCreateDate(LocalDateTime.now());
-        return repository.save(consumer);
+        return ConsumerMapper.entityToDTO(repository.save(consumer));
     }
 
     @Transactional

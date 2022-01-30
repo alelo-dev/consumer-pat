@@ -11,6 +11,6 @@ import java.io.Serializable;
 @Getter
 public class CardCreateResponseDTO implements Serializable {
 
-    private Integer number;
+    private Integer cardNumber;
     private CardType cardType;
 }

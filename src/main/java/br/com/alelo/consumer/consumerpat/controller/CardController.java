@@ -65,11 +65,6 @@ public class CardController {
         return ResponseEntity.ok(this.shoppingService.buy(buyDTO));
     }
 
-    @GetMapping("/{id}")
-    public void getById(@PathVariable("id") Integer id) {
-        service.findByCardNumber(id);
-    }
-
     @GetMapping("/card-number/{cardNumber}")
     public void getByCardNumber(@PathVariable("cardNumber") Integer cardNumber) {
         service.findByCardNumber(cardNumber);

@@ -37,21 +37,11 @@ public class CardService {
         return card;
     }
 
-    public CardDTO findById(Integer id) {
-        Optional<Card> card = repository.findById(id);
-
-        if(card.isEmpty()){
-            throw new EntityNotFoundException("Não foi encontrado um Cartão para o número informado");
-        }
-        return CardMapper.entityToDTO(card.get());
-    }
-
     @Transactional
     public CardCreateResponseDTO save(CardDTO dto) throws BusinessException {
 
-        this.validateCarNumberdExistis(dto.getNumber());
-        var card = CardMapper.dtoToEntity(dto);
-        card = repository.save(card);
+        this.validateCarNumberdExistis(dto.getCardNumber());
+        var card = repository.save(CardMapper.dtoToEntity(dto));
 
         return CardMapper.newEntityToDTO(card);
     }

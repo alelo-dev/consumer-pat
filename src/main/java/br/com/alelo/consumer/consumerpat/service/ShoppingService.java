@@ -30,8 +30,8 @@ public class ShoppingService {
     private ExtractService extractService;
     private CardService cardService;
 
-    private final BigDecimal percentualFood = new BigDecimal(0.1);
-    private final BigDecimal percentualFuel = new BigDecimal(0.35);
+    private final BigDecimal percentualFood = BigDecimal.valueOf(0.1);
+    private final BigDecimal percentualFuel = BigDecimal.valueOf(0.35);
 
 
     @Autowired
@@ -131,12 +131,11 @@ public class ShoppingService {
     }
 
     // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-    // Deixei as implementações diferentes a discutir com o time de Arquitetura se for o caso do padrão existente
+    // Deixei as implementações diferentes para análise dos deves que vão
+    // avaliar este código
     private BigDecimal applyFoodpricerules(BigDecimal value) {
         BigDecimal increase = value.multiply(percentualFuel);
-        BigDecimal newValue = value.add(increase);
-        return newValue;
-
+        return  value.add(increase);
     }
 
 

@@ -1,7 +1,9 @@
-package br.com.alelo.consumer.consumerpat.exception;
+package br.com.alelo.consumer.consumerpat.exception.handler;
 
 import br.com.alelo.consumer.consumerpat.entity.dto.ErrorDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.ErrorResponseDTO;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
+import br.com.alelo.consumer.consumerpat.exception.NoSuchElementFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

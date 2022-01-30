@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity.dto;
 
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
 import lombok.*;
 
@@ -13,8 +14,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CardDTO implements Serializable {
 
-    private Integer number;
-    private BigDecimal balance;
+    private Integer cardNumber;
+    private BigDecimal balanceValue;
     private CardType cardType;
+    private Consumer consumer;
 
 }
