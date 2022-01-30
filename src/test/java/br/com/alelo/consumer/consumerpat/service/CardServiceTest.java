@@ -1,27 +1,22 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mock.*;
-
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
-import br.com.alelo.consumer.consumerpat.entity.mapper.CardMapper;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 class CardServiceTest {
@@ -40,8 +35,6 @@ class CardServiceTest {
     @Mock
     private CardRepository repository;
 
-    @Autowired
-    private CardMapper mapper;
     @Mock
     private Card cardMock;
     @Mock
@@ -73,7 +66,7 @@ class CardServiceTest {
     }
 
     @Test
-    void save() throws BusinessException {
+    void should_save() throws BusinessException {
 
         CardCreateResponseDTO card =  CardCreateResponseDTO.builder()
                 .cardType(cardDTOMock.getCardType())
@@ -85,30 +78,38 @@ class CardServiceTest {
     }
 
     @Test
-    void shold_findByCardNumber() {
-        when(repository.findByCardNumber(CARD_NUMBER)).thenReturn(cardMock);
+    void should_findByCardNumber() {
+        when(service.findByCardNumber(CARD_NUMBER)).thenReturn(cardMock);
         var cardFind = service.findByCardNumber(CARD_NUMBER);
         assertEquals(CARD_NUMBER, cardFind.getCardNumber());
     }
 
     @Test
-    void shold_findByCardNumber_not_found() {
+    void shouldshold_findByCardNumber_not_found() {
+        when(service.findByCardNumber(-1)).thenThrow(new EntityNotFoundException("Não foi encontrado um Cartão para o número informado"));
         EntityNotFoundException exception =  assertThrows(EntityNotFoundException.class, () -> service.findByCardNumber(-1));
         assertEquals("Não foi encontrado um Cartão para o número informado", exception.getMessage());
     }
 
 
-
-
     @Test
-    void debtByCard() {
+    void should_debtByCardw_hith_balance_enough() {
+
     }
 
     @Test
-    void credit() {
+    void should_debtByCard_whith_balance_not_enough() {
+        BigDecimal debit = BigDecimal.valueOf(4000.00);
+        when(service.debtByCard(cardMock, debit )).thenThrow(new EntityNotFoundException("Não foi encontrado um Cartão para o número informado"));
     }
 
     @Test
-    void creditByCard() {
+    void should_credit() {
+
+    }
+
+    @Test
+    void should_creditByCard() {
+
     }
 }

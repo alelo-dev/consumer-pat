@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.extern.slf4j.Slf4j;

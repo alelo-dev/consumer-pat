@@ -69,7 +69,7 @@ public class RequestHandlerExceptionHandler extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> businessError(BusinessException exception) {
-        log.info("Business Error,  message={}, cause={}", exception.getMessage(), exception.getCause());
+        log.info(BUSINESS_ERROR_TEXT, exception.getMessage(), exception.getCause());
 
         List<ErrorDTO> errorMessageDtoList = new ArrayList<>();
 

@@ -46,9 +46,9 @@ public class CardService {
         return CardMapper.newEntityToDTO(card);
     }
 
-
     @Transactional
     public Card debtByCard(Card card, BigDecimal value) {
+
 
         card.setBalanceValue(card.getBalanceValue().subtract(value));
         card = repository.save(card);
@@ -73,6 +73,12 @@ public class CardService {
         card.setBalanceValue(card.getBalanceValue().add(value));
         return repository.save(card);
 
+    }
+
+    public void validateCardBalance(Card card, BigDecimal debitValue) throws BusinessException {
+        if(card.getBalanceValue().compareTo(debitValue) < 0){
+            throw new BusinessException("Não existe Crédito suficiente para transação");
+        }
     }
 
     private void validateCarNumberdExistis(Integer cardNumber) throws BusinessException {

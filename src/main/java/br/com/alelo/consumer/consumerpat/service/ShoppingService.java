@@ -48,7 +48,6 @@ public class ShoppingService {
         var establishment = validEstablishmentTypeBuy(buyDTO);
         var card = getCardByNumber(buyDTO.getCardNumber());
         BigDecimal valueDebit = applyPricingRules(card.getCardType(), buyDTO.getValue());
-        validateCardBalance(card, valueDebit);
 
         Extract extract = Extract.builder()
                 .cardNumber(card.getCardNumber())
@@ -96,8 +95,9 @@ public class ShoppingService {
     }
 
 
-    public TransactionDTO buy(Extract extract, Card card) {
+    public TransactionDTO buy(Extract extract, Card card) throws BusinessException {
 
+        cardService.validateCardBalance(card, extract.getValue());
         cardService.debtByCard(card, extract.getValue());
         extractService.save(extract);
 
@@ -139,12 +139,7 @@ public class ShoppingService {
     }
 
 
-    private Card validateCardBalance(Card card, BigDecimal debitValue) throws BusinessException {
-        if(card.getBalanceValue().compareTo(debitValue) < 0){
-            throw new BusinessException("Não existe Crédito suficiente para transação");
-        }
-        return card;
-    }
+
 
     private Establishment validEstablishmentTypeBuy(BuyDTO buyDTO) throws BusinessException {
 
