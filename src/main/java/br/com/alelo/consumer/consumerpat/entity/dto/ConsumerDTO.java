@@ -15,14 +15,10 @@ public class ConsumerDTO {
     private String name;
     private  Integer documentNumber;
     private  Date birthDate;
-
-    //contacts
     private  String mobilePhoneNumber;
     private String residencePhoneNumber;
     private  String phoneNumber;
     private  String email;
-
-    //Address
     private  String street;
     private  Integer number;
     private  String city;

@@ -10,9 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,16 +19,17 @@ import java.util.List;
 @Slf4j
 @ControllerAdvice
 @RequiredArgsConstructor
-public class RequestHandlerException extends ResponseEntityExceptionHandler {
+public class RequestHandlerExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-    private final static String INTERNAL_SERVER_ERROR = "Erro inesperado, refaça a operação";
+    private static final  String INTERNAL_SERVER_ERROR = "Erro inesperado, refaça a operação";
+    private static final  String BUSINESS_ERROR_TEXT = "Business Error,  message={}, cause={}";
 
 
 
     @ExceptionHandler(NoSuchElementFoundException.class)
     public ResponseEntity<Object> businessError(NoSuchElementFoundException exception) {
-        log.info("Business Error,  message={}, cause={}", exception.getMessage(), exception.getCause());
+        log.info(BUSINESS_ERROR_TEXT, exception.getMessage(), exception.getCause());
 
         List<ErrorDTO> errorMessageDtoList = new ArrayList<>();
 
@@ -50,7 +48,7 @@ public class RequestHandlerException extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> businessError(EntityNotFoundException exception) {
-        log.info("Business Error,  message={}, cause={}", exception.getMessage(), exception.getCause());
+        log.info(BUSINESS_ERROR_TEXT, exception.getMessage(), exception.getCause());
 
         List<ErrorDTO> errorMessageDtoList = new ArrayList<>();
 
