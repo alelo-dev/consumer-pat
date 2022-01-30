@@ -30,18 +30,22 @@ public class ConsumerService {
     }
 
     @Transactional
-    public Consumer update(ConsumerDTO consumerDTO) {
+    public ConsumerDTO update(ConsumerDTO consumerDTO) {
 
         if(isNull(consumerDTO.getId())){
             throw new NoSuchElementFoundException("ID Consumer not Found");
         }
         var consumer = ConsumerMapper.dtoToEntity(consumerDTO);
         consumer.setCreateDate(LocalDateTime.now());
-        return repository.save(consumer);
+        return ConsumerMapper.entityToDTO(repository.save(consumer));
     }
 
-    public Page<Consumer> getAllConsumersList( Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<ConsumerDTO> getAllConsumersList( Pageable pageable) {
+        return repository.findAll(pageable).map(this::convert);
+    }
+
+    public ConsumerDTO convert(Consumer consumer) {
+        return ConsumerMapper.entityToDTO(consumer);
     }
 
 }
