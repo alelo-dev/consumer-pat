@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import br.com.alelo.consumer.consumerpat.converters.CardTypeConverter;
 import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
 import lombok.Data;
 

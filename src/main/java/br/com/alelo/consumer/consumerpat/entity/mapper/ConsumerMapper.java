@@ -6,15 +6,19 @@ import org.springframework.beans.BeanUtils;
 
 public class ConsumerMapper {
 
+    private ConsumerMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Consumer dtoToEntity(ConsumerDTO dto){
-        Consumer consumer = new Consumer();
+        var consumer = new Consumer();
         BeanUtils.copyProperties(dto, consumer);
         return consumer;
     }
 
 
     public static ConsumerDTO entityToDTO(Consumer consumer){
-        ConsumerDTO dto = new ConsumerDTO();
+        var dto = new ConsumerDTO();
         BeanUtils.copyProperties(dto, consumer);
         return dto;
     }

@@ -7,22 +7,26 @@ import org.springframework.beans.BeanUtils;
 
 public class CardMapper {
 
+    private CardMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Card dtoToEntity(CardDTO dto){
-        Card card = new Card();
+        var card = new Card();
         BeanUtils.copyProperties(dto, card);
         return card;
     }
 
 
     public static CardDTO entityToDTO(Card entity){
-        CardDTO dto = new CardDTO();
-        BeanUtils.copyProperties(dto, entity);
+        var dto = new CardDTO();
+        BeanUtils.copyProperties(entity, dto);
         return dto;
     }
 
     public static CardCreateResponseDTO newEntityToDTO(Card entity){
-        CardCreateResponseDTO dto = new CardCreateResponseDTO();
-        BeanUtils.copyProperties(dto, entity);
+        var dto =  CardCreateResponseDTO.builder().build();
+        BeanUtils.copyProperties(entity, dto);
         return dto;
     }
 

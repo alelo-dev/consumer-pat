@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.service.CardService;
 import br.com.alelo.consumer.consumerpat.service.ShoppingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class CardController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @PostMapping
-    public ResponseEntity<CardCreateResponseDTO> save(@RequestBody @Validated CardDTO dto) {
+    public ResponseEntity<CardCreateResponseDTO> save(@RequestBody @Validated CardDTO dto) throws BusinessException {
         return ResponseEntity.ok(service.save(dto));
     }
 
@@ -57,7 +58,7 @@ public class CardController {
 
 
     @PostMapping("/buy")
-    public ResponseEntity<TransactionDTO> buy(@RequestBody @Validated BuyDTO buyDTO) throws Exception {
+    public ResponseEntity<TransactionDTO> buy(@RequestBody @Validated BuyDTO buyDTO) throws BusinessException {
 
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
          *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
