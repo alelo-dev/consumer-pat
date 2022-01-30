@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
@@ -32,15 +33,6 @@ public class ConsumerController {
                                                            @RequestParam("size") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(service.getAllConsumersList(pageable));
-    }
-
-    /* Deve listar todos os clientes (cerca de 500) */
-
-    @GetMapping
-    public ResponseEntity<List<Consumer>> get(@RequestParam("page") int page,
-                                                           @RequestParam("size") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(service.getAllConsumersList(pageable).getContent());
     }
 
 

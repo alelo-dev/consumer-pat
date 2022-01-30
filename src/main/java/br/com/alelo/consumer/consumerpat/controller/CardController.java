@@ -11,14 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@Controller
+@RestController
 @RequestMapping("/card")
 public class CardController {
 
@@ -55,8 +52,6 @@ public class CardController {
     }
 
 
-
-
     @PostMapping("/buy")
     public ResponseEntity<TransactionDTO> buy(@RequestBody @Validated BuyDTO buyDTO) throws BusinessException {
 
@@ -69,7 +64,16 @@ public class CardController {
          * 3 - Posto de combustivel (Fuel)
          */
         return ResponseEntity.ok(this.shoppingService.buy(buyDTO));
+    }
 
+    @GetMapping("/{id}")
+    public void getById(@PathVariable("id") Integer id) {
+        service.findByCardNumber(id);
+    }
+
+    @GetMapping("/card-number/{cardNumber}")
+    public void getByCardNumber(@PathVariable("cardNumber") Integer cardNumber) {
+        service.findByCardNumber(cardNumber);
     }
 
 }

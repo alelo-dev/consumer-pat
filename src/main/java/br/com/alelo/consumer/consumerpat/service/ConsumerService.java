@@ -9,6 +9,7 @@ import br.com.alelo.consumer.consumerpat.entity.mapper.ConsumerMapper;
 import br.com.alelo.consumer.consumerpat.exception.NoSuchElementFoundException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,6 @@ public class ConsumerService {
         consumer.setCreateDate(LocalDateTime.now());
         return repository.save(consumer);
     }
-
 
     public Page<Consumer> getAllConsumersList( Pageable pageable) {
         return repository.findAll(pageable);

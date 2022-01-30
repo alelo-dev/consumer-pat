@@ -68,5 +68,7 @@ Incluir configuração para execução do Sonar.
 Dockerizar a API.
 Rever as chamadas dos endpoints para as operações básicas.
 Incluir uma classe abstrata para realizar generilização das ações mais comuns de CRUD nas entidades de Service.
-Para a base de dados utilizaria o Liquibase ou Flyway para vesionamento também. 
+Para a base de dados utilizaria o Liquibase ou Flyway para vesionamento também, não coloquei algumas coisas por causa das restrições informadas. 
+Incluiria de validators para os tipos de dados, no caso do cartão se existe um tamanho mínimo ou padrão. 
+Pensei em incluir cache para os usuários, visto que são apenas 500 usuários, não seria algo que impactaria tanto na performance, a depender do ambiente. 
 

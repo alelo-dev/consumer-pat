@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -18,5 +19,7 @@ public class Establishment {
     @Enumerated(EnumType.STRING)
     private CardType cardTypeAccepted;
 
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime createDate;
 
 }

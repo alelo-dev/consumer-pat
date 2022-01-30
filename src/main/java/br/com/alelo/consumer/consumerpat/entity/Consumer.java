@@ -3,10 +3,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -42,6 +39,7 @@ public class Consumer implements Serializable {
     private  Integer portalCode;
 
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime createDate;
 
 }

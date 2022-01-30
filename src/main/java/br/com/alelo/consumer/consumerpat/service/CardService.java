@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -27,7 +30,20 @@ public class CardService {
     }
 
     public Card findByCardNumber(Integer cardNumber) {
-        return repository.findByCardNumber(cardNumber);
+        Card card = repository.findByCardNumber(cardNumber);
+        if(isNull(card)){
+            throw  new EntityNotFoundException("Não foi encontrado um Cartão para o número informado");
+        }
+        return card;
+    }
+
+    public CardDTO findById(Integer id) {
+        Optional<Card> card = repository.findById(id);
+
+        if(card.isEmpty()){
+            throw new EntityNotFoundException("Não foi encontrado um Cartão para o número informado");
+        }
+        return CardMapper.entityToDTO(card.get());
     }
 
     @Transactional
