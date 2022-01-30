@@ -1,8 +1,11 @@
 package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
+import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.entity.mapper.CardMapper;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,14 @@ public class CardService {
 
     public Card findByCardNumber(Integer cardNumber) {
         return repository.findByCardNumber(cardNumber);
+    }
+
+    public CardCreateResponseDTO save(CardDTO dto) {
+
+        Card card = CardMapper.dtoToEntity(dto);
+        card = repository.save(card);
+
+        return CardMapper.newEntityToDTO(card);
     }
 
 

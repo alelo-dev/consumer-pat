@@ -1,6 +1,8 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.dto.BuyDTO;
+import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
+import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
 import br.com.alelo.consumer.consumerpat.service.CardService;
 import br.com.alelo.consumer.consumerpat.service.ShoppingService;
@@ -38,6 +40,17 @@ public class CardController {
     @PutMapping("/setcardbalance")
     public void setBalance(int cardNumber, BigDecimal value) {
         service.credit(cardNumber, value);
+    }
+
+
+    /*
+     * Deve creditar(adicionar) um valor(value) em um no cartão.
+     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
+     * para isso deve usar o número do cartão(cardNumber) fornecido.
+     */
+    @PostMapping
+    public ResponseEntity<CardCreateResponseDTO> save(@RequestBody @Validated CardDTO dto) {
+        return ResponseEntity.ok(service.save(dto));
     }
 
 

@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity.mapper;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
 import org.springframework.beans.BeanUtils;
 
@@ -15,6 +16,12 @@ public class CardMapper {
 
     public static CardDTO entityToDTO(Card entity){
         CardDTO dto = new CardDTO();
+        BeanUtils.copyProperties(dto, entity);
+        return dto;
+    }
+
+    public static CardCreateResponseDTO newEntityToDTO(Card entity){
+        CardCreateResponseDTO dto = new CardCreateResponseDTO();
         BeanUtils.copyProperties(dto, entity);
         return dto;
     }

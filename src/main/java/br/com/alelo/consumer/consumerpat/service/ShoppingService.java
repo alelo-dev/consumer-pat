@@ -1,25 +1,28 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import static java.util.Objects.isNull;
-import static org.springframework.util.StringUtils.hasLength;
-
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.entity.dto.BuyDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.ErrorResponseBuyDTO;
+import br.com.alelo.consumer.consumerpat.entity.dto.ErrorDTO;
 import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
 import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
-//@TODO Incluir as validações de valor.
+
 @Service
 public class ShoppingService {
 
@@ -35,18 +38,19 @@ public class ShoppingService {
         this.cardService = cardService;
     }
 
-    public TransactionDTO buy(BuyDTO buyDTO) throws Exception {
+    public TransactionDTO buy(BuyDTO buyDTO) throws BusinessException {
 
-
+        validated(buyDTO);
         var establishment = validEstablishmentTypeBuy(buyDTO);
-        var card = validateCardBalance(buyDTO.getCardNumber(), buyDTO.getValue());
-        BigDecimal value = applyPricingRules(card.getCardType(), buyDTO.getValue());
+        var card = getCardByNumber(buyDTO.getCardNumber());
+        BigDecimal valueDebit = applyPricingRules(card.getCardType(), buyDTO.getValue());
+        validateCardBalance(card, valueDebit);
 
         Extract extract = Extract.builder()
                 .cardNumber(card.getCardNumber())
                 .establishmentName(establishment.getEstablishmentName())
                 .establishmentNameId(establishment.getId())
-                .value(value)
+                .value(valueDebit)
                 .productDescription(buyDTO.getProductDescription())
                 .dateBuy(LocalDateTime.now())
                 .build();
@@ -55,6 +59,36 @@ public class ShoppingService {
 
     }
 
+    private void validated(BuyDTO buyDTO) throws BusinessException {
+
+        List<ErrorDTO> errorList = new ArrayList<ErrorDTO>();
+
+        if (isNull(buyDTO.getCardNumber())) {
+            errorList.add(ErrorDTO.builder().message("card number not found").build());
+
+        }
+
+        if (isNull(buyDTO.getEstablishmentId())) {
+            errorList.add(ErrorDTO.builder().message("Establishment ID not found").build());
+
+        }
+
+        if (nonNull(buyDTO.getValue()) && buyDTO.getValue().compareTo(BigDecimal.ZERO) > 0) {
+            errorList.add(ErrorDTO.builder().message("Invalid Value").build());
+        }
+
+        if (!errorList.isEmpty()) {
+            throw new BusinessException("Invalid Request to By", errorList);
+        }
+    }
+
+    private Card getCardByNumber(Integer cardNumber) {
+        Card card = cardService.findByCardNumber(cardNumber);
+        if (isNull(card)) {
+            throw new EntityNotFoundException("card not found");
+        }
+        return card;
+    }
 
 
     @Transactional
@@ -87,32 +121,41 @@ public class ShoppingService {
         return value;
     }
 
+    // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
     private BigDecimal applyFuelpricerules(BigDecimal value) {
-
+        BigDecimal porcentagem = new BigDecimal(0.1);
+        BigDecimal discount = value.multiply(porcentagem);
+        value.subtract(discount);
         return value;
     }
 
+    // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
     private BigDecimal applyFoodpricerules(BigDecimal value) {
+        BigDecimal porcentagem = new BigDecimal(0.35);
+        BigDecimal increase = value.multiply(porcentagem);
+        value.add(increase);
         return value;
+
     }
 
 
-    private Card validateCardBalance(Integer cardNumber, BigDecimal debitValue) {
-        Card card = cardService.findByCardNumber(cardNumber);
-
+    private Card validateCardBalance(Card card, BigDecimal debitValue) throws BusinessException {
+        if(card.getBalanceValue().compareTo(debitValue) < 0){
+            throw new BusinessException("Não existe Crédito suficiente para transação");
+        }
         return card;
     }
 
-    private Establishment validEstablishmentTypeBuy(BuyDTO buyDTO) throws Exception {
+    private Establishment validEstablishmentTypeBuy(BuyDTO buyDTO) throws BusinessException {
 
         var establishment = establishmenService.findById(buyDTO.getEstablishmentId());
         if (Objects.nonNull(establishment)) {
 
             if (!establishment.getCardTypeAccepted().equals(CardType.getById(buyDTO.getEstablishmentType()))) {
-                throw new Exception("Tipo de Benefício não aceito ou não cadastrado para o estabelecimento ");
+                throw new BusinessException("Tipo de Benefício não aceito ou não cadastrado para o estabelecimento ");
             }
         } else {
-            throw new Exception("Estabelecimento aceita esta cartão ");
+            throw new BusinessException("Estabelecimento aceita esta cartão ");
         }
 
         return establishment;

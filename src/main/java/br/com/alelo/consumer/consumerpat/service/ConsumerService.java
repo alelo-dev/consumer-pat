@@ -23,7 +23,6 @@ public class ConsumerService {
 
         Consumer consumer = ConsumerMapper.dtoToEntity(consumerDTO);
         consumer.setCreateDate(LocalDateTime.now());
-
         return repository.save(consumer);
     }
 

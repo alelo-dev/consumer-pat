@@ -6,18 +6,16 @@ import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CardDTO implements Serializable {
+public class CardCreateResponseDTO implements Serializable {
 
     private Integer number;
-    private BigDecimal balance;
     private CardType cardType;
 
-    public CardDTO() {
+    public CardCreateResponseDTO() {
     }
 
-    public CardDTO(Card card) {
+    public CardCreateResponseDTO(Card card) {
         this.number = card.getCardNumber();
-        this.balance = card.getBalanceValue();
         this.cardType = card.getCardType();
     }
 }

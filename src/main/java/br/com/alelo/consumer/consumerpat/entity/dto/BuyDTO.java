@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @Setter
 public class BuyDTO {
 
-    private int establishmentId;
-    private int cardNumber;
-    private int establishmentType;
+    private Integer establishmentId;
+    private Integer cardNumber;
+    private Integer establishmentType;
     private String productDescription;
     private BigDecimal value;
 
