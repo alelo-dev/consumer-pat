@@ -1,9 +1,9 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.entity.dto.BuyDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.BuyDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.CardCreateResponseDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.CardDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.TransactionDTO;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.service.CardService;
 import br.com.alelo.consumer.consumerpat.service.ShoppingService;

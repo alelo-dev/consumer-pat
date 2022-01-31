@@ -1,10 +1,10 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Card;
-import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
-import br.com.alelo.consumer.consumerpat.entity.mapper.CardMapper;
+import br.com.alelo.consumer.consumerpat.domain.dto.CardCreateResponseDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.CardDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.domain.entity.Card;
+import br.com.alelo.consumer.consumerpat.domain.mapper.CardMapper;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -23,14 +22,16 @@ import static java.util.Objects.nonNull;
 public class CardService {
 
     private final CardRepository repository;
+    private final CardMapper mapper;
 
     @Autowired
-    public CardService(CardRepository cardRepository) {
+    public CardService(CardRepository cardRepository, CardMapper mapper) {
         this.repository = cardRepository;
+        this.mapper = mapper;
     }
 
     public Card findByCardNumber(Integer cardNumber) {
-        Card card = repository.findByCardNumber(cardNumber);
+        var card = repository.findByCardNumber(cardNumber);
         if(isNull(card)){
             throw  new EntityNotFoundException("Não foi encontrado um Cartão para o número informado");
         }
@@ -41,18 +42,17 @@ public class CardService {
     public CardCreateResponseDTO save(CardDTO dto) throws BusinessException {
 
         this.validateCarNumberdExistis(dto.getCardNumber());
-        var card = repository.save(CardMapper.dtoToEntity(dto));
+        var card = repository.save(mapper.dtoToEntity(dto));
 
-        return CardMapper.newEntityToDTO(card);
+        return mapper.newEntityToDTO(card);
     }
 
     @Transactional
-    public Card debtByCard(Card card, BigDecimal value) {
+    public Card debtByCard(Card card, BigDecimal value) throws BusinessException {
 
-
+        this.validateCardBalance(card,value);
         card.setBalanceValue(card.getBalanceValue().subtract(value));
-        card = repository.save(card);
-        return card;
+        return repository.save(card);
     }
 
     @Transactional

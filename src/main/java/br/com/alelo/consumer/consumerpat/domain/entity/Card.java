@@ -1,22 +1,21 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
-import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
 @Getter
 @Setter
 @Entity
-public class Card implements Serializable {
+public class Card extends EntidadeBase<Integer> {
 
     @Id
-    private int cardNumber;
+    private Integer cardNumber;
 
     @Column(name = "balanceValue")
     private BigDecimal balanceValue;

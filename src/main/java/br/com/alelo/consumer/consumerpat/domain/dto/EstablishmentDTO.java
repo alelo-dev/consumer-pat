@@ -1,6 +1,6 @@
-package br.com.alelo.consumer.consumerpat.entity.dto;
+package br.com.alelo.consumer.consumerpat.domain.dto;
 
-import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

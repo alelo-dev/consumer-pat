@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity.dto;
+package br.com.alelo.consumer.consumerpat.domain.dto;
 
 import lombok.*;
 
@@ -9,7 +9,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ConsumerDTO {
+public class ConsumerDTO extends BaseDTO{
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
     private String name;

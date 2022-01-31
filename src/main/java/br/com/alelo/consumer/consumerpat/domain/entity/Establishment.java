@@ -1,6 +1,6 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
-import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class Establishment {
+public class Establishment extends EntidadeBase<Integer> {
 
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
 
     private String establishmentName;
 

@@ -1,0 +1,17 @@
+package br.com.alelo.consumer.consumerpat.domain.dto;
+
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Builder
+@Getter
+@Setter
+public class CardCreateResponseDTO extends BaseDTO{
+    private static final long serialVersionUID = 1L;
+
+    private Integer cardNumber;
+    private CardType cardType;
+}

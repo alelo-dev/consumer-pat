@@ -72,3 +72,7 @@ Para a base de dados utilizaria o Liquibase ou Flyway para vesionamento também,
 Incluiria de validators para os tipos de dados, no caso do cartão se existe um tamanho mínimo ou padrão. 
 Pensei em incluir cache para os usuários, visto que são apenas 500 usuários, não seria algo que impactaria tanto na performance, a depender do ambiente. 
 
+# Melhorias incluídas no domingo
+Inclusão dos testes de API usando o MockMvc mockMvc.
+Inclusão de testes unitários mocados para CardService. 
+Otimizão do Mapper . 

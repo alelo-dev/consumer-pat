@@ -1,15 +1,17 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Card;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.dto.CardCreateResponseDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.CardDTO;
-import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.entity.Card;
+import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.domain.dto.CardCreateResponseDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.CardDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityNotFoundException;
@@ -93,23 +95,42 @@ class CardServiceTest {
 
 
     @Test
-    void should_debtByCardw_hith_balance_enough() {
-
+    void should_debtByCardw_hith_balance_enough() throws BusinessException {
+        BigDecimal debit = BigDecimal.valueOf(2000.00);
+        Card cardDebit = Mockito.mock(Card.class);
+        when(cardDebit.getBalanceValue()).thenReturn(BigDecimal.valueOf(1000.00));
+        when(service.debtByCard(cardMock, debit)).thenReturn(cardDebit);
+        Card card = service.debtByCard(cardMock, debit);
+        assertEquals(0, card.getBalanceValue().compareTo(BigDecimal.valueOf(1000.00)));
     }
 
     @Test
-    void should_debtByCard_whith_balance_not_enough() {
+    void should_debtByCard_whith_balance_not_enough() throws BusinessException {
         BigDecimal debit = BigDecimal.valueOf(4000.00);
-        when(service.debtByCard(cardMock, debit )).thenThrow(new EntityNotFoundException("Não foi encontrado um Cartão para o número informado"));
+        when(service.debtByCard(cardMock, debit )).thenThrow(new BusinessException("Não existe Crédito suficiente para transação"));
+        BusinessException exception =  assertThrows(BusinessException.class, () -> service.debtByCard(cardMock, debit));
+        assertEquals("Não existe Crédito suficiente para transação", exception.getMessage());
     }
 
     @Test
     void should_credit() {
-
+        BigDecimal credit = BigDecimal.valueOf(2000.00);
+        TransactionDTO transactionDTOMock = Mockito.mock(TransactionDTO.class);
+        when(transactionDTOMock.getTransactionId()).thenReturn("11111");
+        Card cardIncrease = Mockito.mock(Card.class);
+        when(cardIncrease.getBalanceValue()).thenReturn(BigDecimal.valueOf(5000.00));
+        when(service.credit(CARD_NUMBER, credit)).thenReturn(transactionDTOMock);
+        TransactionDTO dtoTransaction = service.credit(CARD_NUMBER, credit);
+        assertEquals("11111",dtoTransaction.getTransactionId());
     }
 
     @Test
     void should_creditByCard() {
-
+        BigDecimal debit = BigDecimal.valueOf(3000.00);
+        Card cardIncrease = Mockito.mock(Card.class);
+        when(cardIncrease.getBalanceValue()).thenReturn(BigDecimal.valueOf(6000.00));
+        when(service.creditByCard(cardMock, debit)).thenReturn(cardIncrease);
+        Card card = service.creditByCard(cardMock, debit);
+        assertEquals(0, card.getBalanceValue().compareTo(BigDecimal.valueOf(6000.00)));
     }
 }

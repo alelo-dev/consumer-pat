@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.respository;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

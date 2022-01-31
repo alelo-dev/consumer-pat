@@ -1,10 +1,9 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
 
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -13,10 +12,14 @@ import java.util.Date;
 @Data
 @Builder
 @EqualsAndHashCode(of = "{id,documentNumber}")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Consumer implements Serializable {
+public class Consumer extends EntidadeBase<Integer> {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

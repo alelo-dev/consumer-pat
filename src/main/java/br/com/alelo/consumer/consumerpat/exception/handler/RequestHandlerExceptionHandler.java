@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.exception.handler;
 
-import br.com.alelo.consumer.consumerpat.entity.dto.ErrorDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.ErrorResponseDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.ErrorDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.ErrorResponseDTO;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.exception.NoSuchElementFoundException;
 import lombok.RequiredArgsConstructor;

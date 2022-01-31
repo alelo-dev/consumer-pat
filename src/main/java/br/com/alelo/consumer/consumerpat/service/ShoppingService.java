@@ -1,12 +1,12 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Card;
-import br.com.alelo.consumer.consumerpat.entity.Establishment;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.entity.dto.BuyDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.ErrorDTO;
-import br.com.alelo.consumer.consumerpat.entity.dto.TransactionDTO;
-import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.dto.BuyDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.ErrorDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.domain.entity.Card;
+import br.com.alelo.consumer.consumerpat.domain.entity.Establishment;
+import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class ShoppingService {
         var card = getCardByNumber(buyDTO.getCardNumber());
         BigDecimal valueDebit = applyPricingRules(card.getCardType(), buyDTO.getValue());
 
-        Extract extract = Extract.builder()
+        var extract = Extract.builder()
                 .cardNumber(card.getCardNumber())
                 .establishmentName(establishment.getEstablishmentName())
                 .establishmentNameId(establishment.getId())

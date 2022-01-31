@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.entity.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +32,19 @@ public class ConsumerController {
         return ResponseEntity.ok(service.getAllConsumersList(pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ConsumerDTO> getById(@PathVariable("id") Integer id) {
+        log.debug("ConsumerController.getById - Begin");
+
+        log.debug("ConsumerController.getById - End");
+        return ResponseEntity.ok(service.getById(id));
+    }
+
     /* Cadastrar novos clientes */
     @PostMapping("/createConsumer")
     public ResponseEntity<ConsumerDTO> createConsumer(@RequestBody ConsumerDTO dto) {
         log.debug("ConsumerController.createConsumer - Begin");
-        ConsumerDTO consumerDTOSave = service.save(dto);
+        var consumerDTOSave = service.save(dto);
         log.debug("ConsumerController.createConsumer - End");
         return ResponseEntity.ok(consumerDTOSave);
     }
@@ -46,7 +54,7 @@ public class ConsumerController {
     @PutMapping("/updateConsumer")
     public ResponseEntity<ConsumerDTO> updateConsumer(@RequestBody ConsumerDTO dto) {
         log.debug("ConsumerController.updateConsumer - Begin");
-        ConsumerDTO consumerDTOUpdate = service.update(dto);
+        var consumerDTOUpdate = service.update(dto);
         log.debug("ConsumerController.updateConsumer - End");
         return ResponseEntity.ok(consumerDTOUpdate);
     }

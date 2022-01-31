@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Establishment;
-import br.com.alelo.consumer.consumerpat.entity.dto.EstablishmentDTO;
-import br.com.alelo.consumer.consumerpat.entity.mapper.EstablishmentMapper;
+import br.com.alelo.consumer.consumerpat.domain.dto.EstablishmentDTO;
+import br.com.alelo.consumer.consumerpat.domain.entity.Establishment;
+import br.com.alelo.consumer.consumerpat.domain.mapper.EstablishmentMapper;
 import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,18 +18,21 @@ import java.time.LocalDateTime;
 public class EstablishmenService implements Serializable {
 
     private final EstablishmentRepository repository;
+    private final EstablishmentMapper mapper;
 
     @Autowired
-    public EstablishmenService(EstablishmentRepository repository) {
+    public EstablishmenService(EstablishmentRepository repository, EstablishmentMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
+
 
     @Transactional
     public EstablishmentDTO save(EstablishmentDTO establishmentDTO){
-        var entity = EstablishmentMapper.dtoToEntity(establishmentDTO);
+        var entity = mapper.dtoToEntity(establishmentDTO);
         entity.setCreateDate(LocalDateTime.now());
         entity = this.repository.save(entity);
-        return EstablishmentMapper.entityToDTO(entity);
+        return mapper.entityToDTO(entity);
     }
 
     public Establishment findById(Integer establishmenId) {

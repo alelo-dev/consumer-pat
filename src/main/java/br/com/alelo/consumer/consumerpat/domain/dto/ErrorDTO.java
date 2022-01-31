@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity.dto;
+package br.com.alelo.consumer.consumerpat.domain.dto;
 
 
 import lombok.AllArgsConstructor;

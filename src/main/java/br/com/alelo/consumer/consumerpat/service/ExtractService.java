@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

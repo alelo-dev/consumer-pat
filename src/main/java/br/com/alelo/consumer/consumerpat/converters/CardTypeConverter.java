@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.converters;
 
-import br.com.alelo.consumer.consumerpat.entity.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

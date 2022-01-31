@@ -1,8 +1,6 @@
-package br.com.alelo.consumer.consumerpat.entity.mapper;
+package br.com.alelo.consumer.consumerpat.domain.mapper;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ConsumerMapperTest {
 

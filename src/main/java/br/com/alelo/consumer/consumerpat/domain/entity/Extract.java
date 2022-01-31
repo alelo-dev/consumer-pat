@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,28 +17,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Extract {
+public class Extract extends EntidadeBase<Integer>{
 
     @Id
-    int id;
-    int establishmentNameId;
+    Integer id;
+    Integer establishmentNameId;
     String establishmentName;
     String productDescription;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime dateBuy;
 
-    int cardNumber;
+    Integer cardNumber;
     BigDecimal value;
 
-    public Extract(String productDescription, LocalDateTime dateBuy, int cardNumber, BigDecimal value) {
+    public Extract(String productDescription, LocalDateTime dateBuy, Integer cardNumber, BigDecimal value) {
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
         this.value = value;
     }
 
-    public Extract(String establishmentName, String productDescription, LocalDateTime dateBuy, int cardNumber, BigDecimal value) {
+    public Extract(String establishmentName, String productDescription, LocalDateTime dateBuy, Integer cardNumber, BigDecimal value) {
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
