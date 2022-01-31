@@ -70,7 +70,7 @@ class EstablishmentControllerTest {
         List<EstablishmentDTO> establishmentDTOList =  this.objectMapper.readValue(response,   new TypeReference<List<EstablishmentDTO>>() { });
 
         assertNotNull(response);
-        assertEquals(1, establishmentDTOList.size());
+        assertFalse(establishmentDTOList.isEmpty());
     }
 
 
