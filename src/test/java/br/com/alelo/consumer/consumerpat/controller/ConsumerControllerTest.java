@@ -36,7 +36,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(1)
-    void createConsumer() throws Exception {
+    void should_create_Consumer() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/consumer/createConsumer")
                 .content(JsonTestUtil.asJsonString(getDTO()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +54,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(2)
-    void listAllConsumers() throws Exception {
+    void should_get_listAllConsumers() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/consumer/consumerList")
                 .param("page", "0")
                 .param("size", "5")
@@ -70,7 +70,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(3)
-    void testGetByIdNotFound() throws Exception {
+    void should_GetById_NotFound() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/consumer/{id}", 300)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404))
@@ -82,7 +82,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(4)
-    void testGetByIdFound() throws Exception {
+    void should_GetById_Found() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/consumer/{id}", ID_ENTITY)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -103,7 +103,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(5)
-    void updateConsumer() throws Exception {
+    void should_update_Consumer() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/consumer/{id}", ID_ENTITY)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

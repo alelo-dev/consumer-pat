@@ -24,7 +24,7 @@ class ConsumerMapperTest {
     }
 
     @Test
-    void entityToDTO() {
+    void should_entityToDTO() {
         Consumer consumer = DataTesteUtils.getConsumer();
         consumer.setId(ENTITY_ID);
         ConsumerDTO dto = mapper.entityToDTO(consumer);
@@ -36,7 +36,7 @@ class ConsumerMapperTest {
     }
 
     @Test
-    void dtoToEntity () {
+    void should_dtoToEntity () {
         ConsumerDTO dto = DataTesteUtils.getConsumerDTO();
         Consumer consumer = mapper.dtoToEntity(dto);
         assertEquals(dto.getDocumentNumber(), consumer.getDocumentNumber());

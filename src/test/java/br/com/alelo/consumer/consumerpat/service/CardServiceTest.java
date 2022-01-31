@@ -1,10 +1,9 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import br.com.alelo.consumer.consumerpat.domain.entity.Card;
-import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.dto.CardCreateResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.dto.CardDTO;
-import br.com.alelo.consumer.consumerpat.domain.dto.TransactionDTO;
+import br.com.alelo.consumer.consumerpat.domain.entity.Card;
+import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
@@ -17,7 +16,8 @@ import org.mockito.MockitoAnnotations;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 class CardServiceTest {
@@ -86,7 +86,7 @@ class CardServiceTest {
     }
 
     @Test
-    void shouldshold_findByCardNumber_not_found() {
+    void should_findByCardNumber_not_found() {
         when(service.findByCardNumber(-1)).thenThrow(new EntityNotFoundException("Não foi encontrado um Cartão para o número informado"));
         EntityNotFoundException exception =  assertThrows(EntityNotFoundException.class, () -> service.findByCardNumber(-1));
         assertEquals("Não foi encontrado um Cartão para o número informado", exception.getMessage());

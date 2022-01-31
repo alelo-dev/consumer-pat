@@ -54,14 +54,14 @@ class CardMapperTest {
     }
 
     @Test
-    void entityToDTO() {
+    void should_entityToDTO() {
         CardDTO dto = mapper.entityToDTO(entity);
         assertEquals(CARD_NUMBER, dto.getCardNumber());
         assertEquals(CONSUMER_ID,  dto.getConsumer().getId());
     }
 
     @Test
-    void dtoToEntity () {
+    void should_dtoToEntity () {
         when(dto.getConsumer().getName()).thenReturn(ENTITY_DTO_NAME);
         Card entity = mapper.dtoToEntity(dto);
         assertEquals(CARD_NUMBER_DTO, entity.getCardNumber());
@@ -70,7 +70,7 @@ class CardMapperTest {
     }
 
     @Test
-    void newEntityToDTO() {
+    void should_newEntityToDTO() {
         CardCreateResponseDTO dto = mapper.newEntityToDTO(entity);
         assertEquals(CARD_NUMBER, dto.getCardNumber());
         assertEquals(CardType.FOOD,  dto.getCardType());

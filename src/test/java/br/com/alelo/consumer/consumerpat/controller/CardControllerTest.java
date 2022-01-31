@@ -57,7 +57,7 @@ class CardControllerTest {
 
     @Test
     @Order(1)
-    void createConsumer() throws Exception {
+    void should_create_Consumer() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/consumer/createConsumer")
                 .content(JsonTestUtil.asJsonString(getConsumerDTO()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ class CardControllerTest {
 
     @Test
     @Order(2)
-    void save() throws Exception {
+    void should_save_cards_food_fuel_drugstore() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/card")
                 .content(JsonTestUtil.asJsonString(getCardFoodDto()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ class CardControllerTest {
 
     @Test
     @Order(3)
-    void setBalance() throws Exception {
+    void should_setBalance() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/card/card-number/{id}", CARD_NUMBER_FOOD)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ class CardControllerTest {
 
     @Test
     @Order(4)
-    void getByCardNumber() throws Exception {
+    void should_getByCardNumber() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/card/card-number/{cardNumber}", CARD_NUMBER_FOOD)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -165,7 +165,7 @@ class CardControllerTest {
 
     @Test
     @Order(5)
-    void getByCardNumberNotFound() throws Exception {
+    void should_getByCardNumber_NotFound() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/card/card-number/{cardNumber}", 123123123)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -176,7 +176,7 @@ class CardControllerTest {
 
     @Test
     @Order(7)
-    void createEstablishment() throws Exception {
+    void should_createEstablishment_fuel_food_drugstore() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/establishment")
                 .content(JsonTestUtil.asJsonString(getEstablishmentFoodDTO()))
@@ -219,7 +219,7 @@ class CardControllerTest {
 
     @Test
     @Order(8)
-    void buyFood() throws Exception {
+    void should_buy_Food_Establishment() throws Exception {
         BigDecimal foodPercentDicount = BigDecimal.valueOf(0.1);
         BuyDTO food = getBuyFoodDto();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/card/buy")
@@ -243,7 +243,7 @@ class CardControllerTest {
 
     @Test
     @Order(8)
-    void buyFuel() throws Exception {
+    void should_buy_fuel_Establishment() throws Exception {
         BigDecimal foodPercentIncrease = BigDecimal.valueOf(0.35);
         BuyDTO fuelShop = getBuyFuelDto();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/card/buy")
@@ -268,7 +268,7 @@ class CardControllerTest {
 
     @Test
     @Order(9)
-    void buyDrugsTore() throws Exception {
+    void should_buy_drugstore_Establishment() throws Exception {
 
         BuyDTO drugsToreShop = getBuyDrugsToreDto();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/card/buy")
@@ -291,7 +291,7 @@ class CardControllerTest {
 
     @Test
     @Order(10)
-    void buyInvalidTypeFuelAndFood() throws Exception {
+    void should_buy_with_InvalidType_FuelAndFood() throws Exception {
 
         BuyDTO invalidBuy = getBuyInvalidFoodFuelDto();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/card/buy")
@@ -309,7 +309,7 @@ class CardControllerTest {
 
     @Test
     @Order(11)
-    void getByCardNumberBalanceAfterShop() throws Exception {
+    void should_getByCardNumberBalance_After_Shop() throws Exception {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/card/card-number/{cardNumber}", CARD_NUMBER_FOOD)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -350,7 +350,7 @@ class CardControllerTest {
 
     @Test
     @Order(12)
-    void buyNoEnoughBalance() throws Exception {
+    void should_buy_with_NoEnoughBalance() throws Exception {
 
         BuyDTO invalidBuy = getBuyNotEnoughBalanceDto();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/card/buy")
