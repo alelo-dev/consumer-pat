@@ -8,17 +8,12 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "address")
-public class Address {
+@Table(name="benefittype")
+public class BenefitType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer address_id;
-
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    int benefitType_id;
+    String typeDescription;
 
 }

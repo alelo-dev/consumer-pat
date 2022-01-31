@@ -4,8 +4,11 @@ package br.com.alelo.consumer.consumerpat.entity;
 import jdk.jfr.DataAmount;
 import jdk.jfr.MemoryAddress;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -26,25 +29,31 @@ public class Consumer {
     @ManyToOne
     @JoinColumn(name = "contacts_id")
     Contacts contacts;
-    //Address - Entidade de Endereços
-//    @ManyToMany
-//    Address address;
 
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    //Address - Entidade de Endereços
+    //@OneToMany
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "address_id")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    Address address;
+
 
     //cards - Entidade Benefícios
-    int foodCardNumber;
-    double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+   // @JoinColumn(name = "cardNumber")
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "id")
+   @ManyToOne
+   @JoinColumn(name = "benefit_id")
+   Benefit benefit;
+//    int foodCardNumber;
+//    double foodCardBalance;
+//
+//    int fuelCardNumber;
+//    double fuelCardBalance;
+//
+//    int drugstoreNumber;
+//    double drugstoreCardBalance;
 
     @Override
     public boolean equals(Object o) {
@@ -60,22 +69,26 @@ public class Consumer {
         String mobilePhoneNumber = ((Consumer) o).contacts.getMobilePhoneNumber();
         String residencePhoneNumber = ((Consumer) o).contacts.getResidencePhoneNumber();
         String phoneNumber = ((Consumer) o).contacts.getResidencePhoneNumber();
-        String email = ((Consumer) o).contacts.getEmail();
+        String email    = ((Consumer) o).contacts.getEmail();
+        Integer number  = ((Consumer) o).address.getNumber();
+        String country  = ((Consumer) o).address.getCountry();
+        String street   = ((Consumer) o).address.getStreet();
+        int portalCode  = ((Consumer) o).address.getPortalCode();
+        String city   = ((Consumer) o).address.getCity();
+//        ArrayList<Benefit> benefits = (ArrayList<Benefit>) ((Consumer) o).getBenefits();
 
         return documentNumber == consumer.documentNumber
                 && mobilePhoneNumber == consumer.contacts.getMobilePhoneNumber()
                 && residencePhoneNumber == consumer.contacts.getResidencePhoneNumber()
                 && phoneNumber == consumer.contacts.getPhoneNumber()
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
+                && number == consumer.address.number
+                && portalCode == consumer.address.portalCode
+//                && benefits.equals(consumer.benefits)
+//                && benefits.equals(consumer.benefits)
                 && Objects.equals(id, consumer.id)
                 && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.contacts.getEmail()) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
+                && Objects.equals(email, consumer.contacts.getEmail()) && Objects.equals(street, consumer.address.street) && Objects.equals(city, consumer.address.city)
+                && Objects.equals(country, consumer.address.country);
     }
 
 

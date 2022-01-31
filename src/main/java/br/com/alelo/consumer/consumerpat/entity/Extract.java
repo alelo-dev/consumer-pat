@@ -21,6 +21,9 @@ public class Extract {
     double value;
 
 
+    public Extract() {
+    }
+
     public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
@@ -46,4 +49,5 @@ public class Extract {
         this.cardNumber = cardNumber;
         this.value = value;
     }
+
 }
