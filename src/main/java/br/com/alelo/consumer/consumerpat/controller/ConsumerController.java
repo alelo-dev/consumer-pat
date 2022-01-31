@@ -37,7 +37,7 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
-        consumerService.listConsumerService();
+        return consumerService.listConsumerService();
     }
 
 
