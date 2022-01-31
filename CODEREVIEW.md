@@ -75,4 +75,11 @@ Pensei em incluir cache para os usuários, visto que são apenas 500 usuários, 
 # Melhorias incluídas no domingo
 Inclusão dos testes de API usando o MockMvc mockMvc.
 Inclusão de testes unitários mocados para CardService. 
-Otimizão do Mapper . 
+Otimizão do Mapper , inclusão de transformações de listas de tipos para outros. Aqui não curti muito, se fosse possível utilizar outra alternativa eu usuária, mas tem a limitação de não adicionar nenhum framework. 
+Inclusão de Cache em EstablishmentController para lista de estabelecimentos
+Limpeza de Cache quando cadastrado novo estabelecimento.  <- Aqui como falei , um Redis, MongoDB ou alguma outra alternativa, no entanto aqui já quebra o galho. Se fosse algo que atualiza muito tem que analisar custo benefício, mas em registros que não se alteram muito, vale a pena coloca cache para evitar idas desnecessárias ao banco. 
+Incrementado os testes de API, todos os testes concentrei agora no final ali no CardControllerTest, precisaria ser melhorado dividindo as classes e testes. 
+
+# Observação colocada no domingo.
+Até mesmo a depender da quantidade de transações, alguns cadastros poderiam ser com algum serviço de mensageria. 
+Incluiria um período para busca no endpoint de extrato, deixando x dias como default a ver com P.O time. 

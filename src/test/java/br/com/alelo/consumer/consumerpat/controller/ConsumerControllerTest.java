@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.JsonTestUtil;
 import br.com.alelo.consumer.consumerpat.domain.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -35,7 +36,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(1)
-    void testPost() throws Exception {
+    void createConsumer() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/consumer/createConsumer")
                 .content(JsonTestUtil.asJsonString(getDTO()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +54,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(2)
-    void testGet() throws Exception {
+    void listAllConsumers() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/consumer/consumerList")
                 .param("page", "0")
                 .param("size", "5")
@@ -102,7 +103,7 @@ class ConsumerControllerTest {
 
     @Test
     @Order(5)
-    void should_execute_put() throws Exception {
+    void updateConsumer() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/consumer/{id}", ID_ENTITY)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -167,15 +168,5 @@ class ConsumerControllerTest {
         return dto;
     }
 
-    @Test
-    void listAllConsumers() {
-    }
 
-    @Test
-    void createConsumer() {
-    }
-
-    @Test
-    void updateConsumer() {
-    }
 }

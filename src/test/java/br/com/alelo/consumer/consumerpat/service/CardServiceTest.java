@@ -17,8 +17,7 @@ import org.mockito.MockitoAnnotations;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class CardServiceTest {
@@ -81,7 +80,7 @@ class CardServiceTest {
 
     @Test
     void should_findByCardNumber() {
-        when(service.findByCardNumber(CARD_NUMBER)).thenReturn(cardMock);
+        when(service.findByCardNumber(CARD_NUMBER)).thenReturn(cardDTOMock);
         var cardFind = service.findByCardNumber(CARD_NUMBER);
         assertEquals(CARD_NUMBER, cardFind.getCardNumber());
     }
@@ -115,13 +114,13 @@ class CardServiceTest {
     @Test
     void should_credit() {
         BigDecimal credit = BigDecimal.valueOf(2000.00);
-        TransactionDTO transactionDTOMock = Mockito.mock(TransactionDTO.class);
-        when(transactionDTOMock.getTransactionId()).thenReturn("11111");
-        Card cardIncrease = Mockito.mock(Card.class);
-        when(cardIncrease.getBalanceValue()).thenReturn(BigDecimal.valueOf(5000.00));
-        when(service.credit(CARD_NUMBER, credit)).thenReturn(transactionDTOMock);
-        TransactionDTO dtoTransaction = service.credit(CARD_NUMBER, credit);
-        assertEquals("11111",dtoTransaction.getTransactionId());
+
+        CardDTO cardIncrease = Mockito.mock(CardDTO.class);
+        when( cardIncrease.getBalanceValue()).thenReturn(BigDecimal.valueOf(5000.00));
+
+        when(service.credit(CARD_NUMBER, credit)).thenReturn(cardIncrease);
+        CardDTO dtoTransaction = service.credit(CARD_NUMBER, credit);
+        assertEquals(0, cardIncrease.getBalanceValue().compareTo(BigDecimal.valueOf(5000.00)));
     }
 
     @Test

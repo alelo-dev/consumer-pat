@@ -2,7 +2,6 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.domain.dto.CardCreateResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.dto.CardDTO;
-import br.com.alelo.consumer.consumerpat.domain.dto.TransactionDTO;
 import br.com.alelo.consumer.consumerpat.domain.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.mapper.CardMapper;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
@@ -30,12 +29,12 @@ public class CardService {
         this.mapper = mapper;
     }
 
-    public Card findByCardNumber(Integer cardNumber) {
+    public CardDTO findByCardNumber(Integer cardNumber) {
         var card = repository.findByCardNumber(cardNumber);
         if(isNull(card)){
             throw  new EntityNotFoundException("Não foi encontrado um Cartão para o número informado");
         }
-        return card;
+        return mapper.entityToDTO(card);
     }
 
     @Transactional
@@ -56,7 +55,7 @@ public class CardService {
     }
 
     @Transactional
-    public TransactionDTO credit(int cardNumber, BigDecimal value) {
+    public CardDTO credit(int cardNumber, BigDecimal value) {
 
         var card = repository.findByCardNumber(cardNumber);
 
@@ -64,8 +63,7 @@ public class CardService {
             creditByCard(card, value);
         }
 
-        return TransactionDTO.
-                builder().build();
+        return mapper.entityToDTO(card);
     }
 
 

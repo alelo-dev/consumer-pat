@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CardMapper {
 
-
     public Card dtoToEntity(CardDTO dto){
         var card = new Card();
         BeanUtils.copyProperties(dto, card);

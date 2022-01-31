@@ -34,9 +34,9 @@ public class CardController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @PutMapping("/setcardbalance")
-    public void setBalance(int cardNumber, BigDecimal value) {
-        service.credit(cardNumber, value);
+    @PutMapping("/setcardbalance/{cardNumber}/{value}")
+    public CardDTO setBalance(@PathVariable("cardNumber") Integer cardNumber, @PathVariable("value") BigDecimal value) {
+        return service.credit(cardNumber, value);
     }
 
 
@@ -66,8 +66,8 @@ public class CardController {
     }
 
     @GetMapping("/card-number/{cardNumber}")
-    public void getByCardNumber(@PathVariable("cardNumber") Integer cardNumber) {
-        service.findByCardNumber(cardNumber);
+    public CardDTO getByCardNumber(@PathVariable("cardNumber") Integer cardNumber) {
+        return service.findByCardNumber(cardNumber);
     }
 
 }

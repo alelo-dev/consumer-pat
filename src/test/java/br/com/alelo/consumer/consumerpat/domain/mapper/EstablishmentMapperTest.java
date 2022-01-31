@@ -47,14 +47,14 @@ class EstablishmentMapperTest {
 
 
     @Test
-    void dtoToEntity() {
+    void entityToDTO() {
         EstablishmentDTO dto = mapper.entityToDTO(entity);
         assertEquals(ENTITY_NAME, dto.getEstablishmentName());
         assertEquals(CardType.FUEL, dto.getCardTypeAccepted());
     }
 
     @Test
-    void entityToDTO() {
+    void dtoToEntity () {
         Establishment establishment = mapper.dtoToEntity(dto);
         assertEquals(ENTITY_DTO_NAME, dto.getEstablishmentName());
         assertEquals(CardType.FOOD, dto.getCardTypeAccepted());

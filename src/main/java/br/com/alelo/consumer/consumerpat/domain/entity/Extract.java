@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 public class Extract extends EntidadeBase<Integer>{
 
     @Id
+    @GeneratedValue
     Integer id;
     Integer establishmentNameId;
     String establishmentName;

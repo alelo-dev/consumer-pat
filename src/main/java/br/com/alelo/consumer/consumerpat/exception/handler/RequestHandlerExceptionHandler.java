@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @ControllerAdvice
@@ -39,7 +40,7 @@ public class RequestHandlerExceptionHandler extends ResponseEntityExceptionHandl
                 .message(INTERNAL_SERVER_ERROR)
                 .build());
 
-        ErrorResponseDTO errorResponseDto = ErrorResponseDTO.builder()
+        var errorResponseDto = ErrorResponseDTO.builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .errorList(errorMessageDtoList)
                 .build();
@@ -58,7 +59,7 @@ public class RequestHandlerExceptionHandler extends ResponseEntityExceptionHandl
                 .message(exception.getMessage())
                 .build());
 
-        ErrorResponseDTO errorResponseDto = ErrorResponseDTO.builder()
+        var errorResponseDto = ErrorResponseDTO.builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .errorList(errorMessageDtoList)
                 .build();
@@ -71,15 +72,17 @@ public class RequestHandlerExceptionHandler extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> businessError(BusinessException exception) {
         log.info(BUSINESS_ERROR_TEXT, exception.getMessage(), exception.getCause());
 
-        List<ErrorDTO> errorMessageDtoList = new ArrayList<>();
+        var errorMessageDtoList = exception.getErrorList();
 
-
+        if(Objects.isNull(errorMessageDtoList)){
+            errorMessageDtoList = new ArrayList<>();
+        }
 
         errorMessageDtoList.add(ErrorDTO.builder()
                 .message(exception.getMessage())
                 .build());
 
-        ErrorResponseDTO errorResponseDto = ErrorResponseDTO.builder()
+        var errorResponseDto = ErrorResponseDTO.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .errorList(errorMessageDtoList)
                 .build();
@@ -98,7 +101,7 @@ public class RequestHandlerExceptionHandler extends ResponseEntityExceptionHandl
                 .message(INTERNAL_SERVER_ERROR)
                 .build());
 
-        ErrorResponseDTO errorResponseDto = ErrorResponseDTO.builder()
+        var errorResponseDto = ErrorResponseDTO.builder()
                 .errorList(errorMessageDtoList)
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build();

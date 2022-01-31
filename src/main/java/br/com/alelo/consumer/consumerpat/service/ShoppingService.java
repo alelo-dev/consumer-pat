@@ -7,12 +7,12 @@ import br.com.alelo.consumer.consumerpat.domain.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
 import br.com.alelo.consumer.consumerpat.domain.enumeration.CardType;
+import br.com.alelo.consumer.consumerpat.domain.mapper.CardMapper;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 
 @Service
@@ -29,16 +28,18 @@ public class ShoppingService {
     private EstablishmenService establishmenService;
     private ExtractService extractService;
     private CardService cardService;
+    private CardMapper mapper;
 
     private final BigDecimal percentualFood = BigDecimal.valueOf(0.1);
     private final BigDecimal percentualFuel = BigDecimal.valueOf(0.35);
 
 
     @Autowired
-    public ShoppingService(EstablishmenService establishmenService, ExtractService extractService, CardService cardService){
+    public ShoppingService(EstablishmenService establishmenService, ExtractService extractService, CardService cardService, CardMapper mapper){
         this.establishmenService = establishmenService;
         this. extractService = extractService;
         this.cardService = cardService;
+        this.mapper = mapper;
     }
 
     @Transactional
@@ -58,7 +59,6 @@ public class ShoppingService {
                 .dateBuy(LocalDateTime.now())
                 .build();
 
-
         return this.buy(extract, card);
 
     }
@@ -77,7 +77,7 @@ public class ShoppingService {
 
         }
 
-        if (nonNull(buyDTO.getValue()) && buyDTO.getValue().compareTo(BigDecimal.ZERO) > 0) {
+        if (isNull(buyDTO.getValue()) || buyDTO.getValue().compareTo(BigDecimal.ZERO) < 0) {
             errorList.add(ErrorDTO.builder().message("Invalid Value").build());
         }
 
@@ -87,11 +87,7 @@ public class ShoppingService {
     }
 
     private Card getCardByNumber(Integer cardNumber) {
-        Card card = cardService.findByCardNumber(cardNumber);
-        if (isNull(card)) {
-            throw new EntityNotFoundException("card not found");
-        }
-        return card;
+        return mapper.dtoToEntity(cardService.findByCardNumber(cardNumber));
     }
 
 
@@ -114,28 +110,28 @@ public class ShoppingService {
         switch (cardType) {
 
             case FOOD:
-                    this.applyFoodpricerules(value);
-                break;
+                return this.applyFoodpricerules(value);
 
             case FUEL:
-                    this.applyFuelpricerules(value);
-                break;
+                return this.applyFuelpricerules(value);
+
+            default:
+                return value;
         }
 
-        return value;
-    }
-
-    // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-    private BigDecimal applyFuelpricerules(BigDecimal value) {
-        return  value.subtract(value.multiply(percentualFood));
     }
 
     // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-    // Deixei as implementações diferentes para análise dos deves que vão
-    // avaliar este código
+    private BigDecimal applyFuelpricerules(BigDecimal value) {
+        BigDecimal discount  = value.multiply(percentualFuel);
+        return  value.add(discount);
+    }
+
+
+    // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
     private BigDecimal applyFoodpricerules(BigDecimal value) {
-        BigDecimal increase = value.multiply(percentualFuel);
-        return  value.add(increase);
+        BigDecimal increase = value.multiply(percentualFood);
+        return  value.subtract(increase);
     }
 
 
@@ -147,10 +143,10 @@ public class ShoppingService {
         if (Objects.nonNull(establishment)) {
 
             if (!establishment.getCardTypeAccepted().equals(CardType.getById(buyDTO.getEstablishmentType()))) {
-                throw new BusinessException("Tipo de Benefício não aceito ou não cadastrado para o estabelecimento ");
+                throw new BusinessException("Tipo de Benefício não aceito ou não cadastrado para o estabelecimento");
             }
         } else {
-            throw new BusinessException("Estabelecimento aceita esta cartão ");
+            throw new BusinessException("Estabelecimento aceita esta cartão");
         }
 
         return establishment;
