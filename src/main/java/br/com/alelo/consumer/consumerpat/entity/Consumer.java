@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -37,15 +38,18 @@ public class Consumer {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     Address address;
 
+    @OneToMany
+    @JoinColumn(name = "benefit_id")
+    List<BenefitCard> benefits;
 
     //cards - Entidade Benefícios
 
    // @JoinColumn(name = "cardNumber")
 //    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "id")
-   @ManyToOne
-   @JoinColumn(name = "benefit_id")
-   Benefit benefit;
+//    @ManyToOne
+//    @JoinColumn(name = "benefit_id")
+
 //    int foodCardNumber;
 //    double foodCardBalance;
 //

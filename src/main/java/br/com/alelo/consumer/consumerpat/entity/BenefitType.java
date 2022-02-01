@@ -12,8 +12,10 @@ import javax.persistence.*;
 public class BenefitType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    int benefitType_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String typeDescription;
 
 }

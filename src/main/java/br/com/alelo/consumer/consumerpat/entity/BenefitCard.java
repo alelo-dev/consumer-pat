@@ -13,12 +13,16 @@ public class BenefitCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int benefitCard_id;
+    int id;
 
+    @OneToOne
+    @JoinColumn(name = "benefitType_id")
+    BenefitType benefitType_id;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int cardNumber;
 
-    Long cardBalance;
+    Double cardBalance;
 
 
 }
