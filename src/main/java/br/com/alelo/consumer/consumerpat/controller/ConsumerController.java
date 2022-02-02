@@ -46,6 +46,7 @@ public class ConsumerController {
 //    /* Cadastrar novos clientes */ - OK
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
+
         consumerService.createConsumerService(consumer);
     }
 

@@ -33,16 +33,20 @@ public class ConsumerService {
 
     /* Listagem dos Cliente */
     public List<Consumer> listConsumerService(){
-        return consumerRepository.findAll();
+        try {
+            return consumerRepository.findAll();
+        }catch (Exception e) {
+            throw e;
+        }
     }
 
     /* Cadastra novo Cliente */
     public Consumer createConsumerService(Consumer consumer){
-        try {
+//        try {
             return consumerRepository.save(consumer);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
 
     }
 
