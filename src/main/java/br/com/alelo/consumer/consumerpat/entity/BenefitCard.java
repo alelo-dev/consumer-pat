@@ -19,10 +19,9 @@ public class BenefitCard {
     @JoinColumn(name = "benefitType_id")
     BenefitType benefitType_id;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     int cardNumber;
 
     Double cardBalance;
-
 
 }

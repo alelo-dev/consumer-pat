@@ -23,7 +23,7 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
-    int documentNumber;
+    String documentNumber;
     Date birthDate;
 
     //contacts - Entidade de telefone
@@ -35,7 +35,6 @@ public class Consumer {
     //@OneToMany
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "address_id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
     Address address;
 
     @OneToMany
@@ -87,8 +86,8 @@ public class Consumer {
                 && phoneNumber == consumer.contacts.getPhoneNumber()
                 && number == consumer.address.number
                 && portalCode == consumer.address.portalCode
-//                && benefits.equals(consumer.benefits)
-//                && benefits.equals(consumer.benefits)
+                && benefits.equals(consumer.benefits)
+                && benefits.equals(consumer.benefits)
                 && Objects.equals(id, consumer.id)
                 && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
                 && Objects.equals(email, consumer.contacts.getEmail()) && Objects.equals(street, consumer.address.street) && Objects.equals(city, consumer.address.city)

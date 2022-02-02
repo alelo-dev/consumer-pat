@@ -35,7 +35,7 @@ public class BenefitCardService {
 
         try {
             if(this.findBenefitById(id) != null) {
-                //benefitRepository.deleteById(Math.toIntExact(id));
+                benefitCardRepository.deleteById(Math.toIntExact(id));
                 return new ResponseEntity<>(HttpStatus.OK);
             }else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -51,9 +51,9 @@ public class BenefitCardService {
 
         try {
             if (benefitCard != null) {
-//                benefit1.setBenefitType_id(benefit.getBenefitType_id());
-//                benefit1.(benefit.getName());
-                  benefitCardRepository.save(benefitCard1);
+                benefitCard1.setBenefitType_id(benefitCard.getBenefitType_id());
+                benefitCard1.setCardNumber(benefitCard.getCardNumber());
+                benefitCardRepository.save(benefitCard1);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,21 +67,18 @@ public class BenefitCardService {
         return benefitCardRepository.findById(id);
     }
 
-    /* Credita valor */
+//    /* Credita valor */ OK
     public boolean setBalance(int cardNumber, double value) {
-        List<BenefitCard> benefitCard = null;
-//        benefitCard = benefitCardRepository.findByCardNumber(cardNumber).get();   //consumerRepository.findBycardNumber(cardNumber).get();
+        BenefitCard benefitCard = benefitCardRepository.findByCardNumber(cardNumber).get();   //consumerRepository.findBycardNumber(cardNumber).get();
 
 //        benefit = benefitRepository.findByCardNumber(cardNumber);
-        for (BenefitCard b : benefitCard) {
-            if (b.getBenefitType_id() != null) {
-                // é cartão de farmácia
-                System.out.printf("Cartão " + b.getBenefitType_id() + " creditado");
-                b.setCardBalance((b.getCardBalance() + value));
-                benefitCardRepository.save(b);
-                return true;
-            }
 
+        if (benefitCard.getBenefitType_id() != null) {
+                // é cartão de farmácia
+                System.out.printf("Cartão " + benefitCard.getBenefitType_id() + " creditado");
+                benefitCard.setCardBalance((benefitCard.getCardBalance() + value));
+                benefitCardRepository.save(benefitCard);
+                return true;
         }
         return false;
     }

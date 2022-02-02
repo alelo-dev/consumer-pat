@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConsumerService {
@@ -31,7 +33,7 @@ public class ConsumerService {
 
     /* Listagem dos Cliente */
     public List<Consumer> listConsumerService(){
-        return consumerRepository.getAllConsumersList();
+        return consumerRepository.findAll();
     }
 
     /* Cadastra novo Cliente */
@@ -39,13 +41,13 @@ public class ConsumerService {
         try {
             return consumerRepository.save(consumer);
         } catch (Exception e) {
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     public void recordBuy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value){
-        Consumer consumer = null;
+        //Consumer consumer = null; OK
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
          *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
          *
@@ -56,8 +58,9 @@ public class ConsumerService {
          */
 
         BenefitCard benefitCard = benefitCardRepository.findByCardNumber(cardNumber).get();
+        int id = benefitCard.getBenefitType_id().getId();
         //todo: Mudar para join em uma nova table
-        switch(benefitCard.getBenefitType_id().getId()) {
+        switch(id) {
             case 1:
                 //
                 // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
@@ -78,15 +81,13 @@ public class ConsumerService {
             default:
                 // code block
                 value = value;
+            }
 
+        benefitCard.setCardBalance(benefitCard.getCardBalance() - value);
+        benefitCardRepository.save(benefitCard);
 
-            benefitCard.setCardBalance(benefitCard.getCardBalance() - value);
-            benefitCardRepository.save(benefitCard);
-
-            Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-            extractRepository.save(extract);
-
-        }
+        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+        extractRepository.save(extract);
     }
 
 

@@ -13,11 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
@@ -34,15 +35,15 @@ public class ConsumerController {
     ConsumerService consumerService;
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping("/consumerList")
     public List<Consumer> listAllConsumers() {
+
         return consumerService.listConsumerService();
     }
 
 
-    /* Cadastrar novos clientes */
+//    /* Cadastrar novos clientes */ - OK
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
         consumerService.createConsumerService(consumer);
@@ -52,7 +53,8 @@ public class ConsumerController {
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody Consumer consumer) {
         // Todo: DTO
-        repository.save(consumer);
+        //repository.save(consumer);
+        consumerService.createConsumerService(consumer);
     }
 
 
@@ -63,12 +65,12 @@ public class ConsumerController {
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
     public void setBalance(int cardNumber, double value) {
-        benefitCardService.setBalance(cardNumber, value); //*todo: logica para consultar e adicionar
+        benefitCardService.setBalance(cardNumber, value);
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        //*todo: Integrar lógica já feita
+        consumerService.recordBuy(establishmentType, establishmentName, cardNumber, productDescription, value);
     }
 }

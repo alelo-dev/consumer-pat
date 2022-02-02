@@ -18,6 +18,7 @@ public class Contacts {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer contacts_id;
+
     private String mobilePhoneNumber;
     private String residencePhoneNumber;
     private String phoneNumber;
