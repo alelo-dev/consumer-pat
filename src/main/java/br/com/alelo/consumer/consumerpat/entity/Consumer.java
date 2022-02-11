@@ -1,70 +1,68 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-
-import jdk.jfr.DataAmount;
-import lombok.Data;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(exclude = { "cards" })
 @Entity
 public class Consumer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    private String name;
+    private String documentNumber;
+    private Date birthDate;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    // contacts
+    private String mobilePhoneNumber;
+    private String residencePhoneNumber;
+    private String phoneNumber;
+    private String email;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    // Address
+    private String address1;
+    private String address2;
+    private String city;
+    private String country;
+    private String postalCode;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    @OneToMany
+    @JoinColumn(name = "consumer_id")
+    private List<Card> cards = new ArrayList<>();
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    public Consumer() {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
     }
 
+    public Consumer(Long id) {
+        this.id = id;
+    }
+
+    public Consumer(ConsumerDTO consumerDTO) {
+        this.id = consumerDTO.getId();
+        this.address1 = consumerDTO.getAddress1();
+        this.address2 = consumerDTO.getAddress2();
+        this.birthDate = consumerDTO.getBirthDate();
+        if (consumerDTO.getCards() != null) {
+            this.cards = consumerDTO.getCards()
+                    .stream().map(cardDTO -> new Card(this.id, cardDTO)).collect(Collectors.toList());
+        }
+    }
 
 }
