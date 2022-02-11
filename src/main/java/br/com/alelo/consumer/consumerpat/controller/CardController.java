@@ -26,13 +26,13 @@ public class CardController {
 	@RequestMapping(value = "/balance/update", method = RequestMethod.POST)
     public ResponseEntity setBalance(@RequestBody CardBalanceDto cardBalance) {
 		 this.cardService.setBalance(cardBalance);
-		 return new ResponseEntity(HttpStatus.NO_CONTENT);
+		 return new ResponseEntity(HttpStatus.OK);
 	 }
 	
 	@ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public ResponseEntity buy(@RequestBody BuyInfoDto buyInfo) {
         this.cardService.buy(buyInfo);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

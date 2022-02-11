@@ -27,10 +27,9 @@ public class ConsumerController {
 
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
-    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(method = RequestMethod.GET)
-    public List<ConsumerDto> listAllConsumers() {
-    	return this.consumerService.findAll();
+    public ResponseEntity<List<ConsumerDto>> listAllConsumers() {
+    	return new ResponseEntity<List<ConsumerDto>>(this.consumerService.findAll(), HttpStatus.OK);
     }
 
 
@@ -45,13 +44,13 @@ public class ConsumerController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity updateConsumer(@RequestBody ConsumerDto consumer) {
     	this.consumerService.save(consumer);
-    	return new ResponseEntity(HttpStatus.NO_CONTENT);
+    	return new ResponseEntity(HttpStatus.OK);
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteConsumer(@PathVariable("id") int id) {
     	this.consumerService.delete(id);
-    	return new ResponseEntity(HttpStatus.NO_CONTENT);
+    	return new ResponseEntity(HttpStatus.OK);
     }
 
 }
