@@ -1,10 +1,11 @@
-package br.com.alelo.consumer.consumerpat.respository;
+package br.com.alelo.consumer.consumerpat.repository;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
 
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
