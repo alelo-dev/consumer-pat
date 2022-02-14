@@ -6,20 +6,20 @@ public class ConsumerDto {
 
     Integer id;
     String name;
-    int documentNumber;
+    Integer documentNumber;
     Date birthDate;
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    Integer mobilePhoneNumber;
+    Integer residencePhoneNumber;
+    Integer phoneNumber;
     String email;
     String street;
-    int number;
+    Integer number;
     String city;
     String country;
-    int portalCode;
-    int foodCardNumber;
-    double foodCardBalance;
-    int fuelCardNumber;
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    Integer portalCode;
+    Integer foodCardNumber;
+    Double foodCardBalance;
+    Integer fuelCardNumber;
+    Integer drugstoreNumber;
+    Double drugstoreCardBalance;
 }
