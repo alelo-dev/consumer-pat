@@ -1,8 +1,10 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.exception.CardNotFoundException;
+import br.com.alelo.consumer.consumerpat.exception.ConsumerNotFoundException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.util.EstablishmentType;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConsumerServiceImpl implements ConsumerService{
@@ -114,8 +117,16 @@ public class ConsumerServiceImpl implements ConsumerService{
     }
 
     @Override
-    public Consumer updateConsumer(Consumer consumer) {
-        return this.repository.save(consumer);
+    public Consumer updateConsumer(ConsumerDto consumer, Integer consumerId) throws ConsumerNotFoundException {
+        Optional<Consumer> consumerToChange = this.repository.findById(consumerId);
+
+        if(consumerToChange.isEmpty()){
+            throw new ConsumerNotFoundException("Cliente não encontra para realizar a alteração");
+        }
+
+        consumerToChange.get().setFoodCardBalance(consumer.getFoodCardBalance());
+        consumerToChange.get().setCity(consumer.getCity());
+        return this.repository.save(consumerToChange.get());
     }
 
     @Override

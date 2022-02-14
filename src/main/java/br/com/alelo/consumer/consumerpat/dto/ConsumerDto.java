@@ -1,7 +1,10 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class ConsumerDto {
 
     Integer id;
@@ -22,4 +25,6 @@ public class ConsumerDto {
     Integer fuelCardNumber;
     Integer drugstoreNumber;
     Double drugstoreCardBalance;
+
+
 }
