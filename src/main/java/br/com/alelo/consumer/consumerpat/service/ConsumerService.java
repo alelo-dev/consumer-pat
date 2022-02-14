@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
@@ -20,9 +22,9 @@ public class ConsumerService {
 	@Autowired
 	private ConsumerRepository consumerRepository;
 	
-	public List<Consumer> getAllConsumersList(){
-		return consumerRepository.getAllConsumersList();
-	}
+	public Page<Consumer> getAllConsumersListWhithPagination(Pageable pageable){
+		return consumerRepository.findAll(pageable);
+	}	
 	
 	public Consumer findByDrugstoreNumber(String cardNumber){
 		Consumer consumer = consumerRepository.findByDrugstoreNumber(cardNumber);

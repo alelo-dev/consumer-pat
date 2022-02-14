@@ -1,9 +1,11 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +37,11 @@ public class ConsumerController {
 
 	/* Deve listar todos os clientes (cerca de 500) */
 	@GetMapping
-	public List<Consumer> listAllConsumers() {
-		return consumerService.getAllConsumersList();
+	public Page<Consumer> listAllConsumers(Pageable pageable) {
+		if(Objects.isNull(pageable)) {
+			pageable = Pageable.unpaged();
+		}
+		return consumerService.getAllConsumersListWhithPagination(pageable);
 	}
 
 	/* Cadastrar novos clientes */
@@ -53,7 +58,6 @@ public class ConsumerController {
 	}
 
 	// Não deve ser possível alterar o saldo do cartão
-	// @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
 	@PutMapping("/{id}")
 	public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer, @PathVariable Integer id) {
 
@@ -67,7 +71,6 @@ public class ConsumerController {
 	 * precisa indenficar qual o cartão correto a ser recarregado, para isso deve
 	 * usar o número do cartão(cardNumber) fornecido.
 	 */
-	// @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
 	@PostMapping("/setcardbalance")
 	public ResponseEntity<Consumer> setBalance(@RequestBody Card card) {
 
