@@ -12,13 +12,13 @@ import java.util.Date;
 public class Extract {
 
     @Id
-    int id;
-    int establishmentNameId;
+    Integer id;
+    Integer establishmentNameId;
     String establishmentName;
     String productDescription;
     Date dateBuy;
-    int cardNumber;
-    double value;
+    Integer cardNumber;
+    Double value;
 
 
     public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {

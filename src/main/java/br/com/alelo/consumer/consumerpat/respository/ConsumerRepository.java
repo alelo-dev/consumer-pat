@@ -4,19 +4,14 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
-    @Query(nativeQuery = true, value = "select * from Consumer")
-    List<Consumer> getAllConsumersList();
-
-    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
+    @Query("select c from Consumer c where foodCardNumber = :cardNumber ")
     Consumer findByFoodCardNumber(int cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
+    @Query("select c from Consumer c where fuelCardNumber = :cardNumber ")
     Consumer findByFuelCardNumber(int cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
+    @Query("select c from Consumer c where drugstoreNumber = :cardNumber ")
     Consumer findByDrugstoreNumber(int cardNumber);
 }

@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -20,31 +19,31 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
-    int documentNumber;
+    Integer documentNumber;
     Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    Integer mobilePhoneNumber;
+    Integer residencePhoneNumber;
+    Integer phoneNumber;
     String email;
 
     //Address
     String street;
-    int number;
+    Integer number;
     String city;
     String country;
-    int portalCode;
+    Integer portalCode;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    Integer foodCardNumber;
+    Double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    Integer fuelCardNumber;
+    Double fuelCardBalance;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    Integer drugstoreNumber;
+    Double drugstoreCardBalance;
 
     @Override
     public boolean equals(Object o) {
