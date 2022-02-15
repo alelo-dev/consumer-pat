@@ -16,11 +16,11 @@ public class ExtractDTO {
     String cardNumber;
     double value;
     
-    int establishmentType;
+    String establishmentType;
     
     public ExtractDTO(
     		int id, int establishmentNameId, String establishmentName, String productDescription, 
-    		Date dateBuy, String cardNumber, double value, int establishmentType) {
+    		Date dateBuy, String cardNumber, double value, String establishmentType) {
     	
     	this.id = id;
         this.establishmentNameId = establishmentNameId;

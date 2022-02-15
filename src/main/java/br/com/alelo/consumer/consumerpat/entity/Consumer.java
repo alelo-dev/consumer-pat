@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,24 +37,12 @@ public class Consumer {
     String phoneNumber;
     String email;
 
-    //Address
     @Embedded
     private Address address;    
 
-    //cards
-    String foodCardNumber;
-    double foodCardBalance;
-
-    String fuelCardNumber;
-    double fuelCardBalance;
-
-    String drugstoreNumber;
-    double drugstoreCardBalance;
-    
-//    @OneToMany(mappedBy = "consumer",
-//        	cascade = CascadeType.DETACH,
-//        	orphanRemoval = true
-//			)
-//	private List<Card> cards;    
+    @OneToMany(mappedBy = "consumer",
+        	fetch = FetchType.LAZY
+			)
+	private List<Card> cards;    
 
 }

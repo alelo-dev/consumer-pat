@@ -29,7 +29,6 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler{
 		
 		String lMensagemTratada = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
 		
-		//String mensagemDesenvolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		String lMensagemOriginal = Optional.ofNullable(ex.getCause()).orElse(ex).toString();
 		
 		List<Erro> listaErros = Arrays.asList((new Erro(lMensagemTratada, lMensagemOriginal)));
@@ -50,13 +49,26 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler{
 		return handleExceptionInternal(ex, listaErros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
-	@org.springframework.web.bind.annotation.ExceptionHandler({ApplicationException.class})
-	public ResponseEntity<Object> handleApplicationException(ApplicationException ex,
+	@org.springframework.web.bind.annotation.ExceptionHandler({CardNotFoundException.class})
+	public ResponseEntity<Object> handleCardNotFoundExceptionException(CardNotFoundException ex,
 			WebRequest request) {
 		
 		String lMensagemTratada = messageSource.getMessage("cartao.nao-encontrado", null, LocaleContextHolder.getLocale());
 		
 		String mensagemOriginal = ex.toString();
+		
+		List<Erro> listaErros = Arrays.asList((new Erro(lMensagemTratada, mensagemOriginal)));
+		
+		return handleExceptionInternal(ex, listaErros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}	
+	
+	@org.springframework.web.bind.annotation.ExceptionHandler({ApplicationException.class})
+	public ResponseEntity<Object> handleApplicationException(ApplicationException ex,
+			WebRequest request) {
+		
+		String lMensagemTratada = ex.getMessage();
+		
+		String mensagemOriginal = messageSource.getMessage("mensagem.aplicacao.exception", null, LocaleContextHolder.getLocale());
 		
 		List<Erro> listaErros = Arrays.asList((new Erro(lMensagemTratada, mensagemOriginal)));
 		

@@ -7,17 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.alelo.consumer.consumerpat.dto.ExtractDTO;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.enumerator.EstablishmentType;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.exception.ApplicationException;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 
 @Service
 public class ExtractService {
 
 	@Autowired
-	private ConsumerService consumerService;
+	private CardService cardService;	
 	
 	@Autowired
 	private ExtractRepository extractRepository;
@@ -31,45 +31,39 @@ public class ExtractService {
 		
 		Extract extract = extractDTO.tranformDTOToEntity();
 		
-		Consumer consumer = null;
-		/*
-		 * O valores só podem ser debitados dos cartões com os tipos correspondentes ao
-		 * tipo do estabelecimento da compra. Exemplo: Se a compra é em um
-		 * estabelecimeto de Alimentação(food) então o valor só pode ser debitado do
-		 * cartão e alimentação
-		 *
-		 * Tipos de estabelcimentos 1 - Alimentação (food) 2 - Farmácia (DrugStore) 3 -
-		 * Posto de combustivel (Fuel)
-		 */
-
-		if (extractDTO.getEstablishmentType() == EstablishmentType.FOOD_CARD.getId()) {
+		Card card = cardService.findCardByNumber(extract.getCardNumber());
+		
+		this.validateCard(extractDTO, card); 
+		
+		if (extractDTO.getEstablishmentType().equalsIgnoreCase((EstablishmentType.FOOD_CARD.name()))) {
+			
 			// Para compras no cartão de alimentação o cliente recebe um desconto de 10%
 			Double cashback = (extract.getValue() / 100) * 10;
 			extract.setValue(extract.getValue() - cashback);
 
-			consumer = consumerService.findByFoodCardNumber(extract.getCardNumber());
-			consumer.setFoodCardBalance(consumer.getFoodCardBalance() - extract.getValue());
-			consumerService.save(consumer);
-
-		} else if (extractDTO.getEstablishmentType() == EstablishmentType.DRUGSTORE_CARD.getId()) {
-			consumer = consumerService.findByDrugstoreNumber(extract.getCardNumber());
-			consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - extract.getValue());
-			consumerService.save(consumer);
-
-		} else {
+		} else if (extractDTO.getEstablishmentType().equalsIgnoreCase((EstablishmentType.FUEL_CARD.name()))) {
+			
 			// Nas compras com o cartão de combustivel existe um acrescimo de 35%;
 			Double tax = (extract.getValue() / 100) * 35;
 			extract.setValue(extract.getValue() + tax);
-
-			consumer = consumerService.findByFuelCardNumber(extract.getCardNumber());
-			consumer.setFuelCardBalance(consumer.getFuelCardBalance() - extract.getValue());
-			consumerService.save(consumer);
 		}
-
+		
+		card.setBalance(card.getBalance() -  extract.getValue());
+		cardService.save(card);		
+		
 		extract.setDateBuy(new Date());
 		
 		extract = extractRepository.save(extract);
 		
 		return extract;
+	}
+	
+	
+	private boolean validateCard(ExtractDTO extractDTO, Card card) {
+		if (!card.getTipo().name()
+				.equalsIgnoreCase((extractDTO.getEstablishmentType()))) {
+			throw new ApplicationException("Este cartão não pertence ao tipo selecionado.");
+		}
+		return true;
 	}
 }
