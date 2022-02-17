@@ -1,35 +1,27 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 
 @Data
 @Entity
+@AllArgsConstructor
 public class Extract {
 
     @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
-
-
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+    private int id;
+    private int establishmentNameId;
+    private String establishmentName;
+    private String productDescription;
+    private Date dateBuy;
+    private int cardNumber;
+    private double value;
 
     public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
         this.productDescription = productDescription;
