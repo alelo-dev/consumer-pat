@@ -1,10 +1,9 @@
 package br.com.alelo.consumer.consumerpat.respository;
 
-import br.com.alelo.consumer.consumerpat.entity.consumer.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.card.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
-
+public interface CardRepostiory extends JpaRepository<Card, Long> {
 }

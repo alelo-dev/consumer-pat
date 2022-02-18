@@ -1,56 +1,37 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.entity.card.Card;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private int establishmentNameId;
-    private String establishmentName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_card")
+    private Card card;
+
+    @ManyToOne
+    @JoinColumn(name = "establishment")
+    private Establishment establishment;
+
+    private BigDecimal value;
     private String productDescription;
     private Date dateBuy;
-
-    private int cardNumber;
-
-    private double value;
-
-
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
 
 }
