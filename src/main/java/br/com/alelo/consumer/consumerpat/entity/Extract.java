@@ -1,13 +1,11 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 import br.com.alelo.consumer.consumerpat.entity.card.Card;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -30,8 +28,13 @@ public class Extract {
     @JoinColumn(name = "establishment")
     private Establishment establishment;
 
+    @NonNull
     private BigDecimal value;
+
+    @NonNull
     private String productDescription;
-    private Date dateBuy;
+
+    @NonNull
+    private LocalDate dateBuy;
 
 }

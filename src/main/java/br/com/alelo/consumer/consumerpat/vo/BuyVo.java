@@ -11,16 +11,12 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardVo {
+public class BuyVo {
 
-    private Long number;
-
+    private Long cardNumber;
     private BigDecimal value;
-
     private Long establishmentId;
-
-    private String establishmentName;
-
+    private Long establishmentType;
     private String productDescription;
 
 }

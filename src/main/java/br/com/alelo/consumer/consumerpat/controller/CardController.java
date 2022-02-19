@@ -3,7 +3,9 @@ package br.com.alelo.consumer.consumerpat.controller;
 import br.com.alelo.consumer.consumerpat.entity.card.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.service.CardService;
+import br.com.alelo.consumer.consumerpat.vo.BuyVo;
 import br.com.alelo.consumer.consumerpat.vo.CardVo;
+import br.com.alelo.consumer.consumerpat.vo.ExtractVo;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +17,18 @@ public class CardController {
     @Autowired
     private CardService service;
 
-    /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
-     */
+    @PostMapping
+    public CardVo createCard(@RequestBody CardVo cardVo) {
+        return this.service.createCard(cardVo);
+    }
+
     @PostMapping("/balance")
-    public Card setBalance(@RequestBody CardVo cardVo) {
+    public CardVo setBalance(@RequestBody CardVo cardVo) {
         return this.service.setBalance(cardVo);
     }
 
     @PostMapping("/buy")
-    public Extract buy(@RequestBody  CardVo cardVo) {
-        return this.service.buy(cardVo);
+    public ExtractVo buy(@RequestBody BuyVo buyVo) {
+        return this.service.buy(buyVo);
     }
 }

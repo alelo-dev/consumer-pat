@@ -1,9 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +19,6 @@ public class Establishment {
     private Long Id;
 
     private String name;
-
     private Long type;
 
 }

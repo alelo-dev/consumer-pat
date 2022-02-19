@@ -1,15 +1,25 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import br.com.alelo.consumer.consumerpat.adapter.CardAdapter;
+import br.com.alelo.consumer.consumerpat.adapter.ExtractAdapter;
+import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.entity.card.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.entity.card.ICard;
+import br.com.alelo.consumer.consumerpat.entity.consumer.Consumer;
 import br.com.alelo.consumer.consumerpat.enums.ECard;
 import br.com.alelo.consumer.consumerpat.respository.CardRepostiory;
+import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.vo.BuyVo;
 import br.com.alelo.consumer.consumerpat.vo.CardVo;
+import br.com.alelo.consumer.consumerpat.vo.ExtractVo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 
 @Log4j2
@@ -22,92 +32,50 @@ public class CardService {
     @Autowired
     private CardRepostiory cardRepository;
 
-    public Card setBalance(CardVo cardVo) {
+    @Autowired
+    private ConsumerRepository consumerRepository;
+
+    public CardVo setBalance(CardVo cardVo) {
 
         try {
             Card card = cardRepository.findById(cardVo.getNumber()).orElseThrow(() ->  new Exception("Cartão não encontrado"));
-            card.setBalance(card.getBalance().add(cardVo.getValue()));
+            card.setBalance(card.getBalance().add(cardVo.getBalance()));
             cardRepository.saveAndFlush(card);
+            cardVo = CardAdapter.modelToVo(card);
+
         } catch (Exception ex){
-            ex.printStackTrace();
             log.error(ex.getMessage());
         }
-
-//        Consumer consumer = null;
-//        consumer = repository.findByDrugstoreNumber(cardNumber);
-//
-//        if(consumer != null) {
-//            // é cartão de farmácia
-//            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-//            repository.save(consumer);
-//        } else {
-//            consumer = repository.findByFoodCardNumber(cardNumber);
-//            if(consumer != null) {
-//                // é cartão de refeição
-//                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-//                repository.save(consumer);
-//            } else {
-//                // É cartão de combustivel
-//                consumer = repository.findByFuelCardNumber(cardNumber);
-//                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-//                repository.save(consumer);
-//            }
-//        }
-        return null;
+        return cardVo;
     }
 
-    public Extract buy(CardVo cardVo) {
+    public ExtractVo buy(BuyVo buyVo) {
+
+        ExtractVo extractVo = null;
 
         try{
+            ICard cardStr = (ICard) ECard.findById(buyVo.getEstablishmentType()).getCard().getDeclaredConstructors()[0].newInstance();
+            Card card = cardRepository.findById(buyVo.getCardNumber()).orElseThrow(() -> new Exception("Cartão não encontrado"));
+            card.setBalance(card.getBalance().subtract(cardStr.calculateBalance(buyVo.getValue())));
+            cardRepository.save(card);
 
-            ICard cardStr = (ICard) ECard.findById(cardVo.getEstablishmentId()).getCard().getDeclaredConstructors()[0].newInstance();
-            Card card = cardRepository.findById(cardVo.getNumber()).orElseThrow(() -> new Exception("Cartão não encontrado"));
-            card.setBalance(cardStr.calculateBalance());
-            cardRepository.saveAndFlush(card);
+            Establishment establishment = Establishment.builder().Id(buyVo.getEstablishmentId()).build();
+            Extract extract = Extract.builder().dateBuy(LocalDate.now()).establishment(establishment).productDescription(buyVo.getProductDescription()).card(card)
+                                      .value(buyVo.getValue()).build();
+            extractRepository.save(extract);
+            extractVo = ExtractAdapter.modelToVo(extract);
 
         } catch (Exception ex){
-            ex.printStackTrace();
             log.error(ex.getMessage());
         }
 
-//        Consumer consumer = null;
-//        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-//         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-//         *
-//         * Tipos de estabelcimentos
-//         * 1 - Alimentação (food)
-//         * 2 - Farmácia (DrugStore)
-//         * 3 - Posto de combustivel (Fuel)
-//         */
-//
-//        if (establishmentType == 1) {
-//            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-//            Double cashback  = (value / 100) * 10;
-//            value = value - cashback;
-//
-//            consumer = repository.findByFoodCardNumber(cardNumber);
-//            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-//            repository.save(consumer);
-//
-//        }else if(establishmentType == 2) {
-//            consumer = repository.findByDrugstoreNumber(cardNumber);
-//            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-//            repository.save(consumer);
-//
-//        } else {
-//            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-//            Double tax  = (value / 100) * 35;
-//            value = value + tax;
-//
-//            consumer = repository.findByFuelCardNumber(cardNumber);
-//            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-//            repository.save(consumer);
-//        }
-
-//        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-//        extractRepository.save(extract);
-
-        return null;
+        return Optional.ofNullable(extractVo).orElse(ExtractVo.builder().build());
     }
 
+    public CardVo createCard(CardVo cardVo) {
+        Card card = CardAdapter.voToModel(cardVo);
+        card.setConsumer(consumerRepository.findById(cardVo.getConsumerId()).get());
+        cardVo = CardAdapter.modelToVo(cardRepository.save(card));
+        return cardVo;
+    }
 }

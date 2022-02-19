@@ -1,10 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity.card;
 
 import br.com.alelo.consumer.consumerpat.entity.consumer.Consumer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -19,7 +16,10 @@ public class Card {
 
     @Id
     private Long number;
+    @NonNull
     private BigDecimal balance;
+    @NonNull
+    private Long type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_consumer")

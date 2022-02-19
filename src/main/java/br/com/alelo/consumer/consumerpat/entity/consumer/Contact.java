@@ -1,9 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity.consumer;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -17,6 +14,7 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private Long mobilePhoneNumber;
     private Long residencePhoneNumber;
     private Long phoneNumber;
