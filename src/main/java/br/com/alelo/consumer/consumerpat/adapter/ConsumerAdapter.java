@@ -1,9 +1,7 @@
 package br.com.alelo.consumer.consumerpat.adapter;
 
 import br.com.alelo.consumer.consumerpat.entity.consumer.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.consumer.Contact;
 import br.com.alelo.consumer.consumerpat.vo.ConsumerVo;
-import br.com.alelo.consumer.consumerpat.vo.ContactVo;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;

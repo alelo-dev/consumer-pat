@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class ExtractVo {
 
     private Long cardNumber;
-    private Long establishmentId;
+    private Integer establishmentId;
     private String establishmentName;
     private BigDecimal value;
     private String productDescription;

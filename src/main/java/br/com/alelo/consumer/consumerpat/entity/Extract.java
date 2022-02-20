@@ -24,17 +24,17 @@ public class Extract {
     @JoinColumn(name = "id_card")
     private Card card;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "establishment")
     private Establishment establishment;
 
-    @NonNull
+    @Column(nullable = false)
     private BigDecimal value;
 
-    @NonNull
+    @Column(nullable = false)
     private String productDescription;
 
-    @NonNull
+    @Column(nullable = false)
     private LocalDate dateBuy;
 
 }

@@ -1,8 +1,6 @@
 package br.com.alelo.consumer.consumerpat.adapter;
 
 import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.entity.card.Card;
-import br.com.alelo.consumer.consumerpat.vo.CardVo;
 import br.com.alelo.consumer.consumerpat.vo.ExtractVo;
 import org.springframework.util.CollectionUtils;
 

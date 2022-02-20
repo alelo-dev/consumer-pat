@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class AdddresVo {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+    private Integer id;
 
     private String street;
     private Long number;

@@ -13,11 +13,15 @@ public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     private Long mobilePhoneNumber;
+
     private Long residencePhoneNumber;
+
     private Long phoneNumber;
+
+    @Column(nullable = false)
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ContactVo {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+    private Integer id;
 
     private Long mobilePhoneNumber;
     private Long residencePhoneNumber;

@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.adapter.ConsumerAdapter;
 import br.com.alelo.consumer.consumerpat.entity.card.Card;
 import br.com.alelo.consumer.consumerpat.entity.consumer.Consumer;
+import br.com.alelo.consumer.consumerpat.exception.ValidateException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.vo.ConsumerVo;
@@ -39,16 +40,13 @@ public class ConsumerService {
         return consumerVo;
     }
 
-    public ConsumerVo updateConsumer(ConsumerVo consumerVo, Long id) {
+    public ConsumerVo updateConsumer(ConsumerVo consumerVo, Integer id) {
 
-        try{
-            repository.findById(id.intValue()).orElseThrow(() -> new Exception("Consumidor não encontrado"));
-            Consumer consumer = ConsumerAdapter.voToModel(consumerVo);
-            consumerVo = ConsumerAdapter.modelToVo(repository.saveAndFlush(consumer));
+        Consumer consumer = repository.findById(id).orElseThrow(() -> new ValidateException("Consumidor não encontrado"));
+        consumerVo.setId(consumer.getId());
+        consumer = ConsumerAdapter.voToModel(consumerVo);
+        consumerVo = ConsumerAdapter.modelToVo(repository.saveAndFlush(consumer));
 
-        }catch (Exception exception){
-            log.error(exception.getMessage());
-        }
         return consumerVo;
     }
 

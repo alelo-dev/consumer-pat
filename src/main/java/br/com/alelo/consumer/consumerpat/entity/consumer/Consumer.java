@@ -25,8 +25,13 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private Long documentNumber;
+
+    @Column(nullable = false)
     private LocalDate birthDate;
 
     @OneToMany(mappedBy = "consumer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

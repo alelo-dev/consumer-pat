@@ -16,9 +16,11 @@ public class Card {
 
     @Id
     private Long number;
-    @NonNull
+
+    @Column(nullable = false)
     private BigDecimal balance;
-    @NonNull
+
+    @Column(nullable = false)
     private Long type;
 
     @ManyToOne(fetch = FetchType.LAZY)

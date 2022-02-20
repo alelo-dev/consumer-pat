@@ -28,8 +28,8 @@ public class ConsumerController {
         return service.createConsumer(consumer);
     }
 
-    @PutMapping("{/id}")
-    public ConsumerVo updateConsumer(@RequestBody ConsumerVo consumer, @PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ConsumerVo updateConsumer(@RequestBody ConsumerVo consumer, @PathVariable Integer id) {
         return service.updateConsumer(consumer, id);
     }
 

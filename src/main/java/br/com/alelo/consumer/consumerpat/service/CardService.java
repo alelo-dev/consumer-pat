@@ -6,8 +6,8 @@ import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.entity.card.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.entity.card.ICard;
-import br.com.alelo.consumer.consumerpat.entity.consumer.Consumer;
 import br.com.alelo.consumer.consumerpat.enums.ECard;
+import br.com.alelo.consumer.consumerpat.exception.ValidateException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepostiory;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
@@ -37,39 +37,34 @@ public class CardService {
 
     public CardVo setBalance(CardVo cardVo) {
 
-        try {
-            Card card = cardRepository.findById(cardVo.getNumber()).orElseThrow(() ->  new Exception("Cartão não encontrado"));
-            card.setBalance(card.getBalance().add(cardVo.getBalance()));
-            cardRepository.saveAndFlush(card);
-            cardVo = CardAdapter.modelToVo(card);
+        Card card = cardRepository.findById(cardVo.getNumber()).orElseThrow(() ->  new ValidateException("Cartão não encontrado"));
+        card.setBalance(card.getBalance().add(cardVo.getBalance()));
+        cardRepository.saveAndFlush(card);
+        cardVo = CardAdapter.modelToVo(card);
 
-        } catch (Exception ex){
-            log.error(ex.getMessage());
-        }
         return cardVo;
     }
 
     public ExtractVo buy(BuyVo buyVo) {
 
-        ExtractVo extractVo = null;
+        ICard cardStr;
 
         try{
-            ICard cardStr = (ICard) ECard.findById(buyVo.getEstablishmentType()).getCard().getDeclaredConstructors()[0].newInstance();
-            Card card = cardRepository.findById(buyVo.getCardNumber()).orElseThrow(() -> new Exception("Cartão não encontrado"));
-            card.setBalance(card.getBalance().subtract(cardStr.calculateBalance(buyVo.getValue())));
-            cardRepository.save(card);
-
-            Establishment establishment = Establishment.builder().Id(buyVo.getEstablishmentId()).build();
-            Extract extract = Extract.builder().dateBuy(LocalDate.now()).establishment(establishment).productDescription(buyVo.getProductDescription()).card(card)
-                                      .value(buyVo.getValue()).build();
-            extractRepository.save(extract);
-            extractVo = ExtractAdapter.modelToVo(extract);
-
+            cardStr = (ICard) ECard.findById(buyVo.getEstablishmentType()).getCard().getDeclaredConstructors()[0].newInstance();
         } catch (Exception ex){
-            log.error(ex.getMessage());
+            throw new ValidateException(ex.getMessage());
         }
+        Card card = cardRepository.findById(buyVo.getCardNumber()).orElseThrow(() -> new ValidateException("Cartão não encontrado"));
+        card.setBalance(card.getBalance().subtract(Optional.ofNullable(cardStr).orElseThrow().calculateBalance(buyVo.getValue())));
+        cardRepository.save(card);
 
-        return Optional.ofNullable(extractVo).orElse(ExtractVo.builder().build());
+        Establishment establishment = Establishment.builder().Id(buyVo.getEstablishmentId()).build();
+        Extract extract = Extract.builder().dateBuy(LocalDate.now()).establishment(establishment).productDescription(buyVo.getProductDescription()).card(card)
+                                  .value(buyVo.getValue()).build();
+        extractRepository.save(extract);
+        ExtractVo extractVo = ExtractAdapter.modelToVo(extract);
+
+        return extractVo;
     }
 
     public CardVo createCard(CardVo cardVo) {

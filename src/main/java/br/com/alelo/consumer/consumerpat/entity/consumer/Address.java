@@ -13,12 +13,20 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
+    @Column(nullable = false)
     private String street;
+
+    @Column(nullable = false)
     private Long number;
+
+    @Column(nullable = false)
     private String city;
+
+    @Column(nullable = false)
     private String country;
+
     private Long portalCode;
 
     @ManyToOne(fetch = FetchType.LAZY)

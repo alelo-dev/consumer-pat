@@ -15,7 +15,7 @@ public class BuyVo {
 
     private Long cardNumber;
     private BigDecimal value;
-    private Long establishmentId;
+    private Integer establishmentId;
     private Long establishmentType;
     private String productDescription;
 
