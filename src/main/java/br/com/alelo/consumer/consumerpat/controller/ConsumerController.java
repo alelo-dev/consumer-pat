@@ -143,7 +143,7 @@ public class ConsumerController {
             )
     })
     @PostMapping(value = "/buy/{establishmentType}/{establishmentName}/{cardNumber}/{productDescription}/{value}")
-    public ResponseEntity<ExtractResponseDTO> buy(@PathVariable Integer establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value) {
+    public ResponseEntity<ExtractResponseDTO> buy(@PathVariable Integer establishmentType, @PathVariable String establishmentName, @PathVariable Integer cardNumber, @PathVariable String productDescription, @PathVariable Double value) {
         return ResponseEntity.ok().body(consumerService.buy(establishmentType, establishmentName,  cardNumber,  productDescription,  value));
     }
 
