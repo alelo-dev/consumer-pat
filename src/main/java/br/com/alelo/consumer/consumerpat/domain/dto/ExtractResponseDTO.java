@@ -15,7 +15,6 @@ import java.util.Date;
 @ApiModel
 public class ExtractResponseDTO {
 
-    private Integer establishmentNameId;
     private String establishmentName;
     private String productDescription;
     private Date dateBuy;
