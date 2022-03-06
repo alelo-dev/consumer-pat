@@ -120,7 +120,7 @@ public class ConsumerController {
             )
     })
     @PutMapping(value = "/setcardbalance/{cardNumber}/{value}")
-    public ResponseEntity<ConsumerResponseDTO> setBalance(@PathVariable(value = "0") Integer cardNumber, @PathVariable(value = "49.99") Double value) {
+    public ResponseEntity<ConsumerResponseDTO> setBalance(@PathVariable Integer cardNumber, @PathVariable Double value) {
         return ResponseEntity.ok().body(consumerService.setCardBalence(cardNumber, value));
     }
 
