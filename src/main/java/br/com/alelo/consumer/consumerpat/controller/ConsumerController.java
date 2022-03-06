@@ -142,9 +142,9 @@ public class ConsumerController {
                     message ="Ocorreu um erro inesperado. Contate o suporte!"
             )
     })
-    @PostMapping(value = "/buy/{establishmentType}/{establishmentName}/{cardNumber}/{productDescription}/{value}")
-    public ResponseEntity<ExtractResponseDTO> buy(@PathVariable Integer establishmentType, @PathVariable String establishmentName,
-                                                  @PathVariable Integer cardNumber, @PathVariable String productDescription, @PathVariable Double value) {
+    @PostMapping(value = "/buy")
+    public ResponseEntity<ExtractResponseDTO> buy(Integer establishmentType, String establishmentName,
+                                                  Integer cardNumber, String productDescription, Double value) {
         return ResponseEntity.ok().body(consumerService.buy(establishmentType, establishmentName,  cardNumber,  productDescription,  value));
     }
 
