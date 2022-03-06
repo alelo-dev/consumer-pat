@@ -26,7 +26,7 @@ public class ConsumerController {
 
 
     @ApiOperation(
-            value="Lista de Consumidores - Consumer Pet",
+            value="Lista de Consumidores - Consumer Pat",
             notes="Mostra Listagem de Consumidores.",
             response= ConsumerResponseDTO.class)
     @ApiResponses(value= {
@@ -51,7 +51,7 @@ public class ConsumerController {
 
 
     @ApiOperation(
-            value="Cadastro de Consumidores - Consumer Pet",
+            value="Cadastro de Consumidores - Consumer Pat",
             notes="Efetua o cadastro do Consumidor.",
             response= ConsumerResponseDTO.class)
     @ApiResponses(value= {
@@ -75,7 +75,7 @@ public class ConsumerController {
     }
 
     @ApiOperation(
-            value="Atualiza cadastro dos Consumidores - Consumer Pet",
+            value="Atualiza cadastro dos Consumidores - Consumer Pat",
             notes="Efetua a atualização do cadastro do Consumidor.",
             response= ConsumerResponseDTO.class)
     @ApiResponses(value= {
@@ -100,7 +100,7 @@ public class ConsumerController {
 
 
     @ApiOperation(
-            value="Adiciona valor a um cartão  - Consumer Pet",
+            value="Adiciona valor a um cartão  - Consumer Pat",
             notes="Efetua adição de valor a um cartão específico de um consumidor específico.",
             response= ConsumerResponseDTO.class)
     @ApiResponses(value= {
@@ -124,7 +124,7 @@ public class ConsumerController {
     }
 
     @ApiOperation(
-            value="Realizar Compra - Consumer Pet",
+            value="Realizar Compra - Consumer Pat",
             notes="Efetua compra de um consumidor específico e com cartão específico, no valor informado.",
             response= ExtractResponseDTO.class)
     @ApiResponses(value= {
@@ -143,7 +143,8 @@ public class ConsumerController {
             )
     })
     @PostMapping(value = "/buy/{establishmentType}/{establishmentName}/{cardNumber}/{productDescription}/{value}")
-    public ResponseEntity<ExtractResponseDTO> buy(@PathVariable Integer establishmentType, @PathVariable String establishmentName, @PathVariable Integer cardNumber, @PathVariable String productDescription, @PathVariable Double value) {
+    public ResponseEntity<ExtractResponseDTO> buy(@PathVariable Integer establishmentType, @PathVariable String establishmentName,
+                                                  @PathVariable Integer cardNumber, @PathVariable String productDescription, @PathVariable Double value) {
         return ResponseEntity.ok().body(consumerService.buy(establishmentType, establishmentName,  cardNumber,  productDescription,  value));
     }
 
