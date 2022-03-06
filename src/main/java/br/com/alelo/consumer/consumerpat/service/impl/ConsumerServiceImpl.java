@@ -87,8 +87,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     private ExtractResponseDTO getBuildExtract(Extract extract) {
         return ExtractResponseDTO.builder().establishmentName(extract.getEstablishmentName())
-                .establishmentNameId(extract.getEstablishmentNameId()).
-                productDescription(extract.getProductDescription()).dateBuy(extract.getDateBuy()).
+                .productDescription(extract.getProductDescription()).dateBuy(extract.getDateBuy()).
                 cardNumber(extract.getCardNumber()).value(extract.getValue()).build();
     }
 
