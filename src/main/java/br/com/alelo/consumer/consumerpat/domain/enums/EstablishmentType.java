@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EstablishmentType {
-    FOOD(1, "FoodCard"),
-    DRUGSTORE(2, "DrugstoreCard"),
-    FUEL(3, "FuelCard");
+    FOOD(1, "Food Establishment"),
+    DRUGSTORE(2, "Drugstore Establishment"),
+    FUEL(3, "Fuel Establishment");
 
     private Integer id;
     private String descricao;
