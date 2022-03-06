@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.domain.dto.ConsumerResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.dto.ExtractResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.ConsumerPatException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import br.com.alelo.consumer.consumerpat.service.ExtractService;
@@ -71,12 +72,16 @@ public class ConsumerServiceImpl implements ConsumerService {
         if (establishmentType == 1) {
             value = getFoodCardNumber(cardNumber, value);
         } else if (establishmentType == 2) {
-            getDrugstoreNumber(cardNumber, value);
+            value = getDrugstoreNumber(cardNumber, value);
         } else {
             value = getFuelCardNumber(cardNumber, value);
         }
-        Extract extract = saveExtract(establishmentName, cardNumber, productDescription, value);
-        return getBuildExtract(extract);
+        if(value != null) {
+            Extract extract = saveExtract(establishmentName, cardNumber, productDescription, value);
+            return getBuildExtract(extract);
+        }else{
+            throw new ConsumerPatException("Parâmetros informados não são válidos, verifique e informe novamente");
+        }
 
     }
 
@@ -103,17 +108,20 @@ public class ConsumerServiceImpl implements ConsumerService {
         if(consumer!= null) {
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
             saveConsumer(consumer);
+            return value;
         }
-        return value;
+        return null;
     }
 
-    private void getDrugstoreNumber(Integer cardNumber, Double value) {
+    private Double getDrugstoreNumber(Integer cardNumber, Double value) {
         Consumer consumer;
         consumer = findByDrugstoreNumber(cardNumber);
         if(consumer!= null) {
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             saveConsumer(consumer);
+            return value;
         }
+        return null;
     }
 
     private Double getFoodCardNumber(Integer cardNumber, Double value) {
@@ -126,8 +134,9 @@ public class ConsumerServiceImpl implements ConsumerService {
         if(consumer != null) {
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             saveConsumer(consumer);
+            return value;
         }
-        return value;
+        return null;
     }
 
     @Override
