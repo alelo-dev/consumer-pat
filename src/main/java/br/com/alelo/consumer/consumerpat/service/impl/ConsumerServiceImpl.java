@@ -114,7 +114,7 @@ public class ConsumerServiceImpl implements ConsumerService {
                 saveConsumer(consumer);
                 return value;
             } else {
-                throw new ConsumerPatException("Saldo insuficiente para compra no Fuel Card");
+                throw new ConsumerPatException("Saldo insuficiente para compra no Cartão Combustível");
             }
         }
         return null;
@@ -132,7 +132,7 @@ public class ConsumerServiceImpl implements ConsumerService {
                 saveConsumer(consumer);
                 return value;
             } else {
-                throw new ConsumerPatException("Saldo insuficiente para compra no DrugstoreCard");
+                throw new ConsumerPatException("Saldo insuficiente para compra no Cartão Farmácia");
             }
         }
         return null;
@@ -154,7 +154,7 @@ public class ConsumerServiceImpl implements ConsumerService {
                 saveConsumer(consumer);
                 return value;
             } else {
-                throw new ConsumerPatException("Saldo insuficiente para compra no FoodCard");
+                throw new ConsumerPatException("Saldo insuficiente para compra no Cartão Alimentação");
             }
         }
         return null;
