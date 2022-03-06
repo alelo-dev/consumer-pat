@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.domain.dto.ConsumerResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.dto.ExtractResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
+import br.com.alelo.consumer.consumerpat.domain.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.exception.ConsumerPatException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
@@ -28,7 +29,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     public List<ConsumerResponseDTO> getAllConsumersList() {
         List<Consumer> consumers = consumerRepository.findAll();
         List<ConsumerResponseDTO> consumerResponseDTOS = new ArrayList<>();
-        consumers.forEach(consumer ->{
+        consumers.forEach(consumer -> {
             ConsumerResponseDTO consumerResponseDTO = ConsumerResponseDTO.builder().
                     id(consumer.getId()).name(consumer.getName()).birthDate(consumer.getBirthDate()).documentNumber(consumer.getDocumentNumber()).build();
             consumerResponseDTOS.add(consumerResponseDTO);
@@ -68,18 +69,18 @@ public class ConsumerServiceImpl implements ConsumerService {
      * 3 - Posto de combustivel (Fuel)
      */
     @Override
-    public ExtractResponseDTO buy(Integer establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value) {
-        if (establishmentType == 1) {
+    public ExtractResponseDTO buy(EstablishmentType establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value) {
+        if (establishmentType == EstablishmentType.FOOD) {
             value = getFoodCardNumber(cardNumber, value);
-        } else if (establishmentType == 2) {
+        } else if (establishmentType == EstablishmentType.DRUGSTORE) {
             value = getDrugstoreNumber(cardNumber, value);
         } else {
             value = getFuelCardNumber(cardNumber, value);
         }
-        if(value != null) {
+        if (value != null) {
             Extract extract = saveExtract(establishmentName, cardNumber, productDescription, value);
             return getBuildExtract(extract);
-        }else{
+        } else {
             throw new ConsumerPatException("Parâmetros informados não são válidos, verifique e informe novamente");
         }
 
@@ -104,10 +105,17 @@ public class ConsumerServiceImpl implements ConsumerService {
         value = value + tax;
 
         consumer = findByFuelCardNumber(cardNumber);
-        if(consumer!= null) {
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            saveConsumer(consumer);
-            return value;
+
+        if (consumer != null) {
+            Double saldo = consumer.getFuelCardBalance() - value;
+
+            if (saldo >= 0) {
+                consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+                saveConsumer(consumer);
+                return value;
+            } else {
+                throw new ConsumerPatException("Saldo insuficiente para compra no Fuel Card");
+            }
         }
         return null;
     }
@@ -115,10 +123,17 @@ public class ConsumerServiceImpl implements ConsumerService {
     private Double getDrugstoreNumber(Integer cardNumber, Double value) {
         Consumer consumer;
         consumer = findByDrugstoreNumber(cardNumber);
-        if(consumer!= null) {
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            saveConsumer(consumer);
-            return value;
+
+        if (consumer != null) {
+            Double saldo = consumer.getDrugstoreCardBalance() - value;
+
+            if (saldo >= 0) {
+                consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+                saveConsumer(consumer);
+                return value;
+            } else {
+                throw new ConsumerPatException("Saldo insuficiente para compra no DrugstoreCard");
+            }
         }
         return null;
     }
@@ -130,10 +145,17 @@ public class ConsumerServiceImpl implements ConsumerService {
         value = value - cashback;
 
         consumer = findByFoodCardNumber(cardNumber);
-        if(consumer != null) {
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            saveConsumer(consumer);
-            return value;
+
+        if (consumer != null) {
+            Double saldo = consumer.getFoodCardBalance() - value;
+
+            if (saldo > 0) {
+                consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+                saveConsumer(consumer);
+                return value;
+            } else {
+                throw new ConsumerPatException("Saldo insuficiente para compra no FoodCard");
+            }
         }
         return null;
     }
@@ -141,10 +163,10 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public ConsumerResponseDTO setCardBalence(Integer cardNumber, Double value) {
         Consumer consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
-        if(consumer != null) {
+        if (consumer != null) {
             return getCard(cardNumber, value, consumer);
-        }else{
-            throw  new ConsumerPatException("Consumidor ou cartão não localizado");
+        } else {
+            throw new ConsumerPatException("Consumidor ou cartão não localizado");
         }
     }
 
@@ -162,7 +184,7 @@ public class ConsumerServiceImpl implements ConsumerService {
             } else {
                 // É cartão de combustivel
                 consumer = findByFuelCardNumber(cardNumber);
-                if(consumer!= null) {
+                if (consumer != null) {
                     consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
                     return saveConsumer(consumer);
                 }

@@ -18,12 +18,12 @@ public class ApiValidationException extends Exception {
         super(message, cause);
     }
 
-    public ApiValidationException(String message, List<String> messages){
+    public ApiValidationException(String message, List<String> messages) {
         super(message);
         this.messages = messages;
     }
 
-    public ApiValidationException(List<String> messages){
+    public ApiValidationException(List<String> messages) {
         super();
         this.messages = messages;
     }

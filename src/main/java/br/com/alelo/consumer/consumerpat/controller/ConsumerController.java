@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.domain.dto.ConsumerResponseDTO;
+import br.com.alelo.consumer.consumerpat.domain.dto.EstablishmentRequestDTO;
 import br.com.alelo.consumer.consumerpat.domain.dto.ExtractResponseDTO;
 import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
@@ -26,22 +27,22 @@ public class ConsumerController {
 
 
     @ApiOperation(
-            value="Lista de Consumidores - Consumer Pat",
-            notes="Mostra Listagem de Consumidores.",
-            response= ConsumerResponseDTO.class)
-    @ApiResponses(value= {
+            value = "Lista de Consumidores - Consumer Pat",
+            notes = "Mostra Listagem de Consumidores.",
+            response = ConsumerResponseDTO.class)
+    @ApiResponses(value = {
             @ApiResponse(
-                    code=200,
+                    code = 200,
                     message = "",
                     response = ConsumerResponseDTO.class
             ),
             @ApiResponse(
-                    code=404,
-                    message="Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
+                    code = 404,
+                    message = "Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
             ),
             @ApiResponse(
-                    code=500,
-                    message ="Ocorreu um erro inesperado. Contate o suporte!"
+                    code = 500,
+                    message = "Ocorreu um erro inesperado. Contate o suporte!"
             )
     })
     @GetMapping(value = "/consumerList")
@@ -51,22 +52,22 @@ public class ConsumerController {
 
 
     @ApiOperation(
-            value="Cadastro de Consumidores - Consumer Pat",
-            notes="Efetua o cadastro do Consumidor.",
-            response= ConsumerResponseDTO.class)
-    @ApiResponses(value= {
+            value = "Cadastro de Consumidores - Consumer Pat",
+            notes = "Efetua o cadastro do Consumidor.",
+            response = ConsumerResponseDTO.class)
+    @ApiResponses(value = {
             @ApiResponse(
-                    code=201,
+                    code = 201,
                     message = "Cadastro de consumidor realizado com sucesso.",
                     response = ConsumerResponseDTO.class
             ),
             @ApiResponse(
-                    code=404,
-                    message="Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
+                    code = 404,
+                    message = "Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
             ),
             @ApiResponse(
-                    code=500,
-                    message ="Ocorreu um erro inesperado. Contate o suporte!"
+                    code = 500,
+                    message = "Ocorreu um erro inesperado. Contate o suporte!"
             )
     })
     @PostMapping(value = "/createConsumer")
@@ -75,22 +76,22 @@ public class ConsumerController {
     }
 
     @ApiOperation(
-            value="Atualiza cadastro dos Consumidores - Consumer Pat",
-            notes="Efetua a atualização do cadastro do Consumidor.",
-            response= ConsumerResponseDTO.class)
-    @ApiResponses(value= {
+            value = "Atualiza cadastro dos Consumidores - Consumer Pat",
+            notes = "Efetua a atualização do cadastro do Consumidor.",
+            response = ConsumerResponseDTO.class)
+    @ApiResponses(value = {
             @ApiResponse(
-                    code=200,
+                    code = 200,
                     message = "Consumidor atualizado com sucesso.",
                     response = ConsumerResponseDTO.class
             ),
             @ApiResponse(
-                    code=404,
-                    message="Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
+                    code = 404,
+                    message = "Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
             ),
             @ApiResponse(
-                    code=500,
-                    message ="Ocorreu um erro inesperado. Contate o suporte!"
+                    code = 500,
+                    message = "Ocorreu um erro inesperado. Contate o suporte!"
             )
     })
     @PutMapping(value = "/updateConsumer")
@@ -100,52 +101,53 @@ public class ConsumerController {
 
 
     @ApiOperation(
-            value="Adiciona valor a um cartão  - Consumer Pat",
-            notes="Efetua adição de valor a um cartão específico de um consumidor específico.",
-            response= ConsumerResponseDTO.class)
-    @ApiResponses(value= {
+            value = "Adiciona valor a um cartão  - Consumer Pat",
+            notes = "Efetua adição de valor a um cartão específico de um consumidor específico.",
+            response = ConsumerResponseDTO.class)
+    @ApiResponses(value = {
             @ApiResponse(
-                    code=200,
+                    code = 200,
                     message = "Valor adicionado com sucesso.",
                     response = ConsumerResponseDTO.class
             ),
             @ApiResponse(
-                    code=404,
-                    message="Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
+                    code = 404,
+                    message = "Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
             ),
             @ApiResponse(
-                    code=500,
-                    message ="Ocorreu um erro inesperado. Contate o suporte!"
+                    code = 500,
+                    message = "Ocorreu um erro inesperado. Contate o suporte!"
             )
     })
     @PutMapping(value = "/setcardbalance/{cardNumber}/{value}")
-    public ResponseEntity<ConsumerResponseDTO> setBalance(@PathVariable  Integer cardNumber, @PathVariable Double value) {
-        return ResponseEntity.ok().body(consumerService.setCardBalence(cardNumber,value));
+    public ResponseEntity<ConsumerResponseDTO> setBalance(@PathVariable Integer cardNumber, @PathVariable Double value) {
+        return ResponseEntity.ok().body(consumerService.setCardBalence(cardNumber, value));
     }
 
     @ApiOperation(
-            value="Realizar Compra - Consumer Pat",
-            notes="Efetua compra de um consumidor específico e com cartão específico, no valor informado.",
-            response= ExtractResponseDTO.class)
-    @ApiResponses(value= {
+            value = "Realizar Compra - Consumer Pat",
+            notes = "Efetua compra de um consumidor específico e com cartão específico, no valor informado.",
+            response = ExtractResponseDTO.class)
+    @ApiResponses(value = {
             @ApiResponse(
-                    code=200,
+                    code = 200,
                     message = "Compra realizada com sucesso.",
                     response = ExtractResponseDTO.class
             ),
             @ApiResponse(
-                    code=404,
-                    message="Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
+                    code = 404,
+                    message = "Mensagens de validação caso algum campo informado no JSON não seja encontrado na base de dados."
             ),
             @ApiResponse(
-                    code=500,
-                    message ="Ocorreu um erro inesperado. Contate o suporte!"
+                    code = 500,
+                    message = "Ocorreu um erro inesperado. Contate o suporte!"
             )
     })
-    @PostMapping(value = "/buy/{establishmentType}/{establishmentName}/{cardNumber}/{productDescription}/{value}")
-    public ResponseEntity<ExtractResponseDTO> buy(@PathVariable Integer establishmentType, @PathVariable String establishmentName,
-                                                  @PathVariable Integer cardNumber, @PathVariable String productDescription, @PathVariable Double value) {
-        return ResponseEntity.ok().body(consumerService.buy(establishmentType, establishmentName,  cardNumber,  productDescription,  value));
+    @PostMapping(value = "/buy")
+    public ResponseEntity<ExtractResponseDTO> buy(@RequestBody EstablishmentRequestDTO establishmentRequestDTO) {
+        return ResponseEntity.ok().body(consumerService.buy(establishmentRequestDTO.getEstablishmentType(),
+                establishmentRequestDTO.getExtract().getEstablishmentName(), establishmentRequestDTO.getExtract().getCardNumber(),
+                establishmentRequestDTO.getExtract().getProductDescription(), establishmentRequestDTO.getExtract().getValue()));
     }
 
 }
