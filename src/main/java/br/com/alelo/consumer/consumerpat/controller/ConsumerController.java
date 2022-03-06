@@ -146,8 +146,8 @@ public class ConsumerController {
     @PostMapping(value = "/buy")
     public ResponseEntity<ExtractResponseDTO> buy(@RequestBody EstablishmentRequestDTO establishmentRequestDTO) {
         return ResponseEntity.ok().body(consumerService.buy(establishmentRequestDTO.getEstablishmentType(),
-                establishmentRequestDTO.getExtract().getEstablishmentName(), establishmentRequestDTO.getExtract().getCardNumber(),
-                establishmentRequestDTO.getExtract().getProductDescription(), establishmentRequestDTO.getExtract().getValue()));
+                establishmentRequestDTO.getExtractRequestDTO().getEstablishmentName(), establishmentRequestDTO.getExtractRequestDTO().getCardNumber(),
+                establishmentRequestDTO.getExtractRequestDTO().getProductDescription(), establishmentRequestDTO.getExtractRequestDTO().getValue()));
     }
 
 }
