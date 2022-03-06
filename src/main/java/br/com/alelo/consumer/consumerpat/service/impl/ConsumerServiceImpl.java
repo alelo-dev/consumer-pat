@@ -68,8 +68,6 @@ public class ConsumerServiceImpl implements ConsumerService {
      */
     @Override
     public ExtractResponseDTO buy(Integer establishmentType, String establishmentName, Integer cardNumber, String productDescription, Double value) {
-        Consumer consumer = null;
-
         if (establishmentType == 1) {
             value = getFoodCardNumber(cardNumber, value);
         } else if (establishmentType == 2) {
@@ -102,16 +100,20 @@ public class ConsumerServiceImpl implements ConsumerService {
         value = value + tax;
 
         consumer = findByFuelCardNumber(cardNumber);
-        consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-        saveConsumer(consumer);
+        if(consumer!= null) {
+            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+            saveConsumer(consumer);
+        }
         return value;
     }
 
     private void getDrugstoreNumber(Integer cardNumber, Double value) {
         Consumer consumer;
         consumer = findByDrugstoreNumber(cardNumber);
-        consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-        saveConsumer(consumer);
+        if(consumer!= null) {
+            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+            saveConsumer(consumer);
+        }
     }
 
     private Double getFoodCardNumber(Integer cardNumber, Double value) {
@@ -121,8 +123,10 @@ public class ConsumerServiceImpl implements ConsumerService {
         value = value - cashback;
 
         consumer = findByFoodCardNumber(cardNumber);
-        consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-        saveConsumer(consumer);
+        if(consumer != null) {
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            saveConsumer(consumer);
+        }
         return value;
     }
 
@@ -147,10 +151,13 @@ public class ConsumerServiceImpl implements ConsumerService {
             } else {
                 // É cartão de combustivel
                 consumer = findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                return saveConsumer(consumer);
+                if(consumer!= null) {
+                    consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+                    return saveConsumer(consumer);
+                }
             }
         }
+        return null;
     }
 
 }
