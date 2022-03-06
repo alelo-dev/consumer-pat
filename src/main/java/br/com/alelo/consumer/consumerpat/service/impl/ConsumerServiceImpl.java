@@ -141,8 +141,11 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public ConsumerResponseDTO setCardBalence(Integer cardNumber, Double value) {
         Consumer consumer = consumerRepository.findByDrugstoreNumber(cardNumber);
-
-        return getCard(cardNumber, value, consumer);
+        if(consumer != null) {
+            return getCard(cardNumber, value, consumer);
+        }else{
+            throw  new ConsumerPatException("Consumidor ou cartão não localizado");
+        }
     }
 
     private ConsumerResponseDTO getCard(Integer cardNumber, Double value, Consumer consumer) {
