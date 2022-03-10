@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.model;
 
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -34,8 +34,8 @@ public class Consumer implements Serializable{
     private Integer id;
 	
     private String name;
-    private int documentNumber;
-    private Date birthDate;
+    private Integer documentNumber;
+    private LocalDate birthDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
     private Contact contact;
@@ -43,7 +43,7 @@ public class Consumer implements Serializable{
 	@OneToOne(cascade = CascadeType.ALL)
 	private Adress adress;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Card> cards;
 
 }

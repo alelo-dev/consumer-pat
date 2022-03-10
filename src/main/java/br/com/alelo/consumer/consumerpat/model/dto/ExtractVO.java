@@ -1,5 +1,5 @@
 package br.com.alelo.consumer.consumerpat.model.dto;
 
-public class ExtractDTO {
+public class ExtractVO {
 
 }
