@@ -2,19 +2,28 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.ValidationCard;
+import br.com.alelo.consumer.consumerpat.exception.ValidationConsumer;
+import br.com.alelo.consumer.consumerpat.exception.ValidationEstablishment;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import br.com.alelo.consumer.consumerpat.types.EstablishmentTypeEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-//teste de comite
+
 @Controller
 @RequestMapping("/consumer")
+@RequiredArgsConstructor
 public class ConsumerController {
 
     @Autowired
@@ -23,26 +32,47 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
+    private final ConsumerService consumerService;//[Controller deve acessar uma SERVICE e não acessar a Base Diretamente]
+
 
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+        return consumerService.getListAllConsumers();
     }
 
 
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    @ResponseBody //[Sergio] retornar o status http correto
+    public ResponseEntity createConsumer(@RequestBody Consumer consumer) {
+
+        try {
+            consumerService.createConsumer(consumer);
+            return ResponseEntity.status(HttpStatus.OK).body("Cadastrado com sucesso!");
+        } catch (ValidationConsumer e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    //[Sergio] Mais apropriado utilizar o metodo PATCH por se tratar de um update parcial
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.PATCH)
+    @ResponseBody
+    public ResponseEntity updateConsumer(@RequestBody Consumer consumer) {
+        try {
+            consumerService.updateConsumer(consumer);
+            return ResponseEntity.status(HttpStatus.OK).body("Cadastrado com sucesso!");
+        } catch (ValidationConsumer e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 
@@ -52,68 +82,32 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
+    @ResponseBody
+    //[Sergio] Retornar o status http correto
+    public ResponseEntity setBalance(Long cardNumber, double value) {
+        try {
+            consumerService.setBalance(cardNumber, value);
+            return ResponseEntity.status(HttpStatus.OK).body("Cadastrado com sucesso!");
+        } catch (ValidationCard e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-        *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
-        */
-
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+    public ResponseEntity buy(int establishmentType, String establishmentName, Long cardNumber, String productDescription, double value) {
+        try {
+            consumerService.buy(establishmentType,establishmentName,cardNumber,productDescription,value);
+            return ResponseEntity.status(HttpStatus.OK).body("Cadastrado com sucesso!");
+        } catch (ValidationEstablishment e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationCard e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
     }
 
 }
