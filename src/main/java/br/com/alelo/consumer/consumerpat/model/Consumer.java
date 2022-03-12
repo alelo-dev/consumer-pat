@@ -14,15 +14,19 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @Entity
-@EqualsAndHashCode
 @Builder
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class Consumer implements Serializable{
 
     /**
@@ -31,10 +35,12 @@ public class Consumer implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 	
     private String name;
+    
     private Integer documentNumber;
+    
     private LocalDate birthDate;
 
 	@OneToOne(cascade = CascadeType.ALL)

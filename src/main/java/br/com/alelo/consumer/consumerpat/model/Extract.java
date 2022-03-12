@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,14 +12,18 @@ import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class Extract {
+public class Extract implements Serializable{
 
+	private static final long serialVersionUID = -3254627112617142380L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;

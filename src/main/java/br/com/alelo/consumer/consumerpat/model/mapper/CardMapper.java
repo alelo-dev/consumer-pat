@@ -9,4 +9,6 @@ import br.com.alelo.consumer.consumerpat.model.dto.CardVO;
 public interface CardMapper {
 
 	Card voToModel(CardVO vo);
+	
+	CardVO modelToVo(Card model);
 }

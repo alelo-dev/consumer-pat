@@ -5,12 +5,18 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alelo.consumer.consumerpat.model.Consumer;
@@ -18,48 +24,46 @@ import br.com.alelo.consumer.consumerpat.model.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 
-
 @RestController
 @RequestMapping("/v1/consumer")
 public class ConsumerController {
 
-    @Autowired
-    private ConsumerRepository repository;
+	@Autowired
+	private ConsumerRepository repository;
 
-    @Autowired
-    private ConsumerService consumerService;
-    
-    @Autowired
-    public ConsumerController(ConsumerService consumerService) {
+	private ConsumerService consumerService;
+
+	@Autowired
+	public ConsumerController(ConsumerService consumerService) {
 		this.consumerService = consumerService;
 	}
 
-    /* Deve listar todos os clientes (cerca de 500) */
-    @GetMapping("/consumerList")
-    public ResponseEntity<List<Consumer>> listAllConsumers() {
-    	List<Consumer> consumers = consumerService.findAllConsumers();
-        return ResponseEntity.ok(consumers);
-    }
+	@GetMapping("/consumerList")
+	public ResponseEntity<Page<Consumer>> listAllConsumers(
+			@RequestParam(value = "page", required = true, defaultValue = "0") int page,
+			@RequestParam(value = "size", required = true, defaultValue = "10") int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Consumer> findAllConsumers = consumerService.findAllConsumers(pageable);
+		return ResponseEntity.ok(findAllConsumers);
+	}
 
+	@PostMapping("/createConsumer")
+	public ResponseEntity<Consumer> createConsumer(@RequestBody @Valid ConsumerDTO consumerDTO) {
+		Consumer consumer = consumerService.convertAndSaveConsumer(consumerDTO);
+		return ResponseEntity.ok(consumer);
+	}
 
-    /* Cadastrar novos clientes */
-    @PostMapping("/createConsumer")
-    public void createConsumer(@RequestBody @Valid ConsumerDTO consumerDTO) {
-    	consumerService.convertAndSaveConsumer(consumerDTO);
-    }
+	@PutMapping("/updateConsumer/{consumerId}")
+	public ResponseEntity<Consumer> updateConsumer(@RequestBody @Valid ConsumerDTO consumerDTO, @PathVariable(name = "consumerId", required = true) Long consumerId) {
+		Consumer consumer = consumerService.updateConsumer(consumerDTO, consumerId);
+		return ResponseEntity.ok(consumer);
+	}
 
-    // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
-    }
-
-
-    /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
-     */
+	/*
+	 * Deve creditar(adicionar) um valor(value) em um no cartão. Para isso ele
+	 * precisa indenficar qual o cartão correto a ser recarregado, para isso deve
+	 * usar o número do cartão(cardNumber) fornecido.
+	 */
 //    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
 //    public void setBalance(int cardNumber, double value) {
 //        Consumer consumer = null;
