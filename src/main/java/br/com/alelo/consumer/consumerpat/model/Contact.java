@@ -30,7 +30,10 @@ public class Contact implements Serializable{
 	private Long id;
 	
 	private String mobilePhoneNumber;
+	
 	private String residencePhoneNumber;
+	
 	private String phoneNumber;
+	
 	private String email;
 }

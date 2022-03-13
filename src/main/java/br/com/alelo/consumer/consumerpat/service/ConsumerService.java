@@ -17,4 +17,5 @@ public interface ConsumerService {
 	Consumer updateConsumer(@Valid ConsumerDTO consumerDTO, Long consumerId);
 	
 	Consumer findConsumer(Long id);
+	
 }

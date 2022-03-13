@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AdressVO {
+public class AdressDTO {
 
 	@NotEmpty(message = "Required Field")
 	private String street;

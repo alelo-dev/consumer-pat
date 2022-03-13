@@ -27,11 +27,11 @@ public class ConsumerDTO {
     private LocalDate birthDate;
 
     @NotNull(message = "Required field")
-    private ContactVO contact;
+    private ContactDTO contact;
 
     @NotNull(message = "Required field")
-	private AdressVO adress;
+	private AdressDTO adress;
 
     @NotNull(message = "Required field")
-	private List<CardVO> cards;
+	private List<CardDTO> cards;
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ContactVO {
+public class ContactDTO {
 	
 	@NotEmpty(message = "Required field")
 	private String mobilePhoneNumber;

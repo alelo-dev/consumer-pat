@@ -11,12 +11,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,13 +29,18 @@ public class Extract implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
 	private Integer establishmentNameId;
+	
 	private String establishmentName;
+	
 	private String productDescription;
 
 	@Temporal(TemporalType.DATE)
 	private Date dateBuy;
+	
 	private Integer cardNumber;
+	
 	private Double value;
 
 	public Extract(String productDescription, Date dateBuy, Integer cardNumber, Double value) {

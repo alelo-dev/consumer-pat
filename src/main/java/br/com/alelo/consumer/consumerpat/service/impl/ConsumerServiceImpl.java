@@ -1,13 +1,8 @@
 package br.com.alelo.consumer.consumerpat.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -15,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
 import br.com.alelo.consumer.consumerpat.error.BusinessError;
 import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.model.Card;
 import br.com.alelo.consumer.consumerpat.model.Consumer;
-import br.com.alelo.consumer.consumerpat.model.dto.CardVO;
 import br.com.alelo.consumer.consumerpat.model.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.model.mapper.AdressMapper;
 import br.com.alelo.consumer.consumerpat.model.mapper.CardMapper;
@@ -67,9 +60,9 @@ public class ConsumerServiceImpl implements ConsumerService {
 
 		Consumer consumer = Consumer.builder().name(consumerDTO.getName())
 				.documentNumber(consumerDTO.getDocumentNumber()).birthDate(consumerDTO.getBirthDate())
-				.contact(contactMapper.voToModel(consumerDTO.getContact()))
-				.adress(adressMapper.voToModel(consumerDTO.getAdress()))
-				.cards(consumerDTO.getCards().stream().map(cardMapper::voToModel).collect(Collectors.toList())).build();
+				.contact(contactMapper.toModel(consumerDTO.getContact()))
+				.adress(adressMapper.toModel(consumerDTO.getAdress()))
+				.cards(consumerDTO.getCards().stream().map(cardMapper::toModel).collect(Collectors.toList())).build();
 
 		return consumerRepository.save(consumer);
 	}
@@ -82,10 +75,10 @@ public class ConsumerServiceImpl implements ConsumerService {
 		consumer.setName(consumerDTO.getName());
 		consumer.setDocumentNumber(consumerDTO.getDocumentNumber());
 		consumer.setBirthDate(consumerDTO.getBirthDate());
-		consumer.setContact(contactMapper.voToModel(consumerDTO.getContact()));
-		consumer.setAdress(adressMapper.voToModel(consumerDTO.getAdress()));
+		consumer.setContact(contactMapper.toModel(consumerDTO.getContact()));
+		consumer.setAdress(adressMapper.toModel(consumerDTO.getAdress()));
 
-		List<Card> newCards = consumerDTO.getCards().stream().map(cardMapper::voToModel).collect(Collectors.toList());
+		List<Card> newCards = consumerDTO.getCards().stream().map(cardMapper::toModel).collect(Collectors.toList());
 
 		List<Integer> cardNumbers = consumer.getCards().stream().map(Card::getCardNumber).collect(Collectors.toList());
 

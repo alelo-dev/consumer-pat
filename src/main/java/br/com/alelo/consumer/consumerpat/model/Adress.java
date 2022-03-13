@@ -28,9 +28,14 @@ public class Adress implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String street;
+	
 	private Integer number;
+	
 	private String city;
+	
 	private String country;
+	
 	private Integer portalCode;
 }

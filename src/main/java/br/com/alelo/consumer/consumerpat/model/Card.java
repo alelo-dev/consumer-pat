@@ -2,7 +2,6 @@ package br.com.alelo.consumer.consumerpat.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.com.alelo.consumer.consumerpat.model.enums.TypeCard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,11 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Card implements Serializable {
 
-	public Card(Integer cardNumber, TypeCard typeCard) {
-		this.cardNumber = cardNumber;
-		this.typeCard = typeCard;
-	}
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -41,4 +36,9 @@ public class Card implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private TypeCard typeCard;
+	
+	public Card(Integer cardNumber, TypeCard typeCard) {
+		this.cardNumber = cardNumber;
+		this.typeCard = typeCard;
+	}
 }

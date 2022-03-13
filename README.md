@@ -17,3 +17,77 @@ Faça um fork do projeto, clone o mesmo, abra na sua IDE de preferência e execu
 Banco de Dados da API: http://localhost:8080/h2-console/ <br/></p>
 
  ***Atenção: Não inclua nenhuma lib ou framework***  
+
+### Versao com melhorias.
+ - Realizar build da app para gerar classes do mapStruct
+ - 
+ 
+### Observações gerais
+ - Creio que a app para realização de teste esteja concisa, porém para ambiente real acredito que a divisão de sua resposabilidade em mais de um microservico seria palpavel;
+ 
+### endpoints/requests
+ - buscar todos consumers:
+
+~~~cURL
+curl --location --request GET 'localhost:8080/v1/consumer/consumerList'
+~~~
+ - Criar consumers:
+ 
+~~~cURL
+curl --location --request POST 'localhost:8080/v1/consumer/createConsumer' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Fulano da Rocha",
+    "documentNumber": 2423,
+    "birthDate": "1980-10-20",
+    "contact": {
+        "mobilePhoneNumber": "85999999999",
+        "residencePhoneNumber": "85999999999",
+        "phoneNumber": "85999999999",
+        "email": "fulano@email.com"
+    },
+    "adress": {
+        "street": "Rua A",
+        "number": 234,
+        "city": "Caucaia",
+        "country": "Brasil",
+        "portalCode": 55
+    },
+    "cards": [
+        {
+            "cardNumber": 1,
+            "balance": 10.00,
+            "typeCard": "FUEL"
+        },
+        {
+            "cardNumber": 2,
+            "balance": 10.00,
+            "typeCard": "FOOD"
+        },
+        {
+            "cardNumber": 3,
+            "balance": 10.00,
+            "typeCard": "DRUGSTORE"
+        }
+    ]
+}'
+~~~
+ - Realizar compra
+
+~~~cURL
+curl --location --request POST 'localhost:8080/v1/consumer/buy' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "establishment": {
+        "id" : 1,
+        "authorizedCard": "DRUGSTORE",
+        "establishmentName": "Posto 3 corações"
+    },
+    "cardValueTransaction": {
+        "cardNumber": 3,
+        "value": 1
+    },
+    "productDescription": "Combustivel e seus derivados"
+}'
+~~~
+ 
