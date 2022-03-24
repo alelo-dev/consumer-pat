@@ -25,6 +25,7 @@ public class ConsumerController {
 
 
     /* Deve listar todos os clientes (cerca de 500) */
+    @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
