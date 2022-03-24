@@ -25,22 +25,26 @@ public class ConsumerController {
 
 
     /* Deve listar todos os clientes (cerca de 500) */
-    @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
         return repository.getAllConsumersList();
     }
 
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    
+    /*
+     * Fabio 
+     * Um Update deve ser mapeado com o verbo PUT
+     */
+    @RequestMapping(method = RequestMethod.PUT)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
@@ -56,20 +60,27 @@ public class ConsumerController {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
+        /*
+         * Fabio
+         * Movimentando o saldo via um método indireto, sem acesso ao getter e setter
+         */
         if(consumer != null) {
             // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+           // consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+        	consumer.addDrugStoreCardBalance(value);
             repository.save(consumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
             if(consumer != null) {
                 // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
+                //consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+                consumer.addFoodCardBalance(value);
+            	repository.save(consumer);
             } else {
                 // É cartão de combustivel
                 consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+                //consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+                consumer.addFuelCardBalance(value);
                 repository.save(consumer);
             }
         }
@@ -94,12 +105,14 @@ public class ConsumerController {
             value = value - cashback;
 
             consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            //consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
+            consumer.addFoodCardBalance(-value);
             repository.save(consumer);
 
         }else if(establishmentType == 2) {
             consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+            //consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
+            consumer.addDrugStoreCardBalance(-value);
             repository.save(consumer);
 
         } else {
@@ -108,7 +121,8 @@ public class ConsumerController {
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+            //consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
+            consumer.addFuelCardBalance(-value);
             repository.save(consumer);
         }
 
