@@ -1,52 +1,46 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-
-import jdk.jfr.DataAmount;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
-
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
+@Builder
 @Entity
 public class Consumer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
+
     String name;
-    int documentNumber;
-    Date birthDate;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    Integer documentNumber;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    LocalDate birthDate;
+
+    Contact contact;
+
+    Address address;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+//    int foodCardNumber;
+//    double foodCardBalance;
+//
+//    int fuelCardNumber;
+//    double fuelCardBalance;
+//
+//    int drugstoreNumber;
+//    double drugstoreCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    List<Card> cards;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -64,7 +58,5 @@ public class Consumer {
                 && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
                 && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
                 && Objects.equals(country, consumer.country);
-    }
-
-
+    }*/
 }

@@ -7,25 +7,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
 @Entity
-public class Extract {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
 
-    Integer establishmentNameId;
+    String street;
 
-    String establishmentName;
+    Integer number;
 
-    String productDescription;
+    String city;
 
-    LocalDateTime dateBuy;
+    String country;
 
-    Integer cardNumber;
-
-    Double value;
+    Integer portalCode;
 }

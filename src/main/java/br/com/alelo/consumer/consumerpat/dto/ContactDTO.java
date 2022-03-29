@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,25 +7,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
 @Entity
-public class Extract {
+public class ContactDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
 
-    Integer establishmentNameId;
+    Integer mobilePhoneNumber;
 
-    String establishmentName;
+    Integer residencePhoneNumber;
 
-    String productDescription;
+    Integer phoneNumber;
 
-    LocalDateTime dateBuy;
-
-    Integer cardNumber;
-
-    Double value;
+    String email;
 }
