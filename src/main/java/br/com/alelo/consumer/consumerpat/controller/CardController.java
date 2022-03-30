@@ -1,14 +1,19 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.dto.BalanceDTO;
+import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.service.interfaces.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/card")
+import static org.springframework.http.ResponseEntity.status;
+
+@RestController
+@RequestMapping("card")
+//@Validated
 public class CardController {
     @Autowired
     private CardService cardService;
@@ -18,8 +23,15 @@ public class CardController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.PUT)
-    public void setBalance(BalanceDTO balance) {
-        cardService.setBalance(balance);
+    @PutMapping(value = "/set-card-balance", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BalanceDTO> setBalance(@RequestBody BalanceDTO balance) {
+        return status(HttpStatus.OK).body(cardService.setBalance(balance));
+    }
+
+    @PutMapping(value = "/buy", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BalanceDTO> buy(@RequestBody BuyDTO buy) {
+        return status(HttpStatus.OK).body(cardService.buy(buy));
     }
 }

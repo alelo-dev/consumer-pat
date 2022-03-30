@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Data
 @Builder
 @Entity
+@Table(name = "ADDRESS")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

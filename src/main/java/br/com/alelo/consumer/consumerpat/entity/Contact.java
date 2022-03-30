@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Data
 @Builder
 @Entity
+@Table(name = "CONTACT")
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +22,7 @@ public class Contact {
     @Column(name = "RESIDENCE_PHONE_NUMBER", length = LengthFieldsBD.LENGTH_10)
     private Integer residencePhoneNumber;
 
-    @Column(name = "PHONE_NUMBER", length = LengthFieldsBD.LENGTH_11)
+    @Column(name = "PHONE_NUMBER", nullable = false, length = LengthFieldsBD.LENGTH_11)
     private Integer phoneNumber;
 
     @Column(name = "EMAIL", length = LengthFieldsBD.LENGTH_50)
