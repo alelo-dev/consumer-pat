@@ -1,10 +1,13 @@
 package br.com.alelo.consumer.consumerpat.service.impls;
 
-import br.com.alelo.consumer.consumerpat.dto.BalanceDTO;
 import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.enums.TypeEnum;
+import br.com.alelo.consumer.consumerpat.factory.EstablishmentFactory;
+import br.com.alelo.consumer.consumerpat.parser.interfaces.ConsumerParser;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.service.interfaces.CardService;
 import br.com.alelo.consumer.consumerpat.service.interfaces.ConsumerService;
 import br.com.alelo.consumer.consumerpat.service.interfaces.ExtractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,48 +18,30 @@ import java.util.List;
 @Service
 public class ConsumerServiceImpl implements ConsumerService {
     @Autowired
-    ConsumerRepository consumerRepository;
+    private ConsumerRepository consumerRepository;
 
     @Autowired
-    ExtractService extractService;
+    private ExtractService extractService;
+
+    @Autowired
+    private CardService cardService;
+
+    @Autowired
+    private ConsumerParser consumerParser;
 
     @Override
-    public void insert(ConsumerDTO consumer) {
-        return consumerRepository.save();
+    public Consumer insert(ConsumerDTO consumer) {
+        return consumerRepository.save(consumerParser.parse(consumer));
     }
 
     @Override
     public Consumer update(ConsumerDTO consumer) {
-        return consumerRepository.save();
+        return consumerRepository.save(consumerParser.parse(consumer));
     }
 
     @Override
     public List<ConsumerDTO> getAllConsumersList() {
-        return consumerRepository.getAllConsumersList();
-    }
-
-    @Override
-    public void setBalance(BalanceDTO balance) {
-        Consumer consumer = null;
-        consumer = consumerRepository.findByDrugstoreNumber(balance.getCardNumber());
-
-        if (consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + balance.getValue());
-            consumerRepository.save(consumer);
-        } else {
-            consumer = consumerRepository.findByFoodCardNumber(balance.getCardNumber());
-            if (consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + balance.getValue());
-                consumerRepository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = consumerRepository.findByFuelCardNumber(balance.getCardNumber());
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + balance.getValue());
-                consumerRepository.save(consumer);
-            }
-        }
+        return consumerParser.parse(consumerRepository.findAll());
     }
 
     @Override
@@ -71,7 +56,9 @@ public class ConsumerServiceImpl implements ConsumerService {
          * 3 - Posto de combustivel (Fuel)
          */
 
-        if (buy.getEstablishmentType() == 1) {
+        EstablishmentFactory.getInstance(TypeEnum. buy.getEstablishment().getType().getId())
+
+        if (buy.getEstablishmentDTO().getType().getId() == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             Double cashback = (buy.getValue() / 100) * 10;
             Double value = buy.getValue() - cashback;

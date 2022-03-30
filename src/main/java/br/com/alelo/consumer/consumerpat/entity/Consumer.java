@@ -1,12 +1,10 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.entity.constants.LengthFieldsBD;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,17 +14,23 @@ import java.util.List;
 public class Consumer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    @Column(name = "ID")
+    private Integer id;
 
-    String name;
+    @Column(name = "NAME", nullable = false, length = LengthFieldsBD.LENGTH_200)
+    private String name;
 
-    Integer documentNumber;
+    @Column(name = "DOCUMENT_NUMBER", nullable = false)
+    private Integer documentNumber;
 
-    LocalDate birthDate;
+    @Column(name = "BIRTH_DATE")
+    private LocalDate birthDate;
 
-    Contact contact;
+    @OneToOne(mappedBy = "consumer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Contact contact;
 
-    Address address;
+    @OneToOne(mappedBy = "consumer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Address address;
 
     //cards
 //    int foodCardNumber;
@@ -38,7 +42,8 @@ public class Consumer {
 //    int drugstoreNumber;
 //    double drugstoreCardBalance;
 
-    List<Card> cards;
+    @OneToMany(mappedBy = "consumer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Card> cards;
 
     /*@Override
     public boolean equals(Object o) {

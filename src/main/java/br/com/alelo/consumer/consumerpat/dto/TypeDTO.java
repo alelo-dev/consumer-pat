@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardTypeDTO {
-    Integer id;
-
-    String name;
+public class TypeDTO {
+    private Integer id;
 }

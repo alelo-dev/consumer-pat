@@ -3,19 +3,24 @@ package br.com.alelo.consumer.consumerpat.entity;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Builder
 @Entity
 public class Card {
     @Id
-    Integer number;
+    @Column(name = "NUMBER")
+    private Long number;
 
-    Double balance;
+    @Column(name = "BALANCE", nullable = false)
+    private Double balance;
 
-    CardType type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TYPE_ID", nullable = false)
+    private Type type;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONSUMER_ID", nullable = false)
+    private Consumer consumer;
 }

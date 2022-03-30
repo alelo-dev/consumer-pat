@@ -9,17 +9,17 @@ import java.util.List;
 @Data
 @Builder
 public class ConsumerDTO {
-    Integer id;
+    private Integer id;
 
-    String name;
+    private String name;
 
-    Integer documentNumber;
+    private Integer documentNumber;
 
-    LocalDate birthDate;
+    private LocalDate birthDate;
 
-    ContactDTO contact;
+    private ContactDTO contact;
 
-    AddressDTO address;
+    private AddressDTO address;
 
-    List<CardDTO> cards;
+    private List<CardDTO> cards;
 }

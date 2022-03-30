@@ -1,12 +1,10 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.entity.constants.LengthFieldsBD;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -14,13 +12,22 @@ import javax.persistence.Id;
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    @Column(name = "ID")
+    private Integer id;
 
-    Integer mobilePhoneNumber;
+    @Column(name = "MOBILE_PHONE_NUMBER", length = LengthFieldsBD.LENGTH_11)
+    private Integer mobilePhoneNumber;
 
-    Integer residencePhoneNumber;
+    @Column(name = "RESIDENCE_PHONE_NUMBER", length = LengthFieldsBD.LENGTH_10)
+    private Integer residencePhoneNumber;
 
-    Integer phoneNumber;
+    @Column(name = "PHONE_NUMBER", length = LengthFieldsBD.LENGTH_11)
+    private Integer phoneNumber;
 
-    String email;
+    @Column(name = "EMAIL", length = LengthFieldsBD.LENGTH_50)
+    private String email;
+
+    @OneToOne
+    @JoinColumn(name = "CONSUMER_ID", nullable = false)
+    private Consumer consumer;
 }

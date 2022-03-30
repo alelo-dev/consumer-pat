@@ -3,24 +3,16 @@ package br.com.alelo.consumer.consumerpat.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 @Data
 @Builder
-@Entity
 public class ContactDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    private Integer id;
 
-    Integer mobilePhoneNumber;
+    private Integer mobilePhoneNumber;
 
-    Integer residencePhoneNumber;
+    private Integer residencePhoneNumber;
 
-    Integer phoneNumber;
+    private Integer phoneNumber;
 
-    String email;
+    private String email;
 }

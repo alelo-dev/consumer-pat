@@ -1,12 +1,10 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.entity.constants.LengthFieldsBD;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -14,15 +12,25 @@ import javax.persistence.Id;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    @Column(name = "ID")
+    private Integer id;
 
-    String street;
+    @Column(name = "STREET", nullable = false, length = LengthFieldsBD.LENGTH_200)
+    private String street;
 
-    Integer number;
+    @Column(name = "NUMBER")
+    private Integer number;
 
-    String city;
+    @Column(name = "CITY", nullable = false, length = LengthFieldsBD.LENGTH_100)
+    private String city;
 
-    String country;
+    @Column(name = "COUNTRY", nullable = false, length = LengthFieldsBD.LENGTH_100)
+    private String country;
 
-    Integer portalCode;
+    @Column(name = "PORTAL_CODE", nullable = false)
+    private Integer portalCode;
+
+    @OneToOne
+    @JoinColumn(name = "CONSUMER_ID", nullable = false)
+    private Consumer consumer;
 }

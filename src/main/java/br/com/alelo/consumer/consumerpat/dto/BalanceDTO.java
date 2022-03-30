@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class BalanceDTO {
-    Integer cardNumber;
+    private Long cardNumber;
 
-    Double value;
+    private Double value;
 }

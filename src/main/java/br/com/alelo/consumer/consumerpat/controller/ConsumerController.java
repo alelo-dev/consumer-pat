@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.dto.BalanceDTO;
 import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.service.interfaces.ConsumerService;
@@ -15,7 +14,7 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class ConsumerController {
     @Autowired
-    ConsumerService consumerService;
+    private ConsumerService consumerService;
 
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
@@ -35,17 +34,6 @@ public class ConsumerController {
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
     public void updateConsumer(@RequestBody ConsumerDTO consumer) {
         consumerService.update(consumer);
-    }
-
-
-    /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
-     */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.PUT)
-    public void setBalance(BalanceDTO balance) {
-        consumerService.setBalance(balance);
     }
 
     @ResponseBody

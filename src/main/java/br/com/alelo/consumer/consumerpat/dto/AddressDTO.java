@@ -6,15 +6,15 @@ import lombok.Data;
 @Data
 @Builder
 public class AddressDTO {
-    Integer id;
+    private Integer id;
 
-    String street;
+    private String street;
 
-    Integer number;
+    private Integer number;
 
-    String city;
+    private String city;
 
-    String country;
+    private String country;
 
-    Integer portalCode;
+    private Integer portalCode;
 }

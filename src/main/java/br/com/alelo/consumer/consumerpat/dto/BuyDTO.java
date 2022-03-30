@@ -6,13 +6,11 @@ import lombok.Data;
 @Data
 @Builder
 public class BuyDTO {
-    Integer establishmentType;
+    private EstablishmentDTO establishment;
 
-    String establishmentName;
+    private Long cardNumber;
 
-    Integer cardNumber;
+    private String productDescription;
 
-    String productDescription;
-
-    Double value;
+    private Double value;
 }
