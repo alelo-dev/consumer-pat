@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Builder
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Table(name = "card")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Card {
+public class Card implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
