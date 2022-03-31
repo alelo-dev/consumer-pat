@@ -72,7 +72,8 @@ public class CardServiceImpl implements CardService {
         card.setBalance(card.getBalance().subtract(value));
         cardRepository.save(card);
 
-        Extract extract = Extract.builder().establishmentName(establishmentName)
+        Extract extract = Extract.builder()
+                .establishmentName(establishmentName)
                 .productDescription(productDescription)
                 .dateBuy(LocalDate.now())
                 .cardNumber(cardNumber)

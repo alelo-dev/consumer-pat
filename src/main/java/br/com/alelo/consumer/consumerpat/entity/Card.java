@@ -21,15 +21,14 @@ public class Card implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long number;
+    private String number;
     private BigDecimal balance;
 
     @ManyToOne(targetEntity = CardType.class)
-    @JoinColumn(name = "card_type_id", updatable = false, insertable = false)
+    @JoinColumn(name = "card_type_id")
     private CardType CardType;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "consumer_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "consumer_id", referencedColumnName = "id")
     private Consumer consumer;
-
 }

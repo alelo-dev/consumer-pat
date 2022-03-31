@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
+public interface ConsumerRepository extends JpaRepository<Consumer, Long> {
 
     @Query(nativeQuery = true, value = "select * from Consumer")
     List<Consumer> getAllConsumersList();

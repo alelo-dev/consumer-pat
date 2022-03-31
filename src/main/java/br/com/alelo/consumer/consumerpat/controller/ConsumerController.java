@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.CardException;
-import br.com.alelo.consumer.consumerpat.exception.EstablishmentTypeException;
 import br.com.alelo.consumer.consumerpat.service.CardService;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.RequiredArgsConstructor;
@@ -32,15 +32,15 @@ public class ConsumerController {
 
     /* Cadastrar novos clientes */
     @PostMapping("/createConsumer")
-    public ResponseEntity createConsumer(@RequestBody Consumer consumer) {
-        consumerService.createConsumer(consumer);
+    public ResponseEntity createConsumer(@RequestBody ConsumerDTO consumerDTO) {
+        consumerService.createConsumer(consumerDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     // Não deve ser possível alterar o saldo do cartão
     @PutMapping("/updateConsumer")
-    public ResponseEntity updateConsumer(@RequestBody Consumer consumer) {
-        consumerService.updateConsumer(consumer);
+    public ResponseEntity updateConsumer(@RequestBody ConsumerDTO consumerDTO) {
+        consumerService.updateConsumer(consumerDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -69,7 +69,5 @@ public class ConsumerController {
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
-
 }
