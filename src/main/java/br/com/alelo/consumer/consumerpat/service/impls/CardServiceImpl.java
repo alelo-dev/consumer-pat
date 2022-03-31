@@ -3,7 +3,6 @@ package br.com.alelo.consumer.consumerpat.service.impls;
 import br.com.alelo.consumer.consumerpat.dto.BalanceDTO;
 import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
-import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.entity.enums.TypeEnum;
 import br.com.alelo.consumer.consumerpat.factory.EstablishmentFactory;
 import br.com.alelo.consumer.consumerpat.factory.components.interfaces.EstablishmentComponent;

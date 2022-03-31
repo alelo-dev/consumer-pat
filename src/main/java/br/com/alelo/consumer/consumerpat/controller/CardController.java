@@ -13,7 +13,6 @@ import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("card")
-//@Validated
 public class CardController {
     @Autowired
     private CardService cardService;

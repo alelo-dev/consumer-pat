@@ -20,11 +20,19 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     public ConsumerDTO insert(ConsumerDTO consumerDTO) {
-        Consumer consumer = consumerRepository.save(consumerParser.parse(consumerDTO));
+        Consumer consumer = consumerParser.parse(consumerDTO);
+        Consumer consumerInserted = consumerRepository.save(consumer);
 
-        consumerDTO.setId(consumer.getId());
+        fillIdsToReturn(consumerDTO, consumerInserted);
 
         return consumerDTO;
+    }
+
+    private void fillIdsToReturn(ConsumerDTO consumerDTO, Consumer consumer) {
+        consumerDTO.setId(consumer.getId());
+        consumerDTO.getAddress().setId(consumer.getAddress().getId());
+        consumerDTO.getContact().setId(consumer.getContact().getId());
+
     }
 
     @Override

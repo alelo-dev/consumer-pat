@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * OBSERVAÇÃO: Nestes casos de fazer parse de objetos DTOs para entidades e vice-versa, eu utilizaria o
+ *
  * @Mapper de org.mapstruct.Mapper, porém, como requisito deste projeto de teste pede para que não
  * inclua qualquer lib, precisei fazer desta forma implementada abaixo.
  */
@@ -17,7 +18,7 @@ import java.util.List;
 public class ConsumerParserImpl implements ConsumerParser {
     @Override
     public Consumer parse(ConsumerDTO consumerDTO) {
-        return Consumer.builder()
+        Consumer consumer = Consumer.builder()
                 .id(consumerDTO.getId())
                 .name(consumerDTO.getName())
                 .documentNumber(consumerDTO.getDocumentNumber())
@@ -37,8 +38,13 @@ public class ConsumerParserImpl implements ConsumerParser {
                         .country(consumerDTO.getAddress().getCountry())
                         .portalCode(consumerDTO.getAddress().getPortalCode())
                         .build())
-                .cards(getCardList(consumerDTO.getCards()))
                 .build();
+
+        consumer.setCards(getCardList(consumerDTO.getCards(), consumer));
+        consumer.getContact().setConsumer(consumer);
+        consumer.getAddress().setConsumer(consumer);
+
+        return consumer;
     }
 
     @Override
@@ -75,19 +81,20 @@ public class ConsumerParserImpl implements ConsumerParser {
                 .build();
     }
 
-    private List<Card> getCardList(List<CardDTO> cardDTOList) {
+    private List<Card> getCardList(List<CardDTO> cardDTOList, Consumer consumer) {
         List<Card> cardList = new ArrayList<>();
 
         cardDTOList.stream().forEach(c ->
-            cardList.add(
-                    Card.builder()
-                            .number(c.getNumber())
-                            .balance(c.getBalance())
-                            .type(Type.builder()
-                                    .id(c.getType().getId())
-                                    .build())
-                            .build()
-            )
+                cardList.add(
+                        Card.builder()
+                                .number(c.getNumber())
+                                .balance(c.getBalance())
+                                .type(Type.builder()
+                                        .id(c.getType().getId())
+                                        .build())
+                                .consumer(consumer)
+                                .build()
+                )
         );
 
         return cardList;
@@ -97,15 +104,15 @@ public class ConsumerParserImpl implements ConsumerParser {
         List<CardDTO> cardDTOList = new ArrayList<>();
 
         cardList.stream().forEach(c ->
-            cardDTOList.add(
-                    CardDTO.builder()
-                            .number(c.getNumber())
-                            .balance(c.getBalance())
-                            .type(TypeDTO.builder()
-                                    .id(c.getType().getId())
-                                    .build())
-                            .build()
-            )
+                cardDTOList.add(
+                        CardDTO.builder()
+                                .number(c.getNumber())
+                                .balance(c.getBalance())
+                                .type(TypeDTO.builder()
+                                        .id(c.getType().getId())
+                                        .build())
+                                .build()
+                )
         );
 
         return cardDTOList;

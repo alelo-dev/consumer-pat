@@ -1,11 +1,11 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddressDTO {
     private Integer id;
 

@@ -1,20 +1,20 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContactDTO {
     private Integer id;
 
-    private Integer mobilePhoneNumber;
+    private String mobilePhoneNumber;
 
-    private Integer residencePhoneNumber;
+    private String residencePhoneNumber;
 
     @NonNull
-    private Integer phoneNumber;
+    private String phoneNumber;
 
     private String email;
 }
