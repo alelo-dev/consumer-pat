@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "7ab56067-880d-41da-a9a7-c5c17c4441d5",
+		"name": "Chamadas Projeto -Consumer-Pat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1-/consumerList",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/consumer/consumerList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"consumerList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-/consumerList/creatConsumer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Erik Lima\",\n  \"documentNumber\": 33718136817,\n  \"birthDate\": \"1989-10-25T18:01:00.932Z\",\n\n  \"contactDto\": {\n    \"mobilePhoneNumber\": \"5511941054347\",\n    \"residencePhoneNumber\": \"551143397217\",\n    \"phoneNumber\": \"551143397777\",\n    \"email\": \"erik@alelo.com\"\n  },\n\n  \"addressDto\": {\n    \"street\": \"Paulista avenue\",\n    \"number\": \"7\",\n    \"city\": \"Sao Paulo\",\n    \"country\": \"Brazil\",\n    \"postalCode\": \"15370496\"\n\n  },\n\n  \"cardsDto\": [\n    {\n      \"type\": \"DRUGSTORE\",\n      \"number\": 77777777,\n      \"balance\": 17000\n    },\n\n    {\n      \"type\": \"FOOD\",\n      \"number\": 8787,\n      \"balance\": 15000\n    }    \n  ]\n\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumer/createConsumer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"createConsumer"
+					]
+				},
+				"description": "Chamada do endpoint que serve para cadastrar uma pessoa fisica."
+			},
+			"response": []
+		},
+		{
+			"name": "3-/consumer/getById",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/consumer/getById/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"getById",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-/consumer/updateConsumer/{id}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Erik Alves de Lima\",\n  \"documentNumber\": 33718136817,\n  \"birthDate\": \"1989-10-25T18:01:00.932Z\",\n\n  \"contactDto\": {\n    \"mobilePhoneNumber\": \"5511941054347\",\n    \"residencePhoneNumber\": \"551143397217\",\n    \"phoneNumber\": \"551143397777\",\n    \"email\": \"lima@alelo.com\"\n  },\n\n  \"addressDto\": {\n    \"street\": \"Wall street\",\n    \"number\": \"7\",\n    \"city\": \"New York\",\n    \"country\": \"USA\",\n    \"postalCode\": \"15370496\"\n\n  },\n\n  \"cardsDto\": [\n    {\n      \"type\": \"DRUGSTORE\",\n      \"number\": 77777777,\n      \"balance\": 17000\n    },\n\n    {\n      \"type\": \"FOOD\",\n      \"number\": 8787,\n      \"balance\": 15000\n    }    \n  ]\n\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumer/updateConsumer/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"updateConsumer",
+						"1"
+					]
+				},
+				"description": "Chamada do endpoint que serve para atualizar um lançamento de um funcionario."
+			},
+			"response": []
+		},
+		{
+			"name": "5-/card/setcardbalance",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 2,\n   \"value\": 100.0\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/card/setcardbalance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"card",
+						"setcardbalance"
+					]
+				},
+				"description": "Chamada do endpoint que serve para cadastrar uma pessoa fisica."
+			},
+			"response": []
+		},
+		{
+			"name": "6-/purchase/buy",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cardNumber\": 77777777,\n  \"dateBuy\": \"2022-04-04T03:32:40.725Z\",\n  \"establishmentId\": 1,\n  \"productDescription\": \"Bola quadrada\",\n  \"value\": 150\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/purchase/buy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"purchase",
+						"buy"
+					]
+				},
+				"description": "Chamada do endpoint que serve para cadastrar uma pessoa fisica."
+			},
+			"response": []
+		}
+	]
+}
