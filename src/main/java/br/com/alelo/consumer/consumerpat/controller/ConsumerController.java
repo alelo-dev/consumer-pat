@@ -1,7 +1,11 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.controller.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.entity.orm.ConsumerORM;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
+import br.com.alelo.consumer.consumerpat.respository.ConsumerContactsRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -25,6 +31,14 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
+    @Autowired
+    CardRepository cardRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
+    ConsumerContactsRepository consumerContactsRepository;
 
     /* Deve listar todos os clientes (cerca de 500) */
     //TODO return DTO
@@ -32,17 +46,20 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+    public List<ConsumerDTO> listAllConsumers() {
+        return repository.findAll().stream()
+                .map(ConsumerDTO::from)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Consumer> getById(@PathVariable int id) {
+    public ResponseEntity<ConsumerDTO> getById(@PathVariable int id) {
         var customerFound = repository.findById(id);
         if (customerFound.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(customerFound.get());
+        var found = customerFound.get();
+        return ResponseEntity.ok(ConsumerDTO.from(found));
     }
 
     /* Cadastrar novos clientes */
@@ -50,10 +67,30 @@ public class ConsumerController {
     //TODO dto
     //TODO move logict to CustomerService
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public <T> ResponseEntity<T> createConsumer(@RequestBody Consumer consumer) {
+    public <T> ResponseEntity<T> createConsumer(@RequestBody ConsumerORM consumer) {
+        saveCascade(consumer);
         var created = repository.save(consumer);
         var createdCustomerLink = String.format("/customer/%s", created.getId());
         return ResponseEntity.created(URI.create(createdCustomerLink)).build();
+    }
+
+    //TODO move to a serve
+    private void saveCascade(ConsumerORM consumer) {
+        Optional.ofNullable(consumer.getFoodCard()).ifPresent(foodCard -> {
+            consumer.setFoodCard(cardRepository.save(foodCard));
+        });
+        Optional.ofNullable(consumer.getFuelCard()).ifPresent(fuelCard -> {
+            consumer.setFuelCard(cardRepository.save(fuelCard));
+        });
+        Optional.ofNullable(consumer.getDrugstoreCard()).ifPresent(drugstoreCard -> {
+            consumer.setDrugstoreCard(cardRepository.save(drugstoreCard));
+        });
+        Optional.ofNullable(consumer.getAddress()).ifPresent(address -> {
+            consumer.setAddress(addressRepository.save(address));
+        });
+        Optional.ofNullable(consumer.getContacts()).ifPresent(contacts -> {
+            consumer.setContacts(consumerContactsRepository.save(contacts));
+        });
     }
 
     // Não deve ser possível alterar o saldo do cartão
@@ -62,11 +99,12 @@ public class ConsumerController {
     //TODO Move logic to CustomerService
     //TODO Not update the card balance
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public <T> ResponseEntity<T> updateConsumer(@RequestBody Consumer consumer) {
+    public <T> ResponseEntity<T> updateConsumer(@RequestBody ConsumerORM consumer) {
         var found = repository.findById(consumer.getId());
         if (found.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        saveCascade(consumer);
         repository.save(consumer);
         return ResponseEntity.ok().build();
     }
@@ -83,27 +121,14 @@ public class ConsumerController {
     //TODO extract all logic to CardService
     //TODO refactoring the logic
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public <T> ResponseEntity<T> setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
+    public <T> ResponseEntity<T> setBalance(String cardNumber, double value) {
+        var found = cardRepository.findById(cardNumber);
+        if (found.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+        var card = found.get();
+        card.recharge(value);
+        cardRepository.save(card);
         return ResponseEntity.ok().build();
     }
 
@@ -112,10 +137,8 @@ public class ConsumerController {
     //TODO create enum for establishmentType
     //TODO check for input negative values
     //TODO check for negative balance
-    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
+    public <T> ResponseEntity<T> buy(String establishmentName, String cardNumber, String productDescription, double value) {
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -125,32 +148,18 @@ public class ConsumerController {
         * 3 - Posto de combustivel (Fuel)
         */
 
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+        var found = cardRepository.findById(cardNumber);
+        if (found.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+
+        var card = found.get();
+        card.minus(value);
+        cardRepository.save(card);
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
+        return ResponseEntity.ok().build();
     }
 
 }
