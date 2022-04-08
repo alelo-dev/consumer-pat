@@ -45,8 +45,13 @@ public class ConsumerController {
 
     // Não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
+    public <T> ResponseEntity<T> updateConsumer(@RequestBody Consumer consumer) {
+        var found = repository.findById(consumer.getId());
+        if (found.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         repository.save(consumer);
+        return ResponseEntity.ok().build();
     }
 
 
