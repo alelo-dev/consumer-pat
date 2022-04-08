@@ -60,4 +60,58 @@ class ConsumerControllerTest extends IntegrationSuitTest {
         var updatedResponse = http.postForEntity(API + "/updateConsumer", updated, Void.class);
         assertTrue(updatedResponse.getStatusCode().is2xxSuccessful());
     }
+
+    @Test
+    void rechargeADrugstoreCard() {
+        var requestBody = new Consumer();
+        requestBody.setDrugstoreNumber(22);
+        requestBody.setDrugstoreCardBalance(10);
+
+        var createdResponse = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        var createdId = extractIdFromLocationHeader(createdResponse);
+
+        var updateResponse = http.getForEntity(API + "/setcardbalance?cardNumber=22&value=100", Void.class);
+        assertTrue(updateResponse.getStatusCode().is2xxSuccessful());
+
+        var updated = http.getForEntity(API + "/" + createdId, Consumer.class);
+        assertTrue(updated.getStatusCode().is2xxSuccessful());
+        assertNotNull(updated.getBody());
+        assertEquals(110, updated.getBody().getDrugstoreCardBalance());
+    }
+
+    @Test
+    void rechargeAFoodCard() {
+        var requestBody = new Consumer();
+        requestBody.setFoodCardNumber(33);
+        requestBody.setFoodCardBalance(11);
+
+        var createdResponse = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        var createdId = extractIdFromLocationHeader(createdResponse);
+
+        var updateResponse = http.getForEntity(API + "/setcardbalance?cardNumber=33&value=100", Void.class);
+        assertTrue(updateResponse.getStatusCode().is2xxSuccessful());
+
+        var updated = http.getForEntity(API + "/" + createdId, Consumer.class);
+        assertTrue(updated.getStatusCode().is2xxSuccessful());
+        assertNotNull(updated.getBody());
+        assertEquals(111, updated.getBody().getFoodCardBalance());
+    }
+
+    @Test
+    void rechargeAFuelCard() {
+        var requestBody = new Consumer();
+        requestBody.setFuelCardNumber(44);
+        requestBody.setFuelCardBalance(12);
+
+        var createdResponse = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        var createdId = extractIdFromLocationHeader(createdResponse);
+
+        var updateResponse = http.getForEntity(API + "/setcardbalance?cardNumber=44&value=100", Void.class);
+        assertTrue(updateResponse.getStatusCode().is2xxSuccessful());
+
+        var updated = http.getForEntity(API + "/" + createdId, Consumer.class);
+        assertTrue(updated.getStatusCode().is2xxSuccessful());
+        assertNotNull(updated.getBody());
+        assertEquals(112, updated.getBody().getFuelCardBalance());
+    }
 }

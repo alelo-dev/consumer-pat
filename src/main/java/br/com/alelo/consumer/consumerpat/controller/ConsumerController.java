@@ -27,6 +27,8 @@ public class ConsumerController {
 
 
     /* Deve listar todos os clientes (cerca de 500) */
+    //TODO return DTO
+    //TODO fix path
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
@@ -34,8 +36,19 @@ public class ConsumerController {
         return repository.getAllConsumersList();
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<Consumer> getById(@PathVariable int id) {
+        var customerFound = repository.findById(id);
+        if (customerFound.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(customerFound.get());
+    }
 
     /* Cadastrar novos clientes */
+    //TODO POST /customers/
+    //TODO dto
+    //TODO move logict to CustomerService
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public <T> ResponseEntity<T> createConsumer(@RequestBody Consumer consumer) {
         var created = repository.save(consumer);
@@ -44,6 +57,10 @@ public class ConsumerController {
     }
 
     // Não deve ser possível alterar o saldo do cartão
+    //TODO PUT /customers/{customerId}
+    //TODO dto
+    //TODO Move logic to CustomerService
+    //TODO Not update the card balance
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public <T> ResponseEntity<T> updateConsumer(@RequestBody Consumer consumer) {
         var found = repository.findById(consumer.getId());
@@ -60,8 +77,13 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
+    //TODO negative values
+    //TODO dto
+    //TODO POST /cords/{cardnumber}/recharge
+    //TODO extract all logic to CardService
+    //TODO refactoring the logic
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
+    public <T> ResponseEntity<T> setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
@@ -82,6 +104,7 @@ public class ConsumerController {
                 repository.save(consumer);
             }
         }
+        return ResponseEntity.ok().build();
     }
 
     @ResponseBody
