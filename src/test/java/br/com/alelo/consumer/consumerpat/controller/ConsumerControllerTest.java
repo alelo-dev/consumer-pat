@@ -114,4 +114,52 @@ class ConsumerControllerTest extends IntegrationSuitTest {
         assertNotNull(updated.getBody());
         assertEquals(112, updated.getBody().getFuelCardBalance());
     }
+
+    @Test
+    void orderFood() {
+        var requestBody = new Consumer();
+        requestBody.setFoodCardNumber(124);
+        requestBody.setFoodCardBalance(10);
+
+        var createdResponse = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        var createdId = extractIdFromLocationHeader(createdResponse);
+
+        var orderResponse = http.getForEntity(API + "/buy?establishmentType=1&establishmentName=padaria&cardNumber=124&productDescription=coffee&value=1.35", Void.class);
+        assertTrue(orderResponse.getStatusCode().is2xxSuccessful());
+
+        var updated = http.getForEntity(API + "/" + createdId, Consumer.class);
+        assertEquals(8.785, updated.getBody().getFoodCardBalance(), 0.0);
+    }
+
+    @Test
+    void orderDrugstore() {
+        var requestBody = new Consumer();
+        requestBody.setDrugstoreNumber(123);
+        requestBody.setDrugstoreCardBalance(10);
+
+        var createdResponse = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        var createdId = extractIdFromLocationHeader(createdResponse);
+
+        var orderResponse = http.getForEntity(API + "/buy?establishmentType=2&establishmentName=drogaria&cardNumber=123&productDescription=aspirin&value=1.35", Void.class);
+        assertTrue(orderResponse.getStatusCode().is2xxSuccessful());
+
+        var updated = http.getForEntity(API + "/" + createdId, Consumer.class);
+        assertEquals(8.65, updated.getBody().getDrugstoreCardBalance(), 0.0);
+    }
+
+    @Test
+    void orderFuel() {
+        var requestBody = new Consumer();
+        requestBody.setFuelCardNumber(456);
+        requestBody.setFuelCardBalance(10);
+
+        var createdResponse = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        var createdId = extractIdFromLocationHeader(createdResponse);
+
+        var orderResponse = http.getForEntity(API + "/buy?establishmentType=3&establishmentName=posto&cardNumber=456&productDescription=etanol&value=1.35", Void.class);
+        assertTrue(orderResponse.getStatusCode().is2xxSuccessful());
+
+        var updated = http.getForEntity(API + "/" + createdId, Consumer.class);
+        assertEquals(8.1775, updated.getBody().getFuelCardBalance(), 0.0);
+    }
 }

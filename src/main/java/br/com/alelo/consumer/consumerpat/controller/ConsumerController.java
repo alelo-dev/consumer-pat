@@ -107,7 +107,12 @@ public class ConsumerController {
         return ResponseEntity.ok().build();
     }
 
-    @ResponseBody
+    //TODO POST /orders
+    //TODO move all logic inside OrderService
+    //TODO create enum for establishmentType
+    //TODO check for input negative values
+    //TODO check for negative balance
+    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
