@@ -15,7 +15,7 @@ public class ConsumerDTO {
     private int documentNumber;
     private Date birthDate;
 
-    private CustomerContactsDTO contacts;
+    private ConsumerContactsDTO contacts;
     private AddressDTO address;
 
     private CardDTO foodCard;
@@ -29,7 +29,7 @@ public class ConsumerDTO {
         dto.documentNumber = consumer.getDocumentNumber();
         dto.birthDate = consumer.getBirthDate();
         if (consumer.getContacts() != null) {
-            dto.contacts = CustomerContactsDTO.from(consumer.getContacts());
+            dto.contacts = ConsumerContactsDTO.from(consumer.getContacts());
         }
         if (consumer.getAddress() != null) {
             dto.address = AddressDTO.from(consumer.getAddress());

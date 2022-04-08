@@ -8,6 +8,7 @@ import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerContactsRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,9 @@ public class ConsumerController {
     @Autowired
     ConsumerContactsRepository consumerContactsRepository;
 
+    @Autowired
+    ConsumerService consumerService;
+
     /* Deve listar todos os clientes (cerca de 500) */
     //TODO return DTO
     //TODO fix path
@@ -62,35 +66,22 @@ public class ConsumerController {
         return ResponseEntity.ok(ConsumerDTO.from(found));
     }
 
-    /* Cadastrar novos clientes */
     //TODO POST /customers/
-    //TODO dto
     //TODO move logict to CustomerService
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public <T> ResponseEntity<T> createConsumer(@RequestBody ConsumerORM consumer) {
-        saveCascade(consumer);
-        var created = repository.save(consumer);
+    public <T> ResponseEntity<T> createConsumer(@RequestBody ConsumerDTO consumer) {
+        var created = consumerService.save(consumer);
         var createdCustomerLink = String.format("/customer/%s", created.getId());
         return ResponseEntity.created(URI.create(createdCustomerLink)).build();
     }
 
     //TODO move to a serve
     private void saveCascade(ConsumerORM consumer) {
-        Optional.ofNullable(consumer.getFoodCard()).ifPresent(foodCard -> {
-            consumer.setFoodCard(cardRepository.save(foodCard));
-        });
-        Optional.ofNullable(consumer.getFuelCard()).ifPresent(fuelCard -> {
-            consumer.setFuelCard(cardRepository.save(fuelCard));
-        });
-        Optional.ofNullable(consumer.getDrugstoreCard()).ifPresent(drugstoreCard -> {
-            consumer.setDrugstoreCard(cardRepository.save(drugstoreCard));
-        });
-        Optional.ofNullable(consumer.getAddress()).ifPresent(address -> {
-            consumer.setAddress(addressRepository.save(address));
-        });
-        Optional.ofNullable(consumer.getContacts()).ifPresent(contacts -> {
-            consumer.setContacts(consumerContactsRepository.save(contacts));
-        });
+        Optional.ofNullable(consumer.getFoodCard()).ifPresent(foodCard -> consumer.setFoodCard(cardRepository.save(foodCard)));
+        Optional.ofNullable(consumer.getFuelCard()).ifPresent(fuelCard -> consumer.setFuelCard(cardRepository.save(fuelCard)));
+        Optional.ofNullable(consumer.getAddress()).ifPresent(address -> consumer.setAddress(addressRepository.save(address)));
+        Optional.ofNullable(consumer.getContacts()).ifPresent(contacts -> consumer.setContacts(consumerContactsRepository.save(contacts)));
+        Optional.ofNullable(consumer.getDrugstoreCard()).ifPresent(drugstoreCard -> consumer.setDrugstoreCard(cardRepository.save(drugstoreCard)));
     }
 
     // Não deve ser possível alterar o saldo do cartão
@@ -139,15 +130,6 @@ public class ConsumerController {
     //TODO check for negative balance
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public <T> ResponseEntity<T> buy(String establishmentName, String cardNumber, String productDescription, double value) {
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-        *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
-        */
-
         var found = cardRepository.findById(cardNumber);
         if (found.isEmpty()) {
             return ResponseEntity.notFound().build();

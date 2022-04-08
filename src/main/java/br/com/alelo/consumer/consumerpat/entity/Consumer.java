@@ -7,7 +7,7 @@ public interface Consumer {
     String getName();
     int getDocumentNumber();
     Date getBirthDate();
-    CustomerContact getContacts();
+    ConsumerContacts getContacts();
     Address getAddress();
     Card getFoodCard();
     Card getFuelCard();

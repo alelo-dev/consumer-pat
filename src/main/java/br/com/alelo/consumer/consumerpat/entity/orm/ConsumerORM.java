@@ -32,7 +32,7 @@ public class ConsumerORM implements Consumer {
     private Date birthDate;
 
     @OneToOne
-    private ConsumerContacts contacts;
+    private ConsumerContactsORM contacts;
 
     @OneToOne
     private AddressORM address;

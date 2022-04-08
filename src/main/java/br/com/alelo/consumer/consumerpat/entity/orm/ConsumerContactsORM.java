@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity.orm;
 
-import br.com.alelo.consumer.consumerpat.entity.CustomerContact;
+import br.com.alelo.consumer.consumerpat.entity.ConsumerContacts;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity(name = "ConsumerContacts")
 @Setter
 @Getter
-public class ConsumerContacts implements CustomerContact {
+public class ConsumerContactsORM implements ConsumerContacts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
