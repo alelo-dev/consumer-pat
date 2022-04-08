@@ -6,9 +6,11 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -35,8 +37,10 @@ public class ConsumerController {
 
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    public <T> ResponseEntity<T> createConsumer(@RequestBody Consumer consumer) {
+        var created = repository.save(consumer);
+        var createdCustomerLink = String.format("/customer/%s", created.getId());
+        return ResponseEntity.created(URI.create(createdCustomerLink)).build();
     }
 
     // Não deve ser possível alterar o saldo do cartão
