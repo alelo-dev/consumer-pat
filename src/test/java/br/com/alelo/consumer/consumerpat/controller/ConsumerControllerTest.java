@@ -23,9 +23,8 @@ class ConsumerControllerTest extends IntegrationSuitTest {
     }
 
     @Test
-    void createAndEditACustomer() {
+    void listCustomer() {
         var requestBody = new Consumer();
-        requestBody.setId(10);
         requestBody.setBirthDate(new Date());
         requestBody.setCity("Campinas");
 
@@ -42,5 +41,23 @@ class ConsumerControllerTest extends IntegrationSuitTest {
                 .map(Long::toString)
                 .anyMatch(id -> id.equals(createdId));
         assertTrue(foundCreatedIdOnList);
+    }
+
+    @Test
+    void createAndEditACustomer() {
+        var requestBody = new Consumer();
+        requestBody.setBirthDate(new Date());
+        requestBody.setCity("Campinas");
+
+        var response = http.postForEntity(API + "/createConsumer", requestBody, Void.class);
+        assertEquals(201, response.getStatusCode().value());
+        var createdId = extractIdFromLocationHeader(response);
+
+        var updated = new Consumer();
+        updated.setId(Integer.valueOf(createdId));
+        updated.setCity("Rio de Janeiro");
+
+        var updatedResponse = http.postForEntity(API + "/updateConsumer", updated, Void.class);
+        assertTrue(updatedResponse.getStatusCode().is2xxSuccessful());
     }
 }
