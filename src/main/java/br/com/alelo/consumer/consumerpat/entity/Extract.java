@@ -1,49 +1,37 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.ManyToOne;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
 @Entity
-public class Extract {
+@Getter
+@Setter
+public class Extract implements Serializable {
 
-    @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
+	private static final long serialVersionUID = 3465500229975213476L;
 
-
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+	@Id
+    private String idExtract;
+    
+    @ManyToOne
+    private Establishment stablishment;
+    
+    private String productDescription;
+    
+    private LocalDate dateBuy;
+    
+    @ManyToOne
+    private Card card;
+    
+    private BigDecimal value;
 }
+
