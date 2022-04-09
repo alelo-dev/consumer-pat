@@ -51,53 +51,32 @@ public class ConsumerController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<ConsumerDTO> listAllConsumers() {
-        return repository.findAll().stream()
+        return consumerService.all().stream()
                 .map(ConsumerDTO::from)
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @GetMapping("{id}")
     public ResponseEntity<ConsumerDTO> getById(@PathVariable int id) {
-        var customerFound = repository.findById(id);
-        if (customerFound.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        var found = customerFound.get();
-        return ResponseEntity.ok(ConsumerDTO.from(found));
+        return consumerService.withId(id)
+                .map(ConsumerDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     //TODO POST /customers/
     //TODO move logict to CustomerService
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public <T> ResponseEntity<T> createConsumer(@RequestBody ConsumerDTO consumer) {
-        var created = consumerService.save(consumer);
+        var created = consumerService.persist(consumer);
         var createdCustomerLink = String.format("/customer/%s", created.getId());
         return ResponseEntity.created(URI.create(createdCustomerLink)).build();
     }
 
-    //TODO move to a serve
-    private void saveCascade(ConsumerORM consumer) {
-        Optional.ofNullable(consumer.getFoodCard()).ifPresent(foodCard -> consumer.setFoodCard(cardRepository.save(foodCard)));
-        Optional.ofNullable(consumer.getFuelCard()).ifPresent(fuelCard -> consumer.setFuelCard(cardRepository.save(fuelCard)));
-        Optional.ofNullable(consumer.getAddress()).ifPresent(address -> consumer.setAddress(addressRepository.save(address)));
-        Optional.ofNullable(consumer.getContacts()).ifPresent(contacts -> consumer.setContacts(consumerContactsRepository.save(contacts)));
-        Optional.ofNullable(consumer.getDrugstoreCard()).ifPresent(drugstoreCard -> consumer.setDrugstoreCard(cardRepository.save(drugstoreCard)));
-    }
-
-    // Não deve ser possível alterar o saldo do cartão
-    //TODO PUT /customers/{customerId}
-    //TODO dto
-    //TODO Move logic to CustomerService
-    //TODO Not update the card balance
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public <T> ResponseEntity<T> updateConsumer(@RequestBody ConsumerORM consumer) {
-        var found = repository.findById(consumer.getId());
-        if (found.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        saveCascade(consumer);
-        repository.save(consumer);
-        return ResponseEntity.ok().build();
+    @PutMapping("{consumerId}")
+    public <T> ResponseEntity<T> update(@PathVariable("consumerId") Integer id, @RequestBody ConsumerDTO consumer) {
+        var found = consumerService.merge(id, consumer);
+        return found.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok().build();
     }
 
 

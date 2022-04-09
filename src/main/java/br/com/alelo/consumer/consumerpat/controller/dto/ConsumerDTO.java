@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller.dto;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @Getter
 public class ConsumerDTO {
 
+    @Setter(AccessLevel.NONE)
     private Integer id;
     private String name;
     private int documentNumber;

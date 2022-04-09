@@ -14,7 +14,7 @@ public class ContactsService {
         this.allConsumersContacts = allConsumersContacts;
     }
 
-    public ConsumerContactsORM save(ConsumerContactsDTO newConsumerContacts) {
+    public ConsumerContactsORM persist(ConsumerContactsDTO newConsumerContacts) {
         if (newConsumerContacts == null) {
             return null;
         }
@@ -24,5 +24,16 @@ public class ContactsService {
         contacts.setMobilePhoneNumber(newConsumerContacts.getMobilePhoneNumber());
         contacts.setResidencePhoneNumber(newConsumerContacts.getResidencePhoneNumber());
         return allConsumersContacts.save(contacts);
+    }
+
+    public ConsumerContactsORM merge(ConsumerContactsORM current, ConsumerContactsDTO latest) {
+        if (current == null) {
+            return persist(latest);
+        }
+        current.setEmail(latest.getEmail());
+        current.setPhoneNumber(latest.getPhoneNumber());
+        current.setMobilePhoneNumber(latest.getMobilePhoneNumber());
+        current.setResidencePhoneNumber(latest.getResidencePhoneNumber());
+        return allConsumersContacts.save(current);
     }
 }

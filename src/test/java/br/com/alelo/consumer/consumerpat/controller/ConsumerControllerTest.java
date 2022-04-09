@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.controller.dto.AddressDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.CardType;
 import br.com.alelo.consumer.consumerpat.entity.orm.AddressORM;
 import br.com.alelo.consumer.consumerpat.entity.orm.CardORM;
@@ -56,14 +58,13 @@ class ConsumerControllerTest extends IntegrationSuitTest {
         assertEquals(201, response.getStatusCode().value());
         var createdId = extractIdFromLocationHeader(response);
 
-        var updatedAddress = new AddressORM();
+        var updatedAddress = new AddressDTO();
+        updatedAddress.setCity("Rio de Janeiro");
 
-        var updated = new ConsumerORM();
-        updated.setId(Integer.valueOf(createdId));
+        var updated = new ConsumerDTO();
         updated.setAddress(updatedAddress);
 
-        var updatedResponse = http.postForEntity(API + "/updateConsumer", updated, Void.class);
-        assertTrue(updatedResponse.getStatusCode().is2xxSuccessful());
+        http.put(API + "/" + createdId, updated);
 
         var consumerResponse = http.getForEntity(API + "/" + createdId, ConsumerORM.class);
         assertEquals(Integer.valueOf(createdId), consumerResponse.getBody().getId());

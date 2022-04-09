@@ -14,7 +14,7 @@ public class AddressService {
         this.allAddresses = allAddresses;
     }
 
-    public AddressORM save(AddressDTO newAddress) {
+    public AddressORM persist(AddressDTO newAddress) {
         if (newAddress == null) {
             return null;
         }
@@ -25,5 +25,17 @@ public class AddressService {
         address.setStreet(newAddress.getStreet());
         address.setPostalCode(newAddress.getPostalCode());
         return allAddresses.save(address);
+    }
+
+    public AddressORM merge(AddressORM current, AddressDTO latest) {
+        if (current == null) {
+            return persist(latest);
+        }
+        current.setCity(latest.getCity());
+        current.setNumber(latest.getNumber());
+        current.setStreet(latest.getStreet());
+        current.setCountry(latest.getCountry());
+        current.setPostalCode(latest.getPostalCode());
+        return allAddresses.save(current);
     }
 }

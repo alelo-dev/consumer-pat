@@ -14,7 +14,7 @@ public class CardService {
         this.allCards = allCards;
     }
 
-    public CardORM save(CardDTO newCard) {
+    public CardORM persist(CardDTO newCard) {
         if (newCard == null) {
             return null;
         }
@@ -23,5 +23,14 @@ public class CardService {
         card.setBalance(newCard.getBalance());
         card.setNumber(newCard.getNumber());
         return allCards.save(card);
+    }
+
+    public CardORM merge(CardORM current, CardDTO latest) {
+        if (current == null) {
+            return persist(latest);
+        }
+        current.setType(latest.getType());
+        current.setNumber(latest.getNumber());
+        return allCards.save(current);
     }
 }
