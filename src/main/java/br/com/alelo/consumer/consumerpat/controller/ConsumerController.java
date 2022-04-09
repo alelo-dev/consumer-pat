@@ -2,7 +2,6 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.controller.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +12,18 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/consumer")
+@RequestMapping("/consumers")
 public class ConsumerController {
 
-    @Autowired
-    ConsumerService consumerService;
+    private final ConsumerService consumerService;
 
-    /* Deve listar todos os clientes (cerca de 500) */
-    //TODO return DTO
-    //TODO fix path
+    public ConsumerController(ConsumerService consumerService) {
+        this.consumerService = consumerService;
+    }
+
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping
     public List<ConsumerDTO> listAllConsumers() {
         return consumerService.all().stream()
                 .map(ConsumerDTO::from)
@@ -39,9 +38,7 @@ public class ConsumerController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    //TODO POST /customers/
-    //TODO move logict to CustomerService
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @PostMapping
     public <T> ResponseEntity<T> createConsumer(@RequestBody ConsumerDTO consumer) {
         var created = consumerService.persist(consumer);
         var createdCustomerLink = String.format("/customer/%s", created.getId());

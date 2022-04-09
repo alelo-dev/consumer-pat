@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.controller.dto.CardDTO;
+import br.com.alelo.consumer.consumerpat.controller.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.CardType;
 import br.com.alelo.consumer.consumerpat.entity.orm.CardORM;
 import br.com.alelo.consumer.consumerpat.entity.orm.ConsumerORM;
@@ -14,15 +16,15 @@ class CardControllerTest extends IntegrationSuitTest {
 
     @Test
     void rechargeADrugstoreCard() {
-        var card = new CardORM();
+        var card = new CardDTO();
         card.setNumber("22");
         card.setBalance(10);
         card.setType(CardType.DRUGSTORE);
 
-        var requestBody = new ConsumerORM();
+        var requestBody = new ConsumerDTO();
         requestBody.setDrugstoreCard(card);
 
-        var createdResponse = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var createdResponse = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         var createdId = extractIdFromLocationHeader(createdResponse);
 
         var updateResponse = http.postForEntity(CARDS_API + "/22/recharge", 100d, Void.class);
@@ -44,7 +46,7 @@ class CardControllerTest extends IntegrationSuitTest {
         var requestBody = new ConsumerORM();
         requestBody.setFoodCard(card);
 
-        var createdResponse = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var createdResponse = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         var createdId = extractIdFromLocationHeader(createdResponse);
 
         var updateResponse = http.postForEntity(CARDS_API + "/33/recharge", 100d, Void.class);
@@ -66,7 +68,7 @@ class CardControllerTest extends IntegrationSuitTest {
         var requestBody = new ConsumerORM();
         requestBody.setFuelCard(card);
 
-        var createdResponse = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var createdResponse = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         var createdId = extractIdFromLocationHeader(createdResponse);
 
         var updateResponse = http.postForEntity(CARDS_API + "/44/recharge", 100d, Void.class);

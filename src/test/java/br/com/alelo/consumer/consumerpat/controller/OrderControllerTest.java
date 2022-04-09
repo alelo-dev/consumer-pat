@@ -23,7 +23,7 @@ class OrderControllerTest extends IntegrationSuitTest {
         var requestBody = new ConsumerORM();
         requestBody.setFoodCard(card);
 
-        var createdResponse = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var createdResponse = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         var createdId = extractIdFromLocationHeader(createdResponse);
 
         var orderDto = new OrderDTO();
@@ -49,7 +49,7 @@ class OrderControllerTest extends IntegrationSuitTest {
         var requestBody = new ConsumerORM();
         requestBody.setDrugstoreCard(card);
 
-        var createdResponse = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var createdResponse = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         var createdId = extractIdFromLocationHeader(createdResponse);
 
         var orderDto = new OrderDTO();
@@ -75,7 +75,7 @@ class OrderControllerTest extends IntegrationSuitTest {
         var requestBody = new ConsumerORM();
         requestBody.setFoodCard(card);
 
-        var createdResponse = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var createdResponse = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         var createdId = extractIdFromLocationHeader(createdResponse);
 
         var orderDto = new OrderDTO();

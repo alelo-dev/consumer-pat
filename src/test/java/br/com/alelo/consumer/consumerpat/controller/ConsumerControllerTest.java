@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConsumerControllerTest extends IntegrationSuitTest {
 
-    static final String CONSUMERS_API = "http://localhost:8080/consumer";
+    static final String CONSUMERS_API = "http://localhost:8080/consumers";
 
     @Test
     void createAConsumer() {
         var requestBody = new ConsumerORM();
 
-        var response = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var response = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         assertEquals(201, response.getStatusCode().value());
     }
 
@@ -28,11 +28,11 @@ class ConsumerControllerTest extends IntegrationSuitTest {
         var requestBody = new ConsumerORM();
         requestBody.setBirthDate(new Date());
 
-        var response = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var response = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         assertEquals(201, response.getStatusCode().value());
         var createdId = extractIdFromLocationHeader(response);
 
-        var listResponse = http.getForEntity(CONSUMERS_API + "/consumerList", ConsumerORM[].class);
+        var listResponse = http.getForEntity(CONSUMERS_API, ConsumerORM[].class);
         assertTrue(listResponse.getStatusCode().is2xxSuccessful());
         assertNotNull(listResponse.getBody());
 
@@ -52,7 +52,7 @@ class ConsumerControllerTest extends IntegrationSuitTest {
         requestBody.setBirthDate(new Date());
         requestBody.setAddress(address);
 
-        var response = http.postForEntity(CONSUMERS_API + "/createConsumer", requestBody, Void.class);
+        var response = http.postForEntity(CONSUMERS_API, requestBody, Void.class);
         assertEquals(201, response.getStatusCode().value());
         var createdId = extractIdFromLocationHeader(response);
 
