@@ -15,6 +15,8 @@ public class DrugstoreService implements ITransactionBuy{
 	public void buy(Long cardNumber, BigDecimal value) throws Exception {
 		// TODO Auto-generated method stub
 		
+		 cardService.creditBalance(cardNumber, value);
+		
 	}
 
 }
