@@ -17,7 +17,6 @@ import java.util.UUID;
 @Entity(name = "Extract")
 public class ExtractOrm implements Extract {
 
-    //TODO fix mapping orm
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

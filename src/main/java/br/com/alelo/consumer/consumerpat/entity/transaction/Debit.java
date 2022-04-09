@@ -11,7 +11,6 @@ public class Debit implements Transaction {
     public Debit(double value, CardType type) {
         checkPreConditions(value);
         this.value = type.calcDiscountOrTax(value);
-        checkPostConditions(this.value);
     }
 
     private static void checkPreConditions(double value) {
@@ -28,6 +27,8 @@ public class Debit implements Transaction {
 
     @Override
     public double apply(double balance) {
-        return balance - value;
+        var updatedBalance = balance - value;
+        checkPostConditions(updatedBalance);
+        return updatedBalance;
     }
 }
