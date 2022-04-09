@@ -8,12 +8,11 @@ public interface IConsumerService {
 	
 	public List<Consumer> getAllConsumersList();
 	
-	public void createConsumer(Consumer consumer);
+	public Consumer createConsumer(Consumer consumer);
 	
-	public void updateConsumer(Consumer consumer);
+	public Consumer updateConsumer(Consumer consumer);
 	
-	public void setBalance(int cardNumber, double value);
-	
-	public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value);
+	public Consumer setBalance(int cardNumber, double value);
+
 
 }

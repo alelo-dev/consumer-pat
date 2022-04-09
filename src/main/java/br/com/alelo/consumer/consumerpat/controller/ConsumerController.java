@@ -4,14 +4,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.service.impl.ConsumerService;
 import br.com.alelo.consumer.consumerpat.service.impl.ExtractService;
 
@@ -25,32 +28,30 @@ public class ConsumerController {
 	@Autowired
 	ExtractService extractService;
 
-	@ResponseBody
-	@ResponseStatus(code = HttpStatus.OK)
-	@RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-	public List<Consumer> listAllConsumers() {
-		return consumerService.getAllConsumersList();
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Consumer>> listAllConsumers() {
+		return  ResponseEntity.ok(consumerService.getAllConsumersList());
 	}
 
-	@RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-	public void createConsumer(@RequestBody Consumer consumer) {
-		consumerService.createConsumer(consumer);
+	@PostMapping(consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(consumerService.createConsumer(consumer));
 	}
 
-	@RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
-	public void updateConsumer(@RequestBody Consumer consumer) {
-		consumerService.updateConsumer(consumer);
+	@PutMapping(consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
+		return ResponseEntity.status(HttpStatus.OK).body(consumerService.updateConsumer(consumer));
 	}
 
-	@RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
-	public void setBalance(int cardNumber, double value) {
-		consumerService.setBalance(cardNumber, value);
+	@PostMapping(path = "/transaction/card/addBalance", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Consumer> setBalance(int cardNumber, double value) {
+		return ResponseEntity.status(HttpStatus.OK).body(consumerService.setBalance(cardNumber, value));
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/buy", method = RequestMethod.GET)
-	public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-		consumerService.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
+
+	@PostMapping(path = "/transaction/card/buy", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Extract> buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
+		return ResponseEntity.status(HttpStatus.OK).body(extractService.buy(establishmentType, establishmentName, cardNumber, productDescription, value));
 	}
 
 }
