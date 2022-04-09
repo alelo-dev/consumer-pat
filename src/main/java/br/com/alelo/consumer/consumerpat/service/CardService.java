@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.controller.dto.CardDTO;
 import br.com.alelo.consumer.consumerpat.entity.orm.CardORM;
+import br.com.alelo.consumer.consumerpat.entity.transaction.Recharge;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +40,10 @@ public class CardService {
         if (found.isEmpty()) {
             return UpdateActionResponse.NOT_FOUND;
         }
+
         var card = found.get();
-        card.recharge(value);
+        card.add(new Recharge(value));
+
         allCards.save(card);
         return UpdateActionResponse.UPDATED;
     }

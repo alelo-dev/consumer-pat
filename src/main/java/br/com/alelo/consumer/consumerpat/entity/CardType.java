@@ -4,7 +4,7 @@ public enum CardType {
 
     FUEL {
         @Override
-        double calcDiscountOrTax(double value) {
+        public double calcDiscountOrTax(double value) {
             var tax  = (value / 100) * 35;
             return value + tax;
         }
@@ -12,13 +12,13 @@ public enum CardType {
     DRUGSTORE,
     FOOD {
         @Override
-        double calcDiscountOrTax(double value) {
+        public double calcDiscountOrTax(double value) {
             var cashback  = (value / 100) * 10;
             return value - cashback;
         }
     };
 
-    double calcDiscountOrTax(double value) {
+    public double calcDiscountOrTax(double value) {
         return value;
     }
 }

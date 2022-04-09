@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.controller.dto.OrderDTO;
 import br.com.alelo.consumer.consumerpat.entity.orm.ExtractOrm;
+import br.com.alelo.consumer.consumerpat.entity.transaction.Debit;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ public class OrderService {
         }
 
         var card = found.get();
-        card.minus(orderDto.getValue());
+        card.add(new Debit(orderDto.getValue(), card.getType()));
+
         cardRepository.save(card);
         addExtract(orderDto);
         return UpdateActionResponse.UPDATED;

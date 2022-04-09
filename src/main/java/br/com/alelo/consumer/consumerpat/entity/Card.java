@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.entity.transaction.Transaction;
+
 public interface Card {
 
     String getNumber();
@@ -10,19 +12,8 @@ public interface Card {
 
     void setBalance(double newBalance);
 
-    //TODO check negative value
-    //TODO transaction
-    default void recharge(double value) {
-        var current = getBalance();
-        setBalance(current + value);
-    }
-
-    //TODO unify in transaction
-    //TODO check for positive values
-    //TODO check for balance before
-    default void minus(double value) {
-        var current = getBalance();
-        value = getType().calcDiscountOrTax(value);
-        setBalance(current - value);
+    default void add(Transaction transaction) {
+        var newBalance = transaction.apply(getBalance());
+        setBalance(newBalance);
     }
 }
