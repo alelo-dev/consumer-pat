@@ -33,4 +33,16 @@ public class CardService {
         current.setNumber(latest.getNumber());
         return allCards.save(current);
     }
+
+    public UpdateActionResponse recharge(String cardNumber, double value) {
+        var found = allCards.findById(cardNumber);
+        if (found.isEmpty()) {
+            return UpdateActionResponse.NOT_FOUND;
+        }
+        var card = found.get();
+        card.recharge(value);
+        allCards.save(card);
+        return UpdateActionResponse.UPDATED;
+    }
+
 }

@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
@@ -79,28 +79,6 @@ public class ConsumerController {
         return found.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok().build();
     }
 
-
-    /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
-     */
-    //TODO negative values
-    //TODO dto
-    //TODO POST /cords/{cardnumber}/recharge
-    //TODO extract all logic to CardService
-    //TODO refactoring the logic
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public <T> ResponseEntity<T> setBalance(String cardNumber, double value) {
-        var found = cardRepository.findById(cardNumber);
-        if (found.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        var card = found.get();
-        card.recharge(value);
-        cardRepository.save(card);
-        return ResponseEntity.ok().build();
-    }
 
     //TODO POST /orders
     //TODO move all logic inside OrderService
