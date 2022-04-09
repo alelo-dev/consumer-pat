@@ -1,12 +1,10 @@
 package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.controller.dto.OrderDTO;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.entity.orm.ExtractOrm;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class OrderService {
@@ -33,10 +31,9 @@ public class OrderService {
     }
 
     private void addExtract(OrderDTO orderDto) {
-        var extract = new Extract(
+        var extract = new ExtractOrm(
                 orderDto.getEstablishmentName(),
                 orderDto.getProductDescription(),
-                new Date(),
                 orderDto.getCardNumber(),
                 orderDto.getValue()
         );
