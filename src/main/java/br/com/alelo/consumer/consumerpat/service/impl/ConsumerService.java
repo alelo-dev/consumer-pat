@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
@@ -19,6 +21,7 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.IConsumerService;
 import br.com.alelo.consumer.consumerpat.utils.CopyProperties;
+import br.com.alelo.consumer.consumerpat.utils.UUIDUtils;
 
 @Service
 public class ConsumerService implements IConsumerService {
@@ -77,6 +80,19 @@ public class ConsumerService implements IConsumerService {
 		consumer = CopyProperties.consumerDtoToConsumer(consumerDto, true);
 	
 		return consumerRepository.save(consumer);
+
+	}
+
+	@Override
+	public ResponseEntity<String> deleteConsumer(String id) {
+		
+		Optional<Consumer> consumerOptional = consumerRepository.findById(UUIDUtils.makeUuid(id));
+		if (!consumerOptional.isPresent()) {
+			throw new ConsumerNotFoundException("Consumer not found!");
+		}
+		consumerRepository.delete(consumerOptional.get());
+		
+		return new ResponseEntity<>(id, HttpStatus.OK);
 
 	}
 

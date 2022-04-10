@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
@@ -15,5 +16,7 @@ public interface IConsumerService {
 	public Consumer createConsumer(ConsumerDto consumer) throws Exception;
 
 	public Consumer updateConsumer(ConsumerDto consumer);
+	
+	public ResponseEntity<String> deleteConsumer(String id);
 
 }

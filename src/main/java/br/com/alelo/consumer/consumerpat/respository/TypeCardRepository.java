@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.com.alelo.consumer.consumerpat.entity.TypeCard;
 
 @Repository
-public interface TypeCardRepository extends JpaRepository<TypeCard, String> {
+public interface TypeCardRepository extends JpaRepository<TypeCard, Integer> {
 	
 	Optional<TypeCard> findByTypeCard(String typeCard);
 	

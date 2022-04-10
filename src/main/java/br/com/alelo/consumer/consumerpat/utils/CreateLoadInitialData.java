@@ -159,8 +159,7 @@ public class CreateLoadInitialData implements CommandLineRunner {
         Random r = new Random();
         Integer value = r.nextInt((max - min) + 1) + min;
         return value.toString();
-        
-        
+ 
     }
 
 
