@@ -37,7 +37,6 @@ public class ConsumerService implements IConsumerService {
 		return  consumerRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ConsumerNotFoundException("Consumer not found!"));
 	}
 
-	/* Deve listar todos os clientes (cerca de 500) */
 	@Override
 	public Page<Consumer> getAllConsumers(Pageable pageable) {
 		return consumerRepository.findAll(pageable);
