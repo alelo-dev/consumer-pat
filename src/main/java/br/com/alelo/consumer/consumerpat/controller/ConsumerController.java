@@ -68,6 +68,13 @@ public class ConsumerController {
 	public ResponseEntity<String> delete(@PathVariable("id") String id) {
 		return consumerService.deleteConsumer(id);
 	}
+	
+	//TODO add create address endpint
+	
+	//TODO add delete addcress
+	
+	//TODO add update Address
+	
 
 	
 }

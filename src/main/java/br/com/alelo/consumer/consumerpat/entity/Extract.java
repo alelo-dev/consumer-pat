@@ -17,11 +17,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class Extract implements Serializable {
 
 	private static final long serialVersionUID = 3465500229975213476L;
@@ -44,5 +46,15 @@ public class Extract implements Serializable {
     private Card card;
     
     private BigDecimal value;
+
+    
+	public Extract(Establishment stablishment, String productDescription, Card card, BigDecimal value) {
+		super();
+		this.stablishment = stablishment;
+		this.productDescription = productDescription;
+		this.card = card;
+		this.value = value;
+	}
+
 }
 
