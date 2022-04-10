@@ -1,23 +1,31 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Address implements Serializable {
 	
 	private static final long serialVersionUID = -8853261142760251541L;
 
-	@Id
-    private String idAdress;
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
+	private UUID idAdress;
+ 	
     private String street;
     
     private Integer number;

@@ -3,24 +3,31 @@ package br.com.alelo.consumer.consumerpat.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Setter;
 
-
 @Entity
-@Getter
-@Setter
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Extract implements Serializable {
 
 	private static final long serialVersionUID = 3465500229975213476L;
 
-	@Id
-    private String idExtract;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
+    private UUID idExtract;
     
     @ManyToOne
     private Establishment stablishment;

@@ -2,36 +2,51 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Consumer implements Serializable {
 
 
 	private static final long serialVersionUID = -6138314180053033252L;
 
-	@Id
-    private String idConsumer;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
+    private UUID idConsumer;
     
-    String name;
+    private String name;
     
-    Integer documentNumber;
+    @Column(unique = true)
+    private String documentNumber;
     
-    LocalDate birthDate;
+    private LocalDate birthDate;
+    
+    @CreationTimestamp
+    @Setter(AccessLevel.NONE)
+    LocalDateTime creationTime;
 
     @OneToMany(targetEntity=Contact.class,cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "CONSUMER_ID", referencedColumnName = "idConsumer")

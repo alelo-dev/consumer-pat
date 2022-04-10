@@ -7,17 +7,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TypeCard implements Serializable {
 		
     private static final long serialVersionUID = 7264482008103005850L;
     
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idTypeCard;
 	
