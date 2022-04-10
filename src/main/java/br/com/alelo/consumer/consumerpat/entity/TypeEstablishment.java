@@ -14,13 +14,13 @@ import lombok.Data;
 @Entity
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TypeCard implements Serializable {
+public class TypeEstablishment implements Serializable {
 		
     private static final long serialVersionUID = 7264482008103005850L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer idTypeCard;
+    private Integer idTypeEstablishment;
 	
-    private String typeCard;
+    private String typeEstablishment;
 }

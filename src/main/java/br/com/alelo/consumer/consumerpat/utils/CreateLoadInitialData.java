@@ -15,6 +15,10 @@ import br.com.alelo.consumer.consumerpat.dto.CardDto;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
 import br.com.alelo.consumer.consumerpat.dto.ContactDto;
 import br.com.alelo.consumer.consumerpat.dto.TypeCardDto;
+import br.com.alelo.consumer.consumerpat.entity.Establishment;
+import br.com.alelo.consumer.consumerpat.entity.TypeEstablishment;
+import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
+import br.com.alelo.consumer.consumerpat.respository.TypeEstablishmentRepository;
 import br.com.alelo.consumer.consumerpat.service.impl.ConsumerService;
 
 @Configuration
@@ -23,9 +27,18 @@ public class CreateLoadInitialData implements CommandLineRunner {
 	@Autowired
 	ConsumerService consumerService;
 	
+	@Autowired
+	EstablishmentRepository establishmentRepository;
+	
+	@Autowired
+	TypeEstablishmentRepository typeEstablishmentRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
+		
+
+    	
         for (int i = 0; i < 500; i++) {
         	
         	ConsumerDto consumerDto = new ConsumerDto();
@@ -39,19 +52,15 @@ public class CreateLoadInitialData implements CommandLineRunner {
         	consumerDto.setContacts(listContactDto);
         	
         	List<CardDto> listCardDto = new ArrayList<CardDto>();
-        	
-        	TypeCardDto food = new TypeCardDto();
-        	food.setIdTypeCard(1L);
-        	listCardDto.add(createFakeContactDto(food));
-        	
+    		TypeCardDto food = new TypeCardDto();
+        	food.setIdTypeCard(1);
         	TypeCardDto fuel = new TypeCardDto();
-        	fuel.setIdTypeCard(2L);
-        	listCardDto.add(createFakeContactDto(fuel));
-        	
+        	fuel.setIdTypeCard(2);
         	TypeCardDto drugstore = new TypeCardDto();
-        	drugstore.setIdTypeCard(3L);
+        	drugstore.setIdTypeCard(3);
+        	listCardDto.add(createFakeContactDto(food));
+            listCardDto.add(createFakeContactDto(fuel));
         	listCardDto.add(createFakeContactDto(drugstore));
-        	
         	consumerDto.setCards(listCardDto);
   
         	List<AddressDto> listAddressDto = new ArrayList<AddressDto>();
@@ -63,7 +72,53 @@ public class CreateLoadInitialData implements CommandLineRunner {
        
         	consumerService.createConsumer(consumerDto);
 		}
-		
+        
+        
+
+        Establishment establishmentWallmart = new Establishment();
+        establishmentWallmart.setNameEstablishment("Wallmart");
+        Establishment save1 = establishmentRepository.save(establishmentWallmart);   
+        
+        TypeEstablishment food = new TypeEstablishment();
+    	food.setIdTypeEstablishment(1);
+    	food.setTypeEstablishment("Food");
+    	food = typeEstablishmentRepository.save(food);
+    	
+        List<TypeEstablishment> typeCardsAcceptedWallmart = new ArrayList<TypeEstablishment>();
+        typeCardsAcceptedWallmart.add(food);
+        establishmentWallmart.setTypeEstablishments(typeCardsAcceptedWallmart);
+        establishmentRepository.save(save1);
+        
+        
+        Establishment establishmentShell = new Establishment();
+        establishmentShell.setNameEstablishment("Shell");
+        Establishment save2 = establishmentRepository.save(establishmentShell);   
+        
+        TypeEstablishment fuel = new TypeEstablishment();
+        fuel.setIdTypeEstablishment(2);
+        fuel.setTypeEstablishment("Fuel");
+        fuel = typeEstablishmentRepository.save(fuel);
+    	
+        List<TypeEstablishment> typeCardsAcceptedShell = new ArrayList<TypeEstablishment>();
+        typeCardsAcceptedShell.add(fuel);
+        establishmentShell.setTypeEstablishments(typeCardsAcceptedShell);
+        establishmentRepository.save(save2);
+    	
+    	
+        Establishment establishmentWalgreens = new Establishment();
+        establishmentWalgreens.setNameEstablishment("Walgreens");
+        Establishment save3 = establishmentRepository.save(establishmentWalgreens);   
+        
+        TypeEstablishment drugstore = new TypeEstablishment();
+        drugstore.setIdTypeEstablishment(3);
+        drugstore.setTypeEstablishment("Drugstore");
+        drugstore = typeEstablishmentRepository.save(drugstore);
+    	
+        List<TypeEstablishment> typeCardsAcceptedWalgreens = new ArrayList<TypeEstablishment>();
+        typeCardsAcceptedWalgreens.add(drugstore);
+        establishmentWalgreens.setTypeEstablishments(typeCardsAcceptedWalgreens);
+        establishmentRepository.save(save3);
+ 
 	}
 	
  

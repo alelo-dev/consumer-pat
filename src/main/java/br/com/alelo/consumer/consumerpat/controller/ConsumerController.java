@@ -30,10 +30,6 @@ public class ConsumerController {
 
 	@Autowired
 	ConsumerService consumerService;
-
-//	@Autowired
-//	ExtractService extractService;
-
 	
     @ApiOperation(value = "Return consumer by IdConsumer.")  
     @GetMapping("/{id}")
@@ -65,16 +61,7 @@ public class ConsumerController {
 	public ResponseEntity<Consumer> updateConsumer(@RequestBody ConsumerDto consumerDto) {
 		return ResponseEntity.status(HttpStatus.OK).body(consumerService.updateConsumer(consumerDto));
 	}
-
-//	@PostMapping(path = "/transaction/card/addBalance", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<Consumer> setBalance(int cardNumber, double value) {
-//		return ResponseEntity.status(HttpStatus.OK).body(consumerService.setBalance(cardNumber, value));
-//	}
-//
-//
-//	@PostMapping(path = "/transaction/card/buy", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<Extract> buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-//		return ResponseEntity.status(HttpStatus.OK).body(extractService.buy(establishmentType, establishmentName, cardNumber, productDescription, value));
-//	}
+	
+	//TODO Delete Consumer
 
 }

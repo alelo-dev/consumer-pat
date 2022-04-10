@@ -32,7 +32,7 @@ public class CopyProperties {
 		    BeanUtils.copyProperties(cardsDto , card);	 
 		    
 		    if(!update) {
-		    	card.initBalance(BigDecimal.ZERO);	
+		    	card.addBalance(BigDecimal.ZERO);	
 		    }
 			consumer.getCards().add(card);
 		}

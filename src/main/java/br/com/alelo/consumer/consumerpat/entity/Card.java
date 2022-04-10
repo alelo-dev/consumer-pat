@@ -40,8 +40,7 @@ public class Card implements Serializable{
     @JoinColumn(referencedColumnName="idTypeCard", name=" ID_TYPE_CARD_CONSUMER", nullable = false)
     private TypeCard typeCard;
     
-    
-    public BigDecimal initBalance(BigDecimal value) {
+    public BigDecimal addBalance(BigDecimal value) {
     	return this.cardBalance = value;
     }
 }

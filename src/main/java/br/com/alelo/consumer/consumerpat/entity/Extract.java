@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -33,8 +35,10 @@ public class Extract implements Serializable {
     private Establishment stablishment;
     
     private String productDescription;
-    
-    private LocalDate dateBuy;
+   
+    @CreationTimestamp
+    @Setter(AccessLevel.NONE)
+    LocalDateTime dateBuy;
     
     @ManyToOne
     private Card card;

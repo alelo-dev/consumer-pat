@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -18,7 +18,7 @@ public class ExtractDto implements Serializable {
     
     private String productDescription;
     
-    private LocalDate dateBuy;
+    private LocalDateTime dateBuy;
     
     private CardDto card;
     

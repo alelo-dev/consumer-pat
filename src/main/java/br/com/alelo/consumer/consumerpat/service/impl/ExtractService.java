@@ -1,29 +1,32 @@
-//package br.com.alelo.consumer.consumerpat.service.impl;
-//
-//import java.util.Date;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import br.com.alelo.consumer.consumerpat.entity.Consumer;
-//import br.com.alelo.consumer.consumerpat.entity.Extract;
-//import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-//import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-//import br.com.alelo.consumer.consumerpat.service.IExtraticService;
-//
-//@Service
-//public class ExtractService implements IExtraticService {
-//	
-//
-//    @Autowired
-//    ExtractRepository extractRepository;
-//    
-//
-//	@Autowired
-//	ConsumerRepository consumerRepository;
-//
-//	@Override
-//
+package br.com.alelo.consumer.consumerpat.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import br.com.alelo.consumer.consumerpat.dto.BuyDto;
+import br.com.alelo.consumer.consumerpat.dto.ExtractDto;
+import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.IExtraticService;
+
+
+@Service
+public class ExtractService implements IExtraticService {
+	
+
+    @Autowired
+    ExtractRepository extractRepository;
+    
+
+	@Autowired
+	ConsumerRepository consumerRepository;
+
+    @Override
+    public ExtractDto saveExtract(BuyDto buyDto){
+    	//TODO save extract
+    	return null;
+    }
+
 //	public Extract buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
 //		Consumer consumer = null;
 //		/*
@@ -63,6 +66,6 @@
 //		Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
 //		return extractRepository.save(extract);
 //	}
-//
-//
-//}
+
+
+}
