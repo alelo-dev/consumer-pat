@@ -29,7 +29,6 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Consumer implements Serializable {
 
-
 	private static final long serialVersionUID = -6138314180053033252L;
 
     @Id
@@ -59,4 +58,5 @@ public class Consumer implements Serializable {
     @OneToMany(targetEntity=Card.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "CONSUMER_ID", referencedColumnName = "idConsumer")
     private List<Card> cards;
+    
 }

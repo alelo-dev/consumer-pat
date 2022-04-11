@@ -25,4 +25,5 @@ public class ConsumerDto implements Serializable {
 	private List<AddressDto> addresses;
 
 	private List<CardDto> cards;
+	
 }

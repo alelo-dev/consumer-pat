@@ -43,4 +43,5 @@ public class Card implements Serializable{
     public BigDecimal addBalance(BigDecimal value) {
     	return this.cardBalance = value;
     }
+    
 }

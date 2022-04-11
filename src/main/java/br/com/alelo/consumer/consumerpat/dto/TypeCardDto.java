@@ -15,4 +15,5 @@ public class TypeCardDto implements Serializable {
 	private Integer idTypeCard;
 	
 	private String typeCard;
+	
 }

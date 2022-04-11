@@ -23,6 +23,4 @@ public interface ICardService {
 
 	Card creditBalance(Card card, BigDecimal value);
 
-	
-
 }

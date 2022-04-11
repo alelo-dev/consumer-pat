@@ -37,4 +37,8 @@ public class TransactionController {
 		return ResponseEntity.status(HttpStatus.OK).body(transactionService.consultExtract(requestExtractDto));
 	}
 	
+	//TODO add conulst extract by card/user endpoint
+	
+	//TODO add paramets betwen dates / pagination in two endpoint
+	
 }

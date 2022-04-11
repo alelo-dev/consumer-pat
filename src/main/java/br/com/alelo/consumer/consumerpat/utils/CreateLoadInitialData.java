@@ -35,10 +35,7 @@ public class CreateLoadInitialData implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		
-		
 
-    	
         for (int i = 0; i < 500; i++) {
         	
         	ConsumerDto consumerDto = new ConsumerDto();
@@ -71,10 +68,10 @@ public class CreateLoadInitialData implements CommandLineRunner {
          	consumerDto.setAddresses(listAddressDto);
        
         	consumerService.createConsumer(consumerDto);
+        	
 		}
         
-        
-
+      
         Establishment establishmentWallmart = new Establishment();
         establishmentWallmart.setNameEstablishment("Wallmart");
         Establishment save1 = establishmentRepository.save(establishmentWallmart);   
@@ -120,7 +117,6 @@ public class CreateLoadInitialData implements CommandLineRunner {
         establishmentRepository.save(save3);
  
 	}
-	
  
 	private ContactDto createFakeContactDto(Integer i) {
 		ContactDto contactDto = new ContactDto();
@@ -137,8 +133,7 @@ public class CreateLoadInitialData implements CommandLineRunner {
 		cardDto.setTypeCard(typeCard);
 		return cardDto;
 	}
-	
-	
+		
 	private AddressDto createFakeAdressDto(Integer i) {
 		AddressDto addressDto = new AddressDto();
 		addressDto.setCity("city number"+i);
@@ -161,7 +156,5 @@ public class CreateLoadInitialData implements CommandLineRunner {
         return value.toString();
  
     }
-
-
 
 }

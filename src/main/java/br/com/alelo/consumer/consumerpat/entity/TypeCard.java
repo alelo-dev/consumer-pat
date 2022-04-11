@@ -23,4 +23,5 @@ public class TypeCard implements Serializable {
     private Integer idTypeCard;
 	
     private String typeCard;
+    
 }

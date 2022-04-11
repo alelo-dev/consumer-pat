@@ -15,7 +15,6 @@ import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
 
 public class ValidationsCard {
 	
-
 	public static Card validationBuyCard(BuyDto buyDto, CardRepository cardRepository, EstablishmentRepository establishmentRepository) throws Exception {
 		
 		Optional<Card> cardOptional = cardRepository.findByCardNumber(buyDto.getCardDto().getCardNumber());
@@ -47,7 +46,6 @@ public class ValidationsCard {
 		return cardOptional.isPresent();
 	}
 	
-
     public static boolean verifyCardIsType(Optional<Card> cardOptional, BuyDto buyDto) {
         return cardOptional.get().getTypeCard().getIdTypeCard().equals(buyDto.getCardDto().getTypeCard().getIdTypeCard());
     }

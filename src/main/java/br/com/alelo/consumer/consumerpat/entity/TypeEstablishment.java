@@ -23,4 +23,5 @@ public class TypeEstablishment implements Serializable {
     private Integer idTypeEstablishment;
 	
     private String typeEstablishment;
+    
 }

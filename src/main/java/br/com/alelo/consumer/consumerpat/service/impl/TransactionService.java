@@ -17,25 +17,24 @@ import br.com.alelo.consumer.consumerpat.validations.ValidationsCard;
 
 @Service
 public class TransactionService implements ITransactionService {
+	
+	private static final Integer FOOD = 1;
+	private static final Integer FUEL = 2;
+	private static final Integer DRUGSTORE = 2;
 
 	@Autowired
 	CardRepository cardRepository;
 
 	@Autowired
 	EstablishmentRepository establishmentRepository;
-	
-	
+		
 	@Autowired
 	CardService cardService;
 
 	@Autowired
 	ExtractService extractService;
 
-
-	private static final Integer FOOD = 1;
-	private static final Integer FUEL = 2;
-	private static final Integer DRUGSTORE = 2;
-
+	
 	@Override
 	public ExtractDto buy(BuyDto buyDto) throws Exception {
 		Card card = ValidationsCard.validationBuyCard(buyDto, cardRepository, establishmentRepository);

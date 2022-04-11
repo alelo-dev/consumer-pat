@@ -23,5 +23,6 @@ public class ExtractDto implements Serializable {
     private CardDto card;
     
     private BigDecimal value;
+    
 }
 

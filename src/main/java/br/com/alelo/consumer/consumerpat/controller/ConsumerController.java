@@ -69,12 +69,16 @@ public class ConsumerController {
 		return consumerService.deleteConsumer(id);
 	}
 	
-	//TODO add create address endpint
+	//TODO add create new address endpoint by user
 	
-	//TODO add delete addcress
+	//TODO add update address endpoint by user
 	
-	//TODO add update Address
+	//TODO add delete address endpoint by user
 	
-
+	//TODO add create new contact endpoint by user
+	
+	//TODO add update contact endpoint by user
+	
+	//TODO add delete contact endpoint user
 	
 }
