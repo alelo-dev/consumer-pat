@@ -33,7 +33,6 @@ public class Consumer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Setter(AccessLevel.NONE)
     private UUID idConsumer;
     
     private String name;

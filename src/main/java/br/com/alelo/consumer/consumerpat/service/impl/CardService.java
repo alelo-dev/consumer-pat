@@ -21,7 +21,6 @@ import br.com.alelo.consumer.consumerpat.exception.CardTypeNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.UserNotFoundException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
 import br.com.alelo.consumer.consumerpat.respository.TypeCardRepository;
 import br.com.alelo.consumer.consumerpat.service.ICardService;
 import br.com.alelo.consumer.consumerpat.utils.UUIDUtils;
@@ -32,10 +31,7 @@ public class CardService implements ICardService{
 
 	@Autowired
 	CardRepository cardRepository;
-	
-	@Autowired
-	EstablishmentRepository establishmentRepository;
-	
+		
 	@Autowired
 	ConsumerRepository consumerRepository;
 	

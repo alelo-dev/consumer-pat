@@ -1,9 +1,10 @@
 package br.com.alelo.consumer.consumerpat.service.impl;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,17 +36,19 @@ public class ConsumerService implements IConsumerService {
 	@Autowired
 	CardRepository cardRepository;
 	
-
+	@Cacheable("getConsumer")
 	public Consumer getConsumer(String id) {
-		return  consumerRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ConsumerNotFoundException("Consumer not found!"));
+		return  consumerRepository.findById(UUIDUtils.makeUuid(id)).orElseThrow(() -> new ConsumerNotFoundException("Consumer not found!"));
 	}
 
 	@Override
+	@Cacheable("getAllConsumers")
 	public Page<Consumer> getAllConsumers(Pageable pageable) {
 		return consumerRepository.findAll(pageable);
 	}
 
 	@Override
+	@CacheEvict(value={"getAllConsumers", "getConsumer"}, allEntries=true)
 	public Consumer createConsumer(ConsumerDto consumerDto) throws Exception {
 		
 		Consumer consumer = new Consumer();
@@ -69,6 +72,7 @@ public class ConsumerService implements IConsumerService {
 	}
 
 	@Override
+	@CacheEvict(value={"getAllConsumers", "getConsumer"}, allEntries=true)
 	public Consumer updateConsumer(ConsumerDto consumerDto) {
 		
 		Optional<Consumer> consumerOptional = consumerRepository.findByDocumentNumber(consumerDto.getDocumentNumber());
@@ -78,12 +82,14 @@ public class ConsumerService implements IConsumerService {
 		
 		Consumer consumer = consumerOptional.get();
 		consumer = CopyProperties.consumerDtoToConsumer(consumerDto, true);
+		consumer.setIdConsumer(consumerOptional.get().getIdConsumer());
 	
 		return consumerRepository.save(consumer);
 
 	}
 
 	@Override
+	@CacheEvict(value={"getAllConsumers", "getConsumer"}, allEntries=true)
 	public ResponseEntity<String> deleteConsumer(String id) {
 		
 		Optional<Consumer> consumerOptional = consumerRepository.findById(UUIDUtils.makeUuid(id));

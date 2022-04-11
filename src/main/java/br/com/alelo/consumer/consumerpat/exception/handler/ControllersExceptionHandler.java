@@ -16,6 +16,7 @@ import br.com.alelo.consumer.consumerpat.exception.DocumentIsExistException;
 import br.com.alelo.consumer.consumerpat.exception.EstablishmentNotAcceptCardException;
 import br.com.alelo.consumer.consumerpat.exception.EstablishmentNotFoundException;
 import br.com.alelo.consumer.consumerpat.exception.StandardError;
+import br.com.alelo.consumer.consumerpat.exception.UserNotFoundException;
 
 @ControllerAdvice
 public class ControllersExceptionHandler {
@@ -40,6 +41,12 @@ public class ControllersExceptionHandler {
 
 	@ExceptionHandler(CardNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFound(CardNotFoundException e, HttpServletRequest request) {
+		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<StandardError> objectNotFound(UserNotFoundException e, HttpServletRequest request) {
 		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
