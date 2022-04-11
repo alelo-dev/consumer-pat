@@ -9,9 +9,11 @@ import org.springframework.data.repository.query.Param;
 import br.com.alelo.consumer.consumerpat.entity.Cards;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 
-public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
+public interface CardsRepository extends JpaRepository<Consumer, Integer> {
 
-    @Query(nativeQuery = true, value = "select * from Consumer")
-    List<Consumer> getAllConsumersList();
+    @Query(nativeQuery = true, value = "select * from Cards c"
+    		+ " join c.Consumer co  "
+    		+ " where ca.cardNumber = :cardNumber")
+    Cards findByCardNumber(@Param("ano") int cardNumber);
 
 }
