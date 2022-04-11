@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "2f3fe56f-e731-4fcf-825e-a24369465abe",
+		"name": "Alelo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Card",
+			"item": [
+				{
+					"name": "Create Card",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idConsumer\": \"45f7333d-1f66-4047-ad92-be8daee83866\",\r\n  \"initialBalanace\": 10,\r\n  \"typeCard\": {\r\n    \"idTypeCard\": 2,\r\n    \"typeCard\": \"Fuel\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/card",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consult Balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idCard\": \"f620ea2c-8e33-4adc-a777-5b93014d392b\",\r\n  \"idConsumer\": \"2dc3ce85-d2f3-414d-a9de-801f473fb1fd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/card/balance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"card",
+								"balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Card",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/card/faa816af-956b-4cb1-8901-cf8a7b50477f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"card",
+								"faa816af-956b-4cb1-8901-cf8a7b50477f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consumer",
+			"item": [
+				{
+					"name": "FindAllConsumersWithParameters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/consumer?page=0&limit=10&direction=desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumer"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "direction",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FindAllConsumers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/consumer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FindConsumerById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/consumer/f376251d-7968-411f-bd62-419ae9f13e77",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumer",
+								"f376251d-7968-411f-bd62-419ae9f13e77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Consumer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"addresses\": [\r\n    {\r\n      \"city\": \"SP\",\r\n      \"country\": \"BR\",\r\n      \"number\": 11,\r\n      \"portalCode\": \"08820-040\",\r\n      \"street\": \"AVENUE R\"\r\n    }\r\n  ],\r\n  \"birthDate\": \"2022-04-10\",\r\n  \"cards\": [\r\n    {\r\n      \"cardNumber\": 1234,\r\n      \"typeCard\": {\r\n        \"idTypeCard\": 1\r\n      }\r\n    }\r\n  ],\r\n  \"contacts\": [\r\n    {\r\n      \"email\": \"email@email.com\",\r\n      \"mobilePhoneNumber\": \"11957859463\",\r\n      \"phoneNumber\": \"115666852\",\r\n      \"residencePhoneNumber\": \"11456982\"\r\n    }\r\n  ],\r\n  \"documentNumber\": \"11131111\",\r\n  \"name\": \"Foo 01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/consumer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Consumer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"addresses\": [\r\n    {\r\n      \"city\": \"string\",\r\n      \"country\": \"string\",\r\n      \"number\": 0,\r\n      \"portalCode\": \"string\",\r\n      \"street\": \"string\"\r\n    }\r\n  ],\r\n  \"birthDate\": \"2022-04-11\",\r\n  \"cards\": [\r\n    {\r\n      \"cardNumber\": 1234,\r\n      \"typeCard\": {\r\n        \"idTypeCard\": 1,\r\n        \"typeCard\": \"string\"\r\n      }\r\n    }\r\n  ],\r\n  \"contacts\": [\r\n    {\r\n      \"email\": \"string\",\r\n      \"mobilePhoneNumber\": \"string\",\r\n      \"phoneNumber\": \"string\",\r\n      \"residencePhoneNumber\": \"string\"\r\n    }\r\n  ],\r\n  \"documentNumber\": \"11131111\",\r\n  \"name\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/consumer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Consumer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/consumer/f376251d-7968-411f-bd62-419ae9f13e77",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"consumer",
+								"f376251d-7968-411f-bd62-419ae9f13e77"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Buy Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cardDto\": {\r\n    \"cardNumber\": 7937039,\r\n    \"typeCard\": {\r\n      \"idTypeCard\": 1,\r\n      \"typeCard\": \"Food\"\r\n    }\r\n  },\r\n  \"idEstablishment\": \"2f2a1aa324554e43b1610d5985326e74\",\r\n  \"productDescription\": \"Fake Product\",\r\n  \"value\": 110\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/transaction/buy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transaction",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recarge Balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cardNumber\": 7937039,\r\n  \"value\": 10000.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/card/recharge",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"card",
+								"recharge"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consult Extratic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idConsumer\": \"37f2458ceb854601b92d14858269f7e2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/transaction/extract",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transaction",
+								"extract"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
