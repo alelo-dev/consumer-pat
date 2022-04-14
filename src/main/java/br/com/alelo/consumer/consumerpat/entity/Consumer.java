@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -34,7 +33,7 @@ public class Consumer {
     int number;
     String city;
     String country;
-    int portalCode;
+    int postalCode;
 
     //cards
     int foodCardNumber;
@@ -56,7 +55,7 @@ public class Consumer {
                 && residencePhoneNumber == consumer.residencePhoneNumber
                 && phoneNumber == consumer.phoneNumber
                 && number == consumer.number
-                && portalCode == consumer.portalCode
+                && postalCode == consumer.postalCode
                 && foodCardNumber == consumer.foodCardNumber
                 && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
                 && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
@@ -65,6 +64,4 @@ public class Consumer {
                 && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
                 && Objects.equals(country, consumer.country);
     }
-
-
 }
