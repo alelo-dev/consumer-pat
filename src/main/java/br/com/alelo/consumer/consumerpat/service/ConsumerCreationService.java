@@ -55,7 +55,7 @@ public class ConsumerCreationService {
 
         Optional<ConsumerCardRequestDto> drugstoreCard = consumerRequest.getCardType(consumerRequest, CardType.DRUGSTORE);
         if (drugstoreCard.isPresent()) {
-            consumer.setDrugstoreNumber(drugstoreCard.get().getNumber());
+            consumer.setDrugstoreCardNumber(drugstoreCard.get().getNumber());
             consumer.setDrugstoreCardBalance(drugstoreCard.get().getBalance());
         }
 

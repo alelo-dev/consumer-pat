@@ -32,8 +32,8 @@ public class ConsumerController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @ResponseBody
-    public List<ConsumerResponse> listAllConsumers() {
-        return consumerSearchService.listAllConsumers();
+    public List<ConsumerResponse> listAllConsumers(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+        return consumerSearchService.listAllConsumers(pageNumber, pageSize);
     }
 
     @ApiOperation(value = "Cadastra novos clientes")

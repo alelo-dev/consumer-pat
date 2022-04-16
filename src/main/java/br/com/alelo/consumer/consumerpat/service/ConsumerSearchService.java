@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,9 +22,19 @@ public class ConsumerSearchService {
     @Autowired
     ConsumerRepository consumerRepository;
 
-    public List<ConsumerResponse> listAllConsumers() {
+    public List<ConsumerResponse> listAllConsumers(Integer pageNumber, Integer pageSize) {
 
-        Pageable firstPageWithFiveHundredConsumers = PageRequest.of(0, 500);
+        if (Objects.isNull(pageNumber) || pageNumber < 1) {
+            pageNumber = 0;
+        } else {
+            pageNumber--;
+        }
+
+        if (Objects.isNull(pageSize)) {
+            pageSize = 500;
+        }
+
+        Pageable firstPageWithFiveHundredConsumers = PageRequest.of(pageNumber, pageSize);
 
         Page<Consumer> allConsumersPage = consumerRepository.findAll(firstPageWithFiveHundredConsumers);
 
@@ -51,7 +62,7 @@ public class ConsumerSearchService {
                 .foodCardBalance(consumer.getFoodCardBalance())
                 .fuelCardNumber(consumer.getFuelCardNumber())
                 .fuelCardBalance(consumer.getFuelCardBalance())
-                .drugstoreNumber(consumer.getDrugstoreNumber())
+                .drugstoreCardNumber(consumer.getDrugstoreCardNumber())
                 .drugstoreCardBalance(consumer.getDrugstoreCardBalance())
                 .build();
     }

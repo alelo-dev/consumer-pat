@@ -37,15 +37,19 @@ public class CardPurchaseService {
                 Double valueToCharge = this.chargeFromFoodCard(cardPurchaseRequestDto, consumer.get());
                 consumer.get().setFoodCardBalance(valueToCharge);
                 repository.save(consumer.get());
+            } else {
+                throw new RuntimeException("Cliente sem Cartao Alimentacao");
             }
         }
 
         if (cardPurchaseRequestDto.getEstablishmentType() == 2) {
-            Optional<Consumer> consumer = repository.findByDrugstoreNumber(cardPurchaseRequestDto.getCardNumber());
+            Optional<Consumer> consumer = repository.findByDrugstoreCardNumber(cardPurchaseRequestDto.getCardNumber());
             if (consumer.isPresent()) {
                 Double valueToCharge = this.chargeFromDrugstoreCard(cardPurchaseRequestDto, consumer.get());
                 consumer.get().setDrugstoreCardBalance(valueToCharge);
                 repository.save(consumer.get());
+            } else {
+                throw new RuntimeException("Cliente sem Cartao Farmacia");
             }
         }
 
@@ -55,6 +59,8 @@ public class CardPurchaseService {
                 Double valueToCharge = this.chargeFromFuelCard(cardPurchaseRequestDto, consumer.get());
                 consumer.get().setFuelCardBalance(valueToCharge);
                 repository.save(consumer.get());
+            } else {
+                throw new RuntimeException("Cliente sem Cartao Combustivel");
             }
         }
 
@@ -72,7 +78,7 @@ public class CardPurchaseService {
      * @param cardPurchaseRequestDto informacoes de requisicao
      */
     private Double chargeFromFoodCard(CardPurchaseRequestDto cardPurchaseRequestDto, final Consumer consumer) {
-        Double cashback = (cardPurchaseRequestDto.getValue() / 100) * 10;
+        Double cashback = cardPurchaseRequestDto.getValue()  * 0.10;
         double dicountValue = cardPurchaseRequestDto.getValue() - cashback;
         return consumer.getFoodCardBalance() - dicountValue;
     }

@@ -22,7 +22,7 @@ public class CardBalanceUpdateService {
     public void setBalance(CardBalanceUpdateRequestDto cardBalanceUpdateRequestDto) {
 
         boolean updated = false;
-        Optional<Consumer> consumer = consumerRepository.findByDrugstoreNumber(cardBalanceUpdateRequestDto.getCardNumber());
+        Optional<Consumer> consumer = consumerRepository.findByDrugstoreCardNumber(cardBalanceUpdateRequestDto.getCardNumber());
         if (consumer.isPresent()) {
             consumerRepository.save(this.addBalanceForDrugStoreCard(consumer.get(), cardBalanceUpdateRequestDto.getValue()));
             updated = true;

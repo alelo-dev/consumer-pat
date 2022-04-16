@@ -11,5 +11,5 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     Optional<Consumer> findByFuelCardNumber(int cardNumber);
 
-    Optional<Consumer> findByDrugstoreNumber(int cardNumber);
+    Optional<Consumer> findByDrugstoreCardNumber(int cardNumber);
 }

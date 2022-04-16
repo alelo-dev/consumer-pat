@@ -3,12 +3,10 @@ package br.com.alelo.consumer.consumerpat.dto.response;
 
 import lombok.*;
 
-import javax.persistence.Entity;
 import java.util.Date;
 
 
 @Data
-@Entity
 @EqualsAndHashCode
 @Builder
 @AllArgsConstructor
@@ -17,12 +15,12 @@ public class ConsumerResponse {
 
     Integer id;
     String name;
-    int documentNumber;
+    String documentNumber;
     Date birthDate;
 
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    String mobilePhoneNumber;
+    String residencePhoneNumber;
+    String phoneNumber;
     String email;
 
     //Address
@@ -39,6 +37,6 @@ public class ConsumerResponse {
     int fuelCardNumber;
     double fuelCardBalance;
 
-    int drugstoreNumber;
+    int drugstoreCardNumber;
     double drugstoreCardBalance;
 }

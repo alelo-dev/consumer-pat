@@ -3,16 +3,13 @@ package br.com.alelo.consumer.consumerpat.dto.request;
 
 import br.com.alelo.consumer.consumerpat.type.CardType;
 import com.sun.istack.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
-import java.util.Date;
-import java.util.Optional;
+import lombok.*;
 
 
 @Data
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EqualsAndHashCode
 public class ConsumerCardRequestDto {
     @NotNull

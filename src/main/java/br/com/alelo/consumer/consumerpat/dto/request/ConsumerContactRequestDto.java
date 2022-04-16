@@ -2,23 +2,22 @@ package br.com.alelo.consumer.consumerpat.dto.request;
 
 
 import com.sun.istack.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.Entity;
+import lombok.*;
 
 
 @Data
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EqualsAndHashCode
 public class ConsumerContactRequestDto {
 
     @NotNull
-    Integer mobilePhoneNumber;
+    String mobilePhoneNumber;
     @NotNull
-    Integer residencePhoneNumber;
+    String residencePhoneNumber;
     @NotNull
-    Integer workPhoneNumber;
+    String workPhoneNumber;
 
     String email;
 }

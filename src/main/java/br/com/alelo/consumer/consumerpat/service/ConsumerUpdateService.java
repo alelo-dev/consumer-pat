@@ -52,7 +52,7 @@ public class ConsumerUpdateService {
         fuelCard.ifPresent(consumerCardRequestDto -> existingConsumer.setFuelCardNumber(consumerCardRequestDto.getNumber()));
 
         Optional<ConsumerCardRequestDto> drugstoreCard = consumerUpdateRequest.getCardType(consumerUpdateRequest, CardType.DRUGSTORE);
-        drugstoreCard.ifPresent(consumerCardRequestDto -> existingConsumer.setDrugstoreNumber(consumerCardRequestDto.getNumber()));
+        drugstoreCard.ifPresent(consumerCardRequestDto -> existingConsumer.setDrugstoreCardNumber(consumerCardRequestDto.getNumber()));
 
         return existingConsumer;
     }
