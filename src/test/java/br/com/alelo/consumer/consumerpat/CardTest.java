@@ -110,7 +110,6 @@ class CardTest {
         assertEquals(updatedConsumer.getFoodCardBalance(), expectedCardBalance);
     }
 
-
     @Test
     void mustDebitCardForDrugstoreEstabilishment() {
         ConsumerResponse existingConsumer = consumerSearchService.listAllConsumers(null, null)
@@ -139,7 +138,6 @@ class CardTest {
 
         assertEquals(updatedConsumer.getDrugstoreCardBalance(), expectedCardBalance);
     }
-
 
     @Test
     void mustDebitCardForFoodEstabilishmentWithCashbackDiscount() {
@@ -170,7 +168,6 @@ class CardTest {
 
         assertEquals(updatedConsumer.getFoodCardBalance(), expectedCardBalance);
     }
-
 
     @Test
     void mustDebitCardForFuelEstabilishmentWithTaxCharges() {

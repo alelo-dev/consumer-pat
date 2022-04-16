@@ -7,11 +7,10 @@ import br.com.alelo.consumer.consumerpat.service.CardPurchaseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-@Controller
+@RestController
 @RequestMapping("/card")
 public class CardController {
 

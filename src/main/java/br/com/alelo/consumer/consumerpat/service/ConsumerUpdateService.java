@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.dto.request.ConsumerCardRequestDto;
 import br.com.alelo.consumer.consumerpat.dto.request.ConsumerRequestDto;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.exception.ConsumerDataNotFoundException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.type.CardType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ConsumerUpdateService {
     public void updateConsumer(ConsumerRequestDto consumerRequest) {
         Optional<Consumer> consumer = consumerRepository.findById(consumerRequest.getId());
         if (consumer.isEmpty()) {
-            throw new RuntimeException("NOT FOUND");
+            throw new ConsumerDataNotFoundException();
         }
 
         consumerRepository.save(this.updateConsumer(consumer.get(), consumerRequest));

@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.dto.request.CardPurchaseRequestDto;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.ConsumerDataNotFoundException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class CardPurchaseService {
                 consumer.get().setFoodCardBalance(valueToCharge);
                 repository.save(consumer.get());
             } else {
-                throw new RuntimeException("Cliente sem Cartao Alimentacao");
+                throw new ConsumerDataNotFoundException("Cliente sem Cartao Alimentacao");
             }
         }
 
@@ -49,7 +50,7 @@ public class CardPurchaseService {
                 consumer.get().setDrugstoreCardBalance(valueToCharge);
                 repository.save(consumer.get());
             } else {
-                throw new RuntimeException("Cliente sem Cartao Farmacia");
+                throw new ConsumerDataNotFoundException("Cliente sem Cartao Farmacia");
             }
         }
 
@@ -60,7 +61,7 @@ public class CardPurchaseService {
                 consumer.get().setFuelCardBalance(valueToCharge);
                 repository.save(consumer.get());
             } else {
-                throw new RuntimeException("Cliente sem Cartao Combustivel");
+                throw new ConsumerDataNotFoundException("Cliente sem Cartao Combustivel");
             }
         }
 

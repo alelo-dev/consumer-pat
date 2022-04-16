@@ -8,13 +8,12 @@ import br.com.alelo.consumer.consumerpat.service.ConsumerUpdateService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
@@ -32,7 +31,9 @@ public class ConsumerController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     @ResponseBody
-    public List<ConsumerResponse> listAllConsumers(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+    public List<ConsumerResponse> listAllConsumers(
+            @RequestParam(required = false) Integer pageNumber,
+            @RequestParam(required = false) Integer pageSize) {
         return consumerSearchService.listAllConsumers(pageNumber, pageSize);
     }
 

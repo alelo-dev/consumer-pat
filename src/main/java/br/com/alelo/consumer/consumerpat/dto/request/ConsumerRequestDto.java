@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.dto.request;
 
 
 import br.com.alelo.consumer.consumerpat.type.CardType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class ConsumerRequestDto {
     @NotNull
     String documentNumber;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     Date birthDate;
 
     @NotNull
