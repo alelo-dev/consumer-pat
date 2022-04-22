@@ -1,15 +1,15 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
+import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+
+import lombok.Data;
 
 
 @Data
@@ -20,13 +20,13 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
-    int documentNumber;
+    String documentNumber;
     Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    String mobilePhoneNumber;
+    String residencePhoneNumber;
+    String phoneNumber;
     String email;
 
     //Address

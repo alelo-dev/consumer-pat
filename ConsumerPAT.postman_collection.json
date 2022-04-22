@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "920186fd-b578-494c-ac91-84d071ef66a2",
+		"name": "ConsumerPAT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "list all customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/consumer/consumerList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"consumerList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create consumer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"name\": \"MARCELO SANTOS ARAUJO\",\n     \"documentNumber\": \"05462226683\",\n     \"birthDate\": \"1981-12-26\",\n\n    \n    \"mobilePhoneNumber\": \"34984088841\",\n    \"residencePhoneNumber\": \"3432381186\",\n    \"phoneNumber\": \"34984088841\",\n    \"email\": \"crosara.araujo@gmail.com\",\n\n   \n     \"street\": \"Rua A\",\n     \"number\": \"1033\",\n     \"city\": \"Uberlandia\",\n     \"country\": \"MG\",\n     \"portalCode\": \"38411178\",\n\n   \n     \"foodCardNumber\": \"1\",\n     \"foodCardBalance\": \"100\",\n\n     \"fuelCardNumber\": \"2\",\n     \"fuelCardBalance\": \"100\",\n\n     \"drugstoreNumber\": \"3\",\n     \"drugstoreCardBalance\": \"100\"\n\n\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumer/createConsumer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"createConsumer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update consumer",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"id\": 1,\n     \"name\": \"MARCELO SANTOS ARAUJO\",\n     \"documentNumber\": \"05462226683\",\n     \"birthDate\": \"1981-12-26\",\n\n    \n    \"mobilePhoneNumber\": \"34984088841\",\n    \"residencePhoneNumber\": \"3432381186\",\n    \"phoneNumber\": \"34984088841\",\n    \"email\": \"crosara.araujo@gmail.com\",\n\n   \n     \"street\": \"Rua A\",\n     \"number\": \"1033\",\n     \"city\": \"Uberlandia\",\n     \"country\": \"BRASIL\",\n     \"portalCode\": \"38411178\",\n\n   \n     \"foodCardNumber\": \"1\",\n     \"foodCardBalance\": \"100\",\n\n     \"fuelCardNumber\": \"2\",\n     \"fuelCardBalance\": \"100\",\n\n     \"drugstoreNumber\": \"3\",\n     \"drugstoreCardBalance\": \"100\"\n\n\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumer/updateConsumer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"updateConsumer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set card balance",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"name\": \"MARCELO SANTOS ARAUJO\",\n     \"documentNumber\": \"05462226683\",\n     \"birthDate\": \"1981-12-26\",\n\n    \n    \"mobilePhoneNumber\": \"34984088841\",\n    \"residencePhoneNumber\": \"3432381186\",\n    \"phoneNumber\": \"34984088841\",\n    \"email\": \"crosara.araujo@gmail.com\",\n\n   \n     \"street\": \"Rua A\",\n     \"number\": \"1033\",\n     \"city\": \"Uberlandia\",\n     \"country\": \"MG\",\n     \"portalCode\": \"38411178\",\n\n   \n     \"foodCardNumber\": \"1\",\n     \"foodCardBalance\": \"100\",\n\n     \"fuelCardNumber\": \"2\",\n     \"fuelCardBalance\": \"100\",\n\n     \"drugstoreNumber\": \"3\",\n     \"drugstoreCardBalance\": \"100\"\n\n\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumer/setcardbalance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"setcardbalance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"establishmentType\": 1,\n\t\"establishmentName\": \"A\",\n\t\"cardNumber\": 2,\n\t\"productDescription\": \"X\",\n\t\"value\": \"4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consumer/buy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consumer",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
