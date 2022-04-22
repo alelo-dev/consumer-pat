@@ -29,6 +29,4 @@ public class Request extends BaseEntity {
     @JoinColumn(name = "consumer_id", nullable = false)
     private Consumer consumer;
 
-
-
 }
