@@ -1,0 +1,35 @@
+insert into country (id, name) values (1, 'Brasil');
+
+insert into state (id, name, country_id) values (1, 'Acre', 1);
+insert into state (id, name, country_id) values (2, 'Alagoas', 1);
+insert into state (id, name, country_id) values (3, 'Amazonas', 1);
+insert into state (id, name, country_id) values (4, 'Amapá', 1);
+insert into state (id, name, country_id) values (5, 'Bahia', 1);
+insert into state (id, name, country_id) values (6, 'Ceará', 1);
+insert into state (id, name, country_id) values (7, 'Distrito Federal', 1);
+insert into state (id, name, country_id) values (8, 'Espírito Santo', 1);
+insert into state (id, name, country_id) values (9, 'Goiás', 1);
+insert into state (id, name, country_id) values (10, 'Maranhão', 1);
+insert into state (id, name, country_id) values (11, 'Minas Gerais', 1);
+insert into state (id, name, country_id) values (12, 'Mato Grosso do Sul', 1);
+insert into state (id, name, country_id) values (13, 'Mato Grosso', 1);
+insert into state (id, name, country_id) values (14, 'Pará', 1);
+insert into state (id, name, country_id) values (15, 'Paraíba', 1);
+insert into state (id, name, country_id) values (16, 'Pernambuco', 1);
+insert into state (id, name, country_id) values (17, 'Paraná', 1);
+insert into state (id, name, country_id) values (18, 'Piauí', 1);
+insert into state (id, name, country_id) values (19, 'Rio de Janeiro', 1);
+insert into state (id, name, country_id) values (20, 'Rio Grande do Norte', 1);
+insert into state (id, name, country_id) values (21, 'Rondônia', 1);
+insert into state (id, name, country_id) values (22, 'Roraima', 1);
+insert into state (id, name, country_id) values (23, 'Rio Grande do Sul', 1);
+insert into state (id, name, country_id) values (24, 'Santa Catarina', 1);
+insert into state (id, name, country_id) values (25, 'Sergipe', 1);
+insert into state (id, name, country_id) values (26, 'São Paulo', 1);
+insert into state (id, name, country_id) values (27, 'Tocantins', 1);
+
+insert into city (id, name, state_id) values (1, 'Uberlândia', 11);
+insert into city (id, name, state_id) values (2, 'Belo Horizonte', 11);
+insert into city (id, name, state_id) values (3, 'São Paulo', 26);
+insert into city (id, name, state_id) values (4, 'Campinas', 26);
+insert into city (id, name, state_id) values (5, 'Fortaleza', 6);
