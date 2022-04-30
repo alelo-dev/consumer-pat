@@ -26,7 +26,7 @@ public class Consumer implements Cloneable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Long documentNumber;
+    private long documentNumber;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -61,12 +61,12 @@ public class Consumer implements Cloneable{
     @Column(precision = 20, scale = 2)
     private BigDecimal drugstoreCardBalance = BigDecimal.ZERO;
 
-    public Consumer(String name, Long documentNumber) {
+    public Consumer(String name, long documentNumber) {
         this.name = name;
         this.documentNumber = documentNumber;
     }
 
-    public Consumer(String name, Long documentNumber, Long foodCardNumber, Long fuelCardNumber, Long drugstoreNumber) {
+    public Consumer(String name, long documentNumber, Long foodCardNumber, Long fuelCardNumber, Long drugstoreNumber) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.foodCardNumber = foodCardNumber;
