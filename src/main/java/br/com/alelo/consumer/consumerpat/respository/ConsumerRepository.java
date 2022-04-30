@@ -5,18 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
+public interface ConsumerRepository extends JpaRepository<Consumer, Long> {
 
-    @Query(nativeQuery = true, value = "select * from Consumer")
-    List<Consumer> getAllConsumersList();
+    @Query(" select c FROM Consumer c WHERE (c.foodCardNumber=:cardNumber OR c.fuelCardNumber = :cardNumber OR c.drugstoreNumber = :cardNumber)")
+    Optional<Consumer> findOneByDrugstoreNumberOrFoodCardNumberOrFuelCardNumber(Long cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
-    Consumer findByFoodCardNumber(int cardNumber);
+    boolean existsByDocumentNumber(Long documentNumber);
+    boolean existsByFoodCardNumber(Long foodCardNumber);
+    boolean existsByFuelCardNumber(Long fuelCardNumber);
+    boolean existsByDrugstoreNumber(Long drugstoreNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
-    Consumer findByFuelCardNumber(int cardNumber);
-
-    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
-    Consumer findByDrugstoreNumber(int cardNumber);
 }
