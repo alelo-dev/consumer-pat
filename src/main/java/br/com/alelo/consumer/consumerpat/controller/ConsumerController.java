@@ -42,7 +42,7 @@ public class ConsumerController {
     @GetMapping(value = "/findById/{id}")
     public Consumer findConsumer(@PathVariable(value = "id") Long id) {
 
-        return consumerService.findConsumerById(id);
+        return consumerService.findById(id);
     }
 
     // Não deve ser possível alterar o saldo do cartão

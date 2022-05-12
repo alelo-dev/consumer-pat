@@ -22,12 +22,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType.*;
 import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.*;
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-class CardServiceTest {
+public class CardServiceTest {
 
     @Mock
     private CardRepository cardRepository;
@@ -73,8 +72,21 @@ class CardServiceTest {
 
         cardService.saveAll(cards);
 
-        verify(cardValidator, times(1)).accept(card);
-        verify(cardRepository, times(1)).saveAll(cards);
+        verify(cardValidator, times(1)).accept(any(Card.class));
+        verify(cardRepository, times(1)).saveAll(anyList());
+    }
+
+    @Test
+    public void testAdjustCard() {
+
+        final String maskedNumber = "1.2.3";
+        card.setNumber(maskedNumber);
+
+        assertEquals(maskedNumber, card.getNumber());
+        cardService.adjustCard(card);
+
+        assertEquals("123", card.getNumber());
+        verify(cardValidator, times(1)).accept(any(Card.class));
     }
 
     @Test
@@ -87,7 +99,7 @@ class CardServiceTest {
                 Card.builder().id(1L).number(cardNumber).type(FOOD).balance(100.0).discontinued(false).build();
         final Consumer consumer = Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
-        when(cardRepository.findByCardNumber(eq(addBalanceRequest.getCardNumber()))).thenReturn(Optional.of(card));
+        when(cardRepository.findByCardNumber(eq(addBalanceRequest.getCardNumber()))).thenReturn(of(card));
         when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                 .thenReturn(consumer);
 
@@ -146,7 +158,7 @@ class CardServiceTest {
         final Consumer consumer = Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
         when(establishmentService.getOrCreate(eq(establishment))).thenReturn(establishment);
-        when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+        when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(of(card));
         when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                 .thenReturn(consumer);
 
@@ -183,7 +195,7 @@ class CardServiceTest {
                     Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
             when(establishmentService.getOrCreate(eq(establishment))).thenReturn(establishment);
-            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(of(card));
             when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                     .thenReturn(consumer);
 
@@ -201,7 +213,7 @@ class CardServiceTest {
                     new Date(), 10.0);
 
             when(establishmentService.getOrCreate(any(Establishment.class))).thenReturn(new Establishment());
-            when(cardRepository.findByCardNumber(eq(buyRequest.getCardNumber()))).thenReturn(Optional.empty());
+            when(cardRepository.findByCardNumber(eq(buyRequest.getCardNumber()))).thenReturn(empty());
 
             cardService.buySomething(buyRequest);
         });
@@ -223,7 +235,7 @@ class CardServiceTest {
                     Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
             when(establishmentService.getOrCreate(any(Establishment.class))).thenReturn(new Establishment());
-            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(of(card));
             when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                     .thenReturn(consumer);
 
@@ -249,7 +261,7 @@ class CardServiceTest {
                     Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
             when(establishmentService.getOrCreate(eq(establishment))).thenReturn(establishment);
-            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(of(card));
             when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                     .thenReturn(consumer);
 

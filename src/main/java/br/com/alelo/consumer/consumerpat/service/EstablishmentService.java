@@ -3,17 +3,18 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
+import br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType;
+import br.com.alelo.consumer.consumerpat.validator.EstablishmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType;
 
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Objects.isNull;
-import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.ESTABLISHMENT_MISSING_ID;
+import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.ESTABLISHMENT_MISSING_FIELD;
 import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.ESTABLISHMENT_NOT_FOUND;
+import static java.util.Objects.isNull;
 
 @Service
 public class EstablishmentService {
@@ -24,15 +25,18 @@ public class EstablishmentService {
     @Autowired
     EstablishmentRepository establishmentRepository;
 
+    @Autowired
+    EstablishmentValidator validator;
+
     public Establishment createEstablishment(final Establishment establishment) {
 
+        validator.accept(establishment);
         return establishmentRepository.save(establishment);
     }
 
     public Establishment getOrCreate(final Establishment establishment) {
 
-        //checando o estabelecimento primeiro, porque mesmo se der erro posteriormente,
-        //um estabelecimento novo ainda pode ser criado
+        validator.accept(establishment);
         final Optional<Establishment> persistedEstablishment = findEstablishmentByNameAndType(establishment.getName(),
                 establishment.getType());
         if (persistedEstablishment.isEmpty()) {
@@ -47,13 +51,18 @@ public class EstablishmentService {
         //forçando saber o ID para se houver algum caso de um estabelecimento tiver 2 cadastros diferentes
         //exemplo um posto com loja de conveniência
         if (isNull(establishment.getId())) {
-            throw new CustomException(messageService.get(ESTABLISHMENT_MISSING_ID.getMessage()),
-                    HttpStatus.BAD_REQUEST, ESTABLISHMENT_MISSING_ID.getCode());
+            throw new CustomException(messageService.get(ESTABLISHMENT_MISSING_FIELD.getMessage(), "id"),
+                    HttpStatus.BAD_REQUEST, ESTABLISHMENT_MISSING_FIELD.getCode());
         }
-        Optional<Establishment> persistedEstablishment = establishmentRepository.findById(establishment.getId());
 
-        if (persistedEstablishment.isPresent()) {
-            establishment.setId(persistedEstablishment.get().getId());
+        validator.accept(establishment);
+        Optional<Establishment> checkPersistedEstablishment = establishmentRepository.findById(establishment.getId());
+
+        if (checkPersistedEstablishment.isPresent()) {
+            final Establishment persistedEstablishment = checkPersistedEstablishment.get();
+            establishment.setId(persistedEstablishment.getId());
+            //impedindo que o tipo seja mudado, por questão de integridade da informação dos extratos
+            establishment.setType(persistedEstablishment.getType());
             establishmentRepository.save(establishment);
         } else {
             throw new CustomException(messageService.get(ESTABLISHMENT_NOT_FOUND.getMessage(), establishment.getId()),

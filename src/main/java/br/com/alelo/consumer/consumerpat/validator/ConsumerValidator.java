@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.validator;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.service.MessageService;
+import br.com.alelo.consumer.consumerpat.utils.MaskUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class ConsumerValidator implements java.util.function.Consumer<Consumer> 
                     HttpStatus.BAD_REQUEST, CONSUMER_MISSING_FIELD.getCode());
         }
 
-        final String documentNumberWithoutMask = consumer.getDocumentNumber().replaceAll("\\.", "").replaceAll("-", "");
+        final String documentNumberWithoutMask = MaskUtils.removeDocumentNumberMask(consumer.getDocumentNumber());
         try {
             Long.parseLong(documentNumberWithoutMask);
         } catch (NumberFormatException nfe) {

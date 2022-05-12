@@ -7,6 +7,7 @@ import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.model.request.AddBalanceRequest;
 import br.com.alelo.consumer.consumerpat.model.request.BuyRequest;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
+import br.com.alelo.consumer.consumerpat.utils.MaskUtils;
 import br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType;
 import br.com.alelo.consumer.consumerpat.validator.CardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,14 @@ public class CardService {
     CardValidator validator;
 
     public void saveAll(final List<Card> cards) {
-        cards.forEach(card -> validator.accept(card));
+        cards.forEach(this::adjustCard);
+
         cardRepository.saveAll(cards);
+    }
+
+    public void adjustCard(final Card card) {
+        validator.accept(card);
+        card.setNumber(MaskUtils.removeCardNumberMask(card.getNumber()));
     }
 
     public void addBalance(final AddBalanceRequest addBalanceRequest) {

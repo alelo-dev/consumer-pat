@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.utils.MaskUtils;
 import br.com.alelo.consumer.consumerpat.validator.ConsumerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,26 +22,26 @@ import static org.hibernate.internal.util.collections.CollectionHelper.isNotEmpt
 public class ConsumerService {
 
     @Autowired
-    MessageService messageService;
-
-    @Autowired
     ConsumerRepository consumerRepository;
 
     @Autowired
     CardService cardService;
 
     @Autowired
+    MessageService messageService;
+
+    @Autowired
     ConsumerValidator consumerValidator;
 
     public void createConsumer(Consumer consumer) {
 
-        consumerValidator.accept(consumer);
+        adjustConsumer(consumer);
         consumerRepository.save(consumer);
     }
 
     public void updateConsumer(Consumer consumer) {
 
-        consumerValidator.accept(consumer);
+        adjustConsumer(consumer);
         final Optional<Consumer> checkPersistedConsumer =
                 consumerRepository.findConsumerByDocumentNumber(consumer.getDocumentNumber());
         if (checkPersistedConsumer.isEmpty()) {
@@ -53,38 +54,51 @@ public class ConsumerService {
 
         consumer.setId(persistedConsumer.getId());
 
-        if (isNotEmpty(consumer.getCards())) {
-            final List<Card> consumerPersistedCards = persistedConsumer.getCards();
+        updateConsumerCards(consumer.getCards(), persistedConsumer.getCards());
+
+        consumerRepository.save(consumer);
+    }
+
+    //protected para teste unitário
+    protected void adjustConsumer(Consumer consumer) {
+
+        consumerValidator.accept(consumer);
+        consumer.setDocumentNumber(MaskUtils.removeDocumentNumberMask(consumer.getDocumentNumber()));
+        consumer.getCards().forEach(card -> cardService.adjustCard(card));
+
+    }
+
+    //protected para teste unitário
+    protected void updateConsumerCards(List<Card> updatedConsumerCards, List<Card> consumerPersistedCards) {
+        if (isNotEmpty(updatedConsumerCards)) {
             final List<Card> discontinuedCards =
-                    consumer.getCards().stream().filter(Card::isDiscontinued).collect(Collectors.toList());
-            List<Card> newCards = consumer.getCards();
-            newCards.removeAll(discontinuedCards);
+                    updatedConsumerCards.stream().filter(Card::isDiscontinued).collect(Collectors.toList());
+            updatedConsumerCards.removeAll(discontinuedCards);
 
             //tirando cartões já existentes para travar mudança do saldo
-            newCards.removeIf(card -> consumerPersistedCards.stream()
+            updatedConsumerCards.removeIf(card -> consumerPersistedCards.stream()
                     .anyMatch(consumerCard -> card.getNumber().equals(consumerCard.getNumber())));
 
             //atualizando status do cartão
             consumerPersistedCards.forEach(card ->
+                    //deve ter o mesmo número e tipo senão é desconsiderado
                     discontinuedCards.stream()
-                            .filter(discontinuedCard -> card.getNumber().equals(discontinuedCard.getNumber()))
+                            .filter(discontinuedCard -> card.getNumber()
+                                    .equals(discontinuedCard.getNumber()) && card.getType().equals(discontinuedCard.getType()))
                             .findFirst().ifPresent(match -> {
                                 card.setDiscontinued(true);
                                 discontinuedCards.remove(match);
                             }));
 
-            newCards.addAll(consumerPersistedCards);
+            updatedConsumerCards.addAll(consumerPersistedCards);
         }
-
-        consumerRepository.save(consumer);
     }
-
 
     public List<Consumer> findAll() {
         return consumerRepository.findAll();
     }
 
-    public Consumer findConsumerById(final Long id) {
+    public Consumer findById(final Long id) {
 
         Optional<Consumer> response = consumerRepository.findById(id);
 

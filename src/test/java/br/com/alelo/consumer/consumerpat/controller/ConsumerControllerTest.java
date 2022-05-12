@@ -75,7 +75,7 @@ class ConsumerControllerTest {
 
         final Long consumerId = 1L;
 
-        when(consumerService.findConsumerById(eq(consumerId))).thenReturn(consumer);
+        when(consumerService.findById(eq(consumerId))).thenReturn(consumer);
 
         mockMvc.perform(get("/consumer/findById/" + consumerId)).andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(consumer)));
