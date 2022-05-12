@@ -33,13 +33,13 @@ public class EstablishmentService {
 
         //checando o estabelecimento primeiro, porque mesmo se der erro posteriormente,
         //um estabelecimento novo ainda pode ser criado
-        final Establishment persistedEstablishment = findEstablishmentByNameAndType(establishment.getName(),
+        final Optional<Establishment> persistedEstablishment = findEstablishmentByNameAndType(establishment.getName(),
                 establishment.getType());
-        if (isNull(persistedEstablishment)) {
+        if (persistedEstablishment.isEmpty()) {
             return createEstablishment(establishment);
         }
 
-        return persistedEstablishment;
+        return persistedEstablishment.get();
     }
 
     public void updateEstablishment(final Establishment establishment) {
@@ -76,15 +76,9 @@ public class EstablishmentService {
                 HttpStatus.NOT_FOUND, ESTABLISHMENT_NOT_FOUND.getCode());
     }
 
-    public Establishment findEstablishmentByNameAndType(final String name, final CardAndEstablishmentType type) {
+    public Optional<Establishment> findEstablishmentByNameAndType(final String name,
+                                                                  final CardAndEstablishmentType type) {
 
-        Optional<Establishment> response = establishmentRepository.findEstablishmentByNameAndType(name, type.name());
-        if (response.isPresent()) {
-            return response.get();
-        }
-
-        throw new CustomException(messageService.get(ESTABLISHMENT_NOT_FOUND.getMessage(),
-                "name and type", String.format("%s - %s", name, type.name())), HttpStatus.NOT_FOUND,
-                ESTABLISHMENT_NOT_FOUND.getCode());
+        return establishmentRepository.findEstablishmentByNameAndType(name, type.name());
     }
 }
