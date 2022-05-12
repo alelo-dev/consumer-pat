@@ -1,0 +1,125 @@
+package br.com.alelo.consumer.consumerpat.service;
+
+import br.com.alelo.consumer.consumerpat.entity.Card;
+import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.entity.Establishment;
+import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
+import br.com.alelo.consumer.consumerpat.model.request.AddBalanceRequest;
+import br.com.alelo.consumer.consumerpat.model.request.BuyRequest;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import utils.types.CardAndEstablishmentType;
+
+import java.util.List;
+
+import static java.util.Objects.isNull;
+import static utils.types.ExceptionsType.*;
+
+@Service
+public class CardService {
+
+    @Autowired
+    CardRepository cardRepository;
+
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    ConsumerService consumerService;
+
+    @Autowired
+    EstablishmentService establishmentService;
+
+    @Autowired
+    ExtractService extractService;
+
+    public void saveAll(final List<Card> cards) {
+        cardRepository.saveAll(cards);
+    }
+
+    public void addBalance(final AddBalanceRequest addBalanceRequest) {
+
+        if (addBalanceRequest.getValue() < 0) {
+            throw new CustomException(messageService.get(CARD_ILLEGAL_BALANCE_UPDATE.getMessage()),
+                    HttpStatus.BAD_REQUEST, CARD_ILLEGAL_BALANCE_UPDATE.getCode());
+        }
+
+        final Card persistedCard = cardRepository.findByCardNumber(addBalanceRequest.getCardNumber());
+
+        if (persistedCard != null) {
+            //garantia extra que está sendo adicionado valor pro cartão do consumidor desejado
+            checkIfCardBelongsToConsumer(addBalanceRequest.getConsumerDocumentNumber(), persistedCard);
+
+            persistedCard.setBalance(persistedCard.getBalance() + addBalanceRequest.getValue());
+            cardRepository.save(persistedCard);
+        }
+    }
+
+    private void checkIfCardBelongsToConsumer(final String consumerDocumentNumber, final Card persistedCard) {
+        final Consumer persistedConsumer = consumerService.findConsumerById(persistedCard.getId());
+
+        if (!persistedConsumer.getDocumentNumber().equals(consumerDocumentNumber)) {
+            throw new CustomException(messageService.get(CARD_NOT_FROM_CONSUMER.getMessage()), HttpStatus.BAD_REQUEST,
+                    CARD_NOT_FROM_CONSUMER.getCode());
+        }
+    }
+
+    public void buySomething(BuyRequest buyRequest) {
+
+        final Establishment persistedEstablishment = establishmentService.getOrCreate(buyRequest.getEstablishment());
+
+        final Card persistedCard = cardRepository.findByCardNumber(buyRequest.getCardNumber());
+        if (isNull(persistedCard)) {
+            throw new CustomException(messageService.get(CARD_NOT_FOUND.getMessage(), buyRequest.getCardNumber()),
+                    HttpStatus.BAD_REQUEST, CARD_NOT_FOUND.getCode());
+        }
+
+        checkIfCardBelongsToConsumer(buyRequest.getConsumerDocumentNumber(), persistedCard);
+
+        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da
+        compra.
+         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do
+         cartão e alimentação
+         *
+         * Tipos de estabelcimentos
+         * 1 - Alimentação (food)
+         * 2 - Farmácia (DrugStore)
+         * 3 - Posto de combustivel (Fuel)
+         */
+        double finalValue = buyRequest.getValue();
+        checkIfPurchaseIsPossible(persistedCard, buyRequest.getEstablishment().getType());
+        switch (buyRequest.getEstablishment().getType()) {
+            case DRUGSTORE:
+                //após estruturação, não há mais regra pra esse caso
+                break;
+            case FOOD:
+                finalValue *= 0.9;
+                break;
+            case FUEL:
+                finalValue *= 1.35;
+                break;
+        }
+
+        persistedCard.setBalance(persistedCard.getBalance() - finalValue);
+
+        if (persistedCard.getBalance() < 0) {
+            throw new CustomException(messageService.get(PURCHASE_BLOCKED_BALANCE.getMessage()), HttpStatus.BAD_REQUEST,
+                    PURCHASE_BLOCKED_BALANCE.getCode());
+        }
+
+        cardRepository.save(persistedCard);
+
+        extractService.createExtract(buyRequest, persistedEstablishment, persistedCard);
+    }
+
+    private void checkIfPurchaseIsPossible(final Card persistedCard, final CardAndEstablishmentType type) {
+        if (persistedCard.getCardType() != type) {
+            throw new CustomException(messageService.get(PURCHASE_BLOCKED_TYPE.getMessage(),
+                    persistedCard.getCardType().name(), type.name()), HttpStatus.BAD_REQUEST,
+                    PURCHASE_BLOCKED_TYPE.getCode());
+        }
+    }
+
+}
