@@ -32,9 +32,6 @@ public class ConsumerService {
 
     public void createConsumer(Consumer consumer) {
 
-//        if (isNotEmpty(consumer.getCards())) {
-//            cardService.saveAll(consumer.getCards());
-//        }
         consumerRepository.save(consumer);
     }
 
@@ -45,12 +42,15 @@ public class ConsumerService {
                     HttpStatus.BAD_REQUEST, CONSUMER_MISSING_DOCUMENT.getCode());
         }
 
-        final Consumer persistedConsumer = consumerRepository.getConsumerByDocumentNumber(consumer.getDocumentNumber());
-        if (isNull(persistedConsumer)) {
+        final Optional<Consumer> checkPersistedConsumer =
+                consumerRepository.findConsumerByDocumentNumber(consumer.getDocumentNumber());
+        if (checkPersistedConsumer.isEmpty()) {
             throw new CustomException(messageService.get(CONSUMER_NOT_FOUND.getMessage(), "document number",
                     consumer.getDocumentNumber()), HttpStatus.NOT_FOUND,
                     CONSUMER_NOT_FOUND.getCode());
         }
+
+        final Consumer persistedConsumer = checkPersistedConsumer.get();
 
         consumer.setId(persistedConsumer.getId());
 
@@ -62,21 +62,17 @@ public class ConsumerService {
             newCards.removeAll(discontinuedCards);
 
             //tirando cartões já existentes para travar mudança do saldo
-            newCards.removeIf(card -> {
-                Optional<Card> sameCard = consumerPersistedCards.stream()
-                        .filter(consumerCard -> card.getNumber().equals(consumerCard.getNumber())).findFirst();
-                return sameCard.isPresent();
-            });
+            newCards.removeIf(card -> consumerPersistedCards.stream()
+                    .anyMatch(consumerCard -> card.getNumber().equals(consumerCard.getNumber())));
 
             //atualizando status do cartão
-            consumerPersistedCards.forEach(card -> {
-                final Optional<Card> match = discontinuedCards.stream()
-                        .filter(discontinuedCard -> card.getNumber().equals(discontinuedCard.getNumber())).findFirst();
-                if (match.isPresent()) {
-                    card.setDiscontinued(true);
-                    discontinuedCards.remove(match.get());
-                }
-            });
+            consumerPersistedCards.forEach(card ->
+                    discontinuedCards.stream()
+                            .filter(discontinuedCard -> card.getNumber().equals(discontinuedCard.getNumber()))
+                            .findFirst().ifPresent(match -> {
+                                card.setDiscontinued(true);
+                                discontinuedCards.remove(match);
+                            }));
 
             newCards.addAll(consumerPersistedCards);
         }
@@ -99,5 +95,17 @@ public class ConsumerService {
 
         throw new CustomException(messageService.get(CONSUMER_NOT_FOUND.getMessage(), "id", id), HttpStatus.NOT_FOUND,
                 CONSUMER_NOT_FOUND.getCode());
+    }
+
+    public Consumer findConsumerByDocumentNumber(final String documentNumber) {
+
+        Optional<Consumer> response = consumerRepository.findConsumerByDocumentNumber(documentNumber);
+
+        if (response.isPresent()) {
+            return response.get();
+        }
+
+        throw new CustomException(messageService.get(CONSUMER_NOT_FOUND.getMessage(), "document number",
+                documentNumber), HttpStatus.NOT_FOUND, CONSUMER_NOT_FOUND.getCode());
     }
 }

@@ -15,7 +15,8 @@ public enum ExceptionsType {
     ESTABLISHMENT_MISSING_ID("establishment.missing.id", "EST02E"),
     ESTABLISHMENT_NOT_FOUND("establishment.not.found", "EST01E"),
     PURCHASE_BLOCKED_BALANCE("purchase.blocked.balance", "BUY01E"),
-    PURCHASE_BLOCKED_TYPE("purchase.blocked.type", "BUY02E");
+    PURCHASE_BLOCKED_DISCONTINUED("purchase.blocked.discontinued", "BUY01E"),
+    PURCHASE_BLOCKED_TYPE("purchase.blocked.type", "BUY03E");
     private final String message;
 
     private final String code;

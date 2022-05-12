@@ -23,12 +23,12 @@ public class Card {
     @Column(length = 25, nullable = false)
     private String number;
 
-    @Column(precision = 15, scale = 2, nullable = false)
-    private Double balance;
-
     @Column(length = 15, nullable = false)
     @Enumerated(EnumType.STRING)
-    private CardAndEstablishmentType cardType;
+    private CardAndEstablishmentType type;
+
+    @Column(precision = 15, scale = 2, nullable = false)
+    private Double balance;
 
     @Column(nullable = false)
     private boolean discontinued;

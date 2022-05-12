@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 import utils.types.CardAndEstablishmentType;
 
 import java.util.List;
+import java.util.Optional;
 
-import static java.util.Objects.isNull;
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static utils.types.ExceptionsType.*;
 
 @Service
@@ -46,21 +47,21 @@ public class CardService {
                     HttpStatus.BAD_REQUEST, CARD_ILLEGAL_BALANCE_UPDATE.getCode());
         }
 
-        final Card persistedCard = cardRepository.findByCardNumber(addBalanceRequest.getCardNumber());
+        cardRepository.findByCardNumber(addBalanceRequest.getCardNumber()).ifPresent(persistedCard -> {
 
-        if (persistedCard != null) {
             //garantia extra que está sendo adicionado valor pro cartão do consumidor desejado
             checkIfCardBelongsToConsumer(addBalanceRequest.getConsumerDocumentNumber(), persistedCard);
 
             persistedCard.setBalance(persistedCard.getBalance() + addBalanceRequest.getValue());
             cardRepository.save(persistedCard);
-        }
+        });
     }
 
     private void checkIfCardBelongsToConsumer(final String consumerDocumentNumber, final Card persistedCard) {
-        final Consumer persistedConsumer = consumerService.findConsumerById(persistedCard.getId());
+        final Consumer persistedConsumer = consumerService.findConsumerByDocumentNumber(consumerDocumentNumber);
 
-        if (!persistedConsumer.getDocumentNumber().equals(consumerDocumentNumber)) {
+        if (isEmpty(persistedConsumer.getCards()) || persistedConsumer.getCards().stream()
+                .noneMatch(card -> card.getNumber().equals(persistedCard.getNumber()) && !card.isDiscontinued())) {
             throw new CustomException(messageService.get(CARD_NOT_FROM_CONSUMER.getMessage()), HttpStatus.BAD_REQUEST,
                     CARD_NOT_FROM_CONSUMER.getCode());
         }
@@ -70,12 +71,13 @@ public class CardService {
 
         final Establishment persistedEstablishment = establishmentService.getOrCreate(buyRequest.getEstablishment());
 
-        final Card persistedCard = cardRepository.findByCardNumber(buyRequest.getCardNumber());
-        if (isNull(persistedCard)) {
+        final Optional<Card> checkPersistedCard = cardRepository.findByCardNumber(buyRequest.getCardNumber());
+        if (checkPersistedCard.isEmpty()) {
             throw new CustomException(messageService.get(CARD_NOT_FOUND.getMessage(), buyRequest.getCardNumber()),
                     HttpStatus.BAD_REQUEST, CARD_NOT_FOUND.getCode());
         }
 
+        final Card persistedCard = checkPersistedCard.get();
         checkIfCardBelongsToConsumer(buyRequest.getConsumerDocumentNumber(), persistedCard);
 
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da
@@ -115,9 +117,13 @@ public class CardService {
     }
 
     private void checkIfPurchaseIsPossible(final Card persistedCard, final CardAndEstablishmentType type) {
-        if (persistedCard.getCardType() != type) {
+        if (persistedCard.isDiscontinued()) {
+            throw new CustomException(messageService.get(PURCHASE_BLOCKED_DISCONTINUED.getMessage(),
+                    persistedCard.getType().name(), type.name()), HttpStatus.BAD_REQUEST,
+                    PURCHASE_BLOCKED_DISCONTINUED.getCode());
+        } else if (persistedCard.getType() != type) {
             throw new CustomException(messageService.get(PURCHASE_BLOCKED_TYPE.getMessage(),
-                    persistedCard.getCardType().name(), type.name()), HttpStatus.BAD_REQUEST,
+                    persistedCard.getType().name(), type.name()), HttpStatus.BAD_REQUEST,
                     PURCHASE_BLOCKED_TYPE.getCode());
         }
     }

@@ -8,7 +8,10 @@ import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class ExtractService {
@@ -16,7 +19,11 @@ public class ExtractService {
     @Autowired
     ExtractRepository extractRepository;
 
-    public void createExtract(BuyRequest request, Establishment establishment, Card card) {
+    public void createExtract(final BuyRequest request, final Establishment establishment, final Card card) {
+
+        if (isNull(request.getDateBuy())) {
+            request.setDateBuy(new Date());
+        }
 
         final Extract extract = new Extract(null, request.getProductDescription(), request.getDateBuy(),
                 request.getValue(), establishment, card);

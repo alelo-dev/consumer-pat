@@ -72,12 +72,19 @@ public class EstablishmentService {
             return response.get();
         }
 
-        throw new CustomException(messageService.get(ESTABLISHMENT_NOT_FOUND.getMessage(), id), HttpStatus.NOT_FOUND,
-                ESTABLISHMENT_NOT_FOUND.getCode());
+        throw new CustomException(messageService.get(ESTABLISHMENT_NOT_FOUND.getMessage(), "id", id),
+                HttpStatus.NOT_FOUND, ESTABLISHMENT_NOT_FOUND.getCode());
     }
 
     public Establishment findEstablishmentByNameAndType(final String name, final CardAndEstablishmentType type) {
 
-        return establishmentRepository.findEstablishmentByNameAndType(name, type.name());
+        Optional<Establishment> response = establishmentRepository.findEstablishmentByNameAndType(name, type.name());
+        if (response.isPresent()) {
+            return response.get();
+        }
+
+        throw new CustomException(messageService.get(ESTABLISHMENT_NOT_FOUND.getMessage(),
+                "name and type", String.format("%s - %s", name, type.name())), HttpStatus.NOT_FOUND,
+                ESTABLISHMENT_NOT_FOUND.getCode());
     }
 }
