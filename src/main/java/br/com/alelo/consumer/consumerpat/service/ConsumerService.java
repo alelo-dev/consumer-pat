@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.validator.ConsumerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.isNull;
+import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.CONSUMER_NOT_FOUND;
 import static org.hibernate.internal.util.collections.CollectionHelper.isNotEmpty;
-import static utils.types.ExceptionsType.CONSUMER_MISSING_DOCUMENT;
-import static utils.types.ExceptionsType.CONSUMER_NOT_FOUND;
 
 
 @Service
@@ -30,18 +29,18 @@ public class ConsumerService {
     @Autowired
     CardService cardService;
 
+    @Autowired
+    ConsumerValidator consumerValidator;
+
     public void createConsumer(Consumer consumer) {
 
+        consumerValidator.accept(consumer);
         consumerRepository.save(consumer);
     }
 
     public void updateConsumer(Consumer consumer) {
 
-        if (isNull(consumer.getDocumentNumber()) || "".equals(consumer.getDocumentNumber())) {
-            throw new CustomException(messageService.get(CONSUMER_MISSING_DOCUMENT.getMessage()),
-                    HttpStatus.BAD_REQUEST, CONSUMER_MISSING_DOCUMENT.getCode());
-        }
-
+        consumerValidator.accept(consumer);
         final Optional<Consumer> checkPersistedConsumer =
                 consumerRepository.findConsumerByDocumentNumber(consumer.getDocumentNumber());
         if (checkPersistedConsumer.isEmpty()) {

@@ -7,16 +7,17 @@ import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.model.request.AddBalanceRequest;
 import br.com.alelo.consumer.consumerpat.model.request.BuyRequest;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
+import br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType;
+import br.com.alelo.consumer.consumerpat.validator.CardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import utils.types.CardAndEstablishmentType;
 
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.*;
 import static org.springframework.util.CollectionUtils.isEmpty;
-import static utils.types.ExceptionsType.*;
 
 @Service
 public class CardService {
@@ -36,7 +37,11 @@ public class CardService {
     @Autowired
     ExtractService extractService;
 
+    @Autowired
+    CardValidator validator;
+
     public void saveAll(final List<Card> cards) {
+        cards.forEach(card -> validator.accept(card));
         cardRepository.saveAll(cards);
     }
 
@@ -61,7 +66,7 @@ public class CardService {
         final Consumer persistedConsumer = consumerService.findConsumerByDocumentNumber(consumerDocumentNumber);
 
         if (isEmpty(persistedConsumer.getCards()) || persistedConsumer.getCards().stream()
-                .noneMatch(card -> card.getNumber().equals(persistedCard.getNumber()) && !card.isDiscontinued())) {
+                .noneMatch(card -> card.getNumber().equals(persistedCard.getNumber()))) {
             throw new CustomException(messageService.get(CARD_NOT_FROM_CONSUMER.getMessage()), HttpStatus.BAD_REQUEST,
                     CARD_NOT_FROM_CONSUMER.getCode());
         }
@@ -118,9 +123,8 @@ public class CardService {
 
     private void checkIfPurchaseIsPossible(final Card persistedCard, final CardAndEstablishmentType type) {
         if (persistedCard.isDiscontinued()) {
-            throw new CustomException(messageService.get(PURCHASE_BLOCKED_DISCONTINUED.getMessage(),
-                    persistedCard.getType().name(), type.name()), HttpStatus.BAD_REQUEST,
-                    PURCHASE_BLOCKED_DISCONTINUED.getCode());
+            throw new CustomException(messageService.get(PURCHASE_BLOCKED_DISCONTINUED.getMessage()),
+                    HttpStatus.BAD_REQUEST, PURCHASE_BLOCKED_DISCONTINUED.getCode());
         } else if (persistedCard.getType() != type) {
             throw new CustomException(messageService.get(PURCHASE_BLOCKED_TYPE.getMessage(),
                     persistedCard.getType().name(), type.name()), HttpStatus.BAD_REQUEST,

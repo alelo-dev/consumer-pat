@@ -1,4 +1,4 @@
-package utils.types;
+package br.com.alelo.consumer.consumerpat.utils.types;
 
 public enum CardAndEstablishmentType {
     

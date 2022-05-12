@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static utils.types.CardAndEstablishmentType.FOOD;
+import static br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType.FOOD;
 
 @WebMvcTest(EstablishmentController.class)
 class EstablishmentControllerTest {

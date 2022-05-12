@@ -7,6 +7,8 @@ import br.com.alelo.consumer.consumerpat.model.exception.CustomException;
 import br.com.alelo.consumer.consumerpat.model.request.AddBalanceRequest;
 import br.com.alelo.consumer.consumerpat.model.request.BuyRequest;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
+import br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType;
+import br.com.alelo.consumer.consumerpat.validator.CardValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,21 +19,20 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import utils.types.CardAndEstablishmentType;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType.*;
+import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.*;
 import static java.util.Optional.ofNullable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static utils.types.CardAndEstablishmentType.*;
-import static utils.types.ExceptionsType.CARD_ILLEGAL_BALANCE_UPDATE;
-import static utils.types.ExceptionsType.CARD_NOT_FROM_CONSUMER;
 
 @ExtendWith(SpringExtension.class)
 class CardServiceTest {
@@ -51,6 +52,9 @@ class CardServiceTest {
     @Mock
     private MessageService messageService;
 
+    @Mock
+    private CardValidator cardValidator;
+
     @InjectMocks
     private CardService cardService;
 
@@ -68,6 +72,8 @@ class CardServiceTest {
         final List<Card> cards = List.of(card);
 
         cardService.saveAll(cards);
+
+        verify(cardValidator, times(1)).accept(card);
         verify(cardRepository, times(1)).saveAll(cards);
     }
 
@@ -81,7 +87,7 @@ class CardServiceTest {
                 Card.builder().id(1L).number(cardNumber).type(FOOD).balance(100.0).discontinued(false).build();
         final Consumer consumer = Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
-        when(cardRepository.findByCardNumber(eq(addBalanceRequest.getCardNumber()))).thenReturn(ofNullable(card));
+        when(cardRepository.findByCardNumber(eq(addBalanceRequest.getCardNumber()))).thenReturn(Optional.of(card));
         when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                 .thenReturn(consumer);
 
@@ -129,7 +135,7 @@ class CardServiceTest {
 
     @ParameterizedTest
     @MethodSource("provideDataForBuySomethingOk")
-    public void testBuySomethingOkDrugstore(CardAndEstablishmentType type, double finalBalance) {
+    public void testBuySomethingOk(CardAndEstablishmentType type, double finalBalance) {
 
         final String documentNumber = "123456";
         final String cardNumber = "1234";
@@ -140,7 +146,7 @@ class CardServiceTest {
         final Consumer consumer = Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
 
         when(establishmentService.getOrCreate(eq(establishment))).thenReturn(establishment);
-        when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(ofNullable(card));
+        when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
         when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
                 .thenReturn(consumer);
 
@@ -159,5 +165,97 @@ class CardServiceTest {
                 Arguments.of(DRUGSTORE, 90),
                 Arguments.of(FOOD, 91),
                 Arguments.of(FUEL, 86.5));
+    }
+
+    @Test
+    public void testBuySomethingInsufficientBalance() {
+
+        final CustomException exceptionThatWasThrown = assertThrows(CustomException.class, () -> {
+            final String documentNumber = "123456";
+            final String cardNumber = "1234";
+            final Establishment establishment =
+                    Establishment.builder().id(1L).name("drugstore").type(DRUGSTORE).build();
+            final BuyRequest buyRequest = new BuyRequest(establishment, cardNumber, "123456", "product", new Date(),
+                    10.0);
+            final Card card =
+                    Card.builder().id(1L).number(cardNumber).type(DRUGSTORE).balance(1.0).discontinued(false).build();
+            final Consumer consumer =
+                    Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
+
+            when(establishmentService.getOrCreate(eq(establishment))).thenReturn(establishment);
+            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+            when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
+                    .thenReturn(consumer);
+
+            cardService.buySomething(buyRequest);
+        });
+
+        assertThat(exceptionThatWasThrown.getInternalErrorCode(), equalTo(PURCHASE_BLOCKED_BALANCE.getCode()));
+    }
+
+    @Test
+    public void testBuySomethingCardNotFound() {
+
+        final CustomException exceptionThatWasThrown = assertThrows(CustomException.class, () -> {
+            final BuyRequest buyRequest = new BuyRequest(new Establishment(), "1234", "123456", "product",
+                    new Date(), 10.0);
+
+            when(establishmentService.getOrCreate(any(Establishment.class))).thenReturn(new Establishment());
+            when(cardRepository.findByCardNumber(eq(buyRequest.getCardNumber()))).thenReturn(Optional.empty());
+
+            cardService.buySomething(buyRequest);
+        });
+
+        assertThat(exceptionThatWasThrown.getInternalErrorCode(), equalTo(CARD_NOT_FOUND.getCode()));
+    }
+
+    @Test
+    public void testBuySomethingCardDiscontinued() {
+
+        final CustomException exceptionThatWasThrown = assertThrows(CustomException.class, () -> {
+            final String documentNumber = "123456";
+            final String cardNumber = "1234";
+            final BuyRequest buyRequest = new BuyRequest(new Establishment(), cardNumber, "123456", "product",
+                    new Date(), 10.0);
+            final Card card =
+                    Card.builder().id(1L).number(cardNumber).type(DRUGSTORE).balance(100.0).discontinued(true).build();
+            final Consumer consumer =
+                    Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
+
+            when(establishmentService.getOrCreate(any(Establishment.class))).thenReturn(new Establishment());
+            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+            when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
+                    .thenReturn(consumer);
+
+            cardService.buySomething(buyRequest);
+        });
+
+        assertThat(exceptionThatWasThrown.getInternalErrorCode(), equalTo(PURCHASE_BLOCKED_DISCONTINUED.getCode()));
+    }
+
+    @Test
+    public void testBuySomethingCardNotMatchingEstablishment() {
+
+        final CustomException exceptionThatWasThrown = assertThrows(CustomException.class, () -> {
+            final String documentNumber = "123456";
+            final String cardNumber = "1234";
+            final Establishment establishment =
+                    Establishment.builder().id(1L).name("drugstore").type(DRUGSTORE).build();
+            final BuyRequest buyRequest = new BuyRequest(establishment, cardNumber, "123456", "product", new Date(),
+                    10.0);
+            final Card card =
+                    Card.builder().id(1L).number(cardNumber).type(FOOD).balance(100.0).discontinued(false).build();
+            final Consumer consumer =
+                    Consumer.builder().id(1L).documentNumber(documentNumber).cards(List.of(card)).build();
+
+            when(establishmentService.getOrCreate(eq(establishment))).thenReturn(establishment);
+            when(cardRepository.findByCardNumber(eq(cardNumber))).thenReturn(Optional.of(card));
+            when(consumerService.findConsumerByDocumentNumber(eq(documentNumber)))
+                    .thenReturn(consumer);
+
+            cardService.buySomething(buyRequest);
+        });
+
+        assertThat(exceptionThatWasThrown.getInternalErrorCode(), equalTo(PURCHASE_BLOCKED_TYPE.getCode()));
     }
 }

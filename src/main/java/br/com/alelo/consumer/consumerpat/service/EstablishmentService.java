@@ -6,14 +6,14 @@ import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import utils.types.CardAndEstablishmentType;
+import br.com.alelo.consumer.consumerpat.utils.types.CardAndEstablishmentType;
 
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
-import static utils.types.ExceptionsType.ESTABLISHMENT_MISSING_ID;
-import static utils.types.ExceptionsType.ESTABLISHMENT_NOT_FOUND;
+import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.ESTABLISHMENT_MISSING_ID;
+import static br.com.alelo.consumer.consumerpat.utils.types.ExceptionsType.ESTABLISHMENT_NOT_FOUND;
 
 @Service
 public class EstablishmentService {
