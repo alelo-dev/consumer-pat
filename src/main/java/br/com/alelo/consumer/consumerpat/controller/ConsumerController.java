@@ -57,7 +57,7 @@ public class ConsumerController {
 
     @ResponseBody
     @GetMapping(value = "/buy")
-    public ResponseEntity buy(@RequestParam int establishmentType, @RequestParam String establishmentName,
+    public ResponseEntity<String> buy(@RequestParam int establishmentType, @RequestParam String establishmentName,
             @RequestParam int cardNumber, @RequestParam String productDescription,
             @RequestParam double value) throws Exception {
         try {
