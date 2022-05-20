@@ -12,8 +12,8 @@ public class ExtractService {
   @Autowired
   ExtractRepository repository;
 
-  public void saveExtract(Extract extract) {
-    repository.save(extract);
+  public Extract saveExtract(Extract extract) {
+    return repository.save(extract);
   }
 
 }

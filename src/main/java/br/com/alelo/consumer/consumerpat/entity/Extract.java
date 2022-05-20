@@ -22,14 +22,14 @@ public class Extract {
     String establishmentName;
     String productDescription;
     Date dateBuy;
-    int cardNumber;
+    String cardNumber;
     double value;
 
-    public Extract(String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(String productDescription, Date dateBuy, String cardNumber, double value) {
         this(0, 0, null, productDescription, dateBuy, cardNumber, value);
     }
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(String establishmentName, String productDescription, Date dateBuy, String cardNumber, double value) {
         this(0, 0, establishmentName, productDescription, dateBuy, cardNumber, value);
 
     }

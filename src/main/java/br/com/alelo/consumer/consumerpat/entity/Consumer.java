@@ -1,10 +1,14 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +26,7 @@ public class Consumer {
     Integer id;
 
     String name;
+    @Column(unique = true)
     String documentNumber;
     Date birthDate;
 
@@ -38,14 +43,6 @@ public class Consumer {
     String country;
     int portalCode;
 
-    // cards
-    int foodCardNumber;
-    double foodCardBalance;
-
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
+    @OneToMany(mappedBy = "consumer")
+    List<Card> cards;
 }
