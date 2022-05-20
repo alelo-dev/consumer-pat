@@ -61,9 +61,9 @@ public class ConsumerServiceTest {
         private Consumer consumer2;
         private Card consumerCardFoodSaved;
         private Card consumerCardFuelSaved;
-        private Card consumerCardDrugstoreSaved;
+
         private Card consumerCardSaved;
-        // private Extract extractToBeSaved;
+
         private Extract extractSaved;
 
         @BeforeEach
@@ -116,14 +116,6 @@ public class ConsumerServiceTest {
                                 .cardNumber("123456789")
                                 .cardBalance(600.0)
                                 .cardType(CardTypeEnum.FUEL)
-                                .consumer(consumerSaved)
-                                .active(true)
-                                .build();
-
-                consumerCardDrugstoreSaved = Card.builder()
-                                .cardNumber("123456789")
-                                .cardBalance(50.0)
-                                .cardType(CardTypeEnum.DRUGSTORE)
                                 .consumer(consumerSaved)
                                 .active(true)
                                 .build();

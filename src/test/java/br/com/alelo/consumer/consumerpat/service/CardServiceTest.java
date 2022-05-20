@@ -2,11 +2,9 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
-import org.hibernate.HibernateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -135,18 +133,51 @@ public class CardServiceTest {
   }
 
   @Test
-  void testPayment() {
+  void testPaymentFood() {
     BDDMockito.when(repositoryMock.findByCardNumberAndActiveTrue(ArgumentMatchers.any(String.class)))
-        .thenReturn(Optional.of(cardSaved));
-    BDDMockito.when(repositoryMock.save(ArgumentMatchers.any(Card.class))).thenReturn(cardSaved);
+        .thenReturn(Optional.of(cardFoodSaved));
+    BDDMockito.when(repositoryMock.save(ArgumentMatchers.any(Card.class))).thenReturn(cardFoodSaved);
     BDDMockito.when(extractServiceMock.saveExtract(ArgumentMatchers.any(Extract.class))).thenReturn(extractSaved);
-    service.setCardbalance(cardSaved.getCardNumber(), 500.00);
-    double oldCardBalance = cardSaved.getCardBalance();
+
+    service.setCardbalance(cardFoodSaved.getCardNumber(), 500.00);
+    double oldCardBalance = cardFoodSaved.getCardBalance();
     double value = 5.80;
+    service.payment(EstablishmentType.FOOD_CARD, "Restaurante", cardFoodSaved.getCardNumber(), "Coxinha", value);
 
-    service.payment(EstablishmentType.FOOD_CARD, "Restaurante", cardSaved.getCardNumber(), "Coxinha", value);
+    Double cashback = (value / 100) * 10;
+    value = value - cashback;
+    Assertions.assertThat(cardFoodSaved.getCardBalance()).isEqualTo(oldCardBalance - value);
+  }
 
-    Assertions.assertThat(cardSaved.getCardBalance()).isEqualTo(oldCardBalance - value);
+  @Test
+  void testPaymentFuel() {
+    BDDMockito.when(repositoryMock.findByCardNumberAndActiveTrue(ArgumentMatchers.any(String.class)))
+        .thenReturn(Optional.of(cardFuelSaved));
+    BDDMockito.when(repositoryMock.save(ArgumentMatchers.any(Card.class))).thenReturn(cardFuelSaved);
+    BDDMockito.when(extractServiceMock.saveExtract(ArgumentMatchers.any(Extract.class))).thenReturn(extractSaved);
+
+    service.setCardbalance(cardFuelSaved.getCardNumber(), 500.00);
+    double oldCardBalance = cardFuelSaved.getCardBalance();
+    double value = 300.00;
+    service.payment(EstablishmentType.FUEL_CARD, "Posto Shell", cardFuelSaved.getCardNumber(), "Coxinha", value);
+
+    Double tax = (value / 100) * 35;
+    value = value + tax;
+    Assertions.assertThat(cardFuelSaved.getCardBalance()).isEqualTo(oldCardBalance - value);
+  }
+
+  @Test
+  void testPaymentDrugstore() {
+    BDDMockito.when(repositoryMock.findByCardNumberAndActiveTrue(ArgumentMatchers.any(String.class)))
+        .thenReturn(Optional.of(cardDrugstoreSaved));
+    BDDMockito.when(repositoryMock.save(ArgumentMatchers.any(Card.class))).thenReturn(cardDrugstoreSaved);
+    BDDMockito.when(extractServiceMock.saveExtract(ArgumentMatchers.any(Extract.class))).thenReturn(extractSaved);
+
+    service.setCardbalance(cardDrugstoreSaved.getCardNumber(), 500.00);
+    double oldCardBalance = cardDrugstoreSaved.getCardBalance();
+    double value = 68.00;
+    service.payment(EstablishmentType.FUEL_CARD, "Farmacia", cardDrugstoreSaved.getCardNumber(), "Nimesulida", value);
+    Assertions.assertThat(cardDrugstoreSaved.getCardBalance()).isEqualTo(oldCardBalance - value);
   }
 
   @Test

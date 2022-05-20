@@ -2,11 +2,14 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import br.com.alelo.consumer.consumerpat.constants.CardTypeEnum;
 import lombok.AllArgsConstructor;
@@ -27,6 +30,7 @@ public class Card {
   private String cardNumber;
   private double cardBalance;
   private CardTypeEnum cardType;
+  @Builder.Default
   private boolean active = true;
 
   @ManyToOne

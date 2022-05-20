@@ -47,16 +47,6 @@ public class ConsumerService {
      * 2 - Farmácia (DrugStore)
      * 3 - Posto de combustivel (Fuel)
      */
-
-    if (establishmentType == EstablishmentType.FOOD_CARD) {
-      // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-      Double cashback = (value / 100) * 10;
-      value = value - cashback;
-    } else if (establishmentType == EstablishmentType.FUEL_CARD) {
-      // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-      Double tax = (value / 100) * 35;
-      value = value + tax;
-    }
     cardService.payment(establishmentType, establishmentName, cardNumber, productDescription, value);
 
   }

@@ -31,15 +31,16 @@ public class CardService {
   public Card payment(int establishmentType, String establishmentName, String cardNumber, String productDescription,
       double value) {
     var card = findByCardNumber(cardNumber);
-
-    double newBalance = (card.getCardBalance() - value);
+    final double processedValue = card.getCardType().processPayment(value);
+    double newBalance = (card.getCardBalance() - processedValue);
     if (newBalance < 0)
       throw new RuntimeException("Insufficient funds");
 
     card.setCardBalance(newBalance);
 
     card = repository.save(card);
-    Extract extract = new Extract(establishmentName, productDescription, new Date(), card.getCardNumber(), value);
+    Extract extract = new Extract(establishmentName, productDescription, new Date(), card.getCardNumber(),
+        processedValue);
     extractService.saveExtract(extract);
     return card;
   }
