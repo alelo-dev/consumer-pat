@@ -33,20 +33,20 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping(value = "/consumerList")
-    public Page<Consumer> listAllConsumers(Pageable pageable) {
-        return service.consumerList(pageable);
+    public ResponseEntity<Page<Consumer>> listAllConsumers(Pageable pageable) {
+        return ResponseEntity.ok(service.consumerList(pageable));
     }
 
     /* Cadastrar novos clientes */
     @PostMapping(value = "/createConsumer")
-    public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+    public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) throws RuntimeException, Exception {
         return ResponseEntity.ok(service.createConsumer(consumer));
     }
 
     // Não deve ser possível alterar o saldo do cartão
     @PostMapping(value = "/updateConsumer")
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        service.updateConsumer(consumer);
+    public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
+        return ResponseEntity.ok(service.updateConsumer(consumer));
     }
 
     /*
@@ -56,14 +56,15 @@ public class ConsumerController {
      */
     @ResponseStatus(code = HttpStatus.OK)
     @PostMapping(value = "/setcardbalance")
-    public void setBalance(@RequestParam String cardNumber, @RequestParam double value) {
+    public ResponseEntity<String> setBalance(@RequestParam String cardNumber, @RequestParam double value) {
         cardService.setCardbalance(cardNumber, value);
+        return ResponseEntity.ok().build();
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @PostMapping(value = "/addconsumercard")
-    public void addConsumerCard(@RequestBody Card card) {
-        cardService.addConsumerCard(card);
+    public ResponseEntity<Card> addConsumerCard(@RequestBody Card card) {
+        return ResponseEntity.ok(cardService.addConsumerCard(card));
     }
 
     @DeleteMapping(value = "/removeconsumercard/{id}")
