@@ -1,13 +1,13 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -46,11 +46,37 @@ public class Consumer {
     int drugstoreNumber;
     double drugstoreCardBalance;
 
+    public Consumer() {
+    }
+
+    public Consumer(String name, int documentNumber, Date birthDate, int mobilePhoneNumber, int residencePhoneNumber, int phoneNumber, String email, String street, int number, String city, String country, int portalCode, int foodCardNumber, double foodCardBalance, int fuelCardNumber, double fuelCardBalance, int drugstoreNumber, double drugstoreCardBalance) {
+        this.name = name;
+        this.documentNumber = documentNumber;
+        this.birthDate = birthDate;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.residencePhoneNumber = residencePhoneNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+        this.portalCode = portalCode;
+        this.foodCardNumber = foodCardNumber;
+        this.foodCardBalance = foodCardBalance;
+        this.fuelCardNumber = fuelCardNumber;
+        this.fuelCardBalance = fuelCardBalance;
+        this.drugstoreNumber = drugstoreNumber;
+        this.drugstoreCardBalance = drugstoreCardBalance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        
         Consumer consumer = (Consumer) o;
+
         return documentNumber == consumer.documentNumber
                 && mobilePhoneNumber == consumer.mobilePhoneNumber
                 && residencePhoneNumber == consumer.residencePhoneNumber
@@ -66,5 +92,21 @@ public class Consumer {
                 && Objects.equals(country, consumer.country);
     }
 
-
+    @Override
+    public String toString() {
+        return "{" +
+            "name='" + getName() + "'" +
+            ", documentNumber='" + getDocumentNumber() + "'" +
+            ", birthDate='" + getBirthDate() + "'" +
+            ", mobilePhoneNumber='" + getMobilePhoneNumber() + "'" +
+            ", residencePhoneNumber='" + getResidencePhoneNumber() + "'" +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", street='" + getStreet() + "'" +
+            ", number='" + getNumber() + "'" +
+            ", city='" + getCity() + "'" +
+            ", country='" + getCountry() + "'" +
+            ", portalCode='" + getPortalCode() + "'" +
+            "}";
+    }
 }

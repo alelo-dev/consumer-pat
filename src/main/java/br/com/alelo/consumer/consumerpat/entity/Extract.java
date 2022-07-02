@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
+import java.util.Objects;
 
 
 @Data
@@ -46,4 +47,34 @@ public class Extract {
         this.cardNumber = cardNumber;
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Extract)) {
+            return false;
+        }
+
+        Extract extract = (Extract) o;
+        
+        return id == extract.id 
+            && establishmentNameId == extract.establishmentNameId 
+            && Objects.equals(establishmentName, extract.establishmentName) 
+            && Objects.equals(productDescription, extract.productDescription) 
+            && Objects.equals(dateBuy, extract.dateBuy) 
+            && cardNumber == extract.cardNumber 
+            && value == extract.value;
+    }
+    
+    @Override
+    public String toString() {
+        return "{" +
+            "establishmentName='" + getEstablishmentName() + "'" +
+            ", productDescription='" + getProductDescription() + "'" +
+            ", dateBuy='" + getDateBuy() + "'" +
+            ", cardNumber='" + getCardNumber() + "'" +
+            ", value='" + getValue() + "'" +
+            "}";
+    }
+
 }
