@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
@@ -19,4 +20,6 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
     Consumer findByDrugstoreNumber(int cardNumber);
+
+	Consumer findById(Consumer consumer);
 }
