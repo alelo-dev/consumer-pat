@@ -1,49 +1,56 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
-
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 
-@Data
+@Getter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Table(name = "extract")
 public class Extract {
 
-    @Id
-    int id;
-    int establishmentNameId;
-    String establishmentName;
-    String productDescription;
-    Date dateBuy;
-    int cardNumber;
-    double value;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
+  @Column(name = "establishment_name_id")
+  private int establishmentNameId;
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+  @Column(name = "establishment_name")
+  private String establishmentName;
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+  @Column(name = "product_description")
+  private String productDescription;
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.value = value;
-    }
+  @CreationTimestamp
+  @Column(name = "date_buy")
+  private LocalDateTime dateBuy;
+
+  @Column(name = "card_number")
+  private int cardNumber;
+
+  @Column(name = "value")
+  private BigDecimal value;
+
+  public Extract(String establishmentName, String productDescription, int cardNumber,
+      BigDecimal value) {
+    this.establishmentName = establishmentName;
+    this.productDescription = productDescription;
+    this.cardNumber = cardNumber;
+    this.value = value;
+  }
 }
