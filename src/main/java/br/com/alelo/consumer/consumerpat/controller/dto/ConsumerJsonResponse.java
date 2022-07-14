@@ -64,35 +64,4 @@ public class ConsumerJsonResponse {
   @ApiModelProperty(name = "portalCode", value = "Portal code", position = 13)
   private int portalCode;
 
-  @ApiModelProperty(name = "foodCardNumber", value = "Food card number", position = 14)
-  //cards
-  private int foodCardNumber;
-
-  @ApiModelProperty(name = "foodCardBalance", value = "Food card balance", position = 15)
-  private BigDecimal foodCardBalance;
-
-  @ApiModelProperty(name = "fuelCardNumber", value = "Fuel card number", position = 16)
-  private int fuelCardNumber;
-
-  @ApiModelProperty(name = "fuelCardBalance", value = "Fuel card balance", position = 17)
-  private BigDecimal fuelCardBalance;
-
-  @ApiModelProperty(name = "drugstoreNumber", value = "Drugstore card number", position = 18)
-  private int drugstoreNumber;
-
-  @ApiModelProperty(name = "drugstoreCardBalance", value = "Drugstore card balance", position = 19)
-  private BigDecimal drugstoreCardBalance;
-
-  public static ConsumerJsonResponse fromEntity(Consumer consumer) {
-    return new ConsumerJsonResponse(consumer.getId(), consumer.getName(),
-        consumer.getDocumentNumber(), consumer.getBirthDate(),
-        consumer.getMobilePhoneNumber(), consumer.getResidencePhoneNumber(),
-        consumer.getPhoneNumber(), consumer.getEmail(),
-        consumer.getStreet(), consumer.getNumber(), consumer.getCity(), consumer.getCountry(),
-        consumer.getPortalCode(), consumer.getFoodCardNumber(),
-        consumer.getFoodCardBalance(), consumer.getFuelCardNumber(), consumer.getFuelCardBalance(),
-        consumer.getDrugstoreNumber(),
-        consumer.getDrugstoreCardBalance());
-  }
-
 }

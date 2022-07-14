@@ -19,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "ConsumerCreditarJsonRequest", description = "Informa\u00E7\u00F5es para creditar uma conta.")
-public class ConsumerCreditarJsonRequest {
+public class CartaoCreditarJsonRequest {
 
   @ApiModelProperty(name = "value", value = "Value", position = 1)
   private BigDecimal value;

@@ -1,9 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller.dto;
 
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,32 +58,5 @@ public class ConsumerJsonRequest {
 
   @ApiModelProperty(name = "portalCode", value = "Portal code", position = 12)
   private int portalCode;
-
-  @ApiModelProperty(name = "foodCardNumber", value = "Food card number", position = 13)
-  //cards
-  private int foodCardNumber;
-
-  @ApiModelProperty(name = "foodCardBalance", value = "Food card balance", position = 14)
-  private BigDecimal foodCardBalance;
-
-  @ApiModelProperty(name = "fuelCardNumber", value = "Fuel card number", position = 15)
-  private int fuelCardNumber;
-
-  @ApiModelProperty(name = "fuelCardBalance", value = "Fuel card balance", position = 16)
-  private BigDecimal fuelCardBalance;
-
-  @ApiModelProperty(name = "drugstoreNumber", value = "Drugstore card number", position = 17)
-  private int drugstoreNumber;
-
-  @ApiModelProperty(name = "drugstoreCardBalance", value = "Drugstore card balance", position = 18)
-  private BigDecimal drugstoreCardBalance;
-
-  public Consumer toEntity() {
-    return new Consumer(null, this.name, this.documentNumber, this.birthDate,
-        this.mobilePhoneNumber, this.residencePhoneNumber, this.phoneNumber, this.email,
-        this.street, this.number, this.city, this.country, this.portalCode, this.foodCardNumber,
-        this.foodCardBalance, this.fuelCardNumber, this.fuelCardBalance, this.drugstoreNumber,
-        this.drugstoreCardBalance);
-  }
 
 }

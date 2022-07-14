@@ -7,9 +7,9 @@ import java.util.Map;
 /**
  * @author renanravelli
  */
-public class CalculadoraFactory {
+public class CalculadoraDelegate {
 
-  public static Calculadora criar(Compra compra) {
+  public static Calculadora delegate(Compra compra) {
     Map<Integer, Calculadora> calculadoras = new HashMap<>();
     calculadoras.put(1, new CalculadoraFood());
     calculadoras.put(2, new CalculadoraDrugstore());

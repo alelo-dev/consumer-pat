@@ -3,11 +3,8 @@ package br.com.alelo.consumer.consumerpat.services.impl;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.ConsumerFactoryTest;
 import br.com.alelo.consumer.consumerpat.exceptions.NotFoundException;
-import br.com.alelo.consumer.consumerpat.models.Compra;
-import br.com.alelo.consumer.consumerpat.models.CompraFactoryTest;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import java.math.BigDecimal;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -65,58 +62,6 @@ public class ConsumerServiceImplTest {
 
     Assertions.assertThatThrownBy(
             () -> this.consumerService.atualizar(consumerExistente.getId(), consumer))
-        .isInstanceOf(NotFoundException.class);
-  }
-
-  @Test
-  public void deveCreditarConsumer() {
-
-    Consumer consumer = ConsumerFactoryTest.novoConsumer();
-
-    Mockito.when(consumerRepository.findByCardNumber(consumer.getDrugstoreNumber()))
-        .thenReturn(Optional.of(consumer));
-    Mockito.when(consumerRepository.save(Mockito.any())).thenReturn(consumer);
-
-    Consumer consumerCreditado = this.consumerService.creditar(consumer.getDrugstoreNumber(),
-        BigDecimal.TEN);
-
-    Assertions.assertThat(consumerCreditado.getDrugstoreCardBalance())
-        .isEqualTo(BigDecimal.valueOf(20));
-  }
-
-  @Test
-  public void deveLancarNotFoundExceptionAoCreditarConsumer() {
-
-    Consumer consumer = ConsumerFactoryTest.novoConsumer();
-
-    Assertions.assertThatThrownBy(
-            () -> this.consumerService.creditar(consumer.getDrugstoreNumber(), BigDecimal.TEN))
-        .isInstanceOf(NotFoundException.class);
-  }
-
-  @Test
-  public void deveRealizarCompra() {
-
-    Compra compra = CompraFactoryTest.criar();
-    Consumer consumer = ConsumerFactoryTest.novoConsumer();
-
-    Mockito.when(consumerRepository.findByCardNumber(consumer.getDrugstoreNumber()))
-        .thenReturn(Optional.of(consumer));
-    Mockito.when(consumerRepository.save(Mockito.any())).thenReturn(consumer);
-
-    this.consumerService.compra(consumer.getDrugstoreNumber(), compra);
-
-    Assertions.assertThat(consumer.getDrugstoreCardBalance()).isZero();
-  }
-
-  @Test
-  public void deveLancarNotFoundExceptionAoDebitarConsumer() {
-
-    Compra compra = CompraFactoryTest.criar();
-    Consumer consumer = ConsumerFactoryTest.novoConsumer();
-
-    Assertions.assertThatThrownBy(
-            () -> this.consumerService.compra(consumer.getDrugstoreNumber(), compra))
         .isInstanceOf(NotFoundException.class);
   }
 
