@@ -45,6 +45,15 @@ public class CartaoServiceImpl implements CartaoService {
 
   @Override
   @Transactional
+  public Cartao atualizar(Integer consumerId, Integer cartaoNumber, Cartao cartao) {
+    return repository.findByConsumerIdAndNumber(consumerId, cartaoNumber)
+        .map(c -> c.update(cartao))
+        .map(repository::save)
+        .orElseThrow(NotFoundException.supplier("Cart\u00E3o n\u00E3o encontrado."));
+  }
+
+  @Override
+  @Transactional
   public void compra(Integer consumerId, Integer cartaoNumber, Compra compra) {
     BigDecimal valorCalculado = CalculadoraDelegate.delegate(compra).calcular(compra.getValue());
     CartaoTipo cartaoTipo = CartaoTipo.getByEstablishmentType(compra.getEstablishmentType());

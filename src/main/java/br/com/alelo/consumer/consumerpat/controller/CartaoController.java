@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -58,6 +59,20 @@ public class CartaoController {
       @PathVariable("cardNumber") Integer cardNumber,
       @RequestBody CompraJsonRequest request) {
     cartaoService.compra(consumerId, cardNumber, CompraMapper.map(request));
+  }
+
+  @ApiResponses({
+      @ApiResponse(code = 400, message = "N\u00FAmero do cart\u00E3o j\u00E1 registrado."),
+      @ApiResponse(code = 404, message = "Cart\u00E3o n\u00E3o encontrado.")
+  })
+  @ApiOperation(value = "Endpoint respons\u00E1vel por realizar atualiza\u00E7\u00E3o do cartão.")
+  @PutMapping(path = "/{cardNumber}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<CartaoJsonResponse> atualizar(
+      @PathVariable("consumerId") Integer consumerId,
+      @PathVariable("cardNumber") Integer cardNumber,
+      @RequestBody CartaoJsonRequest request) {
+    Cartao cartao = cartaoService.atualizar(consumerId, cardNumber, CartaoMapper.map(request));
+    return ResponseEntity.ok(CartaoMapper.map(cartao));
   }
 
   /*

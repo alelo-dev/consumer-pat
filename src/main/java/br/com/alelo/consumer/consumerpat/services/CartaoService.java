@@ -12,6 +12,8 @@ public interface CartaoService {
 
   Cartao cadastrar(Integer consumerId, Cartao cartao);
 
+  Cartao atualizar(Integer consumerId, Integer cartaoNumber, Cartao cartao);
+
   void compra(Integer consumerId, Integer cartaoNumber, Compra compra);
 
   Cartao creditar(Integer consumerId, int cardNumber, BigDecimal value);

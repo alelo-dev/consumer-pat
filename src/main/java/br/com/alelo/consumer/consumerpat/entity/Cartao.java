@@ -49,6 +49,14 @@ public class Cartao {
     this.consumer = consumer;
   }
 
+  public Cartao update(Cartao cartao) {
+    this.tipo = cartao.getTipo();
+
+    this.number = cartao.getNumber();
+
+    return this;
+  }
+
   public Cartao creditar(BigDecimal valor) {
     this.balance = this.balance.add(valor);
     return this;
