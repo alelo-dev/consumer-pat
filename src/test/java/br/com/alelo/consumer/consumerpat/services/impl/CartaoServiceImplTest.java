@@ -116,4 +116,20 @@ public class CartaoServiceImplTest {
         cartao.getNumber(), BigDecimal.TEN)).isInstanceOf(NotFoundException.class);
   }
 
+  @Test
+  public void deveAtualizarCartao() {
+
+    Cartao cartao = CartaoFactoryTest.criar();
+    Consumer consumer = cartao.getConsumer();
+
+    Mockito.when(cartaoRepository.findByConsumerIdAndNumber(consumer.getId(), cartao.getNumber()))
+        .thenReturn(Optional.of(cartao));
+    Mockito.when(cartaoRepository.save(Mockito.any())).thenReturn(cartao);
+
+    Cartao cartaoAtualizado = cartaoService.atualizar(consumer.getId(), cartao.getNumber(),
+        cartao);
+
+    Assertions.assertThat(cartaoAtualizado).isEqualTo(cartao);
+  }
+
 }
