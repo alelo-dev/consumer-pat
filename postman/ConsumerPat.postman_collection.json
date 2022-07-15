@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "db8f6cb0-bf0d-44b8-afed-631b9bd3cf1c",
+		"name": "ConsumerPat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Consumer",
+			"item": [
+				{
+					"name": "Add Consumer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Bernardo Osvaldo da Rosa\",\n  \"documentNumber\": \"56705170247\",\n  \"birthDate\": \"23-05-2003\",\n\n  \"street\": \"Rua Acézio Guedes\",\n  \"number\": 482,\n  \"city\": \"Macapá\",\n  \"country\": \"Brasil\",\n  \"postalCode\": 68905628,\n\n  \"email\": \"bernardo-darosa78@jammer.com.br\",\n  \"phone\": \"9635945226\",\n  \"mobilePhone\": \"96993768074\",\n  \"residencePhone\": \"\",\n\n  \"foodCardBalance\": 1500.50,\n  \"drugstoreCardBalance\": 650.88,\n  \"fuelCardBalance\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/consumer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"consumer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Consumer By Filters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/consumer?birthDate=23-05-2003&documentNumber=56705170247&name=Rosa&page=0&size=10&sortDirection=ASC&sortField=ID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"consumer"
+							],
+							"query": [
+								{
+									"key": "birthDate",
+									"value": "23-05-2003"
+								},
+								{
+									"key": "documentNumber",
+									"value": "56705170247"
+								},
+								{
+									"key": "name",
+									"value": "Rosa"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sortDirection",
+									"value": "ASC"
+								},
+								{
+									"key": "sortField",
+									"value": "ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Consumer By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/consumer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"consumer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Consumer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Rosa\",\n  \"documentNumber\": \"56705170247\",\n  \"birthDate\": \"23-05-2003\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/consumer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"consumer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Card",
+			"item": [
+				{
+					"name": "Find Card By Number",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/card/3369186831942291265",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"card",
+								"3369186831942291265"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Card Balance",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"value\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/card/3369186831942291265/balance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"card",
+								"3369186831942291265",
+								"balance"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Extract",
+			"item": [
+				{
+					"name": "Add Extract",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": 3369186831942291265,\n  \"establishmentId\": 108880,\n  \"establishmentName\": \"Levi Alimentos Ltda\",\n  \"establishmentType\": 1,\n  \"productDescription\": \"Manteiga Davaca com Sal 500g - Hiperideal\",\n  \"value\": 23.99\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/extract",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"extract"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Extract By Filters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/extract?cardNumber=3369186831942291265&dateBuyStart=13-07-2022&dateBuyEnd=14-07-2022&establishmentId=108880&establishmentName=Alimentos&page=0&productDescription=Manteiga&size=10&sortDirection=ASC&sortField=ID&value=23.99",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"extract"
+							],
+							"query": [
+								{
+									"key": "cardNumber",
+									"value": "3369186831942291265"
+								},
+								{
+									"key": "dateBuyStart",
+									"value": "13-07-2022"
+								},
+								{
+									"key": "dateBuyEnd",
+									"value": "14-07-2022"
+								},
+								{
+									"key": "establishmentId",
+									"value": "108880"
+								},
+								{
+									"key": "establishmentName",
+									"value": "Alimentos"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "productDescription",
+									"value": "Manteiga"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sortDirection",
+									"value": "ASC"
+								},
+								{
+									"key": "sortField",
+									"value": "ID"
+								},
+								{
+									"key": "value",
+									"value": "23.99"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
