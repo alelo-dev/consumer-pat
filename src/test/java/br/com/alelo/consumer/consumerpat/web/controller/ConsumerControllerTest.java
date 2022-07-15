@@ -1,14 +1,15 @@
 package br.com.alelo.consumer.consumerpat.web.controller;
 
 import br.com.alelo.consumer.consumerpat.exception.ResourceNotFoundException;
-import br.com.alelo.consumer.consumerpat.model.entity.Address;
-import br.com.alelo.consumer.consumerpat.model.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.model.entity.Contact;
+import br.com.alelo.consumer.consumerpat.model.entity.*;
+import br.com.alelo.consumer.consumerpat.model.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import br.com.alelo.consumer.consumerpat.service.ExtractService;
 import br.com.alelo.consumer.consumerpat.utils.Constants;
 import br.com.alelo.consumer.consumerpat.web.vo.consumer.ConsumerFilterVO;
 import br.com.alelo.consumer.consumerpat.web.vo.consumer.NewConsumerFormVO;
 import br.com.alelo.consumer.consumerpat.web.vo.consumer.UpdateConsumerFormVO;
+import br.com.alelo.consumer.consumerpat.web.vo.extract.NewExtractFormVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,8 @@ class ConsumerControllerTest {
 
     private static final String NOT_FOUND_MESSAGE = "Consumer not found!";
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_PATTERN);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_PATTERN);
+    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(Constants.DATETIME_FORMAT_PATTERN);
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,6 +55,9 @@ class ConsumerControllerTest {
 
     @MockBean
     private ConsumerService consumerService;
+
+    @MockBean
+    private ExtractService extractService;
 
     @Test
     void findById_WithInvalidID_ShouldReturnConsumerNotFound() throws Exception {
@@ -83,7 +88,7 @@ class ConsumerControllerTest {
             .andExpect(jsonPath("$.id", is(consumer.getId().intValue())))
             .andExpect(jsonPath("$.name", is(consumer.getName())))
             .andExpect(jsonPath("$.documentNumber", is(consumer.getDocumentNumber())))
-            .andExpect(jsonPath("$.birthDate", is(consumer.getBirthDate().format(FORMATTER))));
+            .andExpect(jsonPath("$.birthDate", is(consumer.getBirthDate().format(DATE_FORMATTER))));
     }
 
     @Test
@@ -124,7 +129,7 @@ class ConsumerControllerTest {
             .andExpect(jsonPath("$.records[0].id", is(consumer.getId().intValue())))
             .andExpect(jsonPath("$.records[0].name", is(consumer.getName())))
             .andExpect(jsonPath("$.records[0].documentNumber", is(consumer.getDocumentNumber())))
-            .andExpect(jsonPath("$.records[0].birthDate", is(consumer.getBirthDate().format(FORMATTER))))
+            .andExpect(jsonPath("$.records[0].birthDate", is(consumer.getBirthDate().format(DATE_FORMATTER))))
             .andExpect(jsonPath("$.page").exists())
             .andExpect(jsonPath("$.page.hasNext", is(false)))
             .andExpect(jsonPath("$.page.hasPrev", is(false)))
@@ -179,7 +184,7 @@ class ConsumerControllerTest {
             .andExpect(jsonPath("$.id", is(consumer.getId().intValue())))
             .andExpect(jsonPath("$.name", is(consumer.getName())))
             .andExpect(jsonPath("$.documentNumber", is(consumer.getDocumentNumber())))
-            .andExpect(jsonPath("$.birthDate", is(consumer.getBirthDate().format(FORMATTER))))
+            .andExpect(jsonPath("$.birthDate", is(consumer.getBirthDate().format(DATE_FORMATTER))))
             .andExpect(jsonPath("$.address").exists())
             .andExpect(jsonPath("$.address.id", is(address.getId().intValue())))
             .andExpect(jsonPath("$.address.street", is(address.getStreet())))
@@ -234,7 +239,50 @@ class ConsumerControllerTest {
             .andExpect(jsonPath("$.id", is(consumer.getId().intValue())))
             .andExpect(jsonPath("$.name", is(consumer.getName())))
             .andExpect(jsonPath("$.documentNumber", is(consumer.getDocumentNumber())))
-            .andExpect(jsonPath("$.birthDate", is(consumer.getBirthDate().format(FORMATTER))));
+            .andExpect(jsonPath("$.birthDate", is(consumer.getBirthDate().format(DATE_FORMATTER))));
+    }
+
+    @Test
+    void buy_WithoutMandatoryParameters_ShouldReturnInvalidValueMessages() throws Exception {
+        NewExtractFormVO body = new NewExtractFormVO();
+
+        mockMvc.perform(post("/v1/consumer/buy")
+            .content(objectMapper.writeValueAsString(body))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.timestamp", is(notNullValue())))
+            .andExpect(jsonPath("$.errors").exists())
+            .andExpect(jsonPath("$.errors").isMap())
+            .andExpect(jsonPath("$.errors", aMapWithSize(6)))
+            .andExpect(jsonPath("$.errors", hasEntry("cardNumber", "CardNumber cannot be null")))
+            .andExpect(jsonPath("$.errors", hasEntry("productDescription", "ProductDescription cannot be null")))
+            .andExpect(jsonPath("$.errors", hasEntry("establishmentId", "EstablishmentId cannot be null")))
+            .andExpect(jsonPath("$.errors", hasEntry("establishmentName", "EstablishmentName cannot be null")))
+            .andExpect(jsonPath("$.errors", hasEntry("establishmentType", "EstablishmentType cannot be null")))
+            .andExpect(jsonPath("$.errors", hasEntry("value", "Value cannot be null")))
+            .andExpect(jsonPath("$.details", is("uri=/v1/consumer/buy")));
+    }
+
+    @Test
+    void buy_WithAllMandatoryParameters_ShouldPersistConsumerAndAddressData() throws Exception {
+        Card card = buildCard(EstablishmentType.DRUGSTORE, null);
+        Extract extract = buildExtract(card, null);
+
+        given(extractService.save(any(NewExtractFormVO.class))).willReturn(extract);
+
+        NewExtractFormVO body = buildExtractFormVo(extract, EstablishmentType.FOOD);
+
+        mockMvc.perform(post("/v1/consumer/buy")
+            .content(objectMapper.writeValueAsString(body))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.establishmentId", is(extract.getEstablishmentId().intValue())))
+            .andExpect(jsonPath("$.establishmentName", is(extract.getEstablishmentName())))
+            .andExpect(jsonPath("$.productDescription", is(extract.getProductDescription())))
+            .andExpect(jsonPath("$.dateBuy", is(extract.getDateBuy().format(DATETIME_FORMATTER))))
+            .andExpect(jsonPath("$.value", is(extract.getValue().doubleValue())));
     }
 
 }

@@ -2,10 +2,13 @@ package br.com.alelo.consumer.consumerpat.web.controller;
 
 import br.com.alelo.consumer.consumerpat.model.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
-import br.com.alelo.consumer.consumerpat.web.vo.consumer.ConsumerVO;
+import br.com.alelo.consumer.consumerpat.service.ExtractService;
 import br.com.alelo.consumer.consumerpat.web.vo.consumer.ConsumerFilterVO;
+import br.com.alelo.consumer.consumerpat.web.vo.consumer.ConsumerVO;
 import br.com.alelo.consumer.consumerpat.web.vo.consumer.NewConsumerFormVO;
 import br.com.alelo.consumer.consumerpat.web.vo.consumer.UpdateConsumerFormVO;
+import br.com.alelo.consumer.consumerpat.web.vo.extract.ExtractVO;
+import br.com.alelo.consumer.consumerpat.web.vo.extract.NewExtractFormVO;
 import br.com.alelo.consumer.consumerpat.web.vo.pagination.PageVO;
 import br.com.alelo.consumer.consumerpat.web.vo.pagination.QueryResultVO;
 import lombok.AllArgsConstructor;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 public class ConsumerController {
 
     private final ConsumerService consumerService;
+
+    private final ExtractService extractService;
 
     @GetMapping("{consumerId}")
     public ConsumerVO findById(@PathVariable Long consumerId) {
@@ -46,6 +51,12 @@ public class ConsumerController {
     @PutMapping("{consumerId}")
     public ConsumerVO update(@PathVariable Long consumerId, @Valid @RequestBody UpdateConsumerFormVO form) {
         return ConsumerVO.from(consumerService.update(consumerId, form));
+    }
+
+    @PostMapping("/buy")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ExtractVO buy(@Valid @RequestBody NewExtractFormVO form) {
+        return ExtractVO.from(extractService.save(form));
     }
 
     private Pageable buildPageable(ConsumerFilterVO filters) {

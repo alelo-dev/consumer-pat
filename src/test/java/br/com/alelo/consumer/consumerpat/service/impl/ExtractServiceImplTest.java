@@ -78,7 +78,7 @@ class ExtractServiceImplTest {
         assertEquals(extract.getEstablishmentName(), extractResult.getEstablishmentName());
         assertEquals(extract.getProductDescription(), extractResult.getProductDescription());
         assertEquals(extract.getDateBuy(), extractResult.getDateBuy());
-        assertEquals(extract.getValue(), extractResult.getValue());
+        assertEquals(0, extract.getValue().compareTo(extractResult.getValue()));
     }
 
     @Test
@@ -134,16 +134,23 @@ class ExtractServiceImplTest {
     }
 
     @Test
-    void save_WithAllMandatoryParameters_ShouldPersistExtractData() {
-        Card drugstoreCard = buildCard(EstablishmentType.DRUGSTORE, null);
+    void save_WithEstablishmentTypeDrugstore_ShouldPersistExtractData() {
+        EstablishmentType establishmentType = EstablishmentType.DRUGSTORE;
 
-        given(cardRepository.findByCardNumber(drugstoreCard.getNumber())).willReturn(Optional.of(drugstoreCard));
+        BigDecimal catdBalance = BigDecimal.valueOf(1000.00);
+        BigDecimal buyValue = BigDecimal.valueOf(100.00);
+        BigDecimal expectedBuyValue = BigDecimal.valueOf(100.00);
+
+        Card card = buildCard(establishmentType, null);
+        card.setBalance(catdBalance);
+
+        given(cardRepository.findByCardNumber(card.getNumber())).willReturn(Optional.of(card));
         given(extractRepository.save(any(Extract.class))).willAnswer(i -> i.getArgument(0, Extract.class));
 
         NewExtractFormVO form = new NewExtractFormVO();
-        form.setEstablishmentType(EstablishmentType.DRUGSTORE.getValue());
-        form.setCardNumber(drugstoreCard.getNumber());
-        form.setValue(drugstoreCard.getBalance().subtract(BigDecimal.TEN));
+        form.setEstablishmentType(establishmentType.getValue());
+        form.setCardNumber(card.getNumber());
+        form.setValue(buyValue);
 
         Extract extractResult = extractService.save(form);
 
@@ -151,7 +158,65 @@ class ExtractServiceImplTest {
         assertEquals(form.getEstablishmentId(), extractResult.getEstablishmentId());
         assertEquals(form.getEstablishmentName(), extractResult.getEstablishmentName());
         assertEquals(form.getProductDescription(), extractResult.getProductDescription());
-        assertEquals(form.getValue(), extractResult.getValue());
+        assertEquals(0, expectedBuyValue.compareTo(extractResult.getValue()));
+        assertEquals(form.getCardNumber(), extractResult.getCard().getNumber());
+    }
+
+    @Test
+    void save_WithEstablishmentTypeFood_ShouldPersistExtractData() {
+        EstablishmentType establishmentType = EstablishmentType.FOOD;
+
+        BigDecimal catdBalance = BigDecimal.valueOf(1000.00);
+        BigDecimal buyValue = BigDecimal.valueOf(100.00);
+        BigDecimal expectedBuyValue = BigDecimal.valueOf(90.00);
+
+        Card card = buildCard(establishmentType, null);
+        card.setBalance(catdBalance);
+
+        given(cardRepository.findByCardNumber(card.getNumber())).willReturn(Optional.of(card));
+        given(extractRepository.save(any(Extract.class))).willAnswer(i -> i.getArgument(0, Extract.class));
+
+        NewExtractFormVO form = new NewExtractFormVO();
+        form.setEstablishmentType(establishmentType.getValue());
+        form.setCardNumber(card.getNumber());
+        form.setValue(buyValue);
+
+        Extract extractResult = extractService.save(form);
+
+        assertNotNull(extractResult);
+        assertEquals(form.getEstablishmentId(), extractResult.getEstablishmentId());
+        assertEquals(form.getEstablishmentName(), extractResult.getEstablishmentName());
+        assertEquals(form.getProductDescription(), extractResult.getProductDescription());
+        assertEquals(0, expectedBuyValue.compareTo(extractResult.getValue()));
+        assertEquals(form.getCardNumber(), extractResult.getCard().getNumber());
+    }
+
+    @Test
+    void save_WithEstablishmentTypeFuel_ShouldPersistExtractData() {
+        EstablishmentType establishmentType = EstablishmentType.FUEL;
+
+        BigDecimal catdBalance = BigDecimal.valueOf(1000.00);
+        BigDecimal buyValue = BigDecimal.valueOf(100.00);
+        BigDecimal expectedBuyValue = BigDecimal.valueOf(135.00);
+
+        Card card = buildCard(establishmentType, null);
+        card.setBalance(catdBalance);
+
+        given(cardRepository.findByCardNumber(card.getNumber())).willReturn(Optional.of(card));
+        given(extractRepository.save(any(Extract.class))).willAnswer(i -> i.getArgument(0, Extract.class));
+
+        NewExtractFormVO form = new NewExtractFormVO();
+        form.setEstablishmentType(establishmentType.getValue());
+        form.setCardNumber(card.getNumber());
+        form.setValue(buyValue);
+
+        Extract extractResult = extractService.save(form);
+
+        assertNotNull(extractResult);
+        assertEquals(form.getEstablishmentId(), extractResult.getEstablishmentId());
+        assertEquals(form.getEstablishmentName(), extractResult.getEstablishmentName());
+        assertEquals(form.getProductDescription(), extractResult.getProductDescription());
+        assertEquals(0, expectedBuyValue.compareTo(extractResult.getValue()));
         assertEquals(form.getCardNumber(), extractResult.getCard().getNumber());
     }
 

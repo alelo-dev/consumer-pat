@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.exception.ResourceNotFoundException;
 import br.com.alelo.consumer.consumerpat.model.entity.Card;
 import br.com.alelo.consumer.consumerpat.model.entity.Extract;
+import br.com.alelo.consumer.consumerpat.model.enums.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.model.repository.CardRepository;
 import br.com.alelo.consumer.consumerpat.model.repository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.ExtractService;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -37,10 +39,20 @@ public class ExtractServiceImpl implements ExtractService {
                 .orElseThrow(() -> new ResourceNotFoundException("Card not found!"));
 
         validateExtract(card, form);
+        adjustValueByEstablishmentType(form);
         updateCardBalance(form, card);
         Extract extract = buildExtract(card, form);
 
         return extractRepository.save(extract);
+    }
+
+    private void adjustValueByEstablishmentType(NewExtractFormVO form) {
+        if (form.getValue().compareTo(BigDecimal.ZERO) > 0) {
+            form.setValue(form.getValue()
+                .multiply(EstablishmentType.fromCode(form.getEstablishmentType())
+                    .getMultiplyFactor())
+            );
+        }
     }
 
     private void validateExtract(Card card, NewExtractFormVO form) {

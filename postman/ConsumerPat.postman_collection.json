@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Bernardo Osvaldo da Rosa\",\n  \"documentNumber\": \"56705170247\",\n  \"birthDate\": \"23-05-2003\",\n\n  \"street\": \"Rua Acézio Guedes\",\n  \"number\": 482,\n  \"city\": \"Macapá\",\n  \"country\": \"Brasil\",\n  \"postalCode\": 68905628,\n\n  \"email\": \"bernardo-darosa78@jammer.com.br\",\n  \"phone\": \"9635945226\",\n  \"mobilePhone\": \"96993768074\",\n  \"residencePhone\": \"\",\n\n  \"foodCardBalance\": 1500.50,\n  \"drugstoreCardBalance\": 650.88,\n  \"fuelCardBalance\": 0\n}",
+							"raw": "{\n  \"name\": \"Bernardo Osvaldo da Rosa\",\n  \"documentNumber\": \"56705170247\",\n  \"birthDate\": \"23-05-2003\",\n\n  \"street\": \"Rua Acézio Guedes\",\n  \"number\": 482,\n  \"city\": \"Macapá\",\n  \"country\": \"Brasil\",\n  \"postalCode\": 68905628,\n\n  \"email\": \"bernardo-darosa78@jammer.com.br\",\n  \"phone\": \"9635945226\",\n  \"mobilePhone\": \"96993768074\",\n  \"residencePhone\": \"\",\n\n  \"foodCardBalance\": 1500.50,\n  \"drugstoreCardBalance\": 650.88,\n  \"fuelCardBalance\": 650.88\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -137,6 +137,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Buy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": 1135569999634178721,\n  \"establishmentId\": 108880,\n  \"establishmentName\": \"Levi Alimentos Ltda\",\n  \"establishmentType\": 1,\n  \"productDescription\": \"Manteiga Davaca com Sal 500g - Hiperideal\",\n  \"value\": 23.99\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/consumer/buy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"consumer",
+								"buy"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -149,7 +179,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/v1/card/3369186831942291265",
+							"raw": "http://localhost:8080/v1/card/1135569999634178721",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -158,7 +188,7 @@
 							"path": [
 								"v1",
 								"card",
-								"3369186831942291265"
+								"1135569999634178721"
 							]
 						}
 					},
@@ -179,7 +209,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/v1/card/3369186831942291265/balance",
+							"raw": "http://localhost:8080/v1/card/1135569999634178721/balance",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -188,7 +218,7 @@
 							"path": [
 								"v1",
 								"card",
-								"3369186831942291265",
+								"1135569999634178721",
 								"balance"
 							]
 						}
@@ -201,41 +231,12 @@
 			"name": "Extract",
 			"item": [
 				{
-					"name": "Add Extract",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"cardNumber\": 3369186831942291265,\n  \"establishmentId\": 108880,\n  \"establishmentName\": \"Levi Alimentos Ltda\",\n  \"establishmentType\": 1,\n  \"productDescription\": \"Manteiga Davaca com Sal 500g - Hiperideal\",\n  \"value\": 23.99\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/v1/extract",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"v1",
-								"extract"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Query Extract By Filters",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/v1/extract?cardNumber=3369186831942291265&dateBuyStart=13-07-2022&dateBuyEnd=14-07-2022&establishmentId=108880&establishmentName=Alimentos&page=0&productDescription=Manteiga&size=10&sortDirection=ASC&sortField=ID&value=23.99",
+							"raw": "http://localhost:8080/v1/extract?cardNumber=1135569999634178721&dateBuyStart=14-07-2022&dateBuyEnd=15-07-2022&establishmentId=108880&establishmentName=Alimentos&page=0&productDescription=Manteiga&size=10&sortDirection=ASC&sortField=ID",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -248,15 +249,15 @@
 							"query": [
 								{
 									"key": "cardNumber",
-									"value": "3369186831942291265"
+									"value": "1135569999634178721"
 								},
 								{
 									"key": "dateBuyStart",
-									"value": "13-07-2022"
+									"value": "14-07-2022"
 								},
 								{
 									"key": "dateBuyEnd",
-									"value": "14-07-2022"
+									"value": "15-07-2022"
 								},
 								{
 									"key": "establishmentId",
@@ -265,6 +266,11 @@
 								{
 									"key": "establishmentName",
 									"value": "Alimentos"
+								},
+								{
+									"key": "value",
+									"value": "23.99",
+									"disabled": true
 								},
 								{
 									"key": "page",
@@ -285,10 +291,6 @@
 								{
 									"key": "sortField",
 									"value": "ID"
-								},
-								{
-									"key": "value",
-									"value": "23.99"
 								}
 							]
 						}

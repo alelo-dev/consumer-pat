@@ -4,7 +4,6 @@ import br.com.alelo.consumer.consumerpat.model.entity.Extract;
 import br.com.alelo.consumer.consumerpat.service.ExtractService;
 import br.com.alelo.consumer.consumerpat.web.vo.extract.ExtractFilterVO;
 import br.com.alelo.consumer.consumerpat.web.vo.extract.ExtractVO;
-import br.com.alelo.consumer.consumerpat.web.vo.extract.NewExtractFormVO;
 import br.com.alelo.consumer.consumerpat.web.vo.pagination.PageVO;
 import br.com.alelo.consumer.consumerpat.web.vo.pagination.QueryResultVO;
 import lombok.AllArgsConstructor;
@@ -12,10 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -29,12 +28,6 @@ public class ExtractController {
     public QueryResultVO<ExtractVO> findAll(ExtractFilterVO filters) {
         Page<Extract> result = extractService.findAll(filters, buildPageable(filters));
         return buildResponse(result);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ExtractVO save(@Valid @RequestBody NewExtractFormVO form) {
-        return ExtractVO.from(extractService.save(form));
     }
 
     private Pageable buildPageable(ExtractFilterVO filters) {
