@@ -1,27 +1,19 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Cliente que possui os dados controlados e transações gerenciadas.
+ * Objeto de Transporte dos dados do cliente (Consumer).
  */
-@Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Consumer {
+public class ConsumerDto {
 
-    // ATENÇÃO: Não apliquei Bean Validation pois não havia nenhuma validação explicitamente definida no teste.
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // CONSUMER PERSONAL DATA
@@ -44,18 +36,12 @@ public class Consumer {
 
     // CONSUMER CARDS
     private Integer foodCardNumber;
-
-    @Column(updatable = false)
     private Double foodCardBalance;
 
     private Integer fuelCardNumber;
-
-    @Column(updatable = false)
     private Double fuelCardBalance;
 
     private Integer drugstoreCardNumber;
-
-    @Column(updatable = false)
     private Double drugstoreCardBalance;
 
 }
