@@ -18,7 +18,7 @@ import java.util.Date;
 @Builder
 public class Consumer {
 
-    // ATENÇÃO: Não apliquei Bean Validation pois não havia nenhuma validação explicitamente definida no teste.
+    // OBSERVAÇÃO: Não apliquei Bean Validation pois não havia nenhuma validação explicitamente definida no teste.
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -102,7 +102,7 @@ public class ConsumerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> destroy(@PathVariable Long id) {
 
-        // Embora sistemas em ambientes de produção não excluam registros eu
+        // OBSERVAÇÃO: Embora sistemas em ambientes de produção não excluam registros eu
         // implementei esse método apenas para demonstrar o conhecimento.
 
         try {
