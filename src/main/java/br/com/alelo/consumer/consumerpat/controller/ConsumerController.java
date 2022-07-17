@@ -4,6 +4,8 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.service.CardService;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/consumer")
 public class ConsumerController {
+
+
+    @Autowired
+    CardService cardService;
+
+    @Autowired
+    ConsumerService consumerService;
 
     @Autowired
     ConsumerRepository repository;
@@ -52,7 +61,11 @@ public class ConsumerController {
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
     public void setBalance(int cardNumber, double value) {
+
+        cardService.setCardBalance(cardNumber, value);
+        /*
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
@@ -73,12 +86,17 @@ public class ConsumerController {
                 repository.save(consumer);
             }
         }
+
+         */
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
+
+        consumerService.buy(establishmentType,establishmentName, cardNumber, productDescription, value);
+
+      //  Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
         *
@@ -87,7 +105,7 @@ public class ConsumerController {
         * 2 - Farmácia (DrugStore)
         * 3 - Posto de combustivel (Fuel)
         */
-
+  /*
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             Double cashback  = (value / 100) * 10;
@@ -114,6 +132,8 @@ public class ConsumerController {
 
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
+
+   */
     }
 
 }

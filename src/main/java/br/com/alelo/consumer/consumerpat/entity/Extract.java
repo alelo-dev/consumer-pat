@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 
@@ -13,18 +15,25 @@ public class Extract {
 
     @Id
     int id;
+    /*
     int establishmentNameId;
     String establishmentName;
+
+     */
+
+    @ManyToOne
+    @JoinColumn(name = "establishment_id")
+    Establishment establishment;
+
     String productDescription;
     Date dateBuy;
     int cardNumber;
     double value;
 
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
+    public Extract(int id, Establishment establishment, String productDescription, Date dateBuy, int cardNumber, double value) {
         this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
+        this.establishment = establishment;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
@@ -38,9 +47,8 @@ public class Extract {
         this.value = value;
     }
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double value) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
+    public Extract(Establishment establishment, String productDescription, Date dateBuy, int cardNumber, double value) {
+        this.establishment = establishment;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
