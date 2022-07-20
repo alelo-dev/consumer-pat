@@ -1,11 +1,13 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.controller.model.BalanceRequest;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.usecase.GetAllConsumerUsecase;
 import br.com.alelo.consumer.consumerpat.usecase.SaveConsumerUsecase;
+import br.com.alelo.consumer.consumerpat.usecase.SetBalanceUsecase;
 import br.com.alelo.consumer.consumerpat.usecase.UpdateConsumerUsecase;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,7 @@ public class ConsumerController {
     private final GetAllConsumerUsecase getAllConsumerUsecase;
     private final SaveConsumerUsecase saveConsumerUsecase;
     private final UpdateConsumerUsecase updateConsumerUsecase;
+    private final SetBalanceUsecase setBalanceUsecase;
 
     @Autowired
     ConsumerRepository repository;
@@ -69,28 +72,9 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-
-        if (consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if (consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
-        }
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
+    public void setBalance(@RequestBody BalanceRequest balanceRequest) {
+        setBalanceUsecase.execute(balanceRequest);
     }
 
     @ResponseBody
