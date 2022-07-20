@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 public class SaveConsumerUsecase {
     private final ConsumerRepository repository;
 
-    public List<Consumer> execute() {
-        return repository.getAllConsumersList();
+    public void execute(Consumer consumer) {
+        repository.save(consumer);
     }
 }
-
