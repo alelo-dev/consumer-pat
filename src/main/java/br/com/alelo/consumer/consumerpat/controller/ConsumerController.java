@@ -4,18 +4,27 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
+import br.com.alelo.consumer.consumerpat.usecase.GetAllConsumerUsecase;
 import java.util.Date;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequestMapping("/consumer")
+@AllArgsConstructor
 public class ConsumerController {
+
+    private final GetAllConsumerUsecase getAllConsumerUsecase;
 
     @Autowired
     ConsumerRepository repository;
@@ -28,8 +37,13 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
+    public ResponseEntity<List<Consumer>> listAllConsumers() {
+        List<Consumer> allConsumersList = getAllConsumerUsecase.execute();
+        if (allConsumersList == null || allConsumersList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(allConsumersList);
+        }
     }
 
 
@@ -56,13 +70,13 @@ public class ConsumerController {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
-        if(consumer != null) {
+        if (consumer != null) {
             // é cartão de farmácia
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
             repository.save(consumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
+            if (consumer != null) {
                 // é cartão de refeição
                 consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
                 repository.save(consumer);
@@ -80,31 +94,31 @@ public class ConsumerController {
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
-        *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
-        */
+         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+         *
+         * Tipos de estabelcimentos
+         * 1 - Alimentação (food)
+         * 2 - Farmácia (DrugStore)
+         * 3 - Posto de combustivel (Fuel)
+         */
 
         if (establishmentType == 1) {
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
+            Double cashback = (value / 100) * 10;
             value = value - cashback;
 
             consumer = repository.findByFoodCardNumber(cardNumber);
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
 
-        }else if(establishmentType == 2) {
+        } else if (establishmentType == 2) {
             consumer = repository.findByDrugstoreNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
 
         } else {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
+            Double tax = (value / 100) * 35;
             value = value + tax;
 
             consumer = repository.findByFuelCardNumber(cardNumber);
