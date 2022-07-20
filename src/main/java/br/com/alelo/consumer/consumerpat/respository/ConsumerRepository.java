@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     @Query(nativeQuery = true, value = "select * from Consumer")
