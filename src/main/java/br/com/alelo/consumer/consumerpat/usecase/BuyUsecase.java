@@ -17,7 +17,7 @@ public class BuyUsecase {
     private final List<ProcessCardStrategy> strategies;
     private final ExtractRepository extractRepository;
 
-    public void execute(BuyRequest input, Integer id) throws Exception {
+    public void execute(BuyRequest input) throws Exception {
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
          *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
          *
@@ -30,7 +30,7 @@ public class BuyUsecase {
         Optional<ProcessCardStrategy> strategyOpt = strategies.stream().filter(s -> s.shouldExecute(input)).findFirst();
 
         if (strategyOpt.isPresent()) {
-            if (strategyOpt.get().execute(input, id)) {
+            if (strategyOpt.get().execute(input)) {
                 extractRepository.save(input.toExtract());
             } else {
                 throw new Exception("Error when execute strategy");

@@ -67,20 +67,18 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "{id}/cardbalance", method = RequestMethod.POST)
+    @RequestMapping(value = "/cardbalance", method = RequestMethod.POST)
     public void setBalance(
-        @PathVariable("id") Integer id,
         @RequestBody BalanceRequest balanceRequest) {
-        setBalanceUsecase.execute(balanceRequest, id);
+        setBalanceUsecase.execute(balanceRequest);
     }
 
-    @RequestMapping(value = "{id}/buy", method = RequestMethod.POST)
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public ResponseEntity<Object> buy(
-        @PathVariable("id") Integer id,
         @RequestBody BuyRequest buyRequest
     ) {
         try {
-            buyUsecase.execute(buyRequest, id);
+            buyUsecase.execute(buyRequest);
             return ResponseEntity.accepted().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

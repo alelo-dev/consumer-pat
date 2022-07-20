@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
-    Consumer findByIdAndFoodCardNumber(int id, int cardNumber);
+    Consumer findByFoodCardNumber(int cardNumber);
 
-    Consumer findByIdAndFuelCardNumber(int id, int cardNumber);
+    Consumer findByFuelCardNumber(int cardNumber);
 
-    Consumer findByIdAndDrugstoreNumber(int id, int cardNumber);
+    Consumer findByDrugstoreNumber(int cardNumber);
 }

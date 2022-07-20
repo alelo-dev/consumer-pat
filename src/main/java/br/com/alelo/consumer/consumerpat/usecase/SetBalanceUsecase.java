@@ -12,23 +12,23 @@ public class SetBalanceUsecase {
 
     private final ConsumerRepository repository;
 
-    public void execute(BalanceRequest input, Integer id) {
+    public void execute(BalanceRequest input) {
         Consumer consumer = null;
-        consumer = repository.findByIdAndDrugstoreNumber(id, input.getCardNumber());
+        consumer = repository.findByDrugstoreNumber(input.getCardNumber());
 
         if (consumer != null) {
             // é cartão de farmácia
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + input.getValue());
             repository.save(consumer);
         } else {
-            consumer = repository.findByIdAndFoodCardNumber(id, input.getCardNumber());
+            consumer = repository.findByFoodCardNumber(input.getCardNumber());
             if (consumer != null) {
                 // é cartão de refeição
                 consumer.setFoodCardBalance(consumer.getFoodCardBalance() + input.getValue());
                 repository.save(consumer);
             } else {
                 // É cartão de combustivel
-                consumer = repository.findByIdAndFuelCardNumber(id, input.getCardNumber());
+                consumer = repository.findByFuelCardNumber(input.getCardNumber());
                 consumer.setFuelCardBalance(consumer.getFuelCardBalance() + input.getValue());
                 repository.save(consumer);
             }
