@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SaveConsumerUsecase {
+
     private final ConsumerRepository repository;
 
     public void execute(Consumer consumer) {
