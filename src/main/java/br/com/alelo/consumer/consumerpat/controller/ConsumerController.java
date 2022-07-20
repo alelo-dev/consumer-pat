@@ -6,6 +6,7 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.usecase.GetAllConsumerUsecase;
 import br.com.alelo.consumer.consumerpat.usecase.SaveConsumerUsecase;
+import br.com.alelo.consumer.consumerpat.usecase.UpdateConsumerUsecase;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class ConsumerController {
 
     private final GetAllConsumerUsecase getAllConsumerUsecase;
     private final SaveConsumerUsecase saveConsumerUsecase;
+    private final UpdateConsumerUsecase updateConsumerUsecase;
 
     @Autowired
     ConsumerRepository repository;
@@ -56,9 +58,9 @@ public class ConsumerController {
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.PATCH)
     public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+        updateConsumerUsecase.execute(consumer);
     }
 
 
