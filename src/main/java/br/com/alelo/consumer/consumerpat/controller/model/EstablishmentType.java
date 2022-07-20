@@ -1,9 +1,9 @@
 package br.com.alelo.consumer.consumerpat.controller.model;
 
 public enum EstablishmentType {
-    ALIMENTACAO(1),
-    FARMACIA(2),
-    POSTO_COMBUSTIVEL(3);
+    FOOD(1),
+    DRUG_STORE(2),
+    FUEL(3);
 
     private Integer code;
 

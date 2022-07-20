@@ -67,10 +67,14 @@ public class ConsumerController {
         setBalanceUsecase.execute(balanceRequest);
     }
 
-    @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public void buy(@RequestBody BuyRequest buyRequest) {
-        buyUsecase.execute(buyRequest);
+    public ResponseEntity<Object> buy(@RequestBody BuyRequest buyRequest) {
+        try {
+            buyUsecase.execute(buyRequest);
+            return ResponseEntity.accepted().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
