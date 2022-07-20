@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
