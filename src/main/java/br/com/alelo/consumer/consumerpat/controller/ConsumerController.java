@@ -34,7 +34,7 @@ public class ConsumerController {
     /* Deve listar todos os clientes (cerca de 500) */
     @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @RequestMapping(value = "/consumers", method = RequestMethod.GET)
     public ResponseEntity<List<Consumer>> listAllConsumers() {
         List<Consumer> allConsumersList = getAllConsumerUsecase.execute();
         if (allConsumersList == null || allConsumersList.isEmpty()) {
@@ -46,13 +46,13 @@ public class ConsumerController {
 
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
         saveConsumerUsecase.execute(consumer);
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.PATCH)
+    @RequestMapping(method = RequestMethod.PATCH)
     public void updateConsumer(@RequestBody Consumer consumer) {
         updateConsumerUsecase.execute(consumer);
     }
@@ -62,14 +62,14 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
+    @RequestMapping(value = "/cardbalance", method = RequestMethod.POST)
     public void setBalance(@RequestBody BalanceRequest balanceRequest) {
         setBalanceUsecase.execute(balanceRequest);
     }
 
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public void buy(BuyRequest buyRequest) {
+    public void buy(@RequestBody BuyRequest buyRequest) {
         buyUsecase.execute(buyRequest);
     }
 
