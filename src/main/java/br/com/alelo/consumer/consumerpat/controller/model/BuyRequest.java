@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class BuyRequest {
 
-    private final int establishmentType;
+    private final EstablishmentType establishmentType;
     private final String establishmentName;
     private final int cardNumber;
     private final String productDescription;
