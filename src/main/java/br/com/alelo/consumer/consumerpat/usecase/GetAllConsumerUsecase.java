@@ -12,6 +12,6 @@ public class GetAllConsumerUsecase {
     private final ConsumerRepository repository;
 
     public List<Consumer> execute() {
-        return repository.getAllConsumersList();
+        return repository.findAll();
     }
 }

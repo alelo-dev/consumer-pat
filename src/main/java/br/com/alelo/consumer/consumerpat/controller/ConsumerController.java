@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.controller.model.BalanceRequest;
 import br.com.alelo.consumer.consumerpat.controller.model.BuyRequest;
+import br.com.alelo.consumer.consumerpat.controller.model.ConsumerRequest;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.usecase.BuyUsecase;
 import br.com.alelo.consumer.consumerpat.usecase.GetAllConsumerUsecase;
@@ -12,6 +13,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,9 +54,12 @@ public class ConsumerController {
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(method = RequestMethod.PATCH)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        updateConsumerUsecase.execute(consumer);
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+    public void updateConsumer(
+        @PathVariable("id") Integer id,
+        @RequestBody ConsumerRequest consumerRequest
+    ) {
+        updateConsumerUsecase.execute(consumerRequest, id);
     }
 
     /*
@@ -62,15 +67,20 @@ public class ConsumerController {
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/cardbalance", method = RequestMethod.POST)
-    public void setBalance(@RequestBody BalanceRequest balanceRequest) {
-        setBalanceUsecase.execute(balanceRequest);
+    @RequestMapping(value = "{id}/cardbalance", method = RequestMethod.POST)
+    public void setBalance(
+        @PathVariable("id") Integer id,
+        @RequestBody BalanceRequest balanceRequest) {
+        setBalanceUsecase.execute(balanceRequest, id);
     }
 
-    @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public ResponseEntity<Object> buy(@RequestBody BuyRequest buyRequest) {
+    @RequestMapping(value = "{id}/buy", method = RequestMethod.POST)
+    public ResponseEntity<Object> buy(
+        @PathVariable("id") Integer id,
+        @RequestBody BuyRequest buyRequest
+    ) {
         try {
-            buyUsecase.execute(buyRequest);
+            buyUsecase.execute(buyRequest, id);
             return ResponseEntity.accepted().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

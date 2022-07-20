@@ -4,5 +4,5 @@ import br.com.alelo.consumer.consumerpat.controller.model.BuyRequest;
 
 public interface ProcessCardStrategy {
     boolean shouldExecute(BuyRequest input);
-    boolean execute(BuyRequest input);
+    boolean execute(BuyRequest input, Integer id);
 }

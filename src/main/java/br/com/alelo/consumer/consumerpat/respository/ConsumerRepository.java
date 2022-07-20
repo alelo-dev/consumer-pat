@@ -10,15 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
-    @Query(nativeQuery = true, value = "select * from Consumer")
-    List<Consumer> getAllConsumersList();
+    Consumer findByIdAndFoodCardNumber(int id, int cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
-    Consumer findByFoodCardNumber(int cardNumber);
+    Consumer findByIdAndFuelCardNumber(int id, int cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
-    Consumer findByFuelCardNumber(int cardNumber);
-
-    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
-    Consumer findByDrugstoreNumber(int cardNumber);
+    Consumer findByIdAndDrugstoreNumber(int id, int cardNumber);
 }

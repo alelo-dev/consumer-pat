@@ -19,14 +19,14 @@ public class ProcessFoodStrategy implements ProcessCardStrategy {
     }
 
     @Override
-    public boolean execute(BuyRequest input) {
+    public boolean execute(BuyRequest input, Integer id) {
         try {
             Consumer consumer = null;
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
             double cashback = (input.getValue() / 100) * 10;
             double value = input.getValue() - cashback;
 
-            consumer = repository.findByFoodCardNumber(input.getCardNumber());
+            consumer = repository.findByIdAndFoodCardNumber(id, input.getCardNumber());
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
             repository.save(consumer);
             return true;

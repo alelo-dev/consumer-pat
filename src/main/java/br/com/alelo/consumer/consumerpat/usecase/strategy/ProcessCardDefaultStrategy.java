@@ -20,14 +20,14 @@ public class ProcessCardDefaultStrategy implements ProcessCardStrategy {
     }
 
     @Override
-    public boolean execute(final BuyRequest input) {
+    public boolean execute(final BuyRequest input, Integer id) {
         try {
             Consumer consumer = null;
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
             double tax = (input.getValue() / 100) * 35;
             double value = input.getValue() + tax;
 
-            consumer = repository.findByFuelCardNumber(input.getCardNumber());
+            consumer = repository.findByIdAndFuelCardNumber(id, input.getCardNumber());
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
             repository.save(consumer);
 

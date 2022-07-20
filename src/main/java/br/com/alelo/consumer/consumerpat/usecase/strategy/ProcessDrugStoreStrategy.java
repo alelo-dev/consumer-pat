@@ -19,10 +19,10 @@ public class ProcessDrugStoreStrategy implements ProcessCardStrategy {
     }
 
     @Override
-    public boolean execute(final BuyRequest input) {
+    public boolean execute(final BuyRequest input, Integer id) {
         try {
             Consumer consumer = null;
-            consumer = repository.findByDrugstoreNumber(input.getCardNumber());
+            consumer = repository.findByIdAndDrugstoreNumber(id, input.getCardNumber());
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - input.getValue());
             repository.save(consumer);
             return true;
