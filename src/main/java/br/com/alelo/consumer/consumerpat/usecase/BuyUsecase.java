@@ -2,10 +2,8 @@ package br.com.alelo.consumer.consumerpat.usecase;
 
 import br.com.alelo.consumer.consumerpat.controller.model.BuyRequest;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,16 +25,18 @@ public class BuyUsecase {
          */
 
         switch (input.getEstablishmentType()) {
-            case ALIMENTACAO: processFood(input);
+            case ALIMENTACAO:
+                processFood(input);
                 break;
-            case FARMACIA: processDrugStore(input);
+            case FARMACIA:
+                processDrugStore(input);
                 break;
-            default: processDefault(input);
+            default:
+                processDefault(input);
                 break;
         }
 
-        Extract extract = new Extract(input.getEstablishmentName(), input.getProductDescription(), new Date(), input.getCardNumber(), input.getValue());
-        extractRepository.save(extract);
+        extractRepository.save(input.toExtract());
     }
 
     private void processDefault(final BuyRequest input) {
