@@ -1,24 +1,26 @@
-package br.com.alelo.consumer.consumerpat.dto;
+package br.com.alelo.consumer.consumerpat.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
- * Objeto de Transporte dos dados do cliente (Consumer).
+ * Classe de objetos de transporte dos dados do consumidor.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Data
 @NoArgsConstructor
-public class ConsumerDto {
+@Data
+public class ConsumerDto extends Dto {
 
-    private Long id;
+    private BigInteger id;
 
     // CONSUMER PERSONAL DATA
     private String name;
-    private Integer documentNumber;
+    private Long documentNumber;
     private Date birthDate;
 
     // CONSUMER CONTACTS
@@ -35,13 +37,13 @@ public class ConsumerDto {
     private Integer portalCode;
 
     // CONSUMER CARDS
-    private Integer foodCardNumber;
-    private Double foodCardBalance;
+    private BigInteger foodCardNumber;
+    private BigDecimal foodCardBalance;
 
-    private Integer fuelCardNumber;
-    private Double fuelCardBalance;
+    private BigInteger fuelCardNumber;
+    private BigDecimal fuelCardBalance;
 
-    private Integer drugstoreCardNumber;
-    private Double drugstoreCardBalance;
+    private BigInteger drugstoreCardNumber;
+    private BigDecimal drugstoreCardBalance;
 
 }

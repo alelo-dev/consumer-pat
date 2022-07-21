@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.entity;
+package br.com.alelo.consumer.consumerpat.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,26 +9,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
- * Extrato da transação realizada entre um cliente e um estabelecimento.
+ * Classe que modela extratos de transações realizadas por um consumidor em estabelecimentos conveniados.
  */
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Builder
 @Entity
 public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Integer establishmentNameId;
+    private BigInteger id;
+
+    private BigInteger establishmentId;
     private String establishmentName;
     private String productDescription;
     private Date dateBuy;
-    private Integer cardNumber;
-    private double value;
+    private BigInteger cardNumber;
+    private BigDecimal value;
 
 }

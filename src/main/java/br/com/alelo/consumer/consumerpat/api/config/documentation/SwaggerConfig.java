@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.config;
+package br.com.alelo.consumer.consumerpat.api.config.documentation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

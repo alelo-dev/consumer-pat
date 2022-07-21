@@ -1,7 +1,7 @@
-package br.com.alelo.consumer.consumerpat.dto.mapper;
+package br.com.alelo.consumer.consumerpat.api.dto.mapper;
 
-import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.api.dto.ConsumerDto;
+import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -19,7 +19,9 @@ public class ConsumerDtoMapper implements DtoMapper<Consumer, ConsumerDto> {
 
     @Override
     public ConsumerDto toDto(Consumer entity) {
+
         ConsumerDto dto = null;
+
         if (entity != null) {
             dto = new ConsumerDto();
             dto.setId(entity.getId());
@@ -28,6 +30,7 @@ public class ConsumerDtoMapper implements DtoMapper<Consumer, ConsumerDto> {
             dto.setBirthDate(entity.getBirthDate());
             dto.setMobilePhoneNumber(entity.getMobilePhoneNumber());
             dto.setResidencePhoneNumber(entity.getResidencePhoneNumber());
+            dto.setPhoneNumber(entity.getPhoneNumber());
             dto.setEmail(entity.getEmail());
             dto.setStreet(entity.getStreet());
             dto.setNumber(entity.getNumber());
@@ -41,12 +44,15 @@ public class ConsumerDtoMapper implements DtoMapper<Consumer, ConsumerDto> {
             dto.setDrugstoreCardNumber(entity.getDrugstoreCardNumber());
             dto.setDrugstoreCardBalance(entity.getDrugstoreCardBalance());
         }
+
         return dto;
     }
 
     @Override
     public Consumer toEntity(ConsumerDto dto) {
+
         Consumer consumer = null;
+
         if (dto != null) {
             consumer = new Consumer();
             consumer.setId(dto.getId());
@@ -55,6 +61,7 @@ public class ConsumerDtoMapper implements DtoMapper<Consumer, ConsumerDto> {
             consumer.setBirthDate(dto.getBirthDate());
             consumer.setMobilePhoneNumber(dto.getMobilePhoneNumber());
             consumer.setResidencePhoneNumber(dto.getResidencePhoneNumber());
+            consumer.setPhoneNumber(dto.getPhoneNumber());
             consumer.setEmail(dto.getEmail());
             consumer.setStreet(dto.getStreet());
             consumer.setNumber(dto.getNumber());
@@ -68,28 +75,35 @@ public class ConsumerDtoMapper implements DtoMapper<Consumer, ConsumerDto> {
             consumer.setDrugstoreCardNumber(dto.getDrugstoreCardNumber());
             consumer.setDrugstoreCardBalance(dto.getDrugstoreCardBalance());
         }
+
         return consumer;
     }
 
     @Override
     public List<ConsumerDto> toDtos(Collection<Consumer> entities) {
+
         List<ConsumerDto> dtos = Collections.emptyList();
+
         if (entities != null && !entities.isEmpty()) {
             dtos = entities.stream()
                     .map(this::toDto)
                     .collect(Collectors.toList());
         }
+
         return dtos;
     }
 
     @Override
     public List<Consumer> toEntities(Collection<ConsumerDto> dtos) {
+
         List<Consumer> entities = Collections.emptyList();
+
         if (dtos != null && !dtos.isEmpty()) {
             entities = dtos.stream()
                     .map(this::toEntity)
                     .collect(Collectors.toList());
         }
+
         return entities;
     }
 }
