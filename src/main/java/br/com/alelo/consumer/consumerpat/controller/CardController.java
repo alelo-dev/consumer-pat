@@ -61,7 +61,7 @@ public class CardController {
             @ApiResponse(code = 404, message = "Card not found"),
             @ApiResponse(code = 422, message = "The card informed is not active")
     })
-    @PatchMapping("/{cardNumber}/activeBalance")
+    @PatchMapping("/{cardNumber}/activeCard")
     public ResponseEntity<CardResponse> activeCard(@PathVariable("cardNumber") String cardNumber){
         return new ResponseEntity<>(cardService.activeCard(cardNumber), HttpStatus.OK);
     }
