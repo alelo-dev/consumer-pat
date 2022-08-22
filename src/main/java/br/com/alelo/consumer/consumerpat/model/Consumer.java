@@ -29,15 +29,8 @@ public class Consumer {
     
     private Date birthDate;
 
-    //contacts
-    private int mobilePhoneNumber;
-    
-    private int residencePhoneNumber;
-    
-    private int phoneNumber;
-    
-    private String email;
-
+    @Embedded
+    private Contact contact; 
 
     @Embedded
     private Address address;
