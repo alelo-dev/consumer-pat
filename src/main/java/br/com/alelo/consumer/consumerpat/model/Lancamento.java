@@ -1,21 +1,23 @@
 package br.com.alelo.consumer.consumerpat.model;
 
-import lombok.Data;
+import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.ManyToAny;
+import lombok.Builder;
+import lombok.Data;
 
-import java.util.Date;
-
-
+@Builder
 @Data
 @Entity
 public class Lancamento {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
         
     private String productDescription;

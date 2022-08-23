@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class EstablishmentService {
 	
 	public void save(EstablishmentDto establishmentDto) {
 		Establishment establishment = new Establishment();
-		establishment.setName(establishmentDto.getName());
+		BeanUtils.copyProperties(establishmentDto, establishment);
 		establishmentRepository.save(establishment);		
 	}
 }

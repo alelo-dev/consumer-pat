@@ -28,8 +28,9 @@ public class Card {
 	
 	private double balance;
 	
-	public void debit(double value) {
+	public double debit(double value) {
 		double calculateBuy = type.calculateBuy(value);
 		setBalance( balance - calculateBuy);
+		return calculateBuy;
 	}
 }
