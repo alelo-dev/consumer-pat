@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.alelo.consumer.consumerpat.dto.EstablishmentDto;
+import br.com.alelo.consumer.consumerpat.error.EntityNotFoundException;
 import br.com.alelo.consumer.consumerpat.model.Establishment;
 import br.com.alelo.consumer.consumerpat.respository.EstablishmentRepository;
 
@@ -20,4 +21,12 @@ public class EstablishmentService {
 		BeanUtils.copyProperties(establishmentDto, establishment);
 		establishmentRepository.save(establishment);		
 	}
+	
+	public Establishment findById(Long establishmentId) {
+		return establishmentRepository.findById(establishmentId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						String.format("Establishment com id %s não encontrado", establishmentId)));
+
+	}
+
 }

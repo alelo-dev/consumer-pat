@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import br.com.alelo.consumer.consumerpat.dto.BuyDto;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
 import br.com.alelo.consumer.consumerpat.dto.MapConsumerDto;
+import br.com.alelo.consumer.consumerpat.error.EntityNotFoundException;
+import br.com.alelo.consumer.consumerpat.error.IncompatibleType;
 import br.com.alelo.consumer.consumerpat.model.Card;
 import br.com.alelo.consumer.consumerpat.model.Consumer;
 import br.com.alelo.consumer.consumerpat.model.Establishment;
@@ -25,35 +27,34 @@ public class ConsumerService {
 
 	@Autowired
 	private ConsumerRepository consumerRepository;
-	
+
 	@Autowired
-	private CardRepository cardRepository;
+	private CardService cardService;
 	
-	@Autowired
-	private EstablishmentRepository establishmentRepository;
+	private EstablishmentService establishmentService;
 	
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
-		
-    @Autowired
-    private MapConsumerDto mapConsumerDto;
 
-    
-	public void save(ConsumerDto consumerDto) {		
+	@Autowired
+	private MapConsumerDto mapConsumerDto;
+
+	public void save(ConsumerDto consumerDto) {
 		consumerRepository.save(mapConsumerDto.create(consumerDto));
 	}
-	
+
 	public Page<Consumer> findAll(int page, int size) {
-		return consumerRepository.findAll(PageRequest.of(page, size));
+		return consumerRepository.findAll(PageRequest.of(page - 1, size));
 	}
+
 	public void update(Long id, ConsumerDto consumerDto) {
 		Optional<Consumer> consumerOp = consumerRepository.findById(id);
-		if(consumerOp.isPresent()) {
+		if (consumerOp.isPresent()) {
 			Consumer consumer = consumerOp.get();
 			mapConsumerDto.update(consumerDto, consumer);
-			consumerRepository.save(consumer);				
-		}else {
-			//TODO lançar exception se não encontrar
+			consumerRepository.save(consumer);
+		} else {
+			throw new EntityNotFoundException(String.format("Consumer com id %s não encontrado", id));
 		}
 	}
 
@@ -62,26 +63,22 @@ public class ConsumerService {
 		consumer.credit(cardNumber, value);
 		consumerRepository.save(consumer);
 	}
-	
+
 	public void buy(Long cardNumber, BuyDto buyDto) {
-		//TODO lançar exception se não encontrar
-		Card card = cardRepository.findByCardNumber(cardNumber);
 		
-		//TODO lançar exception se não encontrar
-		Establishment establishment = establishmentRepository.getOne(buyDto.getEstablishmentId());
-		
-		//TODO lançar exception se o estabelecimento e o cartão não tiverem o mesmo tipo
-		
+		Card card = cardService.findByCardNumber(cardNumber);	
+		Establishment establishment = establishmentService.findById(buyDto.getEstablishmentId());
+
+		if (establishment.getType() != card.getType()) {
+			throw new IncompatibleType(
+					String.format("O tipo do estabelecimento é %s, incompatível com o tipo do cartão que é %s",
+							establishment.getType(), card.getType()));
+		}
 		double debit = card.debit(buyDto.getValue());
-		Lancamento lancamento = Lancamento.builder()
-				.card(card)
-				.dateBuy(new Date())
-				.productDescription(buyDto.getProductDescription())
-				.value(debit)
-				.establishment(establishment)
-				.build();	
-		cardRepository.save(card);
+		Lancamento lancamento = Lancamento.builder().card(card).dateBuy(new Date())
+				.productDescription(buyDto.getProductDescription()).value(debit).establishment(establishment).build();
+		cardService.save(card);
 		lancamentoRepository.save(lancamento);
 	}
-	
+
 }
