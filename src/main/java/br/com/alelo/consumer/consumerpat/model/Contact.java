@@ -8,11 +8,11 @@ import lombok.Data;
 @Embeddable
 public class Contact {
 
-    private int mobilePhoneNumber;
+    private Long mobilePhoneNumber;
     
-    private int residencePhoneNumber;
+    private Long residencePhoneNumber;
     
-    private int phoneNumber;
+    private Long phoneNumber;
     
     private String email;
 

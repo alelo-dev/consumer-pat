@@ -1,15 +1,21 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 public class ContactDto {
 
-    private int mobilePhoneNumber;
+    private Long mobilePhoneNumber;
     
-    private int residencePhoneNumber;
+    private Long residencePhoneNumber;
     
-    private int phoneNumber;
+    private Long phoneNumber;
     
     private String email;
 }
