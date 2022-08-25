@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.alelo.consumer.consumerpat.dto.BuyDto;
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDto;
 import br.com.alelo.consumer.consumerpat.model.Consumer;
+import br.com.alelo.consumer.consumerpat.service.CardService;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 
 @RestController
@@ -26,6 +27,9 @@ public class ConsumerController {
 	@Autowired
 	ConsumerService consumerService;
 
+	@Autowired
+	CardService cardService;
+	
 	@ResponseBody
 	@GetMapping
 	public ResponseEntity<Page<Consumer>> listAllConsumers(//
@@ -50,12 +54,12 @@ public class ConsumerController {
 	}
 
 
-	@PatchMapping("/credit/{cardNumber}")
+	@PatchMapping("/assign/{cardNumber}")
 	public ResponseEntity<Void>  setBalance(//
 			@PathVariable("cardNumber") Long cardNumber, //
 
 			@RequestParam("value") double value) {
-		consumerService.credit(cardNumber, value);
+		cardService.assign(cardNumber, value);
 		return ResponseEntity.ok().build();
 	}
 
@@ -64,7 +68,7 @@ public class ConsumerController {
 	public ResponseEntity<Void>  buy(//
 			@PathVariable("cardNumber") Long cardNumber,
 			@RequestBody BuyDto buyDto) {
-		consumerService.buy(cardNumber, buyDto);
+		cardService.buy(cardNumber, buyDto);
 		return ResponseEntity.ok().build();
 	}
 
