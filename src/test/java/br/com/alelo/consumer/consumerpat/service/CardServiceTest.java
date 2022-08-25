@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.alelo.consumer.consumerpat.dto.BuyDto;
 import br.com.alelo.consumer.consumerpat.emun.TypeCard;
+import br.com.alelo.consumer.consumerpat.error.IncompatibleType;
 import br.com.alelo.consumer.consumerpat.model.Card;
 import br.com.alelo.consumer.consumerpat.model.Establishment;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
@@ -68,11 +69,35 @@ class CardServiceTest {
 		buy.setProductDescription("Desc");
 		buy.setValue(20);
 		
-		cardService.buy(1L, buy);;
+		cardService.buy(1L, buy);
 		
 		verify(cardRepository, times(1)).save(card);
 		verify(lancamentoRepository, times(1)).save(any());
 
+	}
+	
+	@Test
+	void testBuyError() {
+		Card card = new Card();
+		card.setBalance(0);
+		card.setType(TypeCard.DRUG);
+		card.setNumber(1L);
+		
+		when(cardRepository.findByCardNumber(1L)).thenReturn(card);
+		
+		Establishment establishment = new Establishment();
+		establishment.setId(1L);
+		establishment.setName("Name");
+		establishment.setType(TypeCard.FOOD);
+		
+		when(establishmentService.findById(1L)).thenReturn(establishment);
+		
+		BuyDto buy = new BuyDto();
+		buy.setEstablishmentId(1L);
+		buy.setProductDescription("Desc");
+		buy.setValue(20);
+		
+		assertThrows(IncompatibleType.class, () -> cardService.buy(1L, buy));		
 	}
 
 }

@@ -25,10 +25,10 @@ import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 public class ConsumerController {
 
 	@Autowired
-	ConsumerService consumerService;
+	private ConsumerService consumerService;
 
 	@Autowired
-	CardService cardService;
+	private CardService cardService;
 	
 	@ResponseBody
 	@GetMapping
