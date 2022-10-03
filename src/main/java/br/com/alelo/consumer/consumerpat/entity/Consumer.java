@@ -1,70 +1,60 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
 
-import jdk.jfr.DataAmount;
+
+import lombok.*;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
+import java.util.List;
+
 
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Consumer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
-
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
-
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
-
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
-
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-                && mobilePhoneNumber == consumer.mobilePhoneNumber
-                && residencePhoneNumber == consumer.residencePhoneNumber
-                && phoneNumber == consumer.phoneNumber
-                && number == consumer.number
-                && portalCode == consumer.portalCode
-                && foodCardNumber == consumer.foodCardNumber
-                && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-                && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-                && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-                && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-                && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-                && Objects.equals(country, consumer.country);
-    }
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	@Column(name = "NAME")
+	private String name;
+	@Column(name = "DOCUMENT_NUMBER")
+    private String documentNumber;
+	@Column(name = "BIRTH_DATE")
+	private LocalDate birthDate;
+	@Column(name = "EMAIL")
+	private String email;    
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "id_consumer", nullable = false)
+	private List<Phone> PhoneList = new ArrayList<>();
+	@OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_consumer", nullable = false)
+    private List<Card> cardList;
+	 @OneToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	 @JoinColumn(name = "id_consumer", nullable = false)
+	private List<Address> addressList;
+	@Column(name = "CREATE_DATE")
+    private LocalDateTime createdAt;
+	@Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
+	
+	
 
 }
