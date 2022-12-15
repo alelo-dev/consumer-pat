@@ -4,13 +4,17 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -18,10 +22,10 @@ import java.util.List;
 public class ConsumerController {
 
     @Autowired
-    ConsumerRepository repository;
+    private ConsumerRepository repository;
 
     @Autowired
-    ExtractRepository extractRepository;
+    private ExtractRepository extractRepository;
 
 
     /* Deve listar todos os clientes (cerca de 500) */
@@ -42,6 +46,8 @@ public class ConsumerController {
     // Não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody Consumer consumer) {
+    	Consumer consumerToUpdate = validateHasConsumer(consumer.getId());
+    	validateCardBalance(consumer, consumerToUpdate);
         repository.save(consumer);
     }
 
@@ -115,5 +121,21 @@ public class ConsumerController {
         Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
         extractRepository.save(extract);
     }
+    
+    private Consumer validateHasConsumer(Integer id) {
+    	Optional<Consumer> consumer = repository.findById(id);
+        if(consumer.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        return consumer.get();
+	}
+    
+    private void validateCardBalance(Consumer consumer, Consumer consumerToUpdate) {
+        if (consumerToUpdate.getFoodCardBalance() != consumer.getFoodCardBalance() ||
+        		consumerToUpdate.getDrugstoreCardBalance() != consumer.getDrugstoreCardBalance() ||
+        		consumerToUpdate.getFuelCardBalance() != consumer.getFuelCardBalance()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo inválido");
+        }
+    }  
 
 }

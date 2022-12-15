@@ -18,34 +18,67 @@ public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Integer id;
+    private String name;
+    private int documentNumber;
+    private Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    private int mobilePhoneNumber;
+    private int residencePhoneNumber;
+    private int phoneNumber;
+    private String email;
 
     //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    private String street;
+    private int number;
+    private String city;
+    private String country;
+    private int portalCode;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    private int foodCardNumber;
+    private double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    private int fuelCardNumber;
+    private double fuelCardBalance;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    private int drugstoreNumber;
+    private double drugstoreCardBalance;
 
+    public Integer getId() {
+		return id;
+	}
+	
+    public double getFoodCardBalance() {
+		return foodCardBalance;
+	}
+
+
+	public void setFoodCardBalance(double foodCardBalance) {
+		this.foodCardBalance = foodCardBalance;
+	}
+
+
+	public double getFuelCardBalance() {
+		return fuelCardBalance;
+	}
+
+
+	public void setFuelCardBalance(double fuelCardBalance) {
+		this.fuelCardBalance = fuelCardBalance;
+	}
+
+
+	public double getDrugstoreCardBalance() {
+		return drugstoreCardBalance;
+	}
+
+
+	public void setDrugstoreCardBalance(double drugstoreCardBalance) {
+		this.drugstoreCardBalance = drugstoreCardBalance;
+	}
+	
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
