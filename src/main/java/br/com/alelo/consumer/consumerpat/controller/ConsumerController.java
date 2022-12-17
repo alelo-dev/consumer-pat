@@ -41,7 +41,11 @@ public class ConsumerController {
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     @ResponseStatus(code = HttpStatus.CREATED)
     public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+        try {
+			repository.save(consumer);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
+		}
     }
 
     // Não deve ser possível alterar o saldo do cartão
