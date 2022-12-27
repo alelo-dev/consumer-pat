@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-
-import jdk.jfr.DataAmount;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,6 +45,12 @@ public class Consumer {
 
     int drugstoreNumber;
     double drugstoreCardBalance;
+
+    @GetMapping
+    public ResponseEntity<Consumer> listAllConsumers() {
+        Consumer c = new Consumer();
+        return ResponseEntity.ok().body(c);
+    }
 
     @Override
     public boolean equals(Object o) {

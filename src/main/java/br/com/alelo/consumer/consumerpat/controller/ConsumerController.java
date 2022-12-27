@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/consumer")
 public class ConsumerController {
@@ -32,7 +31,6 @@ public class ConsumerController {
         return repository.getAllConsumersList();
     }
 
-
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
@@ -40,18 +38,17 @@ public class ConsumerController {
     }
 
     // Não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.PUT)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
-
 
     /*
      * Deve creditar(adicionar) um valor(value) em um no cartão.
      * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
      * para isso deve usar o número do cartão(cardNumber) fornecido.
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
         consumer = repository.findByDrugstoreNumber(cardNumber);
@@ -76,7 +73,7 @@ public class ConsumerController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
         /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
@@ -112,8 +109,14 @@ public class ConsumerController {
             repository.save(consumer);
         }
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+        Extract extract = new Extract(
+                establishmentName,
+                productDescription,
+                new Date(),
+                cardNumber,
+                value);
         extractRepository.save(extract);
+
     }
 
 }

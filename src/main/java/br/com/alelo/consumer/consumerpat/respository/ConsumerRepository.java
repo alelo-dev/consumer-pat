@@ -11,12 +11,12 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
     @Query(nativeQuery = true, value = "select * from Consumer")
     List<Consumer> getAllConsumersList();
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = ? ")
+    @Query(nativeQuery = true, value = "select * from Consumer where FOOD_CARD_NUMBER = cardNumber ")
     Consumer findByFoodCardNumber(int cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = ? ")
+    @Query(nativeQuery = true, value = "select * from Consumer where FUEL_CARD_NUMBER = cardNumber ")
     Consumer findByFuelCardNumber(int cardNumber);
 
-    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = ? ")
+    @Query(nativeQuery = true, value = "select * from Consumer where DRUGSTORE_NUMBER = cardNumbers ")
     Consumer findByDrugstoreNumber(int cardNumber);
 }
