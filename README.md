@@ -19,10 +19,13 @@ Então, esteja preparado para mostrar suas habilidades e sua capacidade de tomar
 
 * Faça um fork do projeto;
 * Clone o repositório;
-* Abra em sua IDE de preferência (IntelliJ, VS Code, Eclipse, NetBeans, etc.) 
-* Leia as classes (exceto as do pacote config) e verifique se existe algo que você faria diferente (Code Review). 
-* Se encontrar, faça as alterações necessárias. 
+* Abra em sua IDE de preferência (IntelliJ, VS Code, Eclipse, NetBeans, etc.); 
+* Leia as classes (exceto as do pacote config) e verifique se existe algo que você faria diferente (Code Review); 
+* Se encontrar, faça as alterações necessárias;
 * Ao fim, realize o **commit** e nos envie um **Pull Request**.
+
+Observação: caso não possua acesso a uma IDE e necessite realizar as alterações, o GitHub possui um editor web, 
+basta clicar [aqui](https://github.dev/alelo-dev/consumer-pat) para acessar.
 
 ## Executando
 Ambiente Linux/macOS:
