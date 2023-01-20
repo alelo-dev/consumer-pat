@@ -1,0 +1,9 @@
+${AnsiColor.DEFAULT}
+          ${AnsiColor.GREEN}          _          _
+          ${AnsiColor.GREEN}   __ _  | |   ___  | |   ___    _
+          ${AnsiColor.GREEN}  / _` | | |  / _ \ | |  / _ \  (_)
+          ${AnsiColor.GREEN} | (_| | | | |  __/ | | | (_) |  _   _
+          ${AnsiColor.GREEN}  \__,_| |_|  \___| |_|  \___/  (_) (_)
+${AnsiColor.GREEN} ==================================================================================
+${AnsiColor.DEFAULT} > API...............: consumer-pat
+${AnsiColor.GREEN} ==================================================================================${AnsiColor.DEFAULT}

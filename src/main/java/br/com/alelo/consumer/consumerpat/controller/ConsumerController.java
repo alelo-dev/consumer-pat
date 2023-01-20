@@ -4,6 +4,7 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-
+@Log4j2
 @Controller
 @RequestMapping("/consumer")
 public class ConsumerController {
@@ -24,14 +25,16 @@ public class ConsumerController {
     ExtractRepository extractRepository;
 
 
-    /* Deve listar todos os clientes (cerca de 500) */
+    /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
     @ResponseBody
-    @ResponseStatus(code = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
     public List<Consumer> listAllConsumers() {
-        return repository.getAllConsumersList();
-    }
+        log.info("obtendo todos clientes");
+        var consumers = repository.getAllConsumersList();
 
+        return consumers;
+    }
 
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
@@ -39,17 +42,17 @@ public class ConsumerController {
         repository.save(consumer);
     }
 
-    // Não deve ser possível alterar o saldo do cartão
+    // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
-
     /*
-     * Deve creditar(adicionar) um valor(value) em um no cartão.
-     * Para isso ele precisa indenficar qual o cartão correto a ser recarregado,
-     * para isso deve usar o número do cartão(cardNumber) fornecido.
+     * Credito de valor no cartão
+     *
+     * cardNumber: número do cartão
+     * value: valor a ser creditado (adicionado ao saldo)
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public void setBalance(int cardNumber, double value) {
@@ -75,17 +78,27 @@ public class ConsumerController {
         }
     }
 
+    /*
+     * Débito de valor no cartão (compra)
+     *
+     * establishmentType: tipo do estabelecimento comercial
+     * establishmentName: nome do estabelecimento comercial
+     * cardNumber: número do cartão
+     * productDescription: descrição do produto
+     * value: valor a ser debitado (subtraído)
+     */
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
         Consumer consumer = null;
-        /* O valores só podem ser debitados dos cartões com os tipos correspondentes ao tipo do estabelecimento da compra.
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação(food) então o valor só pode ser debitado do cartão e alimentação
+        /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
+
+        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
         *
-        * Tipos de estabelcimentos
-        * 1 - Alimentação (food)
-        * 2 - Farmácia (DrugStore)
-        * 3 - Posto de combustivel (Fuel)
+        * Tipos dos estabelcimentos:
+        *    1) Alimentação (Food)
+        *    2) Farmácia (DrugStore)
+        *    3) Posto de combustivel (Fuel)
         */
 
         if (establishmentType == 1) {
