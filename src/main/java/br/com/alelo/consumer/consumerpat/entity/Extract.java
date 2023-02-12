@@ -1,62 +1,46 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    @JsonIgnore
+    private int id;
 
+    @NonNull
     @Column
-    int establishmentNameId;
+    @JsonIgnore
+    private int establishmentNameId;
 
+    @NonNull
     @Column
-    String establishmentName;
+    private String establishmentName;
 
+    @NonNull
     @Column
-    String productDescription;
+    private String productDescription;
 
+    @NonNull
     @Column
-    Date dateBuy;
+    private LocalDateTime dateBuy;
 
+    @NonNull
     @Column
-    int cardNumber;
+    private long cardNumber;
 
+    @NonNull
     @Column
-    double amount;
-
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.amount = amount;
-    }
-
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.amount = amount;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.amount = amount;
-    }
+    private BigDecimal amount;
 
 }

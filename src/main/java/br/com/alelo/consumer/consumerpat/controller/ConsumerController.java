@@ -1,51 +1,96 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.dto.*;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.exception.ServiceWarningException;
+import br.com.alelo.consumer.consumerpat.service.ConsumerService;
+import br.com.alelo.consumer.consumerpat.service.card.CardTypeEnum;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Log4j2
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
 
     @Autowired
-    ConsumerRepository repository;
+    private ConsumerService consumerService;
 
     @Autowired
-    ExtractRepository extractRepository;
-
+    private Mapper mapper;
 
     /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
-        log.info("obtendo todos clientes");
-        var consumers = repository.getAllConsumersList();
+    //@ResponseBody
+    @Operation(summary = "Return a paged list of consumers")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Return a paged list of consumers"),
+        @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
+        @ApiResponse(responseCode = "401", description = "User invalid", content = @Content),
+    })
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<PageData<Consumer>> listAllConsumers(@RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "50") int size) {
+        log.info("listAllConsumers: Getting paged consumers");
 
-        return consumers;
+        Pageable paging = PageRequest.of(page, size);
+        PageData<Consumer> pageConsumers = consumerService.getAllConsumersListByPage(paging);
+
+        log.info("listAllConsumers: Returning paged consumers");
+
+        return new ResponseEntity<>(pageConsumers, HttpStatus.OK);
     }
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    @Operation(summary = "Create a new consumer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Created consumer"),
+            @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
+            @ApiResponse(responseCode = "401", description = "User invalid", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error", content = @Content)
+    })
+    @PostMapping(value = "")
+    public void createConsumer(@RequestBody @Valid ConsumerCreateDto consumerDto) {
+
+        log.info("createConsumer - Enter");
+
+        Consumer consumer = mapper.toConsumer(consumerDto);
+        consumerService.saveConsumer(consumer);
+
+        log.info("createConsumer - Created");
+
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    @Operation(summary = "Update a consumer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Updated consumer"),
+            @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
+            @ApiResponse(responseCode = "401", description = "User invalid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Consumer not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error", content = @Content),
+    })
+    @PutMapping(value = "/{id}")
+    public void updateConsumer(@RequestBody @Valid ConsumerUpdateDto consumerDto, @NotBlank @PathVariable String id) {
+
+        log.info("updateConsumer - Enter");
+
+        Consumer consumer = mapper.toConsumer(consumerDto);
+        consumer.setIdentifier(id);
+        consumerService.saveConsumer(consumer);
+
+        log.info("updateConsumer - Updated");
     }
 
     /*
@@ -54,28 +99,22 @@ public class ConsumerController {
      * cardNumber: número do cartão
      * value: valor a ser creditado (adicionado ao saldo)
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+    @Operation(summary = "Credit value to a specific card number")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Credited"),
+            @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content),
+            @ApiResponse(responseCode = "401", description = "User invalid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Consumer not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error", content = @Content)
+    })
+    @PostMapping(value = "/credit")
+    public void credit(@RequestBody @Valid ConsumerCreditDto consumerCreditDto) {
 
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
-        }
+        log.info("credit - Updating credit");
+
+        consumerService.credit(consumerCreditDto.getCardNumber(), consumerCreditDto.getValue());
+
+        log.info("credit - Credit updated");
     }
 
     /*
@@ -87,46 +126,33 @@ public class ConsumerController {
      * productDescription: descrição do produto
      * value: valor a ser debitado (subtraído)
      */
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
-        /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
+    @Operation(summary = "Debit value from a specific card number")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Debited"),
+            @ApiResponse(responseCode = "400", description = "Invalid data/Insufficient Balance", content = @Content),
+            @ApiResponse(responseCode = "401", description = "User invalid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Consumer not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error", content = @Content)
+    })
+    @PostMapping(value = "/debit")
+    public void debit(@RequestBody @Valid ConsumerDebitDto consumerDebitDto) {
 
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
-        *
-        * Tipos dos estabelcimentos:
-        *    1) Alimentação (Food)
-        *    2) Farmácia (DrugStore)
-        *    3) Posto de combustivel (Fuel)
-        */
+        log.info("debit - Creating debit");
 
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+        CardTypeEnum establishmentType = null;
+        try {
+            establishmentType = CardTypeEnum.values()[consumerDebitDto.getEstablishmentType()-1];
+        }catch (IndexOutOfBoundsException e) {
+            log.warn("Establishment type invalid: " + consumerDebitDto.getEstablishmentType());
+            throw new ServiceWarningException("Establishment type invalid");
         }
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
+        consumerService.debit(establishmentType, consumerDebitDto.getEstablishmentNameId(),
+                consumerDebitDto.getEstablishmentName(), consumerDebitDto.getCardNumber(),
+                consumerDebitDto.getProductDescription(), consumerDebitDto.getValue());
+
+        log.info("debit - Debit created");
+
     }
 
 }
