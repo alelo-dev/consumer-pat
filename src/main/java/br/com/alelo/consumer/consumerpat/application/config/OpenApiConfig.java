@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.config;
+package br.com.alelo.consumer.consumerpat.application.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
