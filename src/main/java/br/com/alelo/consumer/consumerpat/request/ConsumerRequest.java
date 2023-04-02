@@ -22,10 +22,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsumerRequest {
-    private Integer id;
     private String name;
     @NotBlank
-    @Pattern(regexp = "^(((\\d{3}).(\\d{3}).(\\d{3})-(\\d{2}))?((\\d{2}).(\\d{3}).(\\d{3})/(\\d{4})-(\\d{2}))?)*$", message = "CPF must be valid")
     private String documentNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull

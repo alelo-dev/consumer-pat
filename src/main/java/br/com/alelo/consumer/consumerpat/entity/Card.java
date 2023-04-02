@@ -1,5 +1,7 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -22,6 +24,7 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
     private BigDecimal balance;
     private String number;
@@ -29,6 +32,7 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "consumer_id")
+    @JsonIgnore
     private Consumer consumer;
 
     public void add(BigDecimal value) {

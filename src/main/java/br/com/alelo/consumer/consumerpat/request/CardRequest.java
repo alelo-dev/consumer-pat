@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CardRequest {
-    private Integer id;
     private BigDecimal balance;
     private String number;
     private CardType cardType;
