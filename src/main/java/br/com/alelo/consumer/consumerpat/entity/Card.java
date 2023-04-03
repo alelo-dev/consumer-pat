@@ -36,12 +36,12 @@ public class Card {
     private Consumer consumer;
 
     public void add(BigDecimal value) {
-        value.add(balance);
+        this.balance = balance.add(value);
     }
 
     public void subtract(BigDecimal value) {
         var tax = cardType.taxCalculate(value);
-        tax.subtract(balance);
+        this.balance = balance.subtract(tax);
     }
 
 }

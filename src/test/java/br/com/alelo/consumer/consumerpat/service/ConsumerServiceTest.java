@@ -2,7 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.config.ModelMapperConfig;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.exception.InvalidCardException;
+import br.com.alelo.consumer.consumerpat.exception.ApiException;
 import br.com.alelo.consumer.consumerpat.mapper.ConsumerMapper;
 import br.com.alelo.consumer.consumerpat.model.ConsumerMockEntity;
 import br.com.alelo.consumer.consumerpat.response.ConsumerResponse;
@@ -64,7 +64,7 @@ public class ConsumerServiceTest {
     }
 
     @Test
-    void testCreateConsumerSuccess() throws InvalidCardException {
+    void testCreateConsumerSuccess() throws ApiException {
         when(consumerMapper.toRequest(any())).thenReturn(ConsumerMockEntity.consumerBuilder());
         when(repository.save(any())).thenReturn(ConsumerMockEntity.consumerBuilder());
         when(consumerMapper.toResponse(any())).thenReturn(ConsumerMockEntity.consumerResponseBuilder());

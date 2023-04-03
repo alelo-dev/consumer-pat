@@ -34,7 +34,7 @@ public class ConsumerController {
         return new ResponseEntity<>(consumerService.save(consumerRequest), HttpStatus.CREATED);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "{id}/updateConsumer")
     public ResponseEntity<ConsumerResponse> update(@PathVariable("id") Integer id, @RequestBody ConsumerRequest consumerRequest) {
         return new ResponseEntity<>(consumerService.update(id, consumerRequest), HttpStatus.OK);
     }

@@ -26,16 +26,19 @@ public class ConsumerServiceImpl implements ConsumerService {
     private ConsumerMapper mapper;
 
     public Page<ConsumerResponse> findAllConsumers(Pageable pageable) {
+        log.info("Finding page request = {}", pageable);
         Page<Consumer> consumers = repository.findAll(pageable);
         return consumers.map(mapper::toResponse);
     }
 
     public ConsumerResponse save(ConsumerRequest consumerRequest) {
+        log.info("Creating consumer = {}", consumerRequest);
         Consumer consumer = mapper.toRequest(consumerRequest);
         return mapper.toResponse(repository.save(consumer));
     }
 
     public ConsumerResponse update(Integer id, ConsumerRequest consumerRequest) {
+        log.info("Updating consumer id = {}; info = {}", id, consumerRequest);
         Consumer consumer = repository.findById(id).orElseThrow(() -> new RuntimeException("Consumer Not Found"));
         BeanUtils.copyProperties(consumerRequest, consumer);
         return mapper.toResponse(repository.save(consumer));
