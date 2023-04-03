@@ -5,7 +5,7 @@ import br.com.alelo.consumer.consumerpat.request.SettlingRequest;
 
 import java.math.BigDecimal;
 
-public class SettlingMockEntity {
+public class SettlingEntityBuilder {
 
     public static SettlingRequest settlingRequestBuilder() {
         SettlingRequest settling = new SettlingRequest();

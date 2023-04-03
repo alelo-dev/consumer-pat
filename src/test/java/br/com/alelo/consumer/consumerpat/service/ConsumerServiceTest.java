@@ -4,7 +4,7 @@ import br.com.alelo.consumer.consumerpat.config.ModelMapperConfig;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.ApiException;
 import br.com.alelo.consumer.consumerpat.mapper.ConsumerMapper;
-import br.com.alelo.consumer.consumerpat.model.ConsumerMockEntity;
+import br.com.alelo.consumer.consumerpat.model.ConsumerEntityBuilder;
 import br.com.alelo.consumer.consumerpat.response.ConsumerResponse;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.service.impl.ConsumerServiceImpl;
@@ -50,7 +50,7 @@ public class ConsumerServiceTest {
 
     @Test
     void testListAllConsumersSuccess() {
-        List<Consumer> consumers = List.of(ConsumerMockEntity.consumerBuilder());
+        List<Consumer> consumers = List.of(ConsumerEntityBuilder.consumerBuilder());
         PageImpl<Consumer> foundPageConsumer = new PageImpl<>(consumers);
 
         Pageable pageable = PageRequest.of(0, 15);
@@ -65,22 +65,22 @@ public class ConsumerServiceTest {
 
     @Test
     void testCreateConsumerSuccess() throws ApiException {
-        when(consumerMapper.toRequest(any())).thenReturn(ConsumerMockEntity.consumerBuilder());
-        when(repository.save(any())).thenReturn(ConsumerMockEntity.consumerBuilder());
-        when(consumerMapper.toResponse(any())).thenReturn(ConsumerMockEntity.consumerResponseBuilder());
+        when(consumerMapper.toRequest(any())).thenReturn(ConsumerEntityBuilder.consumerBuilder());
+        when(repository.save(any())).thenReturn(ConsumerEntityBuilder.consumerBuilder());
+        when(consumerMapper.toResponse(any())).thenReturn(ConsumerEntityBuilder.consumerResponseBuilder());
 
-        ConsumerResponse consumer = consumerService.save(ConsumerMockEntity.consumerRequestBuilder());
+        ConsumerResponse consumer = consumerService.save(ConsumerEntityBuilder.consumerRequestBuilder());
 
         assertNotNull(consumer);
     }
 
     @Test
     void testUpdateConsumerSuccess() {
-        when(repository.findById(any())).thenReturn(Optional.of(ConsumerMockEntity.consumerBuilder()));
-        when(repository.save(any())).thenReturn(ConsumerMockEntity.consumerBuilder());
-        when(consumerMapper.toResponse(any())).thenReturn(ConsumerMockEntity.consumerResponseBuilder());
+        when(repository.findById(any())).thenReturn(Optional.of(ConsumerEntityBuilder.consumerBuilder()));
+        when(repository.save(any())).thenReturn(ConsumerEntityBuilder.consumerBuilder());
+        when(consumerMapper.toResponse(any())).thenReturn(ConsumerEntityBuilder.consumerResponseBuilder());
 
-        ConsumerResponse consumer = consumerService.update(1, ConsumerMockEntity.consumerRequestBuilder());
+        ConsumerResponse consumer = consumerService.update(1, ConsumerEntityBuilder.consumerRequestBuilder());
 
         assertNotNull(consumer);
     }
@@ -91,7 +91,7 @@ public class ConsumerServiceTest {
 
         RuntimeException exception =
                 assertThrows(RuntimeException.class, () -> consumerService.update(1,
-                        ConsumerMockEntity.consumerRequestBuilder()));
+                        ConsumerEntityBuilder.consumerRequestBuilder()));
 
         assertNotNull(exception);
         assertEquals("Consumer Not Found", exception.getMessage());

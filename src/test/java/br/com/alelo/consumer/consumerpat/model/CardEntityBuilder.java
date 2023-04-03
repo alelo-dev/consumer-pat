@@ -6,14 +6,14 @@ import br.com.alelo.consumer.consumerpat.response.CardResponse;
 
 import java.math.BigDecimal;
 
-public class CardMockEntity {
+public class CardEntityBuilder {
     public static Card cardBuilder() {
         Card card = new Card();
         card.setCardType(CardType.FOOD);
         card.setBalance(BigDecimal.valueOf(200));
         card.setId(1);
         card.setNumber("21349182048129104");
-        card.setConsumer(ConsumerMockEntity.consumerBuilder());
+        card.setConsumer(ConsumerEntityBuilder.consumerBuilder());
 
         return card;
     }
@@ -24,7 +24,7 @@ public class CardMockEntity {
         cardResponse.setBalance(BigDecimal.valueOf(200));
         cardResponse.setId(1);
         cardResponse.setNumber("21349182048129104");
-        cardResponse.setConsumer(ConsumerMockEntity.consumerBuilder());
+        cardResponse.setConsumer(ConsumerEntityBuilder.consumerBuilder());
 
         return cardResponse;
     }

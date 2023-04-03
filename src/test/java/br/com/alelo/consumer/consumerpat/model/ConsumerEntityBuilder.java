@@ -9,7 +9,7 @@ import br.com.alelo.consumer.consumerpat.response.ConsumerResponse;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class ConsumerMockEntity {
+public class ConsumerEntityBuilder {
 
 
     public static Consumer consumerBuilder() {
