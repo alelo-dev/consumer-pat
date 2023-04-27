@@ -1,66 +1,55 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+@Builder
 @Data
+@Table(indexes = {
+        @Index(name = "idx_foodCardNumber", columnList = "foodCardNumber"),
+        @Index(name = "idx_fuelCardNumber", columnList = "fuelCardNumber"),
+        @Index(name = "idx_drugstoreNumber", columnList = "drugstoreNumber")
+})
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Consumer {
 
+    //TODO: segmentar os dados em mais de uma entidade, tais como dados de contato endereço mas princippalmente o registro dos cartões do cliente
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
-    int documentNumber;
+    Integer documentNumber;
     Date birthDate;
 
     //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
+    Integer mobilePhoneNumber;
+    Integer residencePhoneNumber;
+    Integer phoneNumber;
     String email;
 
     //Address
     String street;
-    int number;
+    Integer number;
     String city;
     String country;
-    int portalCode;
+    Integer portalCode;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    Long foodCardNumber;
+    Double foodCardBalance;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    Long fuelCardNumber;
+    Double fuelCardBalance;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-            && mobilePhoneNumber == consumer.mobilePhoneNumber
-            && residencePhoneNumber == consumer.residencePhoneNumber
-            && phoneNumber == consumer.phoneNumber
-            && number == consumer.number
-            && portalCode == consumer.portalCode
-            && foodCardNumber == consumer.foodCardNumber
-            && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-            && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-            && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-            && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-            && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-            && Objects.equals(country, consumer.country);
-    }
+    Long drugstoreNumber;
+    Double drugstoreCardBalance;
 
 }
