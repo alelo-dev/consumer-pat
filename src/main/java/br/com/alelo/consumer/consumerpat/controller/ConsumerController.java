@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Controller
@@ -24,109 +25,93 @@ public class ConsumerController {
     @Autowired
     ExtractRepository extractRepository;
 
-
-    /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
+    @GetMapping("/consumerList")
     public List<Consumer> listAllConsumers() {
-        log.info("obtendo todos clientes");
-        var consumers = repository.getAllConsumersList();
-
-        return consumers;
+        log.info("Obtendo todos os clientes");
+        return repository.findAll();
     }
 
-    /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    @PostMapping("/createConsumer")
     public void createConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
 
-    // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @PostMapping("/updateConsumer")
     public void updateConsumer(@RequestBody Consumer consumer) {
         repository.save(consumer);
     }
-
-    /*
-     * Credito de valor no cartão
-     *
-     * cardNumber: número do cartão
-     * value: valor a ser creditado (adicionado ao saldo)
+    /* Tipos dos estabelcimentos:
+     *    1) Alimentação (Food)
+     *    2) Farmácia (DrugStore)
+     *    3) Posto de combustivel (Fuel)
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
 
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
+    @GetMapping("/setcardbalance")
+    public void setBalance(@RequestParam int cardNumber, @RequestParam double value) {
+        Optional<Consumer> consumer = repository.findByDrugstoreNumber(cardNumber);
+
+        if (consumer.isPresent()) {
+            Consumer pharmacyConsumer = consumer.get();
+            pharmacyConsumer.setDrugstoreCardBalance(pharmacyConsumer.getDrugstoreCardBalance() + value);
+            repository.save(pharmacyConsumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
+            if (consumer.isPresent()) {
+                Consumer foodConsumer = consumer.get();
+                foodConsumer.setFoodCardBalance(foodConsumer.getFoodCardBalance() + value);
+                repository.save(foodConsumer);
             } else {
-                // É cartão de combustivel
                 consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
+                if (consumer.isPresent()) {
+                    Consumer fuelConsumer = consumer.get();
+                    fuelConsumer.setFuelCardBalance(fuelConsumer.getFuelCardBalance() + value);
+                    repository.save(fuelConsumer);
+                }
             }
         }
     }
 
-    /*
-     * Débito de valor no cartão (compra)
-     *
-     * establishmentType: tipo do estabelecimento comercial
-     * establishmentName: nome do estabelecimento comercial
-     * cardNumber: número do cartão
-     * productDescription: descrição do produto
-     * value: valor a ser debitado (subtraído)
-     */
+    @GetMapping("/buy")
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
-        /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
+    public void buy(
+            @RequestParam int establishmentType,
+            @RequestParam String establishmentName,
+            @RequestParam int cardNumber,
+            @RequestParam String productDescription,
+            @RequestParam double value) {
 
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
-        *
-        * Tipos dos estabelcimentos:
-        *    1) Alimentação (Food)
-        *    2) Farmácia (DrugStore)
-        *    3) Posto de combustivel (Fuel)
-        */
+        Optional<Consumer> consumerOptional = Optional.empty();
+        final double finalValue;
 
         if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
+            Double cashback = (value / 100) * 10;
+            finalValue = value - cashback;
 
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
+            consumerOptional = repository.findByFoodCardNumber(cardNumber);
+        } else if (establishmentType == 2) {
+            consumerOptional = repository.findByDrugstoreNumber(cardNumber);
+            finalValue = value;
         } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
+            Double tax = (value / 100) * 35;
+            finalValue = value + tax;
 
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+            consumerOptional = repository.findByFuelCardNumber(cardNumber);
         }
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
-    }
+        consumerOptional.ifPresent(consumer -> {
+            if (establishmentType == 1) {
+                consumer.setFoodCardBalance(consumer.getFoodCardBalance() - finalValue);
+            } else if (establishmentType == 2) {
+                consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - finalValue);
+            } else {
+                consumer.setFuelCardBalance(consumer.getFuelCardBalance() - finalValue);
+            }
+            repository.save(consumer);
 
+            Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, finalValue);
+            extractRepository.save(extract);
+        });
+    }
 }
