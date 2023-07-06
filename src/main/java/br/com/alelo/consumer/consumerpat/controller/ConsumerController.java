@@ -48,17 +48,20 @@ public class ConsumerController {
     }
 
     /* Cadastrar novos clientes */
-//    @PostMapping
-//    public void createConsumer(@RequestBody Consumer consumer) {
-//        service.save(consumer);
-//    }
-//
-//    // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-//    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-//    public void updateConsumer(@RequestBody Consumer consumer) {
-//        service.save(consumer);
-//    }
-//
+    @ResponseBody
+    @PostMapping
+    public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+        return new ResponseEntity<>(service.save(consumer), HttpStatus.OK);
+    }
+
+    // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
+
+    @ResponseBody
+    @PatchMapping
+    public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
+        return new ResponseEntity<>(service.update(consumer), HttpStatus.OK);
+    }
+
 //    /*
 //     * Credito de valor no cartão
 //     *

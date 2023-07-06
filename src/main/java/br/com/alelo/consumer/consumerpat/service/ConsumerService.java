@@ -6,8 +6,10 @@ import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConsumerService {
@@ -23,5 +25,25 @@ public class ConsumerService {
 
     public Page<Consumer> getAllConsumersList(Integer page, Integer itemsPerPage) {
         return repository.getAllConsumersList(PageRequest.of(page, itemsPerPage));
+    }
+
+    public Consumer save(Consumer consumer) {
+        return repository.save(consumer);
+    }
+
+    public Consumer update(Consumer consumer) {
+
+        Optional<Consumer> databaseEntity = repository.findById(consumer.getId());
+
+        if (databaseEntity.isPresent()) {
+
+            consumer.setDrugstoreCardBalance(databaseEntity.get().getDrugstoreCardBalance());
+            consumer.setFuelCardBalance(databaseEntity.get().getFuelCardBalance());
+            consumer.setFoodCardBalance(databaseEntity.get().getFoodCardBalance());
+
+        } else
+            throw  new NotFoundException(consumer.getId().toString());
+
+        return this.save(consumer);
     }
 }
