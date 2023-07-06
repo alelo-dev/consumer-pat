@@ -59,11 +59,11 @@ public class ConsumerService {
             // é cartão de farmácia
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
 
-        } else if(cardNumber == consumer.getFoodCardBalance()) {
+        } else if(cardNumber == consumer.getFoodCardNumber()) {
             // é cartão de refeição
             consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
 
-        } else if(cardNumber == consumer.getFuelCardBalance()) {
+        } else if(cardNumber == consumer.getFuelCardNumber()) {
             // É cartão de combustivel
             consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
         }

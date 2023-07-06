@@ -14,8 +14,8 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
     Page<Consumer> getAllConsumers(Pageable pageable);
 
     @Query(nativeQuery = true, value = "select * from Consumer where " +
-            "DRUGSTORE_NUMBER = ? " +
-            "OR FUEL_CARD_NUMBER = ? " +
-            "OR FOOD_CARD_NUMBER = ? ")
+            "DRUGSTORE_NUMBER = :cardNumber " +
+            "OR FUEL_CARD_NUMBER = :cardNumber " +
+            "OR FOOD_CARD_NUMBER = :cardNumber ")
     Optional<Consumer> findByAnyCardNumber(Integer cardNumber);
 }

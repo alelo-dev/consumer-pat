@@ -64,6 +64,7 @@ public class ConsumerController {
      * cardNumber: número do cartão
      * value: valor a ser creditado (adicionado ao saldo)
      */
+    @ResponseBody
     @PatchMapping(value = "card/balance")
     public Consumer addBalance(@RequestBody BalanceModel balance) {
         return service.addValue(balance.getCardNumber(), balance.getValue());

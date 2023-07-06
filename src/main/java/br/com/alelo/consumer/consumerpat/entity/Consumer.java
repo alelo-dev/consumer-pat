@@ -2,10 +2,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
@@ -34,12 +31,17 @@ public class Consumer {
     int portalCode;
 
     //cards
+
+    @Column(unique = true)
     int foodCardNumber;
     double foodCardBalance;
 
+
+    @Column(unique = true)
     int fuelCardNumber;
     double fuelCardBalance;
 
+    @Column(unique = true)
     int drugstoreNumber;
     double drugstoreCardBalance;
 
