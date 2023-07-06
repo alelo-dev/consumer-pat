@@ -68,7 +68,7 @@ public class ConsumerController {
      */
     @ResponseBody
     @PatchMapping(value = "card/balance")
-    public Consumer addBalance(@RequestBody @Valid BalanceModel balance) {
+    public Consumer addBalance(@RequestBody @Valid  BalanceModel balance) {
         return service.addValue(balance.getCardNumber(), balance.getValue());
     }
 

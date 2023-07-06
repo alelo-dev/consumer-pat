@@ -21,7 +21,7 @@ public class Handler {
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ResponseEntity<MessageError> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException e){
         return new ResponseEntity<>(
-                new MessageError("There was an integrity error. Please validate the data"), HttpStatus.BAD_REQUEST); // TODO Limpar o retorno da exception
+                new MessageError("There was an integrity error. Please validate the data"), HttpStatus.BAD_REQUEST); // TODO Limpar a mensagem da exception
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
