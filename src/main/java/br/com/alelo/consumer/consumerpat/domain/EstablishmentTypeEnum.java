@@ -74,4 +74,14 @@ public enum EstablishmentTypeEnum implements EstablishmentCost {
 
         return balance - value;
     }
+
+    @SneakyThrows
+    public static EstablishmentTypeEnum valueOf(Integer id) {
+        for (EstablishmentTypeEnum type : EstablishmentTypeEnum.values()) {
+            if (type.id.equals(id)) {
+                return type;
+            }
+        }
+        throw new BadRequestException("Invalid Establishment Type: " + id);
+    }
 }

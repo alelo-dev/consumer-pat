@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import br.com.alelo.consumer.consumerpat.domain.EstablishmentTypeEnum;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.model.BuyModel;
@@ -71,7 +72,7 @@ public class ConsumerService {
 
         Consumer consumer = this.findByAnyCard(buyModel.getCardNumber());
 
-        buyModel.getEstablishmentType()
+        EstablishmentTypeEnum.valueOf(buyModel.getEstablishmentType())
                 .updateBalance(buyModel.getValue(), buyModel.getCardNumber(), consumer);
 
         extractService.save(
