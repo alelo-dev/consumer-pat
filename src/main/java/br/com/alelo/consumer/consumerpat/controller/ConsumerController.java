@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Log4j2
 @Controller
 @RequestMapping("/consumer")
@@ -66,7 +68,7 @@ public class ConsumerController {
      */
     @ResponseBody
     @PatchMapping(value = "card/balance")
-    public Consumer addBalance(@RequestBody BalanceModel balance) {
+    public Consumer addBalance(@RequestBody @Valid BalanceModel balance) {
         return service.addValue(balance.getCardNumber(), balance.getValue());
     }
 
