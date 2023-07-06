@@ -1,9 +1,13 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.entity.Address;
+import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.entity.Contact;
+import br.com.alelo.consumer.consumerpat.respository.AddressRepository;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.respository.ContactRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Log4j2
@@ -22,11 +25,16 @@ import java.util.List;
 public class ConsumerController {
 
     @Autowired
-    ConsumerRepository repository;
+    private ConsumerRepository consumerRepository;
 
     @Autowired
-    ExtractRepository extractRepository;
+    private AddressRepository addressRepository;
 
+    @Autowired
+    private ContactRepository contactRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
     /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
     @ResponseBody
@@ -40,7 +48,7 @@ public class ConsumerController {
         Pageable paging = PageRequest.of(page, pageSize);
 
         try {
-            var consumers = repository.getAllConsumersList(paging);
+            var consumers = consumerRepository.getAllConsumersList(paging);
 
             return consumers;
         }catch (Exception e){
@@ -50,97 +58,97 @@ public class ConsumerController {
         return new ArrayList<Consumer>();
     }
 
-    /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
+    /**
+     * Cadastrar novos clientes
+     * @param consumer
+     */
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
-            repository.save(consumer);
+            consumerRepository.save(consumer);
     }
 
-    // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
-    }
-
-    /*
-     * Credito de valor no cartão
-     *
-     * cardNumber: número do cartão
-     * value: valor a ser creditado (adicionado ao saldo)
+    /**
+     * Atualizar cliente
+     * @param consumer
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreCardNumber(cardNumber);
+    @RequestMapping(value = "/update/{consumerId}", method = RequestMethod.PUT)
+    public void updateConsumer(@PathVariable(value = "consumerId") int consumerId, @RequestBody Consumer consumer) {
 
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
+        var consumerFromDb = consumerRepository.findById(Integer.valueOf(consumerId));
+        if(consumerFromDb.isPresent()){
+            consumer.setId(consumerFromDb.get().getId());
+            consumerRepository.save(consumer);
+        }
+
+    }
+
+    /**
+     * Cadastra endereço do cliente
+     * @param consumerId
+     * @param address
+     */
+    @RequestMapping(value = "/create/{consumerId}/address", method = RequestMethod.POST)
+    public void createAddress(@PathVariable(value = "consumerId") int consumerId, @RequestBody Address address) {
+        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+        if(consumer.isPresent()){
+            address.setConsumer(consumer.get());
+            addressRepository.save(address);
         }
     }
 
-    /*
-     * Débito de valor no cartão (compra)
-     *
-     * establishmentType: tipo do estabelecimento comercial
-     * establishmentName: nome do estabelecimento comercial
-     * cardNumber: número do cartão
-     * productDescription: descrição do produto
-     * value: valor a ser debitado (subtraído)
+    /**
+     * Atualizar endereco do cliente
+     * @param consumerId
+     * @param address
      */
-    @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
-        /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
-
-        *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
-        *
-        * Tipos dos estabelcimentos:
-        *    1) Alimentação (Food)
-        *    2) Farmácia (DrugStore)
-        *    3) Posto de combustivel (Fuel)
-        */
-
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreCardNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+    @RequestMapping(value = "/update/{consumerId}/address", method = RequestMethod.PUT)
+    public void updateAddress(@PathVariable(value = "consumerId") int consumerId,@RequestBody Address address) {
+        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+        if(consumer.isPresent()){
+            address.setConsumer(consumer.get());
+            addressRepository.save(address);
         }
-
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
     }
 
+    /**
+     * Cadastra contato do cliente
+     * @param consumerId
+     * @param contact
+     */
+    @RequestMapping(value = "/create/{consumerId}/contact", method = RequestMethod.POST)
+    public void createContact(@PathVariable(value = "consumerId") int consumerId, @RequestBody Contact contact) {
+        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+        if(consumer.isPresent()) {
+            contact.setConsumer(consumer.get());
+            contactRepository.save(contact);
+        }
+    }
+
+    /**
+     * Atualiza contato do cliente
+     * @param consumerId
+     * @param contact
+     */
+    @RequestMapping(value = "/update/{consumerId}/contact", method = RequestMethod.PUT)
+    public void updateContact(@PathVariable(value = "consumerId") int consumerId,@RequestBody Contact contact) {
+        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+        if(consumer.isPresent()) {
+            contact.setConsumer(consumer.get());
+            contactRepository.save(contact);
+        }
+    }
+
+    /**
+     * Cadastra contato do cliente
+     * @param consumerId
+     * @param card
+     */
+    @RequestMapping(value = "/create/{consumerId}/card", method = RequestMethod.POST)
+    public void createCard(@PathVariable(value = "consumerId") int consumerId, @RequestBody Card card) {
+        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+        if(consumer.isPresent()) {
+            card.setConsumer(consumer.get());
+            cardRepository.save(card);
+        }
+    }
 }

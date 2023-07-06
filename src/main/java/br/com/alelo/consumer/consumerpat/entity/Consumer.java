@@ -1,11 +1,9 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,33 +13,23 @@ public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     Integer id;
     String name;
     int documentNumber;
     Date birthDate;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    Card card;
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    Contact contact;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
-
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreCardNumber;
-    double drugstoreCardBalance;
+    @OneToOne(mappedBy = "consumer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    Address address;
 
     @Override
     public boolean equals(Object o) {
@@ -49,18 +37,9 @@ public class Consumer {
         if (o == null || getClass() != o.getClass()) return false;
         Consumer consumer = (Consumer) o;
         return this.documentNumber == consumer.documentNumber
-            && this.mobilePhoneNumber == consumer.mobilePhoneNumber
-            && this.residencePhoneNumber == consumer.residencePhoneNumber
-            && this.phoneNumber == consumer.phoneNumber
-            && this.number == consumer.number
-            && this.portalCode == consumer.portalCode
-            && this.foodCardNumber == consumer.foodCardNumber
-            && Double.compare(consumer.foodCardBalance, this.foodCardBalance) == 0
-            && this.fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, this.fuelCardBalance) == 0
-            && this.drugstoreCardNumber == consumer.drugstoreCardNumber && Double.compare(consumer.drugstoreCardBalance, this.drugstoreCardBalance) == 0
-            && Objects.equals(this.id, consumer.id) && Objects.equals(this.name, consumer.name) && Objects.equals(this.birthDate, consumer.birthDate)
-            && Objects.equals(this.email, consumer.email) && Objects.equals(this.street, consumer.street) && Objects.equals(this.city, consumer.city)
-            && Objects.equals(this.country, consumer.country);
+            && Objects.equals(this.id, consumer.id)
+            && Objects.equals(this.name, consumer.name)
+            && Objects.equals(this.birthDate, consumer.birthDate);
     }
 
 }

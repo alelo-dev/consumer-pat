@@ -13,6 +13,7 @@ public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     int id;
 
     @Column
