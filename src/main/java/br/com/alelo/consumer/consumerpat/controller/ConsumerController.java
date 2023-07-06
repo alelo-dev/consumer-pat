@@ -6,10 +6,13 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,17 +32,28 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
+    public List<Consumer> listAllConsumers(@RequestParam(defaultValue= "0", required = false)
+                                               Integer page ,
+                                           @RequestParam(defaultValue= "5", required = false)
+                                               Integer pageSize) {
         log.info("obtendo todos clientes");
-        var consumers = repository.getAllConsumersList();
+        Pageable paging = PageRequest.of(page, pageSize);
 
-        return consumers;
+        try {
+            var consumers = repository.getAllConsumersList(paging);
+
+            return consumers;
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+
+        return new ArrayList<Consumer>();
     }
 
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+            repository.save(consumer);
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
@@ -57,7 +71,7 @@ public class ConsumerController {
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public void setBalance(int cardNumber, double value) {
         Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+        consumer = repository.findByDrugstoreCardNumber(cardNumber);
 
         if(consumer != null) {
             // é cartão de farmácia
@@ -111,7 +125,7 @@ public class ConsumerController {
             repository.save(consumer);
 
         }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
+            consumer = repository.findByDrugstoreCardNumber(cardNumber);
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
             repository.save(consumer);
 

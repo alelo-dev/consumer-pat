@@ -40,7 +40,7 @@ public class Consumer {
     int fuelCardNumber;
     double fuelCardBalance;
 
-    int drugstoreNumber;
+    int drugstoreCardNumber;
     double drugstoreCardBalance;
 
     @Override
@@ -48,19 +48,19 @@ public class Consumer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-            && mobilePhoneNumber == consumer.mobilePhoneNumber
-            && residencePhoneNumber == consumer.residencePhoneNumber
-            && phoneNumber == consumer.phoneNumber
-            && number == consumer.number
-            && portalCode == consumer.portalCode
-            && foodCardNumber == consumer.foodCardNumber
-            && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-            && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-            && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-            && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-            && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-            && Objects.equals(country, consumer.country);
+        return this.documentNumber == consumer.documentNumber
+            && this.mobilePhoneNumber == consumer.mobilePhoneNumber
+            && this.residencePhoneNumber == consumer.residencePhoneNumber
+            && this.phoneNumber == consumer.phoneNumber
+            && this.number == consumer.number
+            && this.portalCode == consumer.portalCode
+            && this.foodCardNumber == consumer.foodCardNumber
+            && Double.compare(consumer.foodCardBalance, this.foodCardBalance) == 0
+            && this.fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, this.fuelCardBalance) == 0
+            && this.drugstoreCardNumber == consumer.drugstoreCardNumber && Double.compare(consumer.drugstoreCardBalance, this.drugstoreCardBalance) == 0
+            && Objects.equals(this.id, consumer.id) && Objects.equals(this.name, consumer.name) && Objects.equals(this.birthDate, consumer.birthDate)
+            && Objects.equals(this.email, consumer.email) && Objects.equals(this.street, consumer.street) && Objects.equals(this.city, consumer.city)
+            && Objects.equals(this.country, consumer.country);
     }
 
 }
