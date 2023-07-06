@@ -1,8 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.extern.log4j.Log4j2;
@@ -11,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 @Log4j2
 @Controller
@@ -37,12 +32,12 @@ public class ConsumerController {
 
     @ResponseBody
     @GetMapping
-    public ResponseEntity<Page<Consumer>> listAllConsumers(
+    public ResponseEntity<Page<Consumer>> getAllConsumers(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "100") Integer itemsPerPage) {
         log.info("obtendo todos clientes");
 
-        Page<Consumer> response = service.getAllConsumersList(page, itemsPerPage);
+        Page<Consumer> response = service.getAllConsumers(page, itemsPerPage);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -51,7 +46,7 @@ public class ConsumerController {
     @ResponseBody
     @PostMapping
     public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
-        return new ResponseEntity<>(service.save(consumer), HttpStatus.OK);
+        return new ResponseEntity<>(service.save(consumer), HttpStatus.CREATED);
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão

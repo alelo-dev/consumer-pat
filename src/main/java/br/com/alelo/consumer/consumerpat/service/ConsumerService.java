@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,8 +22,8 @@ public class ConsumerService {
         this.extractRepository = extractRepository;
     }
 
-    public Page<Consumer> getAllConsumersList(Integer page, Integer itemsPerPage) {
-        return repository.getAllConsumersList(PageRequest.of(page, itemsPerPage));
+    public Page<Consumer> getAllConsumers(Integer page, Integer itemsPerPage) {
+        return repository.getAllConsumers(PageRequest.of(page, itemsPerPage));
     }
 
     public Consumer save(Consumer consumer) {
