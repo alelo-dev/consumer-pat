@@ -22,7 +22,7 @@ public class ConsumerService {
         this.extractRepository = extractRepository;
     }
 
-    public Page<Consumer> getAllConsumers(Integer page, Integer itemsPerPage) {
+    public Page<Consumer> getAllConsumers(int page, int itemsPerPage) {
         return repository.getAllConsumers(PageRequest.of(page, itemsPerPage));
     }
 
@@ -41,8 +41,34 @@ public class ConsumerService {
             consumer.setFoodCardBalance(databaseEntity.get().getFoodCardBalance());
 
         } else
-            throw  new NotFoundException(consumer.getId().toString());
+            throw new NotFoundException(consumer.getId().toString());
 
         return this.save(consumer);
     }
+
+    public Consumer addValue(Integer cardNumber, Double value) {
+
+        Optional<Consumer> optionalConsumer = repository.findByAnyCardNumber(cardNumber);
+
+        if(optionalConsumer.isEmpty())
+            throw new NotFoundException(cardNumber.toString());
+
+        Consumer consumer = optionalConsumer.get();
+
+        if(cardNumber == consumer.getDrugstoreNumber()) {
+            // é cartão de farmácia
+            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+
+        } else if(cardNumber == consumer.getFoodCardBalance()) {
+            // é cartão de refeição
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+
+        } else if(cardNumber == consumer.getFuelCardBalance()) {
+            // É cartão de combustivel
+            consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+        }
+
+        return repository.save(consumer);
+    }
+
 }

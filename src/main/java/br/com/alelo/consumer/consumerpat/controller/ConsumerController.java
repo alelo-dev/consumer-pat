@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.model.BalanceModel;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.extern.log4j.Log4j2;
@@ -57,36 +58,17 @@ public class ConsumerController {
         return new ResponseEntity<>(service.update(consumer), HttpStatus.OK);
     }
 
-//    /*
-//     * Credito de valor no cartão
-//     *
-//     * cardNumber: número do cartão
-//     * value: valor a ser creditado (adicionado ao saldo)
-//     */
-//    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-//    public void setBalance(int cardNumber, double value) {
-//        Consumer consumer = null;
-//        consumer = service.findByDrugstoreNumber(cardNumber);
-//
-//        if(consumer != null) {
-//            // é cartão de farmácia
-//            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-//            service.save(consumer);
-//        } else {
-//            consumer = service.findByFoodCardNumber(cardNumber);
-//            if(consumer != null) {
-//                // é cartão de refeição
-//                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-//                service.save(consumer);
-//            } else {
-//                // É cartão de combustivel
-//                consumer = service.findByFuelCardNumber(cardNumber);
-//                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-//                service.save(consumer);
-//            }
-//        }
-//    }
-//
+    /*
+     * Credito de valor no cartão
+     *
+     * cardNumber: número do cartão
+     * value: valor a ser creditado (adicionado ao saldo)
+     */
+    @PatchMapping(value = "card/balance")
+    public Consumer addBalance(@RequestBody BalanceModel balance) {
+        return service.addValue(balance.getCardNumber(), balance.getValue());
+    }
+
 //    /*
 //     * Débito de valor no cartão (compra)
 //     *
