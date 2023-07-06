@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/* Review: Alterando de @Controler para @RestController não existe necessidade de anotar cada método
+separadamente para que apareça no swagger*/
+
 @Log4j2
-@Controller
+@RestController
 @RequestMapping("/consumer")
 public class ConsumerController {
     ConsumerService service;
@@ -30,11 +33,10 @@ public class ConsumerController {
         this.extractRepository = extractRepository;
     }
 
-    /* Review: Removendo redudancia dos paths */
+    /* Review: Removendo redudancia dos paths tal qual POST e /add */
 
     /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
 
-    @ResponseBody
     @GetMapping
     public ResponseEntity<Page<Consumer>> getAllConsumers(
             @RequestParam(defaultValue = "0") Integer page,
@@ -47,7 +49,6 @@ public class ConsumerController {
     }
 
     /* Cadastrar novos clientes */
-    @ResponseBody
     @PostMapping
     public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
         log.info("Creating consumer");
@@ -56,7 +57,6 @@ public class ConsumerController {
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
 
-    @ResponseBody
     @PatchMapping
     public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
         log.info("Updating consumer");
@@ -69,7 +69,6 @@ public class ConsumerController {
      * cardNumber: número do cartão
      * value: valor a ser creditado (adicionado ao saldo)
      */
-    @ResponseBody
     @PatchMapping(value = "card/balance")
     public ResponseEntity<Consumer> addBalance(@RequestBody @Valid  BalanceModel balance) {
         log.info("Adding balance to card: "+ balance.getCardNumber());
@@ -88,7 +87,6 @@ public class ConsumerController {
      * productDescription: descrição do produto
      * value: valor a ser debitado (subtraído)
      */
-    @ResponseBody
     @PostMapping(value = "/buy")
     public ResponseEntity<Consumer> buy(@RequestBody @Valid BuyModel buyModel) {
         log.info("Buying product for card: " + buyModel.getCardNumber());
