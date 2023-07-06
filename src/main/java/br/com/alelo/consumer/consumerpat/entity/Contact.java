@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Contact {
     //contacts
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
     Integer id;
 

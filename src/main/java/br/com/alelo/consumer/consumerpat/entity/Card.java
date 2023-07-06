@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.objectvalue.CardType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
@@ -12,22 +13,17 @@ public class Card {
 
     //cards
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_id")
     Integer id;
 
-    int foodCardNumber;
-    double foodCardBalance;
+    int number;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    double balance;
 
-    int drugstoreCardNumber;
-    double drugstoreCardBalance;
+    CardType cardType;
 
-//    Integer consumerId;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consumer_id")
     @JsonBackReference
     private Consumer consumer;
@@ -37,12 +33,9 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return  this.foodCardNumber == card.foodCardNumber
-                && Double.compare(card.foodCardBalance, this.foodCardBalance) == 0
-                && this.fuelCardNumber == card.fuelCardNumber
-                && Double.compare(card.fuelCardBalance, this.fuelCardBalance) == 0
-                && this.drugstoreCardNumber == card.drugstoreCardNumber
-                && Double.compare(card.drugstoreCardBalance, this.drugstoreCardBalance) == 0
+        return  this.number == card.number
+                && Double.compare(card.balance, this.balance) == 0
+                && this.getCardType() == card.getCardType()
                 && Objects.equals(this.id, card.id);
     }
 }
