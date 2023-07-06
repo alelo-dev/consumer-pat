@@ -3,6 +3,7 @@ package br.com.alelo.consumer.consumerpat.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /* Review: O uso do @Data traz algumas implementações extras que apesar de não serem utilizadas quando passarem
@@ -35,16 +36,16 @@ public class Extract {
     private int cardNumber;
 
     @Column(name = "amount")
-    private double amount;
+    private BigDecimal amount;
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double amount) {
+    public Extract( String productDescription, Date dateBuy, int cardNumber, BigDecimal amount) {
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
         this.amount = amount;
     }
 
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
+    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, BigDecimal amount) {
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;

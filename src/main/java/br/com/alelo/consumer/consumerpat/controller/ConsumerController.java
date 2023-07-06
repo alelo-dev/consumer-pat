@@ -39,7 +39,7 @@ public class ConsumerController {
     public ResponseEntity<Page<Consumer>> getAllConsumers(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "100") Integer itemsPerPage) {
-        log.info("obtendo todos clientes");
+        log.info("Getting all clients");
 
         Page<Consumer> response = service.getAllConsumers(page, itemsPerPage);
 
@@ -50,6 +50,7 @@ public class ConsumerController {
     @ResponseBody
     @PostMapping
     public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
+        log.info("Creating consumer");
         return new ResponseEntity<>(service.save(consumer), HttpStatus.CREATED);
     }
 
@@ -58,6 +59,7 @@ public class ConsumerController {
     @ResponseBody
     @PatchMapping
     public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
+        log.info("Updating consumer");
         return new ResponseEntity<>(service.update(consumer), HttpStatus.OK);
     }
 
@@ -70,6 +72,7 @@ public class ConsumerController {
     @ResponseBody
     @PatchMapping(value = "card/balance")
     public ResponseEntity<Consumer> addBalance(@RequestBody @Valid  BalanceModel balance) {
+        log.info("Adding balance to card: "+ balance.getCardNumber());
 
         Consumer response = service.addValue(balance.getCardNumber(), balance.getValue());
 
@@ -87,7 +90,8 @@ public class ConsumerController {
      */
     @ResponseBody
     @PostMapping(value = "/buy")
-    public ResponseEntity<Consumer> buy(@RequestBody BuyModel buyModel) {
+    public ResponseEntity<Consumer> buy(@RequestBody @Valid BuyModel buyModel) {
+        log.info("Buying product for card: " + buyModel.getCardNumber());
 
         return new ResponseEntity<>(service.buy(buyModel), HttpStatus.OK);
     }

@@ -10,8 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
+
+/* Review: Camada de serviço para garantir segregação entre as regras de negocio e as demais implementações */
 
 @Service
 public class ConsumerService {
@@ -49,21 +52,21 @@ public class ConsumerService {
         return this.save(consumer);
     }
 
-    public Consumer addValue(Integer cardNumber, Double value) {
+    public Consumer addValue(Integer cardNumber, BigDecimal value) {
 
         Consumer consumer = findByAnyCard(cardNumber);
 
         if(cardNumber == consumer.getDrugstoreNumber()) {
             // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
+            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance().add(value));
 
         } else if(cardNumber == consumer.getFoodCardNumber()) {
             // é cartão de refeição
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
+            consumer.setFoodCardBalance(consumer.getFoodCardBalance().add(value));
 
         } else if(cardNumber == consumer.getFuelCardNumber()) {
             // É cartão de combustivel
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
+            consumer.setFuelCardBalance(consumer.getFuelCardBalance().add(value));
         }
 
         return repository.save(consumer);

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -14,9 +15,8 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class BalanceModel {
 
-    /* Review: Mantendo double dado a base mas a utilização do BigDecimal seria o ideal para evitar erros de conversões */
     @Positive(message = "Value must be positive")
-    Double value;
+    BigDecimal value;
 
     Integer cardNumber;
 

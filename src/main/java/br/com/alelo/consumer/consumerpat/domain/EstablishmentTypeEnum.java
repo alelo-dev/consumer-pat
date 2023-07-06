@@ -5,15 +5,20 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.BadRequestException;
 import lombok.SneakyThrows;
 
+import java.math.BigDecimal;
+
 public enum EstablishmentTypeEnum implements EstablishmentCost {
     FOOD(1){
 
-        public Consumer updateBalance(Double value, Integer cardNumber, Consumer consumer){
+        @Override
+        public Consumer updateBalance(BigDecimal value, Integer cardNumber, Consumer consumer){
 
             isCardValid(cardNumber, consumer.getFoodCardNumber());
 
             // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            value -= (value / 100) * 10;
+            value.subtract(value
+                    .divideToIntegralValue(BigDecimal.valueOf(100.0))
+                    .multiply(BigDecimal.valueOf(10)));
 
             consumer.setFoodCardBalance(
                     subtractBalance(consumer.getFoodCardBalance(), value));
@@ -24,7 +29,7 @@ public enum EstablishmentTypeEnum implements EstablishmentCost {
     },
     DRUGSTORE(2){
         @Override
-        public Consumer updateBalance(Double value, Integer cardNumber, Consumer consumer) {
+        public Consumer updateBalance(BigDecimal value, Integer cardNumber, Consumer consumer) {
 
             isCardValid(cardNumber, consumer.getDrugstoreNumber());
 
@@ -36,12 +41,14 @@ public enum EstablishmentTypeEnum implements EstablishmentCost {
     },
     FUEL(3){
         @Override
-        public Consumer updateBalance(Double value, Integer cardNumber, Consumer consumer) {
+        public Consumer updateBalance(BigDecimal value, Integer cardNumber, Consumer consumer) {
 
             isCardValid(cardNumber, consumer.getFuelCardNumber());
 
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            value += (value / 100) * 35;
+            value.add(value
+                    .divideToIntegralValue(BigDecimal.valueOf(100.0))
+                    .multiply(BigDecimal.valueOf(35)));
 
             consumer.setFuelCardBalance(
                     subtractBalance(consumer.getFuelCardBalance(), value));
@@ -68,11 +75,11 @@ public enum EstablishmentTypeEnum implements EstablishmentCost {
     }
 
     @SneakyThrows
-    private static double subtractBalance(Double balance, Double value) {
-        if (balance < value)
+    private static BigDecimal subtractBalance(BigDecimal balance, BigDecimal value) {
+        if (balance.compareTo(value) == -1)
             throw new BadRequestException("Insufficient balance for this operation");
 
-        return balance - value;
+        return balance.subtract(value);
     }
 
     @SneakyThrows
