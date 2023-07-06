@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.model;
 
+import br.com.alelo.consumer.consumerpat.domain.EstablishmentTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
