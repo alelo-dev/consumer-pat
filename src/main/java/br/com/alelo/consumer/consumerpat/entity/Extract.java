@@ -17,7 +17,6 @@ public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "establishment_name_id")

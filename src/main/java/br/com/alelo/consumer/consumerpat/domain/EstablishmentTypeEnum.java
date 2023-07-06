@@ -26,10 +26,10 @@ public enum EstablishmentTypeEnum implements EstablishmentCost {
         @Override
         public Consumer updateBalance(Double value, Integer cardNumber, Consumer consumer) {
 
-            isCardValid(cardNumber, consumer.getFoodCardNumber());
+            isCardValid(cardNumber, consumer.getDrugstoreNumber());
 
-            consumer.setFoodCardBalance(
-                    subtractBalance(consumer.getFoodCardBalance(), value));
+            consumer.setDrugstoreCardBalance(
+                    subtractBalance(consumer.getDrugstoreCardBalance(), value));
 
             return consumer;
         }
@@ -38,13 +38,13 @@ public enum EstablishmentTypeEnum implements EstablishmentCost {
         @Override
         public Consumer updateBalance(Double value, Integer cardNumber, Consumer consumer) {
 
-            isCardValid(cardNumber, consumer.getFoodCardNumber());
+            isCardValid(cardNumber, consumer.getFuelCardNumber());
 
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
             value += (value / 100) * 35;
 
-            consumer.setFoodCardBalance(
-                    subtractBalance(consumer.getFoodCardBalance(), value));
+            consumer.setFuelCardBalance(
+                    subtractBalance(consumer.getFuelCardBalance(), value));
 
             return consumer;
 

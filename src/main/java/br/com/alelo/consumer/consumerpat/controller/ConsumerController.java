@@ -69,8 +69,11 @@ public class ConsumerController {
      */
     @ResponseBody
     @PatchMapping(value = "card/balance")
-    public Consumer addBalance(@RequestBody @Valid  BalanceModel balance) {
-        return service.addValue(balance.getCardNumber(), balance.getValue());
+    public ResponseEntity<Consumer> addBalance(@RequestBody @Valid  BalanceModel balance) {
+
+        Consumer response = service.addValue(balance.getCardNumber(), balance.getValue());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /*
@@ -84,10 +87,9 @@ public class ConsumerController {
      */
     @ResponseBody
     @PostMapping(value = "/buy")
-    public ResponseEntity buy(@RequestBody BuyModel buyModel) {
+    public ResponseEntity<Consumer> buy(@RequestBody BuyModel buyModel) {
 
-        service.buy(buyModel);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(service.buy(buyModel), HttpStatus.OK);
     }
 
 }

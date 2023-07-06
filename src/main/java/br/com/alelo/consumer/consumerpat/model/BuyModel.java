@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BuyModel {
 
-    EstablishmentTypeEnum establishmentTypeEnum;
+    EstablishmentTypeEnum establishmentType;
     String establishmentName;
     Integer cardNumber;
     String productDescription;

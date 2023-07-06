@@ -3,7 +3,6 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.model.BuyModel;
-import br.com.alelo.consumer.consumerpat.domain.EstablishmentTypeEnum;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,18 +67,17 @@ public class ConsumerService {
 
         return repository.save(consumer);
     }
-    public void buy(BuyModel buyModel) {
+    public Consumer buy(BuyModel buyModel) {
 
         Consumer consumer = this.findByAnyCard(buyModel.getCardNumber());
 
-        buyModel.getEstablishmentTypeEnum()
+        buyModel.getEstablishmentType()
                 .updateBalance(buyModel.getValue(), buyModel.getCardNumber(), consumer);
-
-        repository.save(consumer);
 
         extractService.save(
                 new Extract(buyModel.getEstablishmentName(), buyModel.getProductDescription(), new Date(), buyModel.getCardNumber(), buyModel.getValue()));
 
+        return repository.save(consumer);
     }
 
     private Consumer findByAnyCard(Integer cardNumber) {
