@@ -2,8 +2,6 @@ package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.objectvalue.CardType;
-import br.com.alelo.consumer.consumerpat.objectvalue.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.requests.BuyRequest;
 import br.com.alelo.consumer.consumerpat.requests.SetCardBalanceRequest;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
@@ -29,21 +27,21 @@ public class CardController {
     @Autowired
     ExtractRepository extractRepository;
 
-    /*
+    /**
      * Credito de valor no cartão
-     *
-     * cardNumber: número do cartão
-     * value: valor a ser creditado (adicionado ao saldo)
+     * @param cardBalanceRequest
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.PATCH)
     public void setBalance(@RequestBody SetCardBalanceRequest cardBalanceRequest) {
         Card card = repository.findByNumber(cardBalanceRequest.cardNumber);
-        card.setBalance(card.getBalance() + cardBalanceRequest.value);
-        repository.save(card);
+        if(card != null){
+            card.addBalance(cardBalanceRequest.value);
+            repository.save(card);
+        }
     }
 
     /*
-     * Débito de valor no cartão (compra)
+     *
      *
      * establishmentType: tipo do estabelecimento comercial
      * establishmentName: nome do estabelecimento comercial
@@ -51,44 +49,25 @@ public class CardController {
      * productDescription: descrição do produto
      * value: valor a ser debitado (subtraído)
      */
+
+    /**
+     * Débito de valor no cartão (compra)
+     *
+     * Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
+     * Tipos dos estabelcimentos:
+     * 1) Alimentação (Food)
+     * 2) Farmácia (DrugStore)
+     * 3) Posto de combustivel (Fuel)
+     *
+     * @param buyRequest
+     *
+     */
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public void buy(@RequestBody BuyRequest buyRequest) {
         Card card = repository.findByNumber(buyRequest.cardNumber);
-
-        /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
-
-         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
-         *
-         * Tipos dos estabelcimentos:
-         *    1) Alimentação (Food)
-         *    2) Farmácia (DrugStore)
-         *    3) Posto de combustivel (Fuel)
-         */
-
-        if (buyRequest.establishmentType == EstablishmentType.FOOD.getValue() && card.getCardType() == CardType.FOOD) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (buyRequest.value / 100) * 10;
-            buyRequest.value = buyRequest.value - cashback;
-
-            card.setBalance(card.getBalance() - buyRequest.value);
-            repository.save(card);
-            Extract extract = new Extract(buyRequest.establishmentName, buyRequest.productDescription, new Date(), buyRequest.cardNumber, buyRequest.value);
-            extractRepository.save(extract);
-
-        }else if(buyRequest.establishmentType == EstablishmentType.DRUGSTORE.getValue() && card.getCardType() == CardType.DRUGSTORE) {
-            card.setBalance(card.getBalance() - buyRequest.value);
-            repository.save(card);
-            Extract extract = new Extract(buyRequest.establishmentName, buyRequest.productDescription, new Date(), buyRequest.cardNumber, buyRequest.value);
-            extractRepository.save(extract);
-
-
-        } else if(buyRequest.establishmentType == EstablishmentType.FUEL.getValue() && card.getCardType() == CardType.FUEL) {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (buyRequest.value / 100) * 35;
-            buyRequest.value = buyRequest.value + tax;
-
-            card.setBalance(card.getBalance() - buyRequest.value);
+        if(card != null && card.getCardType().isEstablishmentAllowed(buyRequest.establishmentType)){
+            card.buyingTransaction(buyRequest.value);
             repository.save(card);
             Extract extract = new Extract(buyRequest.establishmentName, buyRequest.productDescription, new Date(), buyRequest.cardNumber, buyRequest.value);
             extractRepository.save(extract);
