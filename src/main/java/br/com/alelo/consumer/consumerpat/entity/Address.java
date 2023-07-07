@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 import java.util.Objects;
 
 @Data
@@ -16,10 +19,15 @@ public class Address {
     @Column(name = "address_id")
 
     Integer id;
+    @NotEmpty(message = "Rua não pode ser vazia")
     String street;
+    @Positive(message = "Número deve ser maior que zero")
     int number;
+    @NotEmpty(message = "Cidade não pode ser vazia")
     String city;
+    @NotEmpty(message = "País não pode ser vazio")
     String country;
+    @Positive(message = "Código postal deve ser maior que zero")
     int portalCode;
 
     @OneToOne(fetch = FetchType.LAZY)

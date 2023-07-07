@@ -70,7 +70,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Joao Eduardo\",\r\n    \"documentNumber\": 123456,\r\n    \"birthDate\": \"1983-12-12\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Joao Eduardo Rosa da Fonseca\",\r\n    \"documentNumber\": 123456,\r\n    \"birthDate\": \"1983-12-12\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -78,7 +78,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/consumer/update/197",
+					"raw": "localhost:8080/consumer/update/50",
 					"host": [
 						"localhost"
 					],
@@ -86,7 +86,7 @@
 					"path": [
 						"consumer",
 						"update",
-						"197"
+						"50"
 					]
 				}
 			},
@@ -107,7 +107,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/consumer/create/197/address",
+					"raw": "localhost:8080/consumer/create/50/address",
 					"host": [
 						"localhost"
 					],
@@ -115,7 +115,7 @@
 					"path": [
 						"consumer",
 						"create",
-						"197",
+						"50",
 						"address"
 					]
 				}
@@ -129,7 +129,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"street\" : \"Rua Nova rua 1\",\r\n    \"number\" : 123,\r\n    \"city\" : \"Sao Paulo\",\r\n    \"country\" : \"Brasil\",\r\n    \"portalCode\": 123456789\r\n}",
+					"raw": "{\r\n    \"street\" : \"Rua Nova rua 2\",\r\n    \"number\" : 123,\r\n    \"city\" : \"Sao Paulo\",\r\n    \"country\" : \"Brasil\",\r\n    \"portalCode\": 123456789\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -137,7 +137,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/consumer/update/197/address",
+					"raw": "localhost:8080/consumer/update/50/address",
 					"host": [
 						"localhost"
 					],
@@ -145,7 +145,7 @@
 					"path": [
 						"consumer",
 						"update",
-						"197",
+						"50",
 						"address"
 					]
 				}
@@ -167,7 +167,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/consumer/create/197/contact",
+					"raw": "localhost:8080/consumer/create/50/contact",
 					"host": [
 						"localhost"
 					],
@@ -175,7 +175,7 @@
 					"path": [
 						"consumer",
 						"create",
-						"197",
+						"50",
 						"contact"
 					]
 				}
@@ -197,7 +197,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/consumer/update/197/contact",
+					"raw": "localhost:8080/consumer/update/50/contact",
 					"host": [
 						"localhost"
 					],
@@ -205,7 +205,7 @@
 					"path": [
 						"consumer",
 						"update",
-						"197",
+						"50",
 						"contact"
 					]
 				}
@@ -218,7 +218,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/consumer/create/197/card",
+					"raw": "localhost:8080/consumer/create/50/card",
 					"host": [
 						"localhost"
 					],
@@ -226,7 +226,7 @@
 					"path": [
 						"consumer",
 						"create",
-						"197",
+						"50",
 						"card"
 					]
 				}
@@ -236,16 +236,56 @@
 		{
 			"name": "Add Balance",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cardNumber\" : 100000001,\r\n    \"value\" : 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/card/setcardbalance",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"card",
+						"setcardbalance"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "Buy",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"establishmentType\" : 3,\r\n    \"establishmentName\" :\"Conveniencia\",\r\n    \"cardNumber\" : 300000001,\r\n    \"productDescription\":\"Refeicao\",\r\n    \"value\" : 25\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/card/buy",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"card",
+						"buy"
+					]
+				}
 			},
 			"response": []
 		}

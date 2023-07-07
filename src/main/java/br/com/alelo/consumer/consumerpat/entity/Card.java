@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Objects;
 
 @Data
@@ -17,8 +20,10 @@ public class Card {
     @Column(name = "card_id")
     Integer id;
 
+    @Positive(message = "Número do cartão deve ser maior que zero")
     int number;
 
+    @PositiveOrZero(message = "Saldo insuficiente ou menor que zero")
     double balance;
 
     CardType cardType;

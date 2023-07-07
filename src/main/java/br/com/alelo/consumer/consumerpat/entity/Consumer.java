@@ -2,8 +2,13 @@ package br.com.alelo.consumer.consumerpat.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -16,7 +21,10 @@ public class Consumer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     Integer id;
+    @NotNull(message = "Nome não pode ser nulo")
+    @NotEmpty(message = "Nome não pode ser vazio")
     String name;
+    @Positive(message = "Número do documento deve ser maior que zero")
     int documentNumber;
     Date birthDate;
 
