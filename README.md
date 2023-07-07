@@ -46,3 +46,10 @@ gradlew bootRun
 * JDBC URL: `jdbc:h2:mem:consumer-pat`
 * User Name: `sa`
 * Password: `sa`
+
+
+## Evolução
+* Recomendo a segmentação dos serviços de adição de saldo e de transações de compra em uma aplicação separada com o intuito de aumentar a possibilidade de escalabilidade do sistema.
+* Isolar os cadastros para que a infra dedicada para cadastro seja menor que a dedicada para transação.
+* O serviço de transação ter controle de concorencia usando uma fila de transação ou mesmo algo como uma saga pattern.
+* Melhorias na parte de validação no código.
