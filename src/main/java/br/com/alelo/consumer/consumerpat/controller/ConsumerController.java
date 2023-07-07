@@ -11,17 +11,17 @@ import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ContactRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -66,7 +66,7 @@ public class ConsumerController {
             log.error(e.getMessage());
         }
 
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -76,22 +76,21 @@ public class ConsumerController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ApiResponse> createConsumer(@RequestBody @Valid Consumer consumer, BindingResult bindingResult) {
 
+        log.info("Cadastrando um cliente");
         ApiResponse response = new ApiResponse();
 
-        if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                response.addError(error.getDefaultMessage());
+        try {
+            if (bindingResult.hasErrors()) {
+                response.addErrors(bindingResult);
+                response.setMessage("Erro ao criar usuário");
+            }else{
+                consumerRepository.save(consumer);
+                response.setMessage("Usuário criado com sucesso");
             }
-
-            response.setMessage("Erro ao criar usuário");
-            response.setData(consumer);
-
-            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
 
-        consumerRepository.save(consumer);
-
-        response.setMessage("Usuário criado com sucesso");
         response.setData(consumer);
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -104,30 +103,31 @@ public class ConsumerController {
     public ResponseEntity<ApiResponse> updateConsumer(@PathVariable(value = "consumerId") int consumerId,
                                                       @RequestBody @Valid Consumer consumer,
                                                       BindingResult bindingResult) {
-
-        var consumerFromDb = consumerRepository.findById(Integer.valueOf(consumerId));
+        log.info("Atualizando um cliente");
 
         ApiResponse response = new ApiResponse();
 
-        if(consumerFromDb.isEmpty()){
-            bindingResult.addError(new ObjectError("Consumer","Usuário não existe para atualização"));
-        }
-
-        if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                response.addError(error.getDefaultMessage());
+        try{
+            var consumerFromDb = consumerRepository.findById(Integer.valueOf(consumerId));
+            if(consumerFromDb.isEmpty()){
+                bindingResult.addError(new ObjectError("Consumer","Usuário não existe para atualização"));
             }
 
-            response.setMessage("Erro ao atualizar usuário");
-            consumer.setId(consumerId);
-            response.setData(consumer);
+            if (bindingResult.hasErrors()) {
+                response.addErrors(bindingResult);
+                response.setMessage("Erro ao atualizar usuário");
+                consumer.setId(consumerId);
 
-            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+            }else{
+                consumer.setId(consumerFromDb.get().getId());
+                consumerRepository.save(consumer);
+                response.setMessage("Usuário atualizado com sucesso");
+            }
+
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
 
-        consumer.setId(consumerFromDb.get().getId());
-        consumerRepository.save(consumer);
-        response.setMessage("Usuário atualizado com sucesso");
         response.setData(consumer);
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -141,34 +141,37 @@ public class ConsumerController {
     public ResponseEntity createAddress(@PathVariable(value = "consumerId") int consumerId,
                                         @RequestBody @Valid Address address,
                                         BindingResult bindingResult) {
-
-        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
-        var addressFromDb = addressRepository.findByConsumerId(Integer.valueOf(consumerId));
+        log.info("Cadastrando um endereço");
 
         ApiResponse response = new ApiResponse();
 
-        if(consumer.isEmpty()){
-            bindingResult.addError(new ObjectError("Address","O usuário solicitado para o cadastro de endereço não existe"));
-        }
+        try {
 
-        if(addressFromDb != null){
-            bindingResult.addError(new ObjectError("Address","O usuário solicitado para o cadastro de endereço já possuí um endereço cadastrado"));
-        }
 
-        if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                response.addError(error.getDefaultMessage());
+            var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+            var addressFromDb = addressRepository.findByConsumerId(Integer.valueOf(consumerId));
+
+            if(consumer.isEmpty()){
+                bindingResult.addError(new ObjectError("Address","O usuário solicitado para o cadastro de endereço não existe"));
             }
 
+            if(!addressFromDb.isEmpty()){
+                bindingResult.addError(new ObjectError("Address","O usuário solicitado para o cadastro de endereço já possuí um endereço cadastrado"));
+            }
+
+            if (bindingResult.hasErrors()) {
+                response.addErrors(bindingResult);
+                response.setMessage("Erro ao tentar cadastrar endereço");
+            }else{
+                address.setConsumer(consumer.get());
+                addressRepository.save(address);
+                response.setMessage("Endereço cadastrado com sucesso!");
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
             response.setMessage("Erro ao tentar cadastrar endereço");
-            response.setData(address);
+       }
 
-            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
-        }
-
-        address.setConsumer(consumer.get());
-        addressRepository.save(address);
-        response.setMessage("Endereço cadastrado com sucesso!");
         response.setData(address);
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -182,6 +185,8 @@ public class ConsumerController {
     public ResponseEntity updateAddress(@PathVariable(value = "consumerId") int consumerId,
                                         @RequestBody @Valid Address address,
                                         BindingResult bindingResult) {
+        log.info("Atualizando um endereço");
+
         ApiResponse response = new ApiResponse();
         try{
             var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
@@ -191,33 +196,28 @@ public class ConsumerController {
                 bindingResult.addError(new ObjectError("Address","O usuário solicitado para o atualiação de endereço não existe"));
             }
 
-            if(addressFromDb == null){
+            if(addressFromDb.isEmpty()){
                 bindingResult.addError(new ObjectError("Address","O usuário solicitado para o atualização de endereço não possuí um endereço cadastrado"));
             }
 
             if (bindingResult.hasErrors()) {
-                for (ObjectError error : bindingResult.getAllErrors()) {
-                    response.addError(error.getDefaultMessage());
-                }
-
+                response.addErrors(bindingResult);
                 response.setMessage("Erro ao tentar atualizar endereço");
-                response.setData(address);
-
-                return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+            }else{
+                address.setId(addressFromDb.get().getId());
+                address.setConsumer(consumer.get());
+                addressRepository.save(address);
+                response.setMessage("Endereço atualizado com sucesso!");
             }
 
-            address.setId(addressFromDb.getId());
-            address.setConsumer(consumer.get());
-            addressRepository.save(address);
-            response.setMessage("Endereço atualizado com sucesso!");
-            response.setData(address);
-            return new ResponseEntity(response, HttpStatus.OK);
 
         }catch (Exception e){
             log.error(e.getMessage());
+            response.setMessage("Erro ao tentar atualizar endereço");
         }
 
-        return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+        response.setData(address);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     /**
@@ -229,6 +229,8 @@ public class ConsumerController {
     public ResponseEntity createContact(@PathVariable(value = "consumerId") int consumerId,
                                         @RequestBody @Valid Contact contact,
                                         BindingResult bindingResult) {
+        log.info("Cadastrando um contato");
+
         ApiResponse response = new ApiResponse();
 
         try {
@@ -239,32 +241,27 @@ public class ConsumerController {
                 bindingResult.addError(new ObjectError("Contact","O usuário solicitado para o cadastro de contato não existe"));
             }
 
-            if(contactFromDb != null){
+            if(!contactFromDb.isEmpty()){
                 bindingResult.addError(new ObjectError("Contact","O usuário solicitado para o cadastro de contato já possuí um contato cadastrado"));
             }
 
             if (bindingResult.hasErrors()) {
-                for (ObjectError error : bindingResult.getAllErrors()) {
-                    response.addError(error.getDefaultMessage());
-                }
-
+                response.addErrors(bindingResult);
                 response.setMessage("Erro ao tentar cadastrar contato");
                 response.setData(contact);
-
-                return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+            }else{
+                contact.setConsumer(consumer.get());
+                contactRepository.save(contact);
+                response.setMessage("Contato cadastrado com sucesso!");
+                response.setData(contact);
             }
-
-            contact.setConsumer(consumer.get());
-            contactRepository.save(contact);
-            response.setMessage("Contato cadastrado com sucesso!");
-            response.setData(contact);
-            return new ResponseEntity(response, HttpStatus.OK);
-
         }catch (Exception e){
             log.error(e.getMessage());
+            response.setMessage("Erro ao tentar cadastrar contato");
         }
 
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+        response.setData(contact);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     /**
@@ -276,6 +273,8 @@ public class ConsumerController {
     public ResponseEntity updateContact(@PathVariable(value = "consumerId") int consumerId,
                                         @RequestBody @Valid Contact contact,
                                         BindingResult bindingResult) {
+        log.info("Atualizando um contato");
+
         ApiResponse response = new ApiResponse();
 
         try {
@@ -286,34 +285,26 @@ public class ConsumerController {
                 bindingResult.addError(new ObjectError("Contact","O usuário solicitado para o atualização de contato não existe"));
             }
 
-            if(contactFromDb == null){
+            if(contactFromDb.isEmpty()){
                 bindingResult.addError(new ObjectError("Contact","O usuário solicitado para o atualização de contato não possuí um contato cadastrado"));
             }
 
             if (bindingResult.hasErrors()) {
-                for (ObjectError error : bindingResult.getAllErrors()) {
-                    response.addError(error.getDefaultMessage());
-                }
-
+                response.addErrors(bindingResult);
                 response.setMessage("Erro ao tentar atualizar contato");
-                response.setData(contact);
-
-                return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+            }else{
+                contact.setId(contactFromDb.get().getId());
+                contact.setConsumer(consumer.get());
+                contactRepository.save(contact);
+                response.setMessage("Contato atualizado com sucesso!");
             }
-
-            contact.setId(contactFromDb.getId());
-            contact.setConsumer(consumer.get());
-            contactRepository.save(contact);
-            response.setMessage("Contato atualizado com sucesso!");
-            response.setData(contact);
-            return new ResponseEntity(response, HttpStatus.OK);
-
         }catch (Exception e){
             log.error(e.getMessage());
+            response.setMessage("Erro ao tentar atualizar contato");
         }
 
-
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+        response.setData(contact);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     /**
@@ -325,6 +316,8 @@ public class ConsumerController {
     public ResponseEntity createCard(@PathVariable(value = "consumerId") int consumerId,
                                      @RequestBody @Valid Card card,
                                      BindingResult bindingResult) {
+        log.info("Cadastrando um cartão");
+
         ApiResponse response = new ApiResponse();
 
         try{
@@ -335,27 +328,24 @@ public class ConsumerController {
             }
 
             if (bindingResult.hasErrors()) {
-                for (ObjectError error : bindingResult.getAllErrors()) {
-                    response.addError(error.getDefaultMessage());
-                }
-
+                response.addErrors(bindingResult);
                 response.setMessage("Erro ao cadastrar o cartão");
-                response.setData(card);
-                return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+            }else{
+                card.setConsumer(consumer.get());
+                cardRepository.save(card);
+                response.setMessage("Cartão cadastrado com sucesso!");
             }
-
-            card.setConsumer(consumer.get());
-            cardRepository.save(card);
-            response.setMessage("Cartão cadastrado com sucesso!");
-            response.setData(card);
-            return new ResponseEntity(response, HttpStatus.OK);
-
-        }catch (Exception e){
+        }catch (IllegalArgumentException i){
+            log.error(i.getMessage());
+        }catch (OptimisticLockingFailureException o ){
+            log.error(o.getMessage());
+        }
+        catch (Exception e){
             log.error(e.getMessage());
+            response.setMessage("Erro ao cadastrar o cartão");
         }
 
-        response.setMessage("Erro ao cadastrar o cartão");
         response.setData(card);
-        return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

@@ -42,27 +42,25 @@ public class CardController {
                                      BindingResult bindingResult) {
         ApiResponse response = new ApiResponse();
 
-        Card card = repository.findByNumber(cardBalanceRequest.cardNumber);
+        var card = repository.findByNumber(cardBalanceRequest.cardNumber);
 
-        if(card == null){
-            bindingResult.addError(new ObjectError("Card","O usuário solicitado para o adição de saldo não existe"));
+        if(card.isEmpty()){
+            bindingResult.addError(new ObjectError("Card","O cartão solicitado para o adição de saldo não existe"));
         }
 
         if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                response.addError(error.getDefaultMessage());
-            }
-
+            response.addErrors(bindingResult);
             response.setMessage("Erro ao adicionar saldo no cartão");
             response.setData(cardBalanceRequest);
-            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+        }else{
+            card.get().addBalance(cardBalanceRequest.value);
+            repository.save(card.get());
+            response.setMessage("Saldo adicionado no cartão com sucesso!");
+            response.setData(card);
         }
 
-        card.addBalance(cardBalanceRequest.value);
-        repository.save(card);
-        response.setMessage("Saldo adicionado no cartão com sucesso!");
-        response.setData(card);
         return new ResponseEntity(response, HttpStatus.OK);
+
     }
 
     /*
@@ -92,43 +90,40 @@ public class CardController {
     public ResponseEntity buy(@RequestBody @Valid BuyRequest buyRequest,
                               BindingResult bindingResult) {
         ApiResponse response = new ApiResponse();
-        Card card = repository.findByNumber(buyRequest.cardNumber);
+        var card = repository.findByNumber(buyRequest.cardNumber);
         try {
 
-
-            if(card == null){
-                bindingResult.addError(new ObjectError("Card","O usuário solicitado para o compra não existe"));
+            if(card.isEmpty()){
+                bindingResult.addError(new ObjectError("Card","O cartão solicitado para o compra não existe"));
             }
 
-            if(card != null && !card.getCardType().isEstablishmentAllowed(buyRequest.establishmentType)){
+            if(!card.isEmpty() && !card.get().getCardType().isEstablishmentAllowed(buyRequest.establishmentType)){
                 bindingResult.addError(new ObjectError("Card","O cartão não pode ser utulizado nesse tipo de estabelecimento"));
             }
 
-            if (bindingResult.hasErrors()) {
-                for (ObjectError error : bindingResult.getAllErrors()) {
-                    response.addError(error.getDefaultMessage());
-                }
+            card.get().buyingTransaction(buyRequest.value);
 
-                response.setMessage("Erro ao tentar utilizar o cartão em uma compra");
-                response.setData(buyRequest);
-                return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+            if(!card.isEmpty() && card.get().getBalance() < 0){
+                bindingResult.addError(new ObjectError("Card","O cartão não possui saldo suficiente para essa transação"));
             }
 
-            card.buyingTransaction(buyRequest.value);
-            repository.save(card);
-            Extract extract = new Extract(buyRequest.establishmentName, buyRequest.productDescription, new Date(), buyRequest.cardNumber, buyRequest.value);
-            extractRepository.save(extract);
-            response.setMessage("Compra efetuada com sucesso!");
-            response.setData(buyRequest);
-            return new ResponseEntity(response, HttpStatus.OK);
+            if (bindingResult.hasErrors()) {
+                response.addErrors(bindingResult);
+                response.setMessage("Erro ao tentar utilizar o cartão em uma compra");
+            }else{
+                repository.save(card.get());
+                Extract extract = new Extract(buyRequest.establishmentName, buyRequest.productDescription, new Date(), buyRequest.cardNumber, buyRequest.value);
+                extractRepository.save(extract);
+                response.setMessage("Compra efetuada com sucesso!");
 
+            }
         }catch (Exception e){
             log.error(e.getMessage());
+            response.setMessage("Erro ao tentar utilizar o cartão em uma compra");
         }
 
-        response.setMessage("Erro ao tentar utilizar o cartão em uma compra");
-        response.setData(card);
-        return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
+        response.setData(buyRequest);
+        return new ResponseEntity(response, HttpStatus.OK);
 
     }
 }
