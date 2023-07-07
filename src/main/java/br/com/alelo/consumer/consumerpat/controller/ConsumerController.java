@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,26 +37,32 @@ public class ConsumerController {
     @Autowired
     private CardRepository cardRepository;
 
-    /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
+    /**
+     *
+     * Listar todos os clientes
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers(@RequestParam(defaultValue= "0", required = false)
-                                               Integer page ,
-                                           @RequestParam(defaultValue= "5", required = false)
-                                               Integer pageSize) {
+    public ResponseEntity<List<Consumer>> listAllConsumers(
+            @RequestParam(defaultValue= "0", required = false) Integer page ,
+            @RequestParam(defaultValue= "5", required = false) Integer pageSize) {
         log.info("obtendo todos clientes");
         Pageable paging = PageRequest.of(page, pageSize);
 
         try {
             var consumers = consumerRepository.getAllConsumersList(paging);
 
-            return consumers;
+            return new ResponseEntity<List<Consumer>>(consumers, HttpStatus.OK);
         }catch (Exception e){
             log.error(e.getMessage());
         }
 
-        return new ArrayList<Consumer>();
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -63,8 +70,16 @@ public class ConsumerController {
      * @param consumer
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
+    public ResponseEntity createConsumer(@RequestBody Consumer consumer) {
+        try {
             consumerRepository.save(consumer);
+
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -72,14 +87,16 @@ public class ConsumerController {
      * @param consumer
      */
     @RequestMapping(value = "/update/{consumerId}", method = RequestMethod.PUT)
-    public void updateConsumer(@PathVariable(value = "consumerId") int consumerId, @RequestBody Consumer consumer) {
+    public ResponseEntity updateConsumer(@PathVariable(value = "consumerId") int consumerId, @RequestBody Consumer consumer) {
 
         var consumerFromDb = consumerRepository.findById(Integer.valueOf(consumerId));
         if(consumerFromDb.isPresent()){
             consumer.setId(consumerFromDb.get().getId());
             consumerRepository.save(consumer);
+            return new ResponseEntity(HttpStatus.OK);
         }
 
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -88,12 +105,16 @@ public class ConsumerController {
      * @param address
      */
     @RequestMapping(value = "/create/{consumerId}/address", method = RequestMethod.POST)
-    public void createAddress(@PathVariable(value = "consumerId") int consumerId, @RequestBody Address address) {
+    public ResponseEntity createAddress(@PathVariable(value = "consumerId") int consumerId, @RequestBody Address address) {
         var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
-        if(consumer.isPresent()){
+        var addressFromDb = addressRepository.findByConsumerId(Integer.valueOf(consumerId));
+        if(consumer.isPresent() && addressFromDb == null){
             address.setConsumer(consumer.get());
             addressRepository.save(address);
+            return new ResponseEntity(HttpStatus.OK);
         }
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -102,12 +123,21 @@ public class ConsumerController {
      * @param address
      */
     @RequestMapping(value = "/update/{consumerId}/address", method = RequestMethod.PUT)
-    public void updateAddress(@PathVariable(value = "consumerId") int consumerId,@RequestBody Address address) {
-        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
-        if(consumer.isPresent()){
-            address.setConsumer(consumer.get());
-            addressRepository.save(address);
+    public ResponseEntity updateAddress(@PathVariable(value = "consumerId") int consumerId, @RequestBody Address address) {
+        try{
+            var addressFromDb = addressRepository.findByConsumerId(Integer.valueOf(consumerId));
+            if(addressFromDb != null){
+                var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+                address.setId(addressFromDb.getId());
+                address.setConsumer(consumer.get());
+                addressRepository.save(address);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -116,12 +146,20 @@ public class ConsumerController {
      * @param contact
      */
     @RequestMapping(value = "/create/{consumerId}/contact", method = RequestMethod.POST)
-    public void createContact(@PathVariable(value = "consumerId") int consumerId, @RequestBody Contact contact) {
-        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
-        if(consumer.isPresent()) {
-            contact.setConsumer(consumer.get());
-            contactRepository.save(contact);
+    public ResponseEntity createContact(@PathVariable(value = "consumerId") int consumerId, @RequestBody Contact contact) {
+        try {
+            var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+            var contactFromDb = contactRepository.findByConsumerId(Integer.valueOf(consumerId));
+            if(consumer.isPresent() && contactFromDb == null) {
+                contact.setConsumer(consumer.get());
+                contactRepository.save(contact);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -130,12 +168,24 @@ public class ConsumerController {
      * @param contact
      */
     @RequestMapping(value = "/update/{consumerId}/contact", method = RequestMethod.PUT)
-    public void updateContact(@PathVariable(value = "consumerId") int consumerId,@RequestBody Contact contact) {
-        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
-        if(consumer.isPresent()) {
-            contact.setConsumer(consumer.get());
-            contactRepository.save(contact);
+    public ResponseEntity updateContact(@PathVariable(value = "consumerId") int consumerId,
+                                        @RequestBody Contact contact) {
+        try {
+            var contactFromDb = contactRepository.findByConsumerId(Integer.valueOf(consumerId));
+
+            if(contactFromDb != null) {
+                var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+                contact.setId(contactFromDb.getId());
+                contact.setConsumer(consumer.get());
+                contactRepository.save(contact);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
+
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -144,11 +194,18 @@ public class ConsumerController {
      * @param card
      */
     @RequestMapping(value = "/create/{consumerId}/card", method = RequestMethod.POST)
-    public void createCard(@PathVariable(value = "consumerId") int consumerId, @RequestBody Card card) {
-        var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
-        if(consumer.isPresent()) {
-            card.setConsumer(consumer.get());
-            cardRepository.save(card);
+    public ResponseEntity createCard(@PathVariable(value = "consumerId") int consumerId, @RequestBody Card card) {
+        try{
+            var consumer = consumerRepository.findById(Integer.valueOf(consumerId));
+            if(consumer.isPresent()) {
+                card.setConsumer(consumer.get());
+                cardRepository.save(card);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 }

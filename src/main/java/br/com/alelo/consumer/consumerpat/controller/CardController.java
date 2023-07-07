@@ -8,6 +8,8 @@ import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +34,15 @@ public class CardController {
      * @param cardBalanceRequest
      */
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.PATCH)
-    public void setBalance(@RequestBody SetCardBalanceRequest cardBalanceRequest) {
+    public ResponseEntity setBalance(@RequestBody SetCardBalanceRequest cardBalanceRequest) {
         Card card = repository.findByNumber(cardBalanceRequest.cardNumber);
         if(card != null){
             card.addBalance(cardBalanceRequest.value);
             repository.save(card);
+            return new ResponseEntity(HttpStatus.OK);
         }
+
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /*
@@ -64,13 +69,16 @@ public class CardController {
      */
     @ResponseBody
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public void buy(@RequestBody BuyRequest buyRequest) {
+    public ResponseEntity buy(@RequestBody BuyRequest buyRequest) {
         Card card = repository.findByNumber(buyRequest.cardNumber);
         if(card != null && card.getCardType().isEstablishmentAllowed(buyRequest.establishmentType)){
             card.buyingTransaction(buyRequest.value);
             repository.save(card);
             Extract extract = new Extract(buyRequest.establishmentName, buyRequest.productDescription, new Date(), buyRequest.cardNumber, buyRequest.value);
             extractRepository.save(extract);
+            return new ResponseEntity(HttpStatus.OK);
         }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }

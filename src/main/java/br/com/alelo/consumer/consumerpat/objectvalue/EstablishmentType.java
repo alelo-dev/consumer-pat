@@ -5,7 +5,7 @@ public enum EstablishmentType {
     DRUGSTORE(2),
     FUEL(3);
     private final int value;
-    private EstablishmentType(int value){
+    EstablishmentType(int value){
         this.value = value;
     }
 

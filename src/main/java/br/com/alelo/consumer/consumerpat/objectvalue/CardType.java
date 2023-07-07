@@ -39,7 +39,7 @@ public enum CardType implements CardBalanceStrategy {
         public boolean isEstablishmentAllowed(int establishmentId) {
             return EstablishmentType.FUEL.getValue() == establishmentId;
         }
-    };
+    }
 
 
 }
