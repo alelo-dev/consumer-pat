@@ -4,11 +4,11 @@ import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Log4j2
 @Service
@@ -19,10 +19,8 @@ public class ConsumerService {
     private final ConsumerRepository repository;
     private final ExtractService extractService;
 
-    public List<Consumer> listAllConsumers() {
-        log.info("obtendo todos clientes");
-
-        return repository.getAllConsumersList();
+    public Page<Consumer> getConsumerPageable(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public void createConsumer(Consumer consumer) {

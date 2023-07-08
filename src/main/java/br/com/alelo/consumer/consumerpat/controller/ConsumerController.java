@@ -3,10 +3,12 @@ package br.com.alelo.consumer.consumerpat.controller;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -16,8 +18,8 @@ public class ConsumerController {
     private final ConsumerService service;
 
     @GetMapping
-    public List<Consumer> getAllConsumers() {
-        return service.listAllConsumers();
+    public ResponseEntity<Page<Consumer>> getAllConsumers(@PageableDefault(size = 50) final Pageable pageable) {
+        return ResponseEntity.ok(service.getConsumerPageable(pageable));
     }
 
     @PostMapping
