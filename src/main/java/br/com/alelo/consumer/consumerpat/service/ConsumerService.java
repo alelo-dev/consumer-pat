@@ -25,16 +25,16 @@ public class ConsumerService {
         return repository.getAllConsumersList();
     }
 
-    public void createConsumer(@RequestBody Consumer consumer) {
+    public void createConsumer(Consumer consumer) {
         repository.save(consumer);
     }
 
-    public void updateConsumer(@RequestBody Consumer consumer) {
+    public void updateConsumer(Consumer consumer) {
         repository.save(consumer);
     }
 
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer ;
+    public void setBalance(Integer cardNumber, double value) {
+        Consumer consumer;
         consumer = repository.findByDrugstoreNumber(cardNumber);
 
         if (consumer != null) {
@@ -57,7 +57,7 @@ public class ConsumerService {
     }
 
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer ;
+        Consumer consumer;
         /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
 
          *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
