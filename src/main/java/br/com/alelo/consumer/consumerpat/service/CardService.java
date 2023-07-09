@@ -17,10 +17,12 @@ public class CardService {
     private final CardRepository cardRepository;
 
     public Card save(Card card) {
+        log.info("Salvar card:" + card.toString());
         return cardRepository.save(card);
     }
 
     public Card getCardByNumber(Long cardNumber) {
+        log.info("Salvar card por id:" + cardNumber);
         return cardRepository.findByNumber(cardNumber);
     }
 

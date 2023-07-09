@@ -27,18 +27,22 @@ public class ConsumerService {
     private final CardService cardService;
 
     public Page<Consumer> findConsumersPageable(Pageable pageable) {
+        log.info("Consultar consumers paginados" + pageable.toString());
         return consumerRepository.findAll(pageable);
     }
 
     public Optional<Consumer> getById(Long id) {
+        log.info("Consultar consumer por id" + id);
         return consumerRepository.findById(id);
     }
 
     public Consumer createConsumer(ConsumerDTO consumerDTO) {
+        log.info("Criar novo consumer" + consumerDTO.toString());
         return consumerRepository.save(toEntity(consumerDTO));
     }
 
     public Consumer updateConsumer(Consumer consumer, ConsumerUpdateDTO consumerDTO) {
+        log.info("Atualização consumer: " + consumer.getId() + " com dados " + consumerDTO.toString());
 
         if (consumerDTO.getName() != null)
             consumer.setName(consumerDTO.getName());
@@ -55,6 +59,7 @@ public class ConsumerService {
     }
 
     public Card creditBalance(Long cardNumber, Double value) {
+        log.info("Atualizar balanço com valor " + value + " para cartão " + cardNumber);
         Card card = cardService.getCardByNumber(cardNumber);
 
         if (card != null) {
@@ -66,6 +71,7 @@ public class ConsumerService {
     }
 
     public Extract buy(Integer establishmentType, String establishmentName, Long cardNumber, String productDescription, Double value) {
+        log.info("Realizar transação com valor " + value + " para cartão " + cardNumber + " e estabelecimento " + establishmentName + " do tipo " + establishmentType);
         Card card = cardService.getCardByNumber(cardNumber);
 
         // Para compras no cartão de alimentação o cliente recebe um desconto de 10% e cartão de combustivel existe um acrescimo de 35%
