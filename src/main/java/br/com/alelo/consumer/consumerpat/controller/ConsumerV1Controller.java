@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/consumer")
-public class ConsumerController {
+@RequestMapping("/v1/consumer")
+public class ConsumerV1Controller {
 
     private final ConsumerService service;
 
