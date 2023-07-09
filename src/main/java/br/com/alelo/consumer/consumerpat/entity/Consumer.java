@@ -4,13 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Consumer {
 
     @Id
@@ -23,40 +23,13 @@ public class Consumer {
     @Column
     private LocalDate birthDate;
 
-    // Contact
-    @Column
-    private Integer mobilePhoneNumber;
-    @Column
-    private Integer residencePhoneNumber;
-    @Column
-    private Integer phoneNumber;
-    @Column
-    private String email;
+    @OneToOne
+    private Contact contact;
 
-    //Address
-    @Column
-    private String street;
-    @Column
-    private Integer number;
-    @Column
-    private String city;
-    @Column
-    private String country;
-    @Column
-    private Integer portalCode;
+    @OneToOne
+    private Address address;
 
-    //cards
-    @Column
-    private Integer foodCardNumber;
-    @Column
-    private Double foodCardBalance;
-    @Column
-    private Integer fuelCardNumber;
-    @Column
-    private Double fuelCardBalance;
-    @Column
-    private Integer drugstoreCardNumber;
-    @Column
-    private Double drugstoreCardBalance;
+    @OneToMany
+    private List<Card> cards;
 
 }
