@@ -65,12 +65,12 @@ public class ConsumerV1Controller {
         return ResponseEntity.internalServerError().body("Failed to update consumer");
     }
 
-    @PutMapping("/{cardNumber}/balance")
-    public ResponseEntity<String> setCardBalance(
+    @PutMapping("/{cardNumber}/balances")
+    public ResponseEntity<String> creditCardBalance(
             @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull Long cardNumber,
             @RequestParam("value") @NotNull Double value) {
 
-        Card card = service.setBalance(cardNumber, value);
+        Card card = service.creditBalance(cardNumber, value);
 
         if (card != null)
             return ResponseEntity.ok("Balance update successfully");
@@ -80,7 +80,7 @@ public class ConsumerV1Controller {
 
     @PostMapping("/{cardNumber}/transactions")
     public void makeTransaction(
-            @PathVariable("cardNumber") @Size(min = 16, max = 16) Long cardNumber,
+            @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull Long cardNumber,
             @RequestParam("establishmentType") @NotNull Integer establishmentType,
             @RequestParam("establishmentName") @NotNull String establishmentName,
             @RequestParam("productDescription") @NotNull String productDescription,

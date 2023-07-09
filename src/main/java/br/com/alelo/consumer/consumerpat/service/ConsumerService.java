@@ -56,7 +56,7 @@ public class ConsumerService {
         return consumerRepository.save(consumer);
     }
 
-    public Card setBalance(Long cardNumber, Double value) {
+    public Card creditBalance(Long cardNumber, Double value) {
         Card card = cardRepository.findByNumber(cardNumber);
 
         if (card != null) {
@@ -88,7 +88,7 @@ public class ConsumerService {
         cardRepository.save(card);
         extractService.save(establishmentName, productDescription, cardNumber, value);
     }
-
+    
     public Consumer toEntity(ConsumerDTO consumerDTO) {
 
         Contact contact = Contact.builder()
