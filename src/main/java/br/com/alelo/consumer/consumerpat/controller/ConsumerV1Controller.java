@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ import java.util.Optional;
 @Validated
 @RestController
 @RequestMapping("/v1/consumers")
-public class ConsumerV1Controller implements Response {
+public class ConsumerV1Controller implements ConsumerV1Doc, Response {
 
     private final ConsumerService consumerService;
     private final CardService cardService;
