@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.AllArgsConstructor;
@@ -8,10 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
+
+import javax.validation.Valid;
+import java.util.Optional;
 
 @AllArgsConstructor
 
+@Validated
 @RestController
 @RequestMapping("/v1/consumer")
 public class ConsumerV1Controller {
@@ -25,14 +32,16 @@ public class ConsumerV1Controller {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        service.createConsumer(consumer);
+    public void createConsumer(@RequestBody @Valid ConsumerDTO consumerDTO) {
+        service.createConsumer(service.toEntity(consumerDTO));
     }
 
     @PutMapping("/{id}")
-    public void updateConsumer(@PathVariable("id") Long id, @RequestBody Consumer consumer) {
-        // fazer validação com id
-        service.updateConsumer(consumer);
+    public void updateConsumer(@PathVariable("id") Long id, @RequestBody ConsumerDTO consumerDTO) {
+        Optional<Consumer> consumer = service.getById(id);
+
+        if (consumer.isPresent())
+            service.updateConsumer(consumerDTO);
     }
 
     @PutMapping("/{cardNumber}/balance")

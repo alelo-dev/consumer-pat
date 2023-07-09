@@ -15,7 +15,7 @@ public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    Long id;
     String name;
     int documentNumber;
     Date birthDate;

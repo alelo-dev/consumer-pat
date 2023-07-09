@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
+import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -23,12 +25,16 @@ public class ConsumerService {
         return repository.findAll(pageable);
     }
 
+    public Optional<Consumer> getById(Long id) {
+        return repository.findById(id);
+    }
+
     public void createConsumer(Consumer consumer) {
         repository.save(consumer);
     }
 
-    public void updateConsumer(Consumer consumer) {
-        repository.save(consumer);
+    public void updateConsumer(ConsumerDTO consumerDTO) {
+        repository.save(toEntity(consumerDTO));
     }
 
     public void setBalance(Integer cardNumber, double value) {
@@ -91,5 +97,11 @@ public class ConsumerService {
         }
 
         extractService.save(establishmentName, productDescription, cardNumber, value);
+    }
+
+    public Consumer toEntity(ConsumerDTO consumerDTO) {
+        Consumer consumer = new Consumer();
+
+        return consumer;
     }
 }
