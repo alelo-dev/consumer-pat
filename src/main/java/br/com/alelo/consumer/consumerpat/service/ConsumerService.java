@@ -40,13 +40,16 @@ public class ConsumerService {
 
     public Consumer updateConsumer(Consumer consumer, ConsumerUpdateDTO consumerDTO) {
 
-        consumer.setName(consumerDTO.getName());
-        consumer.setDocumentNumber(consumerDTO.getDocumentNumber());
-        consumer.setBirthDate(consumerDTO.getBirthDate());
+        if (consumerDTO.getName() != null)
+            consumer.setName(consumerDTO.getName());
+        if (consumerDTO.getDocumentNumber() != null)
+            consumer.setDocumentNumber(consumerDTO.getDocumentNumber());
+        if (consumerDTO.getBirthDate() != null)
+            consumer.setBirthDate(consumerDTO.getBirthDate());
 
         // atualizar contato e endereço de acordo com regras de atualização para duas entidades
         // não permitir atualização do balanço e número do cartão
-        // depender do requisto, tratamento pode diferenciar caso consumidor possa ter mais de um cartyão do mesmo tipo
+        // depender do requisito, tratamento pode diferenciar caso consumidor possa ter mais de um cartyão do mesmo tipo
 
         return consumerRepository.save(consumer);
     }
@@ -67,9 +70,9 @@ public class ConsumerService {
 
         // Para compras no cartão de alimentação o cliente recebe um desconto de 10% e cartão de combustivel existe um acrescimo de 35%
         if (establishmentType == 1 && card.getType().equals(CardTypeEnum.FOOD))
-            value = value - ((value / 100) * 10);
+            value -= value * 0.1;
         else if (establishmentType == 3 && card.getType().equals(CardTypeEnum.FUEL))
-            value = value + ((value / 100) * 35);
+            value += value * 0.35;
 
         card.setBalance(card.getBalance() - value);
         return extractService.save(establishmentName, productDescription, card, value);
