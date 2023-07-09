@@ -6,6 +6,7 @@ import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Contact;
 import br.com.alelo.consumer.consumerpat.enuns.CardTypeEnum;
+import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class ConsumerService {
 
     private final ConsumerRepository repository;
+    private final CardRepository cardRepository;
     private final ExtractService extractService;
 
     public Page<Consumer> findConsumersPageable(Pageable pageable) {
@@ -48,27 +50,13 @@ public class ConsumerService {
         repository.save(toEntity(consumerDTO));
     }
 
-    public void setBalance(Integer cardNumber, double value) {
-//        Consumer consumer;
-//        consumer = repository.findByDrugstoreNumber(cardNumber);
-//
-//        if (consumer != null) {
-//            // é cartão de farmácia
-//            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-//            repository.save(consumer);
-//        } else {
-//            consumer = repository.findByFoodCardNumber(cardNumber);
-//            if (consumer != null) {
-//                // é cartão de refeição
-//                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-//                repository.save(consumer);
-//            } else {
-//                // É cartão de combustivel
-//                consumer = repository.findByFuelCardNumber(cardNumber);
-//                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-//                repository.save(consumer);
-//            }
-//        }
+    public void setBalance(Long cardNumber, Double value) {
+        Card card = cardRepository.findByNumber(cardNumber);
+
+        if (card != null) {
+            card.setBalance(card.getBalance() + value);
+            cardRepository.save(card);
+        }
     }
 
     public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {

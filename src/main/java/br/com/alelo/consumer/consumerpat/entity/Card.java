@@ -19,13 +19,16 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
-    private Integer number;
+    @Column(unique = true)
+    private Long number;
 
     @Column
     private Double balance;
 
     @Column
     private CardTypeEnum type;
+
+    @ManyToOne
+    private Consumer consumer;
 
 }

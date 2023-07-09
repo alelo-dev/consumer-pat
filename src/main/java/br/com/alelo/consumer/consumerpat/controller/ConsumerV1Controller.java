@@ -15,6 +15,7 @@ import org.webjars.NotFoundException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -43,7 +44,7 @@ public class ConsumerV1Controller {
     }
 
     @PutMapping("/{cardNumber}/balance")
-    public void setCardBalance(@PathVariable("cardNumber") Integer cardNumber,
+    public void setCardBalance(@PathVariable("cardNumber") @Size(min = 16, max = 16) Long cardNumber,
                                @RequestParam("value") Double value) {
         service.setBalance(cardNumber, value);
     }

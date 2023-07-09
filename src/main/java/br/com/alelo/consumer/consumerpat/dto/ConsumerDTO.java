@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
@@ -40,15 +37,18 @@ public class ConsumerDTO {
     private String country;
 
     @NotNull
-    private Integer foodCardNumber;
+    @Size(min = 16, max = 16, message = "O número deve ter 16 dígitos")
+    private Long foodCardNumber;
     private Double foodCardBalance;
 
     @NotNull
-    private Integer fuelCardNumber;
+    @Size(min = 16, max = 16, message = "O número deve ter 16 dígitos")
+    private Long fuelCardNumber;
     private Double fuelCardBalance;
 
     @NotNull
-    private Integer drugstoreCardNumber;
+    @Size(min = 16, max = 16, message = "O número deve ter 16 dígitos")
+    private Long drugstoreCardNumber;
     private Double drugstoreCardBalance;
 
 }
