@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.enuns;
+package br.com.alelo.consumer.consumerpat.enums;
 
 import lombok.Getter;
 
@@ -6,8 +6,8 @@ import lombok.Getter;
 public enum CardTypeEnum {
 
     FOOD(1, "FOOD"),
-    FUEL(2, "FUEL"),
-    DRUGSTORE(3, "DRUGSTORE");
+    DRUGSTORE(2, "DRUGSTORE"),
+    FUEL(3, "FUEL");
 
     private final Integer id;
     private final String name;

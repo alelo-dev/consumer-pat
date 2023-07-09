@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import br.com.alelo.consumer.consumerpat.enums.EstablishmentTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,8 @@ public class Establishment {
 
     @Column(unique = true)
     private String name;
+
+    @Column
+    private EstablishmentTypeEnum type;
 
 }

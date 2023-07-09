@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import br.com.alelo.consumer.consumerpat.enuns.CardTypeEnum;
+import br.com.alelo.consumer.consumerpat.enums.CardTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
