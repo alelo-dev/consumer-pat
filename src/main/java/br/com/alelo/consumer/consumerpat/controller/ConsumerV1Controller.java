@@ -1,6 +1,8 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.dto.ConsumerUpdateDTO;
+import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 @AllArgsConstructor
 
@@ -26,33 +29,62 @@ public class ConsumerV1Controller {
     private final ConsumerService service;
 
     @GetMapping
-    public ResponseEntity<Page<Consumer>> getAllConsumers(@PageableDefault(size = 50) final Pageable pageable) {
+    public ResponseEntity<Page<Consumer>> getAllConsumers(
+            @PageableDefault(size = 50) final Pageable pageable) {
+
         return ResponseEntity.ok(service.findConsumersPageable(pageable));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createConsumer(@RequestBody @Valid ConsumerDTO consumerDTO) {
-        service.createConsumer(consumerDTO);
+    public ResponseEntity<String> createConsumer(
+            @RequestBody @Valid ConsumerDTO consumerDTO) {
+
+        Consumer newConsumer = service.createConsumer(consumerDTO);
+
+        if (newConsumer != null)
+            return ResponseEntity.status(HttpStatus.CREATED).body("Consumer created successfully");
+
+        return ResponseEntity.internalServerError().body("Failed to create consumer");
     }
 
     @PutMapping("/{id}")
-    public void updateConsumer(@PathVariable("id") @NotNull Long id, @RequestBody ConsumerDTO consumerDTO) {
-        service.updateConsumer(id, consumerDTO);
+    public ResponseEntity<String> updateConsumer(
+            @PathVariable("id") @NotNull Long id,
+            @RequestBody @Valid ConsumerUpdateDTO consumerDTO) {
+
+        Optional<Consumer> consumer = service.getById(id);
+
+        if (consumer.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        Consumer updateConsumer = service.updateConsumer(consumer.get(), consumerDTO);
+
+        if (updateConsumer != null)
+            return ResponseEntity.ok("Consumer update successfully");
+
+        return ResponseEntity.internalServerError().body("Failed to update consumer");
     }
 
     @PutMapping("/{cardNumber}/balance")
-    public void setCardBalance(@PathVariable("cardNumber") @Size(min = 16, max = 16) Long cardNumber,
-                               @RequestParam("value") Double value) {
-        service.setBalance(cardNumber, value);
+    public ResponseEntity<String> setCardBalance(
+            @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull Long cardNumber,
+            @RequestParam("value") @NotNull Double value) {
+
+        Card card = service.setBalance(cardNumber, value);
+
+        if (card != null)
+            return ResponseEntity.ok("Balance update successfully");
+
+        return ResponseEntity.internalServerError().body("Failed to update balance");
     }
 
     @PostMapping("/{cardNumber}/transactions")
-    public void makeTransaction(@PathVariable("cardNumber") @Size(min = 16, max = 16) Long cardNumber,
-                                @RequestParam("establishmentType") Integer establishmentType,
-                                @RequestParam("establishmentName") String establishmentName,
-                                @RequestParam("productDescription") String productDescription,
-                                @RequestParam("value") Double value) {
+    public void makeTransaction(
+            @PathVariable("cardNumber") @Size(min = 16, max = 16) Long cardNumber,
+            @RequestParam("establishmentType") @NotNull Integer establishmentType,
+            @RequestParam("establishmentName") @NotNull String establishmentName,
+            @RequestParam("productDescription") @NotNull String productDescription,
+            @RequestParam("value") @NotNull Double value) {
 
         service.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
     }

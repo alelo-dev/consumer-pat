@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.service;
 
 import br.com.alelo.consumer.consumerpat.dto.ConsumerDTO;
+import br.com.alelo.consumer.consumerpat.dto.ConsumerUpdateDTO;
 import br.com.alelo.consumer.consumerpat.entity.Address;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
@@ -24,34 +25,46 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ConsumerService {
 
-    private final ConsumerRepository repository;
+    private final ConsumerRepository consumerRepository;
     private final CardRepository cardRepository;
+
     private final ExtractService extractService;
 
     public Page<Consumer> findConsumersPageable(Pageable pageable) {
         log.info("Consulta consumers de forma paginada");
-        return repository.findAll(pageable);
+        return consumerRepository.findAll(pageable);
     }
 
-    public void createConsumer(ConsumerDTO consumerDTO) {
-        Consumer consumer = toEntity(consumerDTO);
-
-        repository.save(consumer);
+    public Optional<Consumer> getById(Long id) {
+        return consumerRepository.findById(id);
     }
 
-    public void updateConsumer(Long id, ConsumerDTO consumerDTO) {
-        Consumer consumer = repository.getReferenceById(id);
-
-        repository.save(toEntity(consumerDTO));
+    public Consumer createConsumer(ConsumerDTO consumerDTO) {
+        return consumerRepository.save(toEntity(consumerDTO));
     }
 
-    public void setBalance(Long cardNumber, Double value) {
+    public Consumer updateConsumer(Consumer consumer, ConsumerUpdateDTO consumerDTO) {
+
+        consumer.setName(consumerDTO.getName());
+        consumer.setDocumentNumber(consumerDTO.getDocumentNumber());
+        consumer.setBirthDate(consumerDTO.getBirthDate());
+
+        // atualizar contato e endereço de acordo com regras de atualização para duas entidades
+        // não permitir atualização do balanço e número do cartão
+        // depender do requisto, tratamento pode diferenciar caso consumidor possa ter mais de um cartyão do mesmo tipo
+
+        return consumerRepository.save(consumer);
+    }
+
+    public Card setBalance(Long cardNumber, Double value) {
         Card card = cardRepository.findByNumber(cardNumber);
 
         if (card != null) {
             card.setBalance(card.getBalance() + value);
-            cardRepository.save(card);
+            return cardRepository.save(card);
         }
+
+        return null;
     }
 
     public void buy(int establishmentType, String establishmentName, Long cardNumber, String productDescription, Double value) {

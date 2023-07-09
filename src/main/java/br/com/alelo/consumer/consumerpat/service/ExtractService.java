@@ -35,5 +35,4 @@ public class ExtractService {
             extractRepository.save(extract);
         }
     }
-
 }
