@@ -58,7 +58,7 @@ public class ConsumerService {
         return consumerRepository.save(consumer);
     }
 
-    public Card creditBalance(Long cardNumber, Double value) {
+    public Card creditBalance(String cardNumber, Double value) {
         log.info("Atualizar balanço com valor " + value + " para cartão " + cardNumber);
         Card card = cardService.getCardByNumber(cardNumber);
 
@@ -70,7 +70,7 @@ public class ConsumerService {
         return null;
     }
 
-    public Extract buy(Integer establishmentType, String establishmentName, Long cardNumber, String productDescription, Double value) {
+    public Extract buy(Integer establishmentType, String establishmentName, String cardNumber, String productDescription, Double value) {
         log.info("Realizar transação com valor " + value + " para cartão " + cardNumber + " e estabelecimento " + establishmentName + " do tipo " + establishmentType);
         Card card = cardService.getCardByNumber(cardNumber);
 

@@ -21,7 +21,7 @@ public class CardService {
         return cardRepository.save(card);
     }
 
-    public Card getCardByNumber(Long cardNumber) {
+    public Card getCardByNumber(String cardNumber) {
         log.info("Salvar card por id:" + cardNumber);
         return cardRepository.findByNumber(cardNumber);
     }

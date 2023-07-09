@@ -37,17 +37,17 @@ public class ConsumerDTO {
 
     @NotNull
     @Size(min = 16, max = 16, message = "O número deve ter 16 dígitos")
-    private Long foodCardNumber;
+    private String foodCardNumber;
     private Double foodCardBalance;
 
     @NotNull
     @Size(min = 16, max = 16, message = "O número deve ter 16 dígitos")
-    private Long fuelCardNumber;
+    private String fuelCardNumber;
     private Double fuelCardBalance;
 
     @NotNull
     @Size(min = 16, max = 16, message = "O número deve ter 16 dígitos")
-    private Long drugstoreCardNumber;
+    private String drugstoreCardNumber;
     private Double drugstoreCardBalance;
 
 }

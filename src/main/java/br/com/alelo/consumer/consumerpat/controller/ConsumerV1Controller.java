@@ -70,7 +70,7 @@ public class ConsumerV1Controller implements ConsumerV1Doc, Response {
 
     @PutMapping("/{cardNumber}/balances")
     public ResponseEntity<?> creditCardBalance(
-            @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull Long cardNumber,
+            @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull String cardNumber,
             @RequestParam("value") @NotNull Double value) {
 
         Card card = consumerService.creditBalance(cardNumber, value);
@@ -83,7 +83,7 @@ public class ConsumerV1Controller implements ConsumerV1Doc, Response {
 
     @PostMapping("/{cardNumber}/transactions")
     public ResponseEntity<?> makeTransaction(
-            @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull Long cardNumber,
+            @PathVariable("cardNumber") @Size(min = 16, max = 16) @NotNull String cardNumber,
             @RequestParam("establishmentType") @NotNull Integer establishmentType,
             @RequestParam("establishmentName") @NotNull String establishmentName,
             @RequestParam("productDescription") @NotNull String productDescription,

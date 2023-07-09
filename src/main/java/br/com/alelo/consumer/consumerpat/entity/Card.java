@@ -20,7 +20,7 @@ public class Card {
     private Long id;
 
     @Column(unique = true)
-    private Long number;
+    private String number;
 
     @Column
     private Double balance;
