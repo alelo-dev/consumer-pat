@@ -27,7 +27,7 @@ public class ConsumerV1Controller {
 
     @GetMapping
     public ResponseEntity<Page<Consumer>> getAllConsumers(@PageableDefault(size = 50) final Pageable pageable) {
-        return ResponseEntity.ok(service.getConsumerPageable(pageable));
+        return ResponseEntity.ok(service.findConsumersPageable(pageable));
     }
 
     @PostMapping

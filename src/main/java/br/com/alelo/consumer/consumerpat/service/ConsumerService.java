@@ -21,7 +21,7 @@ public class ConsumerService {
     private final ConsumerRepository repository;
     private final ExtractService extractService;
 
-    public Page<Consumer> getConsumerPageable(Pageable pageable) {
+    public Page<Consumer> findConsumersPageable(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
