@@ -1,6 +1,9 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,7 +32,7 @@ public class Consumer {
     @OneToOne
     private Address address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "consumer")
     private List<Card> cards;
 
 }

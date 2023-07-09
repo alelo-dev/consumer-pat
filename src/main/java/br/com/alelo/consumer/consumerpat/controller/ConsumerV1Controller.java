@@ -11,18 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.webjars.NotFoundException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Optional;
 
 @AllArgsConstructor
 
 @Validated
 @RestController
-@RequestMapping("/v1/consumer")
+@RequestMapping("/v1/consumers")
 public class ConsumerV1Controller {
 
     private final ConsumerService service;
@@ -50,11 +48,11 @@ public class ConsumerV1Controller {
     }
 
     @PostMapping("/{cardNumber}/transactions")
-    public void makeTransaction(@PathVariable("cardNumber") int cardNumber,
-                                @RequestParam("establishmentType") int establishmentType,
+    public void makeTransaction(@PathVariable("cardNumber") @Size(min = 16, max = 16) Long cardNumber,
+                                @RequestParam("establishmentType") Integer establishmentType,
                                 @RequestParam("establishmentName") String establishmentName,
                                 @RequestParam("productDescription") String productDescription,
-                                @RequestParam("value") double value) {
+                                @RequestParam("value") Double value) {
 
         service.buy(establishmentType, establishmentName, cardNumber, productDescription, value);
     }

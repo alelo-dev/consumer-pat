@@ -33,11 +33,6 @@ public class ConsumerService {
         return repository.findAll(pageable);
     }
 
-    public Optional<Consumer> getById(Long id) {
-        log.info("Consulta consumer por identificador: " + id);
-        return repository.findById(id);
-    }
-
     public void createConsumer(ConsumerDTO consumerDTO) {
         Consumer consumer = toEntity(consumerDTO);
 
@@ -59,43 +54,26 @@ public class ConsumerService {
         }
     }
 
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-//        Consumer consumer;
-//        /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
-//
-//         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
-//         *
-//         * Tipos dos estabelcimentos:
-//         *    1) Alimentação (Food)
-//         *    2) Farmácia (DrugStore)
-//         *    3) Posto de combustivel (Fuel)
-//         */
-//
-//        if (establishmentType == 1) {
-//            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-//            double cashback = (value / 100) * 10;
-//            value = value - cashback;
-//
-//            consumer = repository.findByFoodCardNumber(cardNumber);
-//            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-//            repository.save(consumer);
-//
-//        } else if (establishmentType == 2) {
-//            consumer = repository.findByDrugstoreNumber(cardNumber);
-//            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-//            repository.save(consumer);
-//
-//        } else {
-//            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-//            double tax = (value / 100) * 35;
-//            value = value + tax;
-//
-//            consumer = repository.findByFuelCardNumber(cardNumber);
-//            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-//            repository.save(consumer);
-//        }
-//
-//        extractService.save(establishmentName, productDescription, cardNumber, value);
+    public void buy(int establishmentType, String establishmentName, Long cardNumber, String productDescription, Double value) {
+        Card card = cardRepository.findByNumber(cardNumber);
+
+        if (establishmentType == 1 && card.getType().equals(CardTypeEnum.FOOD)) {
+            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+            Double cashback = (value / 100) * 10;
+            value = value - cashback;
+            card.setBalance(card.getBalance() - value);
+        } else if (establishmentType == 2 && card.getType().equals(CardTypeEnum.DRUGSTORE)) {
+            card.setBalance(card.getBalance() - value);
+        } else {
+            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
+            Double tax = (value / 100) * 35;
+            value = value + tax;
+
+            card.setBalance(card.getBalance() - value);
+        }
+
+        cardRepository.save(card);
+        extractService.save(establishmentName, productDescription, cardNumber, value);
     }
 
     public Consumer toEntity(ConsumerDTO consumerDTO) {
@@ -143,4 +121,5 @@ public class ConsumerService {
 
         return consumer;
     }
+
 }
