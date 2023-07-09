@@ -1,66 +1,62 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
-import java.util.Objects;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Long id;
+    @Column
+    private String name;
+    @Column
+    private Integer documentNumber;
+    @Column
+    private LocalDate birthDate;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+    // Contact
+    @Column
+    private Integer mobilePhoneNumber;
+    @Column
+    private Integer residencePhoneNumber;
+    @Column
+    private Integer phoneNumber;
+    @Column
+    private String email;
 
     //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @Column
+    private String street;
+    @Column
+    private Integer number;
+    @Column
+    private String city;
+    @Column
+    private String country;
+    @Column
+    private Integer portalCode;
 
     //cards
-    int foodCardNumber;
-    double foodCardBalance;
-
-    int fuelCardNumber;
-    double fuelCardBalance;
-
-    int drugstoreNumber;
-    double drugstoreCardBalance;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
-        return documentNumber == consumer.documentNumber
-            && mobilePhoneNumber == consumer.mobilePhoneNumber
-            && residencePhoneNumber == consumer.residencePhoneNumber
-            && phoneNumber == consumer.phoneNumber
-            && number == consumer.number
-            && portalCode == consumer.portalCode
-            && foodCardNumber == consumer.foodCardNumber
-            && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-            && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-            && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
-            && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
-            && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
-            && Objects.equals(country, consumer.country);
-    }
+    @Column
+    private Integer foodCardNumber;
+    @Column
+    private Double foodCardBalance;
+    @Column
+    private Integer fuelCardNumber;
+    @Column
+    private Double fuelCardBalance;
+    @Column
+    private Integer drugstoreCardNumber;
+    @Column
+    private Double drugstoreCardBalance;
 
 }

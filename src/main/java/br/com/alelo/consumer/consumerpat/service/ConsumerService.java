@@ -22,18 +22,24 @@ public class ConsumerService {
     private final ExtractService extractService;
 
     public Page<Consumer> findConsumersPageable(Pageable pageable) {
+        log.info("Consulta consumers de forma paginada");
         return repository.findAll(pageable);
     }
 
     public Optional<Consumer> getById(Long id) {
+        log.info("Consulta consumer por identificador: " + id);
         return repository.findById(id);
     }
 
-    public void createConsumer(Consumer consumer) {
+    public void createConsumer(ConsumerDTO consumerDTO) {
+        Consumer consumer = toEntity(consumerDTO);
+
         repository.save(consumer);
     }
 
-    public void updateConsumer(ConsumerDTO consumerDTO) {
+    public void updateConsumer(Long id, ConsumerDTO consumerDTO) {
+        Consumer consumer = repository.getReferenceById(id);
+
         repository.save(toEntity(consumerDTO));
     }
 
@@ -100,8 +106,25 @@ public class ConsumerService {
     }
 
     public Consumer toEntity(ConsumerDTO consumerDTO) {
-        Consumer consumer = new Consumer();
-
-        return consumer;
+        Consumer entity = Consumer.builder()
+                .name(consumerDTO.getName())
+                .documentNumber(consumerDTO.getDocumentNumber())
+                .birthDate(consumerDTO.getBirthDate())
+                .mobilePhoneNumber(consumerDTO.getMobilePhoneNumber())
+                .residencePhoneNumber(consumerDTO.getPhoneNumber())
+                .email(consumerDTO.getEmail())
+                .street(consumerDTO.getStreet())
+                .number(consumerDTO.getNumber())
+                .city(consumerDTO.getCity())
+                .country(consumerDTO.getCountry())
+                .portalCode(consumerDTO.getPortalCode())
+                .foodCardBalance(consumerDTO.getFoodCardBalance())
+                .foodCardNumber(consumerDTO.getFoodCardNumber())
+                .fuelCardBalance(consumerDTO.getFuelCardBalance())
+                .fuelCardNumber(consumerDTO.getFuelCardNumber())
+                .drugstoreCardBalance(consumerDTO.getDrugstoreCardBalance())
+                .drugstoreCardNumber(consumerDTO.getDrugstoreCardNumber())
+                .build();
+        return entity;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -33,15 +34,12 @@ public class ConsumerV1Controller {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createConsumer(@RequestBody @Valid ConsumerDTO consumerDTO) {
-        service.createConsumer(service.toEntity(consumerDTO));
+        service.createConsumer(consumerDTO);
     }
 
     @PutMapping("/{id}")
-    public void updateConsumer(@PathVariable("id") Long id, @RequestBody ConsumerDTO consumerDTO) {
-        Optional<Consumer> consumer = service.getById(id);
-
-        if (consumer.isPresent())
-            service.updateConsumer(consumerDTO);
+    public void updateConsumer(@PathVariable("id") @NotNull Long id, @RequestBody ConsumerDTO consumerDTO) {
+        service.updateConsumer(id, consumerDTO);
     }
 
     @PutMapping("/{cardNumber}/balance")
