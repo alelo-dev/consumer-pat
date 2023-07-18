@@ -64,4 +64,10 @@ public class Consumer {
 
     @Column(name = "FUEL_CARD_BALANCE")
     private double fuelCardBalance;
+
+    @Column(name = "DRUGSTORE_CARD_NUMBER")
+    private int drugstoreCardNumber;
+
+    @Column(name = "DRUGSTORE_CARD_BALANCE")
+    private double drugstoreCardBalance;
 }
