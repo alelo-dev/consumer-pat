@@ -1,6 +1,8 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +10,8 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "consumer")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Consumer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +21,7 @@ public class Consumer {
     @Column(name = "CONSUMER_NAME")
     private String consumerName;
 
-    @Column(name = "DOCUMENT_NUMBER")
+    @Column(name = "DOCUMENT_NUMBER", unique = true)
     private int documentNumber;
 
     @Column(name = "BIRTH_DATE")
@@ -33,7 +37,7 @@ public class Consumer {
     @Column(name = "PHONE_NUMBER")
     private int phoneNumber;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     //Address
@@ -53,21 +57,60 @@ public class Consumer {
     private int portalCode;
 
     //cards
-    @Column(name = "FOOD_CARD_NUMBER")
+    @Column(name = "FOOD_CARD_NUMBER", unique = true)
     private int foodCardNumber;
 
     @Column(name = "FOOD_CARD_BALANCE")
     private double foodCardBalance;
 
-    @Column(name = "FUEL_CARD_NUMBER")
+    @Column(name = "FUEL_CARD_NUMBER", unique = true)
     private int fuelCardNumber;
 
     @Column(name = "FUEL_CARD_BALANCE")
     private double fuelCardBalance;
 
-    @Column(name = "DRUGSTORE_CARD_NUMBER")
+    @Column(name = "DRUGSTORE_CARD_NUMBER", unique = true)
     private int drugstoreCardNumber;
 
     @Column(name = "DRUGSTORE_CARD_BALANCE")
     private double drugstoreCardBalance;
+
+    public Consumer(String consumerName, int documentNumber, Date birthDate, int mobilePhoneNumber, int residencePhoneNumber, int phoneNumber, String email, String street, int number, String city, String country, int portalCode, int foodCardNumber, double foodCardBalance, int fuelCardNumber, double fuelCardBalance, int drugstoreCardNumber, double drugstoreCardBalance) {
+        this.consumerName = consumerName;
+        this.documentNumber = documentNumber;
+        this.birthDate = birthDate;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.residencePhoneNumber = residencePhoneNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+        this.portalCode = portalCode;
+        this.foodCardNumber = foodCardNumber;
+        this.foodCardBalance = foodCardBalance;
+        this.fuelCardNumber = fuelCardNumber;
+        this.fuelCardBalance = fuelCardBalance;
+        this.drugstoreCardNumber = drugstoreCardNumber;
+        this.drugstoreCardBalance = drugstoreCardBalance;
+    }
+
+    public Consumer(String consumerName, int documentNumber, Date birthDate, int mobilePhoneNumber, int residencePhoneNumber, int phoneNumber, String email, String street, int number, String city, String country, int portalCode, int foodCardNumber, int fuelCardNumber, int drugstoreCardNumber) {
+        this.consumerName = consumerName;
+        this.documentNumber = documentNumber;
+        this.birthDate = birthDate;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.residencePhoneNumber = residencePhoneNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.country = country;
+        this.portalCode = portalCode;
+        this.foodCardNumber = foodCardNumber;
+        this.fuelCardNumber = fuelCardNumber;
+        this.drugstoreCardNumber = drugstoreCardNumber;
+    }
 }
