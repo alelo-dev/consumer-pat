@@ -11,3 +11,7 @@ spring:
   h2:
     console.enabled: true
     console.path: /h2-console
+
+server:
+  error:
+    include-message: always
