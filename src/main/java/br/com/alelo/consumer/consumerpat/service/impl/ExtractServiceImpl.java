@@ -13,7 +13,6 @@ public class ExtractServiceImpl implements ExtractService {
         this.repository = repository;
     }
 
-
     @Override
     public void create(Extract extract) {
         repository.save(extract);
