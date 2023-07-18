@@ -9,54 +9,36 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "extract")
 public class Extract {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    @Column(name = "extract_id")
+    private int extractId;
 
-    @Column
-    int establishmentNameId;
+    @Column(name = "establishment_id")
+    private int establishmentId;
 
-    @Column
-    String establishmentName;
+    @Column(name = "establishment_name")
+    private String establishmentName;
 
-    @Column
-    String productDescription;
+    @Column(name = "product_description")
+    private String productDescription;
 
-    @Column
-    Date dateBuy;
+    @Column(name = "date_of_purchase")
+    private Date dateOfPurchase;
 
-    @Column
-    int cardNumber;
+    @Column(name = "card_number")
+    private int cardNumber;
 
-    @Column
-    double amount;
+    @Column(name = "amount")
+    private double amount;
 
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.id = id;
-        this.establishmentNameId = establishmentNameId;
+    public Extract(String establishmentName, String productDescription, Date dateOfPurchase, int cardNumber, double amount) {
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
+        this.dateOfPurchase = dateOfPurchase;
         this.cardNumber = cardNumber;
         this.amount = amount;
     }
-
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.amount = amount;
-    }
-
-    public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.establishmentNameId = establishmentNameId;
-        this.establishmentName = establishmentName;
-        this.productDescription = productDescription;
-        this.dateBuy = dateBuy;
-        this.cardNumber = cardNumber;
-        this.amount = amount;
-    }
-
 }
