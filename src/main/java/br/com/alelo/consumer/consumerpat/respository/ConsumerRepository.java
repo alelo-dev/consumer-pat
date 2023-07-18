@@ -18,6 +18,6 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
     @Query("select c from Consumer c where c.fuelCardNumber = :cardNumber")
     Optional<Consumer> findByFuelCardNumber(@Param("cardNumber") int cardNumber);
 
-    @Query("select c from Consumer c where c.drugstoreNumber = :cardNumber")
+    @Query("select c from Consumer c where c.drugstoreCardNumber = :cardNumber")
     Optional<Consumer> findByDrugstoreNumber(@Param("cardNumber") int cardNumber);
 }
