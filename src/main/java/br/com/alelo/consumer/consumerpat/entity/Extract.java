@@ -13,25 +13,25 @@ import java.util.Date;
 public class Extract {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "extract_id")
+    @Column(name = "EXTRACT_ID")
     private int extractId;
 
-    @Column(name = "establishment_id")
+    @Column(name = "ESTABLISHMENT_ID")
     private int establishmentId;
 
-    @Column(name = "establishment_name")
+    @Column(name = "ESTABLISHMENT_NAME")
     private String establishmentName;
 
-    @Column(name = "product_description")
+    @Column(name = "PRODUCT_DESCRIPTION")
     private String productDescription;
 
-    @Column(name = "date_of_purchase")
+    @Column(name = "DATE_OF_PURCHASE")
     private Date dateOfPurchase;
 
-    @Column(name = "card_number")
+    @Column(name = "CARD_NUMBER")
     private int cardNumber;
 
-    @Column(name = "amount")
+    @Column(name = "AMOUNT")
     private double amount;
 
     public Extract(String establishmentName, String productDescription, Date dateOfPurchase, int cardNumber, double amount) {
