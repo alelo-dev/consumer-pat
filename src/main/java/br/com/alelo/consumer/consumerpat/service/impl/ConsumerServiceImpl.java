@@ -24,8 +24,8 @@ public class ConsumerServiceImpl implements ConsumerService {
     }
 
     @Override
-    public void create(ConsumerCreate customerCreate) {
-        repository.save(customerCreate.toEntity());
+    public void create(ConsumerCreate consumerCreate) {
+        repository.save(consumerCreate.toEntity());
     }
 
     @Override
@@ -37,14 +37,14 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void update(ConsumerUpdate consumerUpdate) {
         var consumerFound = repository.findById(consumerUpdate.getConsumerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Consumer not found"));
-        var customerToUpdate = consumerUpdate.toEntity();
+        var consumerToUpdate = consumerUpdate.toEntity();
 
-        customerToUpdate.setConsumerId(consumerFound.getConsumerId());
-        customerToUpdate.setFoodCardBalance(consumerFound.getFoodCardBalance());
-        customerToUpdate.setFuelCardBalance(consumerFound.getFuelCardBalance());
-        customerToUpdate.setDrugstoreCardBalance(consumerFound.getDrugstoreCardBalance());
+        consumerToUpdate.setConsumerId(consumerFound.getConsumerId());
+        consumerToUpdate.setFoodCardBalance(consumerFound.getFoodCardBalance());
+        consumerToUpdate.setFuelCardBalance(consumerFound.getFuelCardBalance());
+        consumerToUpdate.setDrugstoreCardBalance(consumerFound.getDrugstoreCardBalance());
 
-        repository.save(customerToUpdate);
+        repository.save(consumerToUpdate);
     }
 
     @Override

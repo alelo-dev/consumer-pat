@@ -9,7 +9,7 @@ import br.com.alelo.consumer.consumerpat.model.ConsumerUpdate;
 import java.util.List;
 
 public interface ConsumerService {
-    void create(ConsumerCreate customerCreate);
+    void create(ConsumerCreate consumerCreate);
 
     List<Consumer> getAll();
 
