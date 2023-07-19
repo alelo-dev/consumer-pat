@@ -30,25 +30,18 @@ public class ConsumerService {
     }
 
     public Consumer update(Consumer consumer) {
-
         Optional<Consumer> databaseEntity = consumerRepository.findById(Math.toIntExact(consumer.getId()));
-
         if (databaseEntity.isPresent()) {
-
             consumer.setDrugstoreCardBalance(databaseEntity.get().getDrugstoreCardBalance());
             consumer.setFuelCardBalance(databaseEntity.get().getFuelCardBalance());
             consumer.setFoodCardBalance(databaseEntity.get().getFoodCardBalance());
-
         } else
             throw new NotFoundException(consumer.getId().toString());
-
         return this.save(consumer);
     }
 
     public static Consumer addValue(Integer cardNumber, BigDecimal value) {
-
         Consumer consumer = findByAnyCard(cardNumber);
-
         if(cardNumber == consumer.getDrugstoreNumber()) {
             consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance().add(value));
         } else if(cardNumber == consumer.getFoodCardNumber()) {
@@ -60,23 +53,17 @@ public class ConsumerService {
         return consumerRepository.save(consumer);
     }
     public Consumer buy(BuyModel buyModel) {
-
         Consumer consumer = this.findByAnyCard(buyModel.getCardNumber());
-
         ConsumerEnum.fromValue(buyModel.getType());
-
         extractService.save(
                 new Extract(buyModel.getName(), buyModel.getProductDescription(), new Date(), buyModel.getCardNumber(), buyModel.getValue()));
-
         return consumerRepository.save(consumer);
     }
 
     private static Consumer findByAnyCard(Integer cardNumber) {
         Optional<Consumer> optionalConsumer = consumerRepository.findByCardNumber(cardNumber);
-
         if(optionalConsumer.isEmpty())
             throw new NotFoundException(cardNumber.toString());
-
         return optionalConsumer.get();
     }
 }

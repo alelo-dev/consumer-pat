@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @Log4j2
 @RestController
-@RequestMapping("/consumer")
+@RequestMapping("/")
 public class ConsumerController {
 
     ConsumerService consumerService;
@@ -31,9 +31,11 @@ public class ConsumerController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @GetMapping("/get")
+    @GetMapping("getConsumer")
     public ResponseEntity<Page<Consumer>> getAllConsumers(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "100") Integer itemsPerPage) {
@@ -45,23 +47,31 @@ public class ConsumerController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @PostMapping("/create")
+    @PostMapping("consumer")
     public ResponseEntity<Consumer> createConsumer(@RequestBody Consumer consumer) {
         return new ResponseEntity<>(consumerService.save(consumer), HttpStatus.CREATED);
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @PatchMapping("/update")
+    @PatchMapping("consumer")
     public ResponseEntity<Consumer> updateConsumer(@RequestBody Consumer consumer) {
         return new ResponseEntity<>(consumerService.update(consumer), HttpStatus.OK);
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PatchMapping("balance")
     public ResponseEntity<Consumer> addBalance(@RequestBody @Valid CardBalanceModel cardBalanceModel) {
@@ -72,9 +82,12 @@ public class ConsumerController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @PostMapping(value = "/buy")
+    @PostMapping(value = "buy")
     public ResponseEntity<Consumer> buy(@RequestBody @Valid BuyModel buyModel) {
         log.info("Buying product for card: " + buyModel.getCardNumber());
 
