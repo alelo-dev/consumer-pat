@@ -1,47 +1,85 @@
 package br.com.alelo.consumer.consumerpat.entity;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "name")
     private String name;
-    private int documentNumber;
+
+    @Column(name = "documentNumber")
+    private String documentNumber;
+
+    @Column(name = "birthDate")
     private Date birthDate;
 
-    //contacts
-    int mobilePhoneNumber;
-    int residencePhoneNumber;
-    int phoneNumber;
-    String email;
+// Contacts
 
-    //Address
-    String street;
-    int number;
-    String city;
-    String country;
-    int portalCode;
+    @Column(name = "mobilePhoneNumber")
+    private String mobilePhoneNumber;
 
-    //cards
-    int foodCardNumber;
-    double foodCardBalance;
+    @Column(name = "residencePhoneNumber")
+    private String residencePhoneNumber;
 
-    int fuelCardNumber;
-    double fuelCardBalance;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
 
-    int drugstoreNumber;
-    double drugstoreCardBalance;
+    @Column(name = "email")
+    private String email;
+
+// Address
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "number")
+    private int number;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "postalCode")
+    private int postalCode;
+
+// Cards
+
+    @Column(name = "foodCardNumber", unique = true)
+    private int foodCardNumber;
+
+    @Column(name = "foodCardBalance")
+    private BigDecimal foodCardBalance;
+
+    @Column(name = "fuelCardNumber", unique = true)
+    private int fuelCardNumber;
+
+    @Column(name = "fuelCardBalance")
+    private BigDecimal fuelCardBalance;
+
+    @Column(name = "drugstoreNumber", unique = true)
+    private int drugstoreNumber;
+
+    @Column(name = "drugstoreCardBalance")
+    private BigDecimal drugstoreCardBalance;
 
     @Override
     public boolean equals(Object o) {
@@ -53,11 +91,10 @@ public class Consumer {
             && residencePhoneNumber == consumer.residencePhoneNumber
             && phoneNumber == consumer.phoneNumber
             && number == consumer.number
-            && portalCode == consumer.portalCode
-            && foodCardNumber == consumer.foodCardNumber
-            && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-            && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-            && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
+            && postalCode == consumer.postalCode
+            && foodCardNumber == consumer.foodCardNumber && consumer.foodCardBalance.compareTo(foodCardBalance) == 0
+            && fuelCardNumber == consumer.fuelCardNumber && consumer.fuelCardBalance.compareTo(fuelCardBalance) == 0
+            && drugstoreNumber == consumer.drugstoreNumber && consumer.drugstoreCardBalance.compareTo(drugstoreCardBalance) == 0
             && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
             && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
             && Objects.equals(country, consumer.country);
