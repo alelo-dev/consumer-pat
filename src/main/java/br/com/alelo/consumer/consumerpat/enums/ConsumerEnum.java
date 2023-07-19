@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.enums;
 
 import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.Optional;
 

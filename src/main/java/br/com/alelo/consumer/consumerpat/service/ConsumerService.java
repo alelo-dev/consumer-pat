@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class ConsumerService {
 
-    ConsumerRepository consumerRepository;
+    static ConsumerRepository consumerRepository;
 
     ExtractService extractService;
 
@@ -43,7 +43,7 @@ public class ConsumerService {
         return this.save(consumer);
     }
 
-    public Consumer addValue(Integer cardNumber, BigDecimal value) {
+    public static Consumer addValue(Integer cardNumber, BigDecimal value) {
 
         Consumer consumer = findByAnyCard(cardNumber);
 
@@ -69,7 +69,7 @@ public class ConsumerService {
         return consumerRepository.save(consumer);
     }
 
-    private Consumer findByAnyCard(Integer cardNumber) {
+    private static Consumer findByAnyCard(Integer cardNumber) {
         Optional<Consumer> optionalConsumer = consumerRepository.findByCardNumber(cardNumber);
 
         if(optionalConsumer.isEmpty())

@@ -1,9 +1,6 @@
 package br.com.alelo.consumer.consumerpat.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.repository.ExtractRepository;
 
