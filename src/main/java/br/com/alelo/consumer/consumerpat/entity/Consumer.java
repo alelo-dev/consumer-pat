@@ -15,10 +15,10 @@ public class Consumer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    String name;
-    int documentNumber;
-    Date birthDate;
+    private Long id;
+    private String name;
+    private int documentNumber;
+    private Date birthDate;
 
     //contacts
     int mobilePhoneNumber;
