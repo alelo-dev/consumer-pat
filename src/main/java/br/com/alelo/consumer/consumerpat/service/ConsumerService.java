@@ -7,12 +7,14 @@ import br.com.alelo.consumer.consumerpat.model.BuyModel;
 import br.com.alelo.consumer.consumerpat.repository.ConsumerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
 
+@Service
 public class ConsumerService {
 
     static ConsumerRepository consumerRepository;
