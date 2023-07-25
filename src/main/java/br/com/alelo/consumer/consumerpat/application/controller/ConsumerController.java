@@ -1,9 +1,9 @@
 package br.com.alelo.consumer.consumerpat.application.controller;
 
-import br.com.alelo.consumer.consumerpat.domain.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.domain.entity.Extract;
-import br.com.alelo.consumer.consumerpat.infrastructure.respository.ConsumerRepository;
-import br.com.alelo.consumer.consumerpat.infrastructure.respository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.infrastructure.repository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.infrastructure.repository.ExtractRepository;
+import br.com.alelo.consumer.consumerpat.infrastructure.repository.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.infrastructure.repository.entity.Extract;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

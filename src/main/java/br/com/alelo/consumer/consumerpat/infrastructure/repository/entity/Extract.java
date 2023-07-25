@@ -1,4 +1,4 @@
-package br.com.alelo.consumer.consumerpat.domain.entity;
+package br.com.alelo.consumer.consumerpat.infrastructure.repository.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,7 +43,7 @@ public class Extract {
         this.amount = amount;
     }
 
-    public Extract( String productDescription, Date dateBuy, int cardNumber, double amount) {
+    public Extract(String productDescription, Date dateBuy, int cardNumber, double amount) {
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
         this.cardNumber = cardNumber;
