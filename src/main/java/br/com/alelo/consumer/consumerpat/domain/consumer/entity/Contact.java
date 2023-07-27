@@ -1,13 +1,12 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Contact {
     private String mobilePhoneNumber;

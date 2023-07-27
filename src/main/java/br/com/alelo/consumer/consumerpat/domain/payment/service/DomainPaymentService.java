@@ -1,15 +1,12 @@
 package br.com.alelo.consumer.consumerpat.domain.payment.service;
 
-import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.service.CardService;
 import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
+import br.com.alelo.consumer.consumerpat.domain.common.ResourceNotFoundException;
 import br.com.alelo.consumer.consumerpat.domain.ledger.service.LedgerService;
-import br.com.alelo.consumer.consumerpat.domain.payment.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Payment;
 import br.com.alelo.consumer.consumerpat.domain.payment.repository.PaymentRepository;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 import static java.lang.String.format;
@@ -28,27 +25,24 @@ public class DomainPaymentService implements PaymentService {
         this.ledgerService = ledgerService;
     }
 
-    public void registerPayment(Establishment establishment,
-                                String productDescription,
-                                LocalDate buyDate,
-                                CardNumber cardNumber,
-                                BigDecimal amount) {
+    public void registerPayment(final Payment newPayment) {
+        newPayment.addId(UUID.randomUUID());
+        var carFound = cardService.searchCardByCardNumber(newPayment.getCardNumber())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        format("Card [%s] not found", newPayment.getCardNumber())));
 
-        var car = cardService.searchCardByCardNumber(cardNumber)
-                .orElseThrow(() -> new DomainException(format("Card [%s] not found", cardNumber)));
+        newPayment.addPaymentStrategy(carFound.getCardType());
 
-        var newPayment = new Payment(UUID.randomUUID(), establishment, productDescription, buyDate, cardNumber, amount);
-        newPayment.addPaymentStrategy(car.getCardType());
-
-        if (!newPayment.getPaymentStrategy().isEstablishmentAllowed(establishment.getEstablishmentType())) {
+        if (!newPayment.getPaymentStrategy().isEstablishmentAllowed(
+                newPayment.getEstablishment().getEstablishmentType())) {
             throw new DomainException("Payment type not permitted");
         }
 
-        var cardBalance = cardService.searchCardBalanceByCardNumber(cardNumber)
-                .orElseThrow(() ->
-                        new DomainException(format("Card balance with card number [%s] not found", cardNumber)));
+        var cardBalance = cardService.searchCardBalanceByCardNumber(newPayment.getCardNumber())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        format("Card balance with card number [%s] not found", newPayment.getCardNumber())));
 
-        cardBalance.withdrawCardBalance(amount);
+        cardBalance.withdrawCardBalance(newPayment.getAmount());
 
         paymentRepository.save(newPayment);
         cardService.updateCardBalance(cardBalance);

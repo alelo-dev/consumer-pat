@@ -35,7 +35,7 @@ public class PaymentTest {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = new BigDecimal("50.0");
 
-        Payment payment = new Payment(id, establishment, productDescription, buyDate, cardNumber, amount);
+        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertTrue(violations.isEmpty(), "Valid payment should not have violations");
@@ -50,7 +50,7 @@ public class PaymentTest {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = new BigDecimal("100.0");
 
-        Payment payment = new Payment(id, establishment, productDescription, buyDate, cardNumber, amount);
+        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Blank product description should have violations");
@@ -66,7 +66,7 @@ public class PaymentTest {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = new BigDecimal("5.0");
 
-        Payment payment = new Payment(id, establishment, productDescription, buyDate, cardNumber, amount);
+        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Null buy date should have violations");
@@ -82,7 +82,7 @@ public class PaymentTest {
         CardNumber cardNumber = null;
         BigDecimal amount = new BigDecimal("20.0");
 
-        Payment payment = new Payment(id, establishment, productDescription, buyDate, cardNumber, amount);
+        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Null card number should have violations");
@@ -98,7 +98,7 @@ public class PaymentTest {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = null;
 
-        Payment payment = new Payment(id, establishment, productDescription, buyDate, cardNumber, amount);
+        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Null amount should have violations");
@@ -114,7 +114,7 @@ public class PaymentTest {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = new BigDecimal("100.0");
 
-        Payment payment = new Payment(id, establishment, productDescription, buyDate, cardNumber, amount);
+        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
         payment.addPaymentStrategy(CardType.FOOD);
 
         assertNotNull(payment.getPaymentStrategy(), "Payment strategy should not be null");

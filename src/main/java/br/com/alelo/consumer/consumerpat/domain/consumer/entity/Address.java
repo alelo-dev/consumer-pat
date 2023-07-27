@@ -1,14 +1,13 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Address {
     @NotBlank(message = "Street is required.")

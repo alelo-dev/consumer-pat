@@ -1,14 +1,13 @@
 package br.com.alelo.consumer.consumerpat.domain.payment.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Establishment {
 

@@ -22,19 +22,17 @@ public class CardTest {
 
     @Test
     void testCardCreationValid() {
-        UUID consumerId = UUID.randomUUID();
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.FOOD;
 
-        Card card = new Card(cardNumber, cardType, consumerId);
+        Card card = new Card(cardNumber, cardType);
     }
 
     @Test
     void testAddCardBalance() {
-        UUID consumerId = UUID.randomUUID();
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.DRUGSTORE;
-        Card card = new Card(cardNumber, cardType, consumerId);
+        Card card = new Card(cardNumber, cardType);
 
         CardBalance cardBalance = new CardBalance(UUID.randomUUID(), card);
 
@@ -43,16 +41,13 @@ public class CardTest {
 
     @Test
     void testValidCard() {
-        // Create test data
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.FOOD;
-        UUID consumerId = UUID.randomUUID();
-        Card card = new Card(cardNumber, cardType, consumerId);
+        Card card = new Card(cardNumber, cardType);
 
         // Use AssertJ to perform assertions
         assertThat(card.getCardNumber()).isEqualTo(cardNumber);
         assertThat(card.getCardType()).isEqualTo(cardType);
-        assertThat(card.getConsumerId()).isEqualTo(consumerId);
         assertThat(card.getCardBalance()).isNull();
 
         // Validate the card object
@@ -63,7 +58,7 @@ public class CardTest {
     @Test
     void testInvalidCard() {
         // Create a card without required fields
-        Card card = new Card(null, null, null);
+        Card card = new Card(null, null);
 
         // Validate the card object
         Set<ConstraintViolation<Card>> violations = validator.validate(card);

@@ -1,12 +1,12 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.service;
 
 import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
-import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Address;
+import br.com.alelo.consumer.consumerpat.domain.common.ResourceNotFoundException;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Contact;
 import br.com.alelo.consumer.consumerpat.domain.consumer.repository.ConsumerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,24 +20,16 @@ public class DomainConsumerService implements ConsumerService {
         this.consumerRepository = consumerRepository;
     }
 
-    public UUID createConsumer(
-            String name,
-            String documentNumber,
-            LocalDate birthDate,
-            Contact contact,
-            Address address) {
-        final var consumer = new Consumer(UUID.randomUUID(), name, documentNumber, birthDate);
-        consumer.addContact(contact);
-        consumer.addAddress(address);
-
-        consumerRepository.save(consumer);
-
-        return consumer.getId();
+    public UUID createConsumer(final Consumer newConsumer) {
+        newConsumer.addId(UUID.randomUUID());
+        consumerRepository.save(newConsumer);
+        return newConsumer.getId();
     }
 
-    public void updateConsumer(Consumer updateConsumer) {
-        var consumer = searchConsumerById(updateConsumer.getId())
-                .orElseThrow(() -> new DomainException(format("Consumer [%s] not found", updateConsumer.getId())));
+    public void updateConsumer(final UUID consumerId, final Consumer updateConsumer) {
+        var consumer = searchConsumerById(consumerId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        format("Consumer [%s] not found", updateConsumer.getId())));
 
         consumer.changeConsumer(updateConsumer);
 
@@ -46,5 +38,9 @@ public class DomainConsumerService implements ConsumerService {
 
     public Optional<Consumer> searchConsumerById(final UUID consumerId) {
         return consumerRepository.findById(consumerId);
+    }
+
+    public Page<Consumer> listAll(Pageable consumerPageable) {
+        return null;
     }
 }

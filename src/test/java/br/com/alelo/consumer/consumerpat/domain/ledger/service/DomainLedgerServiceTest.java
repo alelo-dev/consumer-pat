@@ -34,7 +34,7 @@ public class DomainLedgerServiceTest {
     void testCredit() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = BigDecimal.valueOf(100);
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, CardType.FOOD, UUID.randomUUID()));
+        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, CardType.FOOD));
         cardBalance.chargeCardBalance(amount);
 
         domainLedgerService.credit(cardBalance);
@@ -46,7 +46,7 @@ public class DomainLedgerServiceTest {
     void testDebit() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = BigDecimal.valueOf(50);
-        Payment payment = new Payment(UUID.randomUUID(),
+        Payment payment = new Payment(
                 new Establishment("Restaurant", EstablishmentType.FOOD), "Food", LocalDate.now(), cardNumber, amount);
 
         domainLedgerService.debit(payment);

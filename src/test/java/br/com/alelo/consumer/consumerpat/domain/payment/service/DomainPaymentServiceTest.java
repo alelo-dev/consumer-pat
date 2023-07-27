@@ -43,20 +43,21 @@ public class DomainPaymentServiceTest {
     void testRegisterPaymentSuccess() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.FOOD;
-        UUID consumerId = UUID.randomUUID();
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType, consumerId));
+        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType));
         cardBalance.chargeCardBalance(BigDecimal.valueOf(100));
 
         Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
         String productDescription = "Food";
         LocalDate buyDate = LocalDate.now();
         BigDecimal amount = BigDecimal.valueOf(50);
+        var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
+        newPayment.addId(UUID.randomUUID());
 
         when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance.getCard()));
 
         when(cardService.searchCardBalanceByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance));
 
-        domainPaymentService.registerPayment(establishment, productDescription, buyDate, cardNumber, amount);
+        domainPaymentService.registerPayment(newPayment);
 
         verify(paymentRepository, times(1)).save(any(Payment.class));
         verify(cardService, times(1)).updateCardBalance(any(CardBalance.class));
@@ -70,10 +71,12 @@ public class DomainPaymentServiceTest {
         String productDescription = "Food";
         LocalDate buyDate = LocalDate.now();
         BigDecimal amount = BigDecimal.valueOf(50);
+        var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
+        newPayment.addId(UUID.randomUUID());
 
         when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.empty());
 
-        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(establishment, productDescription, buyDate, cardNumber, amount));
+        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(newPayment));
 
         verify(paymentRepository, never()).save(any(Payment.class));
         verify(cardService, never()).updateCardBalance(any(CardBalance.class));
@@ -85,19 +88,20 @@ public class DomainPaymentServiceTest {
         // Create test data
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.FOOD;
-        UUID consumerId = UUID.randomUUID();
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType, consumerId));
+        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType));
 
         Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
         String productDescription = "Food";
         LocalDate buyDate = LocalDate.now();
         BigDecimal amount = BigDecimal.valueOf(50);
+        var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
+        newPayment.addId(UUID.randomUUID());
 
         when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance.getCard()));
 
         when(cardService.searchCardBalanceByCardNumber(cardNumber)).thenReturn(Optional.empty());
 
-        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(establishment, productDescription, buyDate, cardNumber, amount));
+        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(newPayment));
 
         verify(paymentRepository, never()).save(any(Payment.class));
         verify(cardService, never()).updateCardBalance(any(CardBalance.class));
@@ -107,20 +111,21 @@ public class DomainPaymentServiceTest {
     @Test
     void testRegisterPaymentNotAllowed() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
-        CardType cardType = CardType.FUEL; // Not allowed at the Restaurant establishment
-        UUID consumerId = UUID.randomUUID();
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType, consumerId));
+        CardType cardType = CardType.FUEL;
+        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType));
 
         Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
         String productDescription = "Food";
         LocalDate buyDate = LocalDate.now();
         BigDecimal amount = BigDecimal.valueOf(50);
+        var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
+        newPayment.addId(UUID.randomUUID());
 
         when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance.getCard()));
 
         when(cardService.searchCardBalanceByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance));
 
-        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(establishment, productDescription, buyDate, cardNumber, amount));
+        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(newPayment));
 
         verify(paymentRepository, never()).save(any(Payment.class));
         verify(cardService, never()).updateCardBalance(any(CardBalance.class));

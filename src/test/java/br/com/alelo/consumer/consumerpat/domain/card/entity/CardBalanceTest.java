@@ -23,7 +23,7 @@ public class CardBalanceTest {
     @Test
     void testCardBalanceCreationValid() {
         UUID cardId = UUID.randomUUID();
-        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD, UUID.randomUUID());
+        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
         CardBalance cardBalance = new CardBalance(cardId, card);
 
         assertDoesNotThrow(() -> validator.validate(cardBalance));
@@ -32,7 +32,7 @@ public class CardBalanceTest {
     @Test
     void testChargeCardBalance() {
         UUID cardId = UUID.randomUUID();
-        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD, UUID.randomUUID());
+        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
         CardBalance cardBalance = new CardBalance(cardId, card);
 
         BigDecimal initialBalance = new BigDecimal("100.0");
@@ -50,7 +50,7 @@ public class CardBalanceTest {
     @Test
     void testWithdrawCardBalance() {
         UUID cardId = UUID.randomUUID();
-        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD, UUID.randomUUID());
+        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
         CardBalance cardBalance = new CardBalance(cardId, card);
 
         BigDecimal initialBalance = new BigDecimal("100.0");
@@ -65,7 +65,7 @@ public class CardBalanceTest {
     @Test
     void testWithdrawCardBalanceInsufficientFunds() {
         UUID cardId = UUID.randomUUID();
-        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD, UUID.randomUUID());
+        Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
         CardBalance cardBalance = new CardBalance(cardId, card);
 
         BigDecimal initialBalance = new BigDecimal("100.0");

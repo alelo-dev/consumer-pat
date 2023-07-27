@@ -1,17 +1,18 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.service;
 
-import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Address;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Contact;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface ConsumerService {
-    UUID createConsumer(String name, String documentNumber, LocalDate birthDate, Contact contact, Address address);
+    UUID createConsumer(final Consumer newConsumer);
 
-    void updateConsumer(Consumer updateConsumer);
+    void updateConsumer(final UUID consumerId, final Consumer updateConsumer);
 
     Optional<Consumer> searchConsumerById(final UUID consumerId);
+
+    Page<Consumer> listAll(Pageable consumerPageable);
 }

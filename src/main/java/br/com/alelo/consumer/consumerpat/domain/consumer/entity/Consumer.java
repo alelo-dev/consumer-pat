@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.entity;
 
-import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Consumer {
 
@@ -25,30 +26,35 @@ public class Consumer {
     private Contact contact;
     private Address address;
 
-    public Consumer(UUID id, String name, String documentNumber, LocalDate birthDate) {
-        this.id = id;
+    public Consumer(String name, String documentNumber, LocalDate birthDate, Contact contact, Address address) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.birthDate = birthDate;
+        this.contact = contact;
+        this.address = address;
     }
 
     public void changeConsumer(final Consumer updateConsumer) {
-        this.name = updateConsumer.name;
-        this.documentNumber = updateConsumer.documentNumber;
-        this.birthDate = updateConsumer.birthDate;
+        this.name = updateConsumer.getName();
+        this.documentNumber = updateConsumer.getDocumentNumber();
+        this.birthDate = updateConsumer.getBirthDate();
+        this.addContact(updateConsumer.getContact());
+        this.addAddress(updateConsumer.getAddress());
+    }
+
+    public void addId(final UUID id) {
+        this.id = id;
     }
 
     public void addContact(final Contact contact) {
-        if (contact == null) {
-            throw new DomainException("Contact is required");
+        if (contact != null) {
+            this.contact = contact;
         }
-        this.contact = contact;
     }
 
     public void addAddress(final Address address) {
-        if (address == null) {
-            throw new DomainException("Address is required");
+        if (address != null) {
+            this.address = address;
         }
-        this.address = address;
     }
 }

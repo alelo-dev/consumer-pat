@@ -16,7 +16,7 @@ import java.util.List;
 @Log4j2
 @Controller
 @RequestMapping("/consumer")
-public class ConsumerController {
+public class ConsumerBkpController {
 
     @Autowired
     ConsumerRepository repository;

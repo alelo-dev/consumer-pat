@@ -2,9 +2,7 @@ package br.com.alelo.consumer.consumerpat.domain.payment.entity;
 
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,6 +12,8 @@ import java.util.UUID;
 
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class Payment {
 
@@ -30,18 +30,20 @@ public class Payment {
     private BigDecimal amount;
     private PaymentStrategy paymentStrategy;
 
-    public Payment(UUID id,
-                   Establishment establishment,
+    public Payment(Establishment establishment,
                    String productDescription,
                    LocalDate buyDate,
                    CardNumber cardNumber,
                    BigDecimal amount) {
-        this.id = id;
         this.establishment = establishment;
         this.productDescription = productDescription;
         this.buyDate = buyDate;
         this.cardNumber = cardNumber;
         this.amount = amount;
+    }
+
+    public void addId(final UUID id) {
+        this.id = id;
     }
 
     public void addPaymentStrategy(final CardType cardType) {

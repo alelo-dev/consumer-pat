@@ -26,10 +26,11 @@ public class ConsumerServiceTest {
         LocalDate birthDate = LocalDate.of(1990, 1, 1);
         Contact contact = new Contact("91234567890", "1234567890", "1234567890", "john.doe@example.com");
         Address address = new Address("Main Street", 123, "City", "Country", "12345");
+        Consumer consumer = new Consumer(name, documentNumber, birthDate, contact, address);
 
         DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
 
-        UUID createdConsumerId = consumerService.createConsumer(name, documentNumber, birthDate, contact, address);
+        UUID createdConsumerId = consumerService.createConsumer(consumer);
 
         assertNotNull(createdConsumerId, "Created consumer ID should not be null");
 
@@ -49,16 +50,16 @@ public class ConsumerServiceTest {
     @Test
     void testUpdateConsumer() {
         ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
-
         UUID existingConsumerId = UUID.randomUUID();
-        Consumer existingConsumer = new Consumer(existingConsumerId, "John Doe", "123456789", LocalDate.of(1990, 1, 1));
-        Consumer updateConsumer = new Consumer(existingConsumerId, "Updated Name", "987654321", LocalDate.of(1995, 5, 5));
+        Consumer existingConsumer = new Consumer("John Doe", "123456789", LocalDate.of(1990, 1, 1), any(), any());
+        existingConsumer.addId(existingConsumerId);
+        Consumer updateConsumer = new Consumer("Updated Name", "987654321", LocalDate.of(1995, 5, 5), any(), any());
 
         when(consumerRepository.findById(existingConsumerId)).thenReturn(Optional.of(existingConsumer));
 
         DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
 
-        consumerService.updateConsumer(updateConsumer);
+        consumerService.updateConsumer(existingConsumerId, updateConsumer);
 
         verify(consumerRepository, times(1)).findById(existingConsumerId);
         verify(consumerRepository, times(1)).save(any(Consumer.class));
@@ -69,13 +70,13 @@ public class ConsumerServiceTest {
         ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
 
         UUID nonExistentConsumerId = UUID.randomUUID();
-        Consumer updateConsumer = new Consumer(nonExistentConsumerId, "Updated Name", "987654321", LocalDate.of(1995, 5, 5));
+        Consumer updateConsumer = new Consumer("Updated Name", "987654321", LocalDate.of(1995, 5, 5), any(), any());
 
         when(consumerRepository.findById(nonExistentConsumerId)).thenReturn(Optional.empty());
 
         DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
 
-        assertThrows(DomainException.class, () -> consumerService.updateConsumer(updateConsumer));
+        assertThrows(DomainException.class, () -> consumerService.updateConsumer(nonExistentConsumerId, updateConsumer));
 
         verify(consumerRepository, times(1)).findById(nonExistentConsumerId);
         verify(consumerRepository, never()).save(any(Consumer.class));
@@ -86,7 +87,8 @@ public class ConsumerServiceTest {
         ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
 
         UUID existingConsumerId = UUID.randomUUID();
-        Consumer existingConsumer = new Consumer(existingConsumerId, "John Doe", "123456789", LocalDate.of(1990, 1, 1));
+        Consumer existingConsumer = new Consumer("John Doe", "123456789", LocalDate.of(1990, 1, 1), any(), any());
+        existingConsumer.addId(existingConsumerId);
 
         when(consumerRepository.findById(existingConsumerId)).thenReturn(Optional.of(existingConsumer));
 
