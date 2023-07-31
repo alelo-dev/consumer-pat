@@ -6,11 +6,12 @@ import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
 import br.com.alelo.consumer.consumerpat.domain.card.service.CardService;
 import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
+import br.com.alelo.consumer.consumerpat.domain.common.ResourceNotFoundException;
 import br.com.alelo.consumer.consumerpat.domain.ledger.service.LedgerService;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Payment;
-import br.com.alelo.consumer.consumerpat.domain.payment.repository.PaymentRepository;
+import br.com.alelo.consumer.consumerpat.domain.payment.repository.DomainPaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,14 +26,14 @@ import static org.mockito.Mockito.*;
 public class DomainPaymentServiceTest {
 
     private DomainPaymentService domainPaymentService;
-    private PaymentRepository paymentRepository;
+    private DomainPaymentRepository paymentRepository;
     private CardService cardService;
     private LedgerService ledgerService;
 
     @BeforeEach
     void setUp() {
         // Create mocks for the dependencies
-        paymentRepository = mock(PaymentRepository.class);
+        paymentRepository = mock(DomainPaymentRepository.class);
         cardService = mock(CardService.class);
         ledgerService = mock(LedgerService.class);
 
@@ -43,8 +44,10 @@ public class DomainPaymentServiceTest {
     void testRegisterPaymentSuccess() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.FOOD;
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType));
+        var cardBalance = new CardBalance(cardNumber);
         cardBalance.chargeCardBalance(BigDecimal.valueOf(100));
+        var card = new Card(cardNumber, cardType);
+        card.addCardBalance(cardBalance);
 
         Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
         String productDescription = "Food";
@@ -53,20 +56,21 @@ public class DomainPaymentServiceTest {
         var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
         newPayment.addId(UUID.randomUUID());
 
-        when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance.getCard()));
+        when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(card));
 
         when(cardService.searchCardBalanceByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance));
 
         domainPaymentService.registerPayment(newPayment);
 
         verify(paymentRepository, times(1)).save(any(Payment.class));
-        verify(cardService, times(1)).updateCardBalance(any(CardBalance.class));
-        verify(ledgerService, times(1)).credit(any(CardBalance.class));
+        verify(cardService, times(1)).updateCard(any(Card.class));
+        verify(ledgerService, times(1)).debit(any(Payment.class));
     }
 
     @Test
     void testRegisterPaymentCardNotFound() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
+
         Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
         String productDescription = "Food";
         LocalDate buyDate = LocalDate.now();
@@ -76,43 +80,23 @@ public class DomainPaymentServiceTest {
 
         when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.empty());
 
-        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(newPayment));
-
-        verify(paymentRepository, never()).save(any(Payment.class));
-        verify(cardService, never()).updateCardBalance(any(CardBalance.class));
-        verify(ledgerService, never()).credit(any(CardBalance.class));
-    }
-
-    @Test
-    void testRegisterPaymentCardBalanceNotFound() {
-        // Create test data
-        CardNumber cardNumber = new CardNumber("1234567812345678");
-        CardType cardType = CardType.FOOD;
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType));
-
-        Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
-        String productDescription = "Food";
-        LocalDate buyDate = LocalDate.now();
-        BigDecimal amount = BigDecimal.valueOf(50);
-        var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
-        newPayment.addId(UUID.randomUUID());
-
-        when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance.getCard()));
-
         when(cardService.searchCardBalanceByCardNumber(cardNumber)).thenReturn(Optional.empty());
 
-        assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(newPayment));
+        assertThrows(ResourceNotFoundException.class, () -> domainPaymentService.registerPayment(newPayment));
 
         verify(paymentRepository, never()).save(any(Payment.class));
-        verify(cardService, never()).updateCardBalance(any(CardBalance.class));
-        verify(ledgerService, never()).credit(any(CardBalance.class));
+        verify(cardService, never()).updateCard(any(Card.class));
+        verify(ledgerService, never()).debit(any(Payment.class));
     }
 
     @Test
     void testRegisterPaymentNotAllowed() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         CardType cardType = CardType.FUEL;
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, cardType));
+        var cardBalance = new CardBalance(cardNumber);
+        cardBalance.chargeCardBalance(BigDecimal.valueOf(100));
+        var card = new Card(cardNumber, cardType);
+        card.addCardBalance(cardBalance);
 
         Establishment establishment = new Establishment("Restaurant", EstablishmentType.FOOD);
         String productDescription = "Food";
@@ -121,14 +105,14 @@ public class DomainPaymentServiceTest {
         var newPayment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
         newPayment.addId(UUID.randomUUID());
 
-        when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance.getCard()));
+        when(cardService.searchCardByCardNumber(cardNumber)).thenReturn(Optional.of(card));
 
         when(cardService.searchCardBalanceByCardNumber(cardNumber)).thenReturn(Optional.of(cardBalance));
 
         assertThrows(DomainException.class, () -> domainPaymentService.registerPayment(newPayment));
 
         verify(paymentRepository, never()).save(any(Payment.class));
-        verify(cardService, never()).updateCardBalance(any(CardBalance.class));
-        verify(ledgerService, never()).credit(any(CardBalance.class));
+        verify(cardService, never()).updateCard(any(Card.class));
+        verify(ledgerService, never()).debit(any(Payment.class));
     }
 }

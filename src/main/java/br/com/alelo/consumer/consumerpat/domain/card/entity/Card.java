@@ -1,11 +1,13 @@
 package br.com.alelo.consumer.consumerpat.domain.card.entity;
 
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Consumer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -14,11 +16,14 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 public class Card {
 
-    @NotNull(message = "Card number is required")
+    @Valid
+    @NotNull(message = "cardNumber is required")
     private CardNumber cardNumber;
-    @NotNull(message = "Card type number is required")
+    @NotNull(message = "cardType is required")
     private CardType cardType;
+    @JsonIgnore
     private Consumer consumer;
+    @JsonIgnore
     private CardBalance cardBalance;
 
     public Card(CardNumber cardNumber, CardType cardType) {

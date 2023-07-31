@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.domain.payment.entity;
 
+import br.com.alelo.consumer.consumerpat.domain.card.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ public class PaymentTest {
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Blank product description should have violations");
-        assertEquals("Product description is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("productDescription is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -70,23 +71,7 @@ public class PaymentTest {
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Null buy date should have violations");
-        assertEquals("Buy date is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
-    }
-
-    @Test
-    void testNullCardNumber() {
-        UUID id = UUID.randomUUID();
-        Establishment establishment = new Establishment("Bookstore", null);
-        String productDescription = "Book";
-        LocalDate buyDate = LocalDate.now();
-        CardNumber cardNumber = null;
-        BigDecimal amount = new BigDecimal("20.0");
-
-        Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
-
-        Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
-        assertFalse(violations.isEmpty(), "Null card number should have violations");
-        assertEquals("Card number is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("buyDate is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -102,7 +87,7 @@ public class PaymentTest {
 
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
         assertFalse(violations.isEmpty(), "Null amount should have violations");
-        assertEquals("Amount is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("amount is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test

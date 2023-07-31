@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface CardService {
     void addCard(final UUID consumerId, final Card newCard);
 
-    void updateCardBalance(final CardBalance cardBalance);
+    void updateCard(final Card card);
 
     Optional<CardBalance> searchCardBalanceByCardNumber(final CardNumber cardNumber);
 

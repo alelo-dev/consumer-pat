@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.application.controller.card;
 
-import br.com.alelo.consumer.consumerpat.application.controller.card.request.CardRechargeRequest;
+import br.com.alelo.consumer.consumerpat.application.controller.card.payload.CardRechargeRequest;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.service.CardService;
 import br.com.alelo.consumer.consumerpat.domain.common.DomainException;

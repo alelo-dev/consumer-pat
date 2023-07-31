@@ -1,10 +1,12 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -16,14 +18,17 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Consumer {
 
+    @JsonIgnore
     private UUID id;
-    @NotBlank(message = "Nome is required")
+    @NotBlank(message = "name is required")
     private String name;
-    @NotBlank(message = "Document number is required")
+    @NotBlank(message = "documentNumber is required")
     private String documentNumber;
-    @NotNull(message = "Birth date is required")
+    @NotNull(message = "birthDate is required")
     private LocalDate birthDate;
+    @Valid
     private Contact contact;
+    @Valid
     private Address address;
 
     public Consumer(String name, String documentNumber, LocalDate birthDate, Contact contact, Address address) {

@@ -34,7 +34,7 @@ public class EstablishmentTest {
 
         Set<ConstraintViolation<Establishment>> violations = validator.validate(establishment);
         assertFalse(violations.isEmpty(), "Blank name should have violations");
-        assertEquals("Establishment name is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("establishmentName is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -43,6 +43,6 @@ public class EstablishmentTest {
 
         Set<ConstraintViolation<Establishment>> violations = validator.validate(establishment);
         assertFalse(violations.isEmpty(), "Null type should have violations");
-        assertEquals("Establishment type is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("establishmentType is required", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 }

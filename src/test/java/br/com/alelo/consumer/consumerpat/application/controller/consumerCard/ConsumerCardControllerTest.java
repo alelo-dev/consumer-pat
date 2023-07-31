@@ -1,7 +1,8 @@
 package br.com.alelo.consumer.consumerpat.application.controller.consumerCard;
 
-import br.com.alelo.consumer.consumerpat.application.controller.consumerCard.request.CardRequest;
+import br.com.alelo.consumer.consumerpat.application.controller.consumerCard.payload.CardConsumerRequest;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.Card;
+import br.com.alelo.consumer.consumerpat.domain.card.entity.CardBalance;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
 import br.com.alelo.consumer.consumerpat.domain.card.service.CardService;
@@ -55,7 +56,7 @@ public class ConsumerCardControllerTest {
     public void testAddCard_Success() throws Exception {
         UUID consumerId = UUID.randomUUID();
         Card card = new Card(new CardNumber("1234567890123456"), CardType.FOOD);
-        CardRequest cardRequest = new CardRequest(card);
+        CardConsumerRequest cardRequest = new CardConsumerRequest(card);
 
         mockMvc.perform(post("/consumers/{consumerId}/cards", consumerId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,6 +72,7 @@ public class ConsumerCardControllerTest {
         UUID consumerId = UUID.randomUUID();
         var cardNumber = new CardNumber("1234567890123456");
         Card card = new Card(cardNumber, CardType.FOOD);
+        card.addCardBalance(new CardBalance(cardNumber));
         Set<Card> cards = new HashSet<>();
         cards.add(card);
 
@@ -81,7 +83,7 @@ public class ConsumerCardControllerTest {
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.cards[0].cardNumber.cardNumber").value(cardNumber.getCardNumber()))
-                .andExpect(jsonPath("$.cards[0].cardType").value("FOOD"));
+                .andExpect(jsonPath("$.cards[0].car.cardNumber.cardNumber").value(cardNumber.getCardNumber()))
+                .andExpect(jsonPath("$.cards[0].car.cardType").value("FOOD"));
     }
 }

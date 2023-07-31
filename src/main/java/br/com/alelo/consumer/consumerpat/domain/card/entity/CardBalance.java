@@ -4,9 +4,9 @@ import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static java.math.BigDecimal.ZERO;
 
@@ -14,16 +14,15 @@ import static java.math.BigDecimal.ZERO;
 @ToString
 public class CardBalance {
 
-    private UUID id;
-    @NotNull
+    @NotNull(message = "Amount is required")
     private BigDecimal amount;
-    @NotNull
-    private Card card;
+    @Valid
+    @NotNull(message = "cardNumber is required")
+    private CardNumber cardNumber;
 
-    public CardBalance(UUID id, Card card) {
-        this.id = id;
+    public CardBalance(CardNumber cardNumber) {
         this.amount = ZERO;
-        this.card = card;
+        this.cardNumber = cardNumber;
     }
 
     public void chargeCardBalance(final BigDecimal value) {

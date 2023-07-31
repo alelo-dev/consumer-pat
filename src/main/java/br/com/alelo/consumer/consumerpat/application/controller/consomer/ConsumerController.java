@@ -1,8 +1,8 @@
 package br.com.alelo.consumer.consumerpat.application.controller.consomer;
 
-import br.com.alelo.consumer.consumerpat.application.controller.consomer.request.ConsumerRequest;
-import br.com.alelo.consumer.consumerpat.application.controller.consomer.response.ConsumerIdResponse;
-import br.com.alelo.consumer.consumerpat.application.controller.consomer.response.ConsumerResponse;
+import br.com.alelo.consumer.consumerpat.application.controller.consomer.payload.ConsumerRequest;
+import br.com.alelo.consumer.consumerpat.application.controller.consomer.payload.ConsumerIdResponse;
+import br.com.alelo.consumer.consumerpat.application.controller.consomer.payload.ConsumerResponse;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.consumer.service.ConsumerService;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +31,7 @@ public class ConsumerController {
     @GetMapping
     public ResponseEntity<Page<ConsumerResponse>> listAllConsumers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "50") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Consumer> consumers = consumerService.listAll(pageable);

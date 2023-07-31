@@ -1,6 +1,9 @@
 package br.com.alelo.consumer.consumerpat.domain.payment.entity;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,9 +14,9 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 public class Establishment {
 
-    @NotBlank(message = "Establishment name is required")
+    @NotBlank(message = "establishmentName is required")
     private String establishmentName;
-    @NotNull(message = "Establishment type is required")
+    @NotNull(message = "establishmentType is required")
     private EstablishmentType establishmentType;
 
     public Establishment(String establishmentName, EstablishmentType establishmentType) {

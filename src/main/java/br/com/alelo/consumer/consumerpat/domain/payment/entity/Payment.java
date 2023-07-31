@@ -2,8 +2,10 @@ package br.com.alelo.consumer.consumerpat.domain.payment.entity;
 
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -17,17 +19,21 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Payment {
 
+    @JsonIgnore
     private UUID id;
-    @NotNull(message = "Establishment is required")
+    @Valid
+    @NotNull(message = "establishment is required")
     private Establishment establishment;
-    @NotBlank(message = "Product description is required")
+    @NotBlank(message = "productDescription is required")
     private String productDescription;
-    @NotNull(message = "Buy date is required")
+    @NotNull(message = "buyDate is required")
     private LocalDate buyDate;
-    @NotNull(message = "Card number is required")
+    @Valid
+    @NotNull(message = "cardNumber is required")
     private CardNumber cardNumber;
-    @NotNull(message = "Amount is required")
+    @NotNull(message = "amount is required")
     private BigDecimal amount;
+    @JsonIgnore
     private PaymentStrategy paymentStrategy;
 
     public Payment(Establishment establishment,

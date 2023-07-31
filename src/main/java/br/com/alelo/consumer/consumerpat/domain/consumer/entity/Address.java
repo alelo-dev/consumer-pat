@@ -1,6 +1,9 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.entity;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,15 +13,15 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Address {
-    @NotBlank(message = "Street is required.")
+    @NotBlank(message = "street is required.")
     private String street;
-    @NotNull(message = "Number is required.")
+    @NotNull(message = "number is required.")
     private Integer number;
-    @NotBlank(message = "City is required.")
+    @NotBlank(message = "city is required.")
     private String city;
-    @NotBlank(message = "Country is required.")
+    @NotBlank(message = "country is required.")
     private String country;
-    @NotBlank(message = "Portal code is required.")
+    @NotBlank(message = "portalCode is required.")
     private String portalCode;
 
     public Address(String street, Integer number, String city, String country, String portalCode) {

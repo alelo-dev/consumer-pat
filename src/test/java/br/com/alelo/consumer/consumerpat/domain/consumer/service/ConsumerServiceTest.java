@@ -1,119 +1,145 @@
 package br.com.alelo.consumer.consumerpat.domain.consumer.service;
 
-import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Address;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Contact;
-import br.com.alelo.consumer.consumerpat.domain.consumer.repository.ConsumerRepository;
+import br.com.alelo.consumer.consumerpat.domain.consumer.repository.DomainConsumerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ConsumerServiceTest {
+class DomainConsumerServiceTest {
+
+    @Mock
+    private DomainConsumerRepository consumerRepository;
+
+    @InjectMocks
+    private DomainConsumerService consumerService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void testCreateConsumer() {
-        ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
+        Consumer newConsumer = new Consumer(
+                "John Doe",
+                "123456789",
+                LocalDate.of(1990, 1, 1),
+                new Contact("123456789", "987654321", "111111111", "john@example.com"),
+                new Address("123 Main St", 10, "City", "Country", "12345")
+        );
 
-        String name = "John Doe";
-        String documentNumber = "123456789";
-        LocalDate birthDate = LocalDate.of(1990, 1, 1);
-        Contact contact = new Contact("91234567890", "1234567890", "1234567890", "john.doe@example.com");
-        Address address = new Address("Main Street", 123, "City", "Country", "12345");
-        Consumer consumer = new Consumer(name, documentNumber, birthDate, contact, address);
+        UUID generatedId = UUID.randomUUID();
+        when(consumerRepository.save(newConsumer, true)).thenReturn(generatedId);
 
-        DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
+        UUID createdId = consumerService.createConsumer(newConsumer);
+        assertEquals(generatedId, createdId);
 
-        UUID createdConsumerId = consumerService.createConsumer(consumer);
-
-        assertNotNull(createdConsumerId, "Created consumer ID should not be null");
-
-        ArgumentCaptor<Consumer> consumerCaptor = ArgumentCaptor.forClass(Consumer.class);
-        verify(consumerRepository).save(consumerCaptor.capture());
-
-        Consumer capturedConsumer = consumerCaptor.getValue();
-
-        assertEquals(name, capturedConsumer.getName(), "Name should match");
-        assertEquals(documentNumber, capturedConsumer.getDocumentNumber(), "Document number should match");
-        assertEquals(birthDate, capturedConsumer.getBirthDate(), "Birth date should match");
-        assertEquals(contact, capturedConsumer.getContact(), "Contact should match");
-        assertEquals(address, capturedConsumer.getAddress(), "Address should match");
+        verify(consumerRepository, times(1)).save(newConsumer, true);
     }
-
 
     @Test
     void testUpdateConsumer() {
-        ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
         UUID existingConsumerId = UUID.randomUUID();
-        Consumer existingConsumer = new Consumer("John Doe", "123456789", LocalDate.of(1990, 1, 1), any(), any());
+        Consumer existingConsumer = new Consumer(
+                "John Doe",
+                "123456789",
+                LocalDate.of(1990, 1, 1),
+                new Contact("123456789", "987654321", "111111111", "john@example.com"),
+                new Address("123 Main St", 10, "City", "Country", "12345")
+        );
         existingConsumer.addId(existingConsumerId);
-        Consumer updateConsumer = new Consumer("Updated Name", "987654321", LocalDate.of(1995, 5, 5), any(), any());
+
+        Consumer updatedConsumer = new Consumer(
+                "Updated John Doe",
+                "987654321",
+                LocalDate.of(1980, 2, 2),
+                new Contact("987654321", "123456789", "999999999", "updated@example.com"),
+                new Address("456 New St", 20, "City", "Country", "54321")
+        );
+        updatedConsumer.addId(existingConsumerId);
 
         when(consumerRepository.findById(existingConsumerId)).thenReturn(Optional.of(existingConsumer));
+        when(consumerRepository.save(any(Consumer.class), eq(false))).thenReturn(existingConsumerId);
 
-        DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
-
-        consumerService.updateConsumer(existingConsumerId, updateConsumer);
+        consumerService.updateConsumer(existingConsumerId, updatedConsumer);
 
         verify(consumerRepository, times(1)).findById(existingConsumerId);
-        verify(consumerRepository, times(1)).save(any(Consumer.class));
-    }
 
-    @Test
-    void testUpdateConsumerNotFound() {
-        ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
+        verify(consumerRepository, times(1)).save(updatedConsumer, false);
 
-        UUID nonExistentConsumerId = UUID.randomUUID();
-        Consumer updateConsumer = new Consumer("Updated Name", "987654321", LocalDate.of(1995, 5, 5), any(), any());
-
-        when(consumerRepository.findById(nonExistentConsumerId)).thenReturn(Optional.empty());
-
-        DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
-
-        assertThrows(DomainException.class, () -> consumerService.updateConsumer(nonExistentConsumerId, updateConsumer));
-
-        verify(consumerRepository, times(1)).findById(nonExistentConsumerId);
-        verify(consumerRepository, never()).save(any(Consumer.class));
+        assertEquals(updatedConsumer.getName(), existingConsumer.getName());
+        assertEquals(updatedConsumer.getDocumentNumber(), existingConsumer.getDocumentNumber());
+        assertEquals(updatedConsumer.getBirthDate(), existingConsumer.getBirthDate());
+        assertEquals(updatedConsumer.getContact(), existingConsumer.getContact());
+        assertEquals(updatedConsumer.getAddress(), existingConsumer.getAddress());
     }
 
     @Test
     void testSearchConsumerById() {
-        ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
+        UUID consumerId = UUID.randomUUID();
+        Consumer consumer = new Consumer(
+                "John Doe",
+                "123456789",
+                LocalDate.of(1990, 1, 1),
+                new Contact("123456789", "987654321", "111111111", "john@example.com"),
+                new Address("123 Main St", 10, "City", "Country", "12345")
+        );
+        consumer.addId(consumerId);
 
-        UUID existingConsumerId = UUID.randomUUID();
-        Consumer existingConsumer = new Consumer("John Doe", "123456789", LocalDate.of(1990, 1, 1), any(), any());
-        existingConsumer.addId(existingConsumerId);
+        when(consumerRepository.findById(consumerId)).thenReturn(Optional.of(consumer));
 
-        when(consumerRepository.findById(existingConsumerId)).thenReturn(Optional.of(existingConsumer));
+        Optional<Consumer> foundConsumer = consumerService.searchConsumerById(consumerId);
+        assertTrue(foundConsumer.isPresent());
+        assertEquals(consumer, foundConsumer.get());
 
-        DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
-
-        Optional<Consumer> foundConsumer = consumerService.searchConsumerById(existingConsumerId);
-
-        assertTrue(foundConsumer.isPresent(), "Found consumer should be present");
-        assertEquals(existingConsumer, foundConsumer.get(), "Found consumer should match the existing consumer");
-        verify(consumerRepository, times(1)).findById(existingConsumerId);
+        verify(consumerRepository, times(1)).findById(consumerId);
     }
 
     @Test
-    void testSearchConsumerByIdNotFound() {
-        ConsumerRepository consumerRepository = mock(ConsumerRepository.class);
+    void testSearchConsumerById_NotFound() {
+        UUID nonExistingConsumerId = UUID.randomUUID();
 
-        UUID nonExistentConsumerId = UUID.randomUUID();
+        when(consumerRepository.findById(nonExistingConsumerId)).thenReturn(Optional.empty());
 
-        when(consumerRepository.findById(nonExistentConsumerId)).thenReturn(Optional.empty());
+        Optional<Consumer> foundConsumer = consumerService.searchConsumerById(nonExistingConsumerId);
 
-        DomainConsumerService consumerService = new DomainConsumerService(consumerRepository);
+        assertFalse(foundConsumer.isPresent());
 
-        Optional<Consumer> foundConsumer = consumerService.searchConsumerById(nonExistentConsumerId);
+        verify(consumerRepository, times(1)).findById(nonExistingConsumerId);
+    }
 
-        assertFalse(foundConsumer.isPresent(), "Non-existent consumer should not be found");
-        verify(consumerRepository, times(1)).findById(nonExistentConsumerId);
+    @Test
+    void testListAllConsumers() {
+        List<Consumer> consumers = new ArrayList<>();
+        consumers.add(new Consumer("John Doe", "123456789", LocalDate.of(1990, 1, 1), null, null));
+        consumers.add(new Consumer("Jane Smith", "987654321", LocalDate.of(1985, 5, 10), null, null));
+
+        Pageable pageable = Pageable.unpaged();
+        Page<Consumer> consumerPage = new PageImpl<>(consumers, pageable, consumers.size());
+        when(consumerRepository.listAll(pageable)).thenReturn(consumerPage);
+
+        Page<Consumer> result = consumerService.listAll(pageable);
+
+        assertEquals(consumers, result.getContent());
+
+        verify(consumerRepository, times(1)).listAll(pageable);
     }
 }
+

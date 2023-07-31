@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.application.controller.payment;
 
-import br.com.alelo.consumer.consumerpat.application.controller.consomer.response.ConsumerIdResponse;
-import br.com.alelo.consumer.consumerpat.application.controller.payment.request.PaymentRequest;
+import br.com.alelo.consumer.consumerpat.application.controller.payment.payload.PaymentRequest;
 import br.com.alelo.consumer.consumerpat.domain.payment.service.PaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;

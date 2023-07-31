@@ -7,7 +7,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,18 +21,16 @@ public class CardBalanceTest {
 
     @Test
     void testCardBalanceCreationValid() {
-        UUID cardId = UUID.randomUUID();
         Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
-        CardBalance cardBalance = new CardBalance(cardId, card);
+        CardBalance cardBalance = new CardBalance(card.getCardNumber());
 
         assertDoesNotThrow(() -> validator.validate(cardBalance));
     }
 
     @Test
     void testChargeCardBalance() {
-        UUID cardId = UUID.randomUUID();
         Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
-        CardBalance cardBalance = new CardBalance(cardId, card);
+        CardBalance cardBalance = new CardBalance(card.getCardNumber());
 
         BigDecimal initialBalance = new BigDecimal("100.0");
         cardBalance.chargeCardBalance(initialBalance);
@@ -49,9 +46,8 @@ public class CardBalanceTest {
 
     @Test
     void testWithdrawCardBalance() {
-        UUID cardId = UUID.randomUUID();
         Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
-        CardBalance cardBalance = new CardBalance(cardId, card);
+        CardBalance cardBalance = new CardBalance(card.getCardNumber());
 
         BigDecimal initialBalance = new BigDecimal("100.0");
         cardBalance.chargeCardBalance(initialBalance);
@@ -64,9 +60,8 @@ public class CardBalanceTest {
 
     @Test
     void testWithdrawCardBalanceInsufficientFunds() {
-        UUID cardId = UUID.randomUUID();
         Card card = new Card(new CardNumber("1234567812345678"), CardType.FOOD);
-        CardBalance cardBalance = new CardBalance(cardId, card);
+        CardBalance cardBalance = new CardBalance(card.getCardNumber());
 
         BigDecimal initialBalance = new BigDecimal("100.0");
         cardBalance.chargeCardBalance(initialBalance);

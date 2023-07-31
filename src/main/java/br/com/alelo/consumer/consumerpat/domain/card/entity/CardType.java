@@ -1,14 +1,18 @@
 package br.com.alelo.consumer.consumerpat.domain.card.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@Getter
-@ToString
-@RequiredArgsConstructor
 public enum CardType {
-    FOOD(1), DRUGSTORE(2), FUEL(3);
+    FOOD, DRUGSTORE, FUEL;
 
-    private final int id;
+    @JsonValue
+    public String value() {
+        return name();
+    }
+
+    @JsonCreator
+    public static CardType fromString(String value) {
+        return CardType.valueOf(value.toUpperCase());
+    }
 }

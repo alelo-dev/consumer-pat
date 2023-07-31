@@ -1,7 +1,7 @@
 package br.com.alelo.consumer.consumerpat.application.controller.consomer;
 
-import br.com.alelo.consumer.consumerpat.application.controller.consomer.request.ConsumerRequest;
-import br.com.alelo.consumer.consumerpat.application.controller.consomer.response.ConsumerResponse;
+import br.com.alelo.consumer.consumerpat.application.controller.consomer.payload.ConsumerRequest;
+import br.com.alelo.consumer.consumerpat.application.controller.consomer.payload.ConsumerResponse;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Address;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.domain.consumer.entity.Contact;

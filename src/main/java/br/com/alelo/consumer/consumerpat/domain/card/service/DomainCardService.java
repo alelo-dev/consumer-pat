@@ -3,11 +3,12 @@ package br.com.alelo.consumer.consumerpat.domain.card.service;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardBalance;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
-import br.com.alelo.consumer.consumerpat.domain.card.repository.CardRepository;
-import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
+import br.com.alelo.consumer.consumerpat.domain.card.repository.DomainCardRepository;
 import br.com.alelo.consumer.consumerpat.domain.common.ResourceNotFoundException;
 import br.com.alelo.consumer.consumerpat.domain.consumer.service.ConsumerService;
 import br.com.alelo.consumer.consumerpat.domain.ledger.service.LedgerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -16,32 +17,27 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
+@Service
+@RequiredArgsConstructor
 public class DomainCardService implements CardService {
 
-    private final CardRepository cardRepository;
+    private final DomainCardRepository cardRepository;
     private final ConsumerService consumerService;
     private final LedgerService ledgerService;
-
-    public DomainCardService(CardRepository cardRepository,
-                             ConsumerService consumerService,
-                             LedgerService ledgerService) {
-        this.cardRepository = cardRepository;
-        this.consumerService = consumerService;
-        this.ledgerService = ledgerService;
-    }
 
     public void addCard(final UUID consumerId, final Card newCard) {
         var consumer = consumerService.searchConsumerById(consumerId)
                 .orElseThrow(() -> new ResourceNotFoundException(format("Consumer [%s] not found", consumerId)));
+        var cardBalance = new CardBalance(newCard.getCardNumber());
 
         newCard.addConsumer(consumer);
-        newCard.addCardBalance(new CardBalance(UUID.randomUUID(), newCard));
+        newCard.addCardBalance(cardBalance);
 
         cardRepository.saveCard(newCard);
     }
 
-    public void updateCardBalance(final CardBalance cardBalance) {
-        cardRepository.saveCardBalance(cardBalance);
+    public void updateCard(final Card card) {
+        cardRepository.saveCard(card);
     }
 
     public Optional<CardBalance> searchCardBalanceByCardNumber(final CardNumber cardNumber) {
@@ -49,13 +45,13 @@ public class DomainCardService implements CardService {
     }
 
     public void chargeCard(final CardNumber cardNumber, final BigDecimal amount) {
-        var cardBalance = searchCardBalanceByCardNumber(cardNumber)
-                .orElseThrow(() -> new ResourceNotFoundException(format("Card balance [%s] not found", cardNumber)));
+        var card = searchCardByCardNumber(cardNumber)
+                .orElseThrow(() -> new ResourceNotFoundException(format("Card [%s] not found", cardNumber)));
 
-        cardBalance.chargeCardBalance(amount);
+        card.getCardBalance().chargeCardBalance(amount);
 
-        updateCardBalance(cardBalance);
-        ledgerService.credit(cardBalance);
+        updateCard(card);
+        ledgerService.credit(card);
     }
 
     public Optional<Card> searchCardByCardNumber(final CardNumber cardNumber) {

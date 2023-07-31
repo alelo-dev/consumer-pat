@@ -7,7 +7,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +33,7 @@ public class CardTest {
         CardType cardType = CardType.DRUGSTORE;
         Card card = new Card(cardNumber, cardType);
 
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), card);
+        CardBalance cardBalance = new CardBalance(card.getCardNumber());
 
         card.addCardBalance(cardBalance);
     }
@@ -45,31 +44,25 @@ public class CardTest {
         CardType cardType = CardType.FOOD;
         Card card = new Card(cardNumber, cardType);
 
-        // Use AssertJ to perform assertions
         assertThat(card.getCardNumber()).isEqualTo(cardNumber);
         assertThat(card.getCardType()).isEqualTo(cardType);
         assertThat(card.getCardBalance()).isNull();
 
-        // Validate the card object
         Set<ConstraintViolation<Card>> violations = validator.validate(card);
         assertThat(violations).isEmpty();
     }
 
     @Test
     void testInvalidCard() {
-        // Create a card without required fields
         Card card = new Card(null, null);
 
-        // Validate the card object
         Set<ConstraintViolation<Card>> violations = validator.validate(card);
 
-        // Use AssertJ to perform assertions on the validation result
-        assertThat(violations).hasSize(3);
+        assertThat(violations).hasSize(2);
         assertThat(violations).extracting(ConstraintViolation::getMessage)
                 .containsExactlyInAnyOrder(
-                        "Card number is required",
-                        "Card type number is required",
-                        "Consumer id number is required"
+                        "cardNumber is required",
+                        "cardType is required"
                 );
     }
 }

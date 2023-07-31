@@ -1,24 +1,20 @@
 package br.com.alelo.consumer.consumerpat.domain.payment.entity;
 
-import br.com.alelo.consumer.consumerpat.domain.common.DomainException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.Arrays;
-
-@Getter
-@ToString
-@AllArgsConstructor
 public enum EstablishmentType {
-    FOOD(1),
-    DRUGSTORE(2),
-    FUEL(3);
+    FOOD,
+    DRUGSTORE,
+    FUEL;
 
-    private Integer id;
+    @JsonValue
+    public String value() {
+        return name();
+    }
 
-    public static EstablishmentType getEnum(final Integer establishmentType) {
-        return Arrays.stream(values()).filter(enumItem -> enumItem.getId().equals(establishmentType))
-                .findFirst().orElseThrow(() -> new DomainException("Establishment type not found"));
+    @JsonCreator
+    public static EstablishmentType fromString(String value) {
+        return EstablishmentType.valueOf(value.toUpperCase());
     }
 }

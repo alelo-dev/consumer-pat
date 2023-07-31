@@ -1,7 +1,9 @@
 package br.com.alelo.consumer.consumerpat.application.controller.payment;
 
-import br.com.alelo.consumer.consumerpat.application.controller.payment.request.PaymentRequest;
+import br.com.alelo.consumer.consumerpat.application.controller.payment.payload.PaymentRequest;
+import br.com.alelo.consumer.consumerpat.domain.card.entity.Card;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
+import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Payment;
@@ -22,7 +24,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,14 +47,12 @@ public class PaymentControllerTest {
 
     @Test
     public void testRegisterPayment_Success() throws Exception {
-        UUID paymentId = UUID.randomUUID();
         Establishment establishment = new Establishment("Sample Restaurant", EstablishmentType.FOOD);
         String productDescription = "Sample Product";
         LocalDate buyDate = LocalDate.now();
         CardNumber cardNumber = new CardNumber("1234567890123456");
         BigDecimal amount = BigDecimal.valueOf(100);
         Payment payment = new Payment(establishment, productDescription, buyDate, cardNumber, amount);
-        payment.addId(paymentId);
         PaymentRequest paymentRequest = new PaymentRequest(payment);
 
         mockMvc.perform(post("/payments")

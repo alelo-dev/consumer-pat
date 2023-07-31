@@ -32,7 +32,7 @@ public class AddressTest {
 
         Set<ConstraintViolation<Address>> violations = validator.validate(address);
         assertFalse(violations.isEmpty(), "Blank street should have violations");
-        assertEquals("Street is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("street is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -41,7 +41,7 @@ public class AddressTest {
 
         Set<ConstraintViolation<Address>> violations = validator.validate(address);
         assertFalse(violations.isEmpty(), "Null number should have violations");
-        assertEquals("Number is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("number is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -50,7 +50,7 @@ public class AddressTest {
 
         Set<ConstraintViolation<Address>> violations = validator.validate(address);
         assertFalse(violations.isEmpty(), "Blank city should have violations");
-        assertEquals("City is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("city is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -59,7 +59,7 @@ public class AddressTest {
 
         Set<ConstraintViolation<Address>> violations = validator.validate(address);
         assertFalse(violations.isEmpty(), "Blank country should have violations");
-        assertEquals("Country is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("country is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 
     @Test
@@ -68,6 +68,6 @@ public class AddressTest {
 
         Set<ConstraintViolation<Address>> violations = validator.validate(address);
         assertFalse(violations.isEmpty(), "Blank portal code should have violations");
-        assertEquals("Portal code is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
+        assertEquals("portalCode is required.", violations.iterator().next().getMessage(), "Correct validation message should be present");
     }
 }

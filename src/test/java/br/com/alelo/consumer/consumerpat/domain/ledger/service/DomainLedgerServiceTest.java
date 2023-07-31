@@ -5,7 +5,7 @@ import br.com.alelo.consumer.consumerpat.domain.card.entity.CardBalance;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardNumber;
 import br.com.alelo.consumer.consumerpat.domain.card.entity.CardType;
 import br.com.alelo.consumer.consumerpat.domain.ledger.entity.LedgerRecord;
-import br.com.alelo.consumer.consumerpat.domain.ledger.repository.LedgerRepository;
+import br.com.alelo.consumer.consumerpat.domain.ledger.repository.DomainLedgerRepository;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Establishment;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.EstablishmentType;
 import br.com.alelo.consumer.consumerpat.domain.payment.entity.Payment;
@@ -14,18 +14,17 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
 public class DomainLedgerServiceTest {
 
     private DomainLedgerService domainLedgerService;
-    private LedgerRepository ledgerRepository;
+    private DomainLedgerRepository ledgerRepository;
 
     @BeforeEach
     void setUp() {
-        ledgerRepository = mock(LedgerRepository.class);
+        ledgerRepository = mock(DomainLedgerRepository.class);
 
         domainLedgerService = new DomainLedgerService(ledgerRepository);
     }
@@ -34,10 +33,12 @@ public class DomainLedgerServiceTest {
     void testCredit() {
         CardNumber cardNumber = new CardNumber("1234567812345678");
         BigDecimal amount = BigDecimal.valueOf(100);
-        CardBalance cardBalance = new CardBalance(UUID.randomUUID(), new Card(cardNumber, CardType.FOOD));
+        var cardBalance = new CardBalance(cardNumber);
         cardBalance.chargeCardBalance(amount);
+        var card = new Card(cardNumber, CardType.FOOD);
+        card.addCardBalance(cardBalance);
 
-        domainLedgerService.credit(cardBalance);
+        domainLedgerService.credit(card);
 
         verify(ledgerRepository, times(1)).save(any(LedgerRecord.class));
     }
