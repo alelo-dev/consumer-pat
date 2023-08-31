@@ -1,6 +1,6 @@
 package br.com.alelo.consumer.consumerpat.dto;
 
-import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.entity.enums.CompanyType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-/**
- * DTO para representar informações de um consumidor.
- */
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -22,12 +20,13 @@ public class ConsumerDTO {
     private Integer documentNumber;
     private Date birthDate;
 
+    //Contact
     private Integer mobilePhoneNumber;
     private Integer residencePhoneNumber;
     private Integer phoneNumber;
     private String email;
 
-    // Cartões
+    // Cards
     private Integer foodCardNumber;
     private Double foodCardBalance;
     private Integer fuelCardNumber;
@@ -35,7 +34,7 @@ public class ConsumerDTO {
     private Integer drugstoreCardNumber;
     private Double drugstoreCardBalance;
 
-    // Endereço
+    //Address
     private String street;
     private int number;
     private String city;
@@ -47,12 +46,12 @@ public class ConsumerDTO {
      *
      * @return O tipo de estabelecimento.
      */
-    public EstablishmentType getType() {
+    public CompanyType getType() {
         if (foodCardNumber != null) {
-            return EstablishmentType.FOOD;
+            return CompanyType.FOOD;
         } else if (fuelCardNumber != null) {
-            return EstablishmentType.FUEL;
+            return CompanyType.FUEL;
         }
-        return EstablishmentType.DRUGSTORE;
+        return CompanyType.DRUGSTORE;
     }
 }

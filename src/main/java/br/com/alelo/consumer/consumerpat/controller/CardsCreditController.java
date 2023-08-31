@@ -7,9 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/consumer")
+@RequestMapping("/cards")
 public class CardsCreditController {
 
+    /*
+     * Adiciona ou credita um novo valor no cartão.
+     * Sendo necessário indenficar qual o cartão correto a ser creditado,
+     * onde o número do cartão(cardNumber) deve ser fornecido.
+     */
     @Autowired
     private CardCreditService cardCreditService;
 
@@ -21,6 +26,5 @@ public class CardsCreditController {
         } catch (ChangeSetPersister.NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
 }
 }

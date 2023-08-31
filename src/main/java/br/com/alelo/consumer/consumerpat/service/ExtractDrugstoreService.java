@@ -3,7 +3,7 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.dto.ExtractDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.entity.enums.CompanyType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessSaldoException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
@@ -26,7 +26,7 @@ public class ExtractDrugstoreService implements ExtractStrategy {
         if(cardOp.isPresent()) {
             var card = cardOp.get();
             if(dto.getValue() > card.getCardBalance()) {
-                throw new BusinessSaldoException("Saldo insuficiente para efetuar a compra!");
+                throw new BusinessSaldoException("Sem saldo para efetuar a compra!");
             }
             card.setCardBalance(card.getCardBalance() - dto.getValue());
             cardRepository.save(card);
@@ -35,14 +35,14 @@ public class ExtractDrugstoreService implements ExtractStrategy {
                     .value(dto.getValue())
                     .card(card)
                     .dateBuy(new Date())
-                    .establishment(EstablishmentType.DRUGSTORE)
+                    .company(CompanyType.DRUGSTORE)
                     .productDescription(dto.getProductDescription())
                     .build());
         }
     }
 
     @Override
-    public EstablishmentType getStrategyName() {
-        return EstablishmentType.DRUGSTORE;
+    public CompanyType getStrategyName() {
+            return CompanyType.DRUGSTORE;
     }
 }

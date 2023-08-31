@@ -3,7 +3,7 @@ package br.com.alelo.consumer.consumerpat.service;
 import br.com.alelo.consumer.consumerpat.dto.ExtractDTO;
 import br.com.alelo.consumer.consumerpat.entity.Card;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
-import br.com.alelo.consumer.consumerpat.entity.enums.EstablishmentType;
+import br.com.alelo.consumer.consumerpat.entity.enums.CompanyType;
 import br.com.alelo.consumer.consumerpat.exception.BusinessSaldoException;
 import br.com.alelo.consumer.consumerpat.respository.CardRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
@@ -37,15 +37,15 @@ public class ExtractFuelService implements ExtractStrategy {
                     .value(dto.getValue())
                     .card(card)
                     .dateBuy(new Date())
-                    .establishment(EstablishmentType.FOOD)
+                    .company(CompanyType.FOOD)
                     .productDescription(dto.getProductDescription())
                     .build());
         }
     }
 
     @Override
-    public EstablishmentType getStrategyName() {
-        return EstablishmentType.FUEL;
+    public CompanyType getStrategyName() {
+        return CompanyType.FUEL;
     }
 
 }
