@@ -41,6 +41,10 @@ public class ConsumerDTO {
     private String country;
     private int postalCode;
 
+    public ConsumerDTO(String name  ) {
+        this.name = name;
+    }
+
     /**
      * Obtém o tipo de estabelecimento com base nos cartões associados.
      *
