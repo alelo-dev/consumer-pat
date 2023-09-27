@@ -1,17 +1,23 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.command.CreateConsumerCommand;
+import br.com.alelo.consumer.consumerpat.command.UpdateConsumerCommand;
+import br.com.alelo.consumer.consumerpat.commandhandler.CreateConsumerCommandHandler;
+import br.com.alelo.consumer.consumerpat.commandhandler.ListAllConsumerCommandHandler;
+import br.com.alelo.consumer.consumerpat.commandhandler.UpdateConsumerCommandHandler;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Log4j2
 @Controller
@@ -21,6 +27,15 @@ public class ConsumerController {
     @Autowired
     ConsumerRepository repository;
 
+    @Autowired 
+    ListAllConsumerCommandHandler listAllConsumerCommandHandler;
+
+    @Autowired
+    CreateConsumerCommandHandler createConsumerCommandHandler;
+
+    @Autowired
+    UpdateConsumerCommandHandler updateConsumerCommandHandler;
+
     @Autowired
     ExtractRepository extractRepository;
 
@@ -29,23 +44,31 @@ public class ConsumerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/consumerList", method = RequestMethod.GET)
-    public List<Consumer> listAllConsumers() {
+    public Page<Consumer> listAllConsumers() {
         log.info("obtendo todos clientes");
-        var consumers = repository.getAllConsumersList();
+        Page<Consumer> allConsumerPageable = listAllConsumerCommandHandler.handle(null);
 
-        return consumers;
+        return allConsumerPageable;
     }
 
     /* Cadastrar novos clientes */
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
-    public void createConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    public ResponseEntity<Consumer> createConsumer(@RequestBody CreateConsumerCommand consumerRequest) {
+
+        Consumer consumerResponse = createConsumerCommandHandler.handle(consumerRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(consumerResponse);
+        
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
-    public void updateConsumer(@RequestBody Consumer consumer) {
-        repository.save(consumer);
+    @RequestMapping(value = "/updateConsumer/{id}", method = RequestMethod.PATCH)
+    public ResponseEntity<Consumer> updateConsumer(@PathVariable String id, @RequestBody UpdateConsumerCommand command) {
+        command.setId(id);
+
+        Consumer consumerResponse = updateConsumerCommandHandler.handle(command);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(consumerResponse);
     }
 
     /*
