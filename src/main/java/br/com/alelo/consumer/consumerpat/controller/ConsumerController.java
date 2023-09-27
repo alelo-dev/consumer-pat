@@ -1,12 +1,15 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
 import br.com.alelo.consumer.consumerpat.command.CreateConsumerCommand;
+import br.com.alelo.consumer.consumerpat.command.PurchaseOperationCommand;
+import br.com.alelo.consumer.consumerpat.command.UpdateCardBalanceCommand;
 import br.com.alelo.consumer.consumerpat.command.UpdateConsumerCommand;
 import br.com.alelo.consumer.consumerpat.commandhandler.CreateConsumerCommandHandler;
 import br.com.alelo.consumer.consumerpat.commandhandler.ListAllConsumerCommandHandler;
+import br.com.alelo.consumer.consumerpat.commandhandler.PurchaseOperationCommandHandler;
+import br.com.alelo.consumer.consumerpat.commandhandler.UpdateCardBalanceCommandHandler;
 import br.com.alelo.consumer.consumerpat.commandhandler.UpdateConsumerCommandHandler;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
-import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.extern.log4j.Log4j2;
@@ -16,8 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 @Log4j2
 @Controller
@@ -35,6 +36,12 @@ public class ConsumerController {
 
     @Autowired
     UpdateConsumerCommandHandler updateConsumerCommandHandler;
+
+    @Autowired
+    UpdateCardBalanceCommandHandler updateCardBalanceCommandHandler;
+
+    @Autowired
+    PurchaseOperationCommandHandler purchaseOperationCommandHandler;
 
     @Autowired
     ExtractRepository extractRepository;
@@ -77,28 +84,12 @@ public class ConsumerController {
      * cardNumber: número do cartão
      * value: valor a ser creditado (adicionado ao saldo)
      */
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
-    public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
+    public ResponseEntity<Consumer> setBalance(@RequestBody UpdateCardBalanceCommand command) {
 
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
-        } else {
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
-            } else {
-                // É cartão de combustivel
-                consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
-            }
-        }
+        Consumer consumerResponse = updateCardBalanceCommandHandler.handle(command);        
+
+        return ResponseEntity.status(HttpStatus.OK).body(consumerResponse);
     }
 
     /*
@@ -111,9 +102,13 @@ public class ConsumerController {
      * value: valor a ser debitado (subtraído)
      */
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(int establishmentType, String establishmentName, int cardNumber, String productDescription, double value) {
-        Consumer consumer = null;
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
+    public ResponseEntity<Consumer> buy(@RequestBody PurchaseOperationCommand command) {
+
+        purchaseOperationCommandHandler.handle(command);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+
         /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
 
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
@@ -123,33 +118,6 @@ public class ConsumerController {
         *    2) Farmácia (DrugStore)
         *    3) Posto de combustivel (Fuel)
         */
-
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
-
-        } else {
-            // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
-        }
-
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
-        extractRepository.save(extract);
     }
 
 }
