@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import br.com.alelo.consumer.consumerpat.command.PurchaseOperationCommand;
-import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.DefaultException;
 import br.com.alelo.consumer.consumerpat.factory.DrugStorePurchaseOperation;
 import br.com.alelo.consumer.consumerpat.factory.FoodPurchaseOperation;

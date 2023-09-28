@@ -1,12 +1,9 @@
 package br.com.alelo.consumer.consumerpat.commandhandler;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import br.com.alelo.consumer.consumerpat.command.CreateConsumerCommand;
 import br.com.alelo.consumer.consumerpat.command.UpdateCardBalanceCommand;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.exception.DefaultException;

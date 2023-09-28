@@ -25,9 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
-    @Autowired
-    ConsumerRepository repository;
-
     @Autowired 
     ListAllConsumerCommandHandler listAllConsumerCommandHandler;
 
@@ -43,9 +40,6 @@ public class ConsumerController {
     @Autowired
     PurchaseOperationCommandHandler purchaseOperationCommandHandler;
 
-    @Autowired
-    ExtractRepository extractRepository;
-
 
     /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
     @ResponseBody
@@ -59,6 +53,7 @@ public class ConsumerController {
     }
 
     /* Cadastrar novos clientes */
+    @ResponseBody
     @RequestMapping(value = "/createConsumer", method = RequestMethod.POST)
     public ResponseEntity<Consumer> createConsumer(@RequestBody CreateConsumerCommand consumerRequest) {
 
@@ -69,6 +64,7 @@ public class ConsumerController {
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
+    @ResponseBody
     @RequestMapping(value = "/updateConsumer/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<Consumer> updateConsumer(@PathVariable String id, @RequestBody UpdateConsumerCommand command) {
         command.setId(id);
@@ -84,6 +80,7 @@ public class ConsumerController {
      * cardNumber: número do cartão
      * value: valor a ser creditado (adicionado ao saldo)
      */
+    @ResponseBody    
     @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST)
     public ResponseEntity<Consumer> setBalance(@RequestBody UpdateCardBalanceCommand command) {
 

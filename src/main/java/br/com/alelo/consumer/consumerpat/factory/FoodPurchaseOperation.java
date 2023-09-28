@@ -2,7 +2,6 @@ package br.com.alelo.consumer.consumerpat.factory;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import br.com.alelo.consumer.consumerpat.command.PurchaseOperationCommand;
