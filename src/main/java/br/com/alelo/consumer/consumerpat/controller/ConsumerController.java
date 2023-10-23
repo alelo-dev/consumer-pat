@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.service.ConsumerService;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,11 +48,15 @@ public class ConsumerController extends BaseController {
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
     @RequestMapping(value = "/update-consumer", method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public void updateConsumer(@RequestBody Consumer consumer) {
-    	if(consumer != null && consumer.id != null) {
-    		consumerService.createConsumer(consumer);    		
-    	}else {
-    		log.error(">>> updateConsumer: Não pode atualizar um Cliente nulo ou sem ID.");
-    	}    	
+    	try {
+    		if(consumer != null && consumer.id != null) {
+        		consumerService.updateConsumer(consumer);    		
+        	}else {
+        		log.error(">>> updateConsumer: Não pode atualizar um Cliente nulo ou sem ID.");
+        	}    
+    	}catch (BusinessException e) {
+			log.error(e.getMessage());
+		}	
     }
 
     /*
