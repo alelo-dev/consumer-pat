@@ -14,8 +14,6 @@ import java.util.Objects;
 @Data
 @Entity
 public class Consumer extends BaseEntity {
-
-    private static final int INITIAL_VALUE_ZERO = 0;
     
 	public String name;
     public int documentNumber;

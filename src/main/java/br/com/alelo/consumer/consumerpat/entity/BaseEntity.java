@@ -8,7 +8,7 @@ package br.com.alelo.consumer.consumerpat.entity;
  */
 public class BaseEntity {
 	
-	 protected static final int INITIAL_VALUE_ZERO = 0;
+	protected static final int INITIAL_VALUE_ZERO = 0;
 
 	public Integer id;
 
