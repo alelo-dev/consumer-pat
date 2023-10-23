@@ -2,6 +2,7 @@ package br.com.alelo.consumer.consumerpat.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
+import br.com.alelo.consumer.consumerpat.exception.BusinessException;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 
@@ -55,12 +57,24 @@ public class ConsumerService extends BaseService {
     /**
      * Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
      * @param consumer
+     * @throws BusinessException 
      */
-    public void updateConsumer(@RequestBody Consumer consumer) {
-    	
-    	// TODO: Implementar Regra
-    	
-        repository.save(consumer);
+    public void updateConsumer(@RequestBody Consumer consumer) throws BusinessException {
+    	Optional<Consumer> consumerBase = repository.findById(consumer.id);
+    	if(consumerBase!=null && consumerBase.get() != null) {
+    		if(consumerBase.get().fuelCardBalance != consumer.fuelCardBalance) {
+    			throw new BusinessException("O saldo do cartão de combustível não deve ser alterado!");
+    		}
+    		if(consumerBase.get().drugstoreCardBalance != consumer.drugstoreCardBalance) {
+    			throw new BusinessException("O saldo do cartão de farmácia não deve ser alterado!");
+    		}
+    		if(consumerBase.get().foodCardBalance != consumer.foodCardBalance) {
+    			throw new BusinessException("O saldo do cartão de alimentação não deve ser alterado!");
+    		}
+    		repository.save(consumer);
+    	}else {
+    		log.error(">>> updateConsumer: ID não encontrado para atualizar!");
+    	} 
     }
     
     /**
@@ -126,7 +140,6 @@ public class ConsumerService extends BaseService {
      * value: valor a ser debitado (subtraído)
      */
     public void buy(BuyDTO buyDto) {
-        Consumer consumer = null;
         /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
 
         *  Exemplo: Se a compra é em um estabelecimeto de Alimentação (food) então o valor só pode ser debitado do cartão alimentação
