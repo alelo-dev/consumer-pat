@@ -1,10 +1,14 @@
 package br.com.alelo.consumer.consumerpat.controller;
 
+import br.com.alelo.consumer.consumerpat.config.OpenApiConfig;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
 import br.com.alelo.consumer.consumerpat.entity.Extract;
 import br.com.alelo.consumer.consumerpat.respository.ConsumerRepository;
 import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
 import lombok.extern.log4j.Log4j2;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,8 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
+	private static final Logger log = LogManager.getLogger(ConsumerController.class);
+	
     @Autowired
     ConsumerRepository repository;
 
