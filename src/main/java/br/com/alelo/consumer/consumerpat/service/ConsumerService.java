@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -139,6 +142,7 @@ public class ConsumerService extends BaseService {
      * productDescription: descrição do produto
      * value: valor a ser debitado (subtraído)
      */
+	@Transactional(value = TxType.REQUIRED, rollbackOn = {Exception.class})
     public void buy(BuyDTO buyDto) {
         /* O valor só podem ser debitado do catão com o tipo correspondente ao tipo do estabelecimento da compra.
 
