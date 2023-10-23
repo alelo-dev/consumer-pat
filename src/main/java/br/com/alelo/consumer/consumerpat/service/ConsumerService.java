@@ -6,9 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.alelo.consumer.consumerpat.dto.BuyDTO;
 import br.com.alelo.consumer.consumerpat.entity.Consumer;
@@ -23,6 +20,16 @@ import br.com.alelo.consumer.consumerpat.respository.ExtractRepository;
  */
 @Service
 public class ConsumerService extends BaseService {
+
+	private static final int MULTIPLIER_BY_35 = 35;
+
+	private static final int MULTIPLIER_BY_10 = 10;
+
+	private static final int DIVIDER_BY_100 = 100;
+
+	private static final int TYPE_ESTABLISHMENT_DRUGSTORE = 2;
+
+	private static final int TYPE_ESTABLISHMENT_FOOD = 1;
 
 	@Autowired
     ConsumerRepository repository;
@@ -62,27 +69,52 @@ public class ConsumerService extends BaseService {
      * value: valor a ser creditado (adicionado ao saldo)
      */
     public void setBalance(int cardNumber, double value) {
-        Consumer consumer = null;
-        consumer = repository.findByDrugstoreNumber(cardNumber);
-
-        if(consumer != null) {
-            // é cartão de farmácia
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() + value);
-            repository.save(consumer);
+         Consumer consumer = repository.findByDrugstoreNumber(cardNumber);
+        if(consumer != null) { 
+        	// é cartão de farmácia
+            setBalanceDrugstore(value, consumer);
         } else {
             consumer = repository.findByFoodCardNumber(cardNumber);
-            if(consumer != null) {
-                // é cartão de refeição
-                consumer.setFoodCardBalance(consumer.getFoodCardBalance() + value);
-                repository.save(consumer);
+            if(consumer != null) { 
+            	// é cartão de refeição
+                setBalanceFood(value, consumer);
             } else {
-                // É cartão de combustivel
+            	// É cartão de combustivel
                 consumer = repository.findByFuelCardNumber(cardNumber);
-                consumer.setFuelCardBalance(consumer.getFuelCardBalance() + value);
-                repository.save(consumer);
+                setBalanceFuel(value, consumer);
             }
         }
     }
+
+    /**
+     * Credito de valor no cartão de combustivel
+     * @param value
+     * @param consumer
+     */
+	private void setBalanceFuel(double value, Consumer consumer) {
+		consumer.fuelCardBalance = consumer.fuelCardBalance + value;
+		repository.save(consumer);
+	}
+
+	 /**
+     * Credito de valor no cartão de alimentacao
+     * @param value
+     * @param consumer
+     */
+	private void setBalanceFood(double value, Consumer consumer) {
+		consumer.foodCardBalance = consumer.foodCardBalance + value;
+		repository.save(consumer);
+	}
+
+	 /**
+     * Credito de valor no cartão de farmacia
+     * @param value
+     * @param consumer
+     */
+	private void setBalanceDrugstore(double value, Consumer consumer) {
+		consumer.drugstoreCardBalance = consumer.drugstoreCardBalance + value;
+		repository.save(consumer);
+	}
 	
     /**
      * Débito de valor no cartão (compra)
@@ -105,31 +137,53 @@ public class ConsumerService extends BaseService {
         *    3) Posto de combustivel (Fuel)
         */
 
-        if (establishmentType == 1) {
-            // Para compras no cartão de alimentação o cliente recebe um desconto de 10%
-            Double cashback  = (value / 100) * 10;
-            value = value - cashback;
-
-            consumer = repository.findByFoodCardNumber(cardNumber);
-            consumer.setFoodCardBalance(consumer.getFoodCardBalance() - value);
-            repository.save(consumer);
-
-        }else if(establishmentType == 2) {
-            consumer = repository.findByDrugstoreNumber(cardNumber);
-            consumer.setDrugstoreCardBalance(consumer.getDrugstoreCardBalance() - value);
-            repository.save(consumer);
+        if (buyDto.establishmentType == TYPE_ESTABLISHMENT_FOOD) {
+        	// Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+            buyFood(buyDto);           
+        }else if(buyDto.establishmentType == TYPE_ESTABLISHMENT_DRUGSTORE) {
+            buyDrugstore(buyDto);
 
         } else {
             // Nas compras com o cartão de combustivel existe um acrescimo de 35%;
-            Double tax  = (value / 100) * 35;
-            value = value + tax;
-
-            consumer = repository.findByFuelCardNumber(cardNumber);
-            consumer.setFuelCardBalance(consumer.getFuelCardBalance() - value);
-            repository.save(consumer);
+            buyFuel(buyDto);
         }
 
-        Extract extract = new Extract(establishmentName, productDescription, new Date(), cardNumber, value);
+        Extract extract = new Extract(buyDto.establishmentName, buyDto.productDescription, new Date(), buyDto.cardNumber, buyDto.value);
         extractRepository.save(extract);
     }
+
+    /**
+     * Nas compras com o cartão de combustivel existe um acrescimo de 35%;
+     * @param buyDto
+     */
+	private void buyFuel(BuyDTO buyDto) {
+		Consumer consumer;
+		Double tax  = (buyDto.value / DIVIDER_BY_100) * MULTIPLIER_BY_35;
+		buyDto.value = buyDto.value + tax;
+
+		consumer = repository.findByFuelCardNumber(buyDto.cardNumber);
+		consumer.fuelCardBalance = consumer.fuelCardBalance - buyDto.value;
+		repository.save(consumer);
+	}
+
+	/**
+	 * * @param buyDto
+	 */
+	private void buyDrugstore(BuyDTO buyDto) {
+		Consumer consumer;
+		consumer = repository.findByDrugstoreNumber(buyDto.cardNumber);
+		consumer.drugstoreCardBalance = consumer.drugstoreCardBalance - buyDto.value;
+		repository.save(consumer);
+	}
+
+    /**
+     * Para compras no cartão de alimentação o cliente recebe um desconto de 10%
+     */
+	private void buyFood(BuyDTO buyDto) {
+		Double cashback  = (buyDto.value / DIVIDER_BY_100) * MULTIPLIER_BY_10;
+		buyDto.value = buyDto.value - cashback;
+		Consumer consumer = repository.findByFoodCardNumber(buyDto.cardNumber);
+		consumer.foodCardBalance = consumer.foodCardBalance - buyDto.value;
+		repository.save(consumer);
+	}
 }
