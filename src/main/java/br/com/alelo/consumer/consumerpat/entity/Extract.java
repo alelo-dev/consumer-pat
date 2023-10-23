@@ -9,11 +9,7 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
-public class Extract {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+public class Extract extends BaseEntity{
 
     @Column
     int establishmentNameId;
@@ -33,6 +29,14 @@ public class Extract {
     @Column
     double amount;
 
+    @Override
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID", nullable = false)
+    public Integer getId() {
+		return id;
+	}
+    
     public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
