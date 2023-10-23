@@ -55,7 +55,6 @@ public class Extract extends BaseEntity{
     }
 
     public Extract(String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
-        this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
         this.productDescription = productDescription;
         this.dateBuy = dateBuy;
