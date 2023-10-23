@@ -46,7 +46,7 @@ public class ConsumerController extends BaseController {
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public void updateConsumer(@RequestBody Consumer consumer) {
     	if(consumer != null && consumer.id != null) {
     		consumerService.createConsumer(consumer);    		
@@ -62,7 +62,7 @@ public class ConsumerController extends BaseController {
      * value: valor a ser creditado (adicionado ao saldo)
      */
     
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
     public void setBalance(@RequestParam int cardNumber, @RequestParam double value) {
     	if(cardNumber > 0 && value > 0) {
     		consumerService.setBalance(cardNumber, value);    		
@@ -82,8 +82,8 @@ public class ConsumerController extends BaseController {
      * value: valor a ser debitado (subtraído)
      */
     @ResponseBody
-    @RequestMapping(value = "/buy", method = RequestMethod.GET)
-    public void buy(BuyDTO buyDto) {
+    @RequestMapping(value = "/buy", method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
+    public void buy(@RequestBody BuyDTO buyDto) {
     	if(buyDto != null) {
     		consumerService.buy(buyDto);   		
     	}else {
