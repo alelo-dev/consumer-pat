@@ -28,14 +28,14 @@ public class ConsumerController extends BaseController {
     /* Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) */
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/consumerList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8" )
+    @RequestMapping(value = "/consumer-list", method = RequestMethod.GET, produces = "application/json;charset=UTF-8" )
     public List<Consumer> listAllConsumers() {
         log.info("obtendo todos clientes");            
         return consumerService.listAllConsumers();
     }
 
     /* Cadastrar novos clientes */
-    @RequestMapping(value = "/createConsumer", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/create-consumer", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8")
     public void createConsumer(@RequestBody Consumer consumer) {
     	if(consumer != null) {
     		consumerService.createConsumer(consumer);    		
@@ -45,7 +45,7 @@ public class ConsumerController extends BaseController {
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
-    @RequestMapping(value = "/updateConsumer", method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/update-consumer", method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public void updateConsumer(@RequestBody Consumer consumer) {
     	if(consumer != null && consumer.id != null) {
     		consumerService.createConsumer(consumer);    		
@@ -61,7 +61,7 @@ public class ConsumerController extends BaseController {
      * value: valor a ser creditado (adicionado ao saldo)
      */
     
-    @RequestMapping(value = "/setcardbalance", method = RequestMethod.GET)
+    @RequestMapping(value = "/set-card-balance", method = RequestMethod.GET)
     public void setBalance(@RequestParam int cardNumber, @RequestParam double value) {
     	if(cardNumber > 0 && value > 0) {
     		consumerService.setBalance(cardNumber, value);    		
