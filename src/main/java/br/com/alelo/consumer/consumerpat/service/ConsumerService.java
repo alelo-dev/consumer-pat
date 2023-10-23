@@ -30,11 +30,11 @@ public class ConsumerService extends BaseService {
     @Autowired
     ExtractRepository extractRepository;
     
+    /**
+     *  Listar todos os clientes (obs.: tabela possui cerca de 50.000 registros) 
+     */
     public List<Consumer> listAllConsumers() {
-        log.info("obtendo todos clientes");
-        var consumers = repository.getAllConsumersList();
-
-        return consumers;
+        return repository.getAllConsumersList();
     }
     
     /**
@@ -50,6 +50,9 @@ public class ConsumerService extends BaseService {
      * @param consumer
      */
     public void updateConsumer(@RequestBody Consumer consumer) {
+    	
+    	// TODO: Implementar Regra
+    	
         repository.save(consumer);
     }
     
