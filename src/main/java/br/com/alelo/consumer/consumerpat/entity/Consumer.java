@@ -15,7 +15,9 @@ import java.util.Objects;
 @Entity
 public class Consumer extends BaseEntity {
 
-    public String name;
+    private static final int INITIAL_VALUE_ZERO = 0;
+    
+	public String name;
     public int documentNumber;
     public Date birthDate;
 
@@ -52,10 +54,10 @@ public class Consumer extends BaseEntity {
 	}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Consumer consumer = (Consumer) o;
+    public boolean equals(Object consumerObject) {
+        if (this == consumerObject) return true;
+        if (consumerObject == null || getClass() != consumerObject.getClass()) return false;
+        Consumer consumer = (Consumer) consumerObject;
         return documentNumber == consumer.documentNumber
             && mobilePhoneNumber == consumer.mobilePhoneNumber
             && residencePhoneNumber == consumer.residencePhoneNumber
@@ -63,9 +65,9 @@ public class Consumer extends BaseEntity {
             && number == consumer.number
             && portalCode == consumer.portalCode
             && foodCardNumber == consumer.foodCardNumber
-            && Double.compare(consumer.foodCardBalance, foodCardBalance) == 0
-            && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == 0
-            && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == 0
+            && Double.compare(consumer.foodCardBalance, foodCardBalance) == INITIAL_VALUE_ZERO
+            && fuelCardNumber == consumer.fuelCardNumber && Double.compare(consumer.fuelCardBalance, fuelCardBalance) == INITIAL_VALUE_ZERO
+            && drugstoreNumber == consumer.drugstoreNumber && Double.compare(consumer.drugstoreCardBalance, drugstoreCardBalance) == INITIAL_VALUE_ZERO
             && Objects.equals(id, consumer.id) && Objects.equals(name, consumer.name) && Objects.equals(birthDate, consumer.birthDate)
             && Objects.equals(email, consumer.email) && Objects.equals(street, consumer.street) && Objects.equals(city, consumer.city)
             && Objects.equals(country, consumer.country);

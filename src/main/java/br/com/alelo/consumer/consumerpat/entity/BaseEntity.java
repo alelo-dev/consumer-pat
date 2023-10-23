@@ -7,6 +7,8 @@ package br.com.alelo.consumer.consumerpat.entity;
  * @date 23/10/2023
  */
 public class BaseEntity {
+	
+	 protected static final int INITIAL_VALUE_ZERO = 0;
 
 	public Integer id;
 
