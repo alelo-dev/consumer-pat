@@ -38,14 +38,14 @@ class ConsumerTestApplicationTests {
 	@Test
     public void waitingCompleteList() {		
 	    List<Consumer> resultado = controller.listAllConsumers();		
-	    assertFalse(resultado.isEmpty());
+	    assertFalse(resultado.isEmpty()); // se a base estiver vazia vai falhar
 	}
 	
 	/**
 	 * Testa regra de negocio saldo do cartao nao pode ser alterado
 	 */
 	@Test
-    public void waitingBusinessException() {	
+    public void waitingBusinessException() { // se a base estiver vazia vai falhar	
 		 Exception exception = assertThrows(BusinessException.class, () -> {
 			 service.updateConsumer(createMock());
 		    });
