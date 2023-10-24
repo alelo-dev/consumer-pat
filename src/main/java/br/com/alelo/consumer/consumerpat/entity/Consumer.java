@@ -82,7 +82,8 @@ public class Consumer extends BaseEntity {
     public Integer getId() {
 		return id;
 	}
-
+  
+    // Mantendo o get para que o banco seja criado
     public String getName() {
 		return name;
 	}
