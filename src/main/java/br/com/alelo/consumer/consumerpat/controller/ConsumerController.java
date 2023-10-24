@@ -36,6 +36,7 @@ public class ConsumerController extends BaseController {
     }
 
     /* Cadastrar novos clientes */
+    @ResponseBody
     @RequestMapping(value = "/create-consumer", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8")
     public void createConsumer(@RequestBody Consumer consumer) {
     	if(consumer != null) {
@@ -46,6 +47,7 @@ public class ConsumerController extends BaseController {
     }
 
     // Atualizar cliente, lembrando que não deve ser possível alterar o saldo do cartão
+    @ResponseBody
     @RequestMapping(value = "/update-consumer", method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public void updateConsumer(@RequestBody Consumer consumer) {
     	try {
@@ -65,7 +67,7 @@ public class ConsumerController extends BaseController {
      * cardNumber: número do cartão
      * value: valor a ser creditado (adicionado ao saldo)
      */
-    
+    @ResponseBody
     @RequestMapping(value = "/set-card-balance", method = RequestMethod.GET)
     public void setBalance(@RequestParam int cardNumber, @RequestParam double value) {
     	if(cardNumber > 0 && value > 0) {
