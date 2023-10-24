@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+
+  consumer-pat:
+    build:
+      context: .
+    container_name: consumer-pat
+    image: consumer-pat:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - consumer-pat-network
+    restart: unless-stopped
+
+networks:
+  consumer-pat-network:
+    name: consumer-pat-network
