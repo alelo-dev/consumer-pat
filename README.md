@@ -36,6 +36,24 @@ Ambiente Windows:
 ```cmd
 gradlew bootRun
 ```
+
+Docker:
+
+1 - Acessa a pasta do projeto
+
+2 -
+ 
+```bash 
+./gradlew clean build
+```
+
+3 -
+
+```bash 
+./docker compose up
+```
+
+
 ## Documentação da API (Swagger)
 
 * URL: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
