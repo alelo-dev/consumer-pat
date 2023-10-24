@@ -9,6 +9,7 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name="extract")
 public class Extract extends BaseEntity{
 
     @Column
@@ -37,7 +38,81 @@ public class Extract extends BaseEntity{
 		return id;
 	}
     
-    public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
+    
+    
+    public int getEstablishmentNameId() {
+		return establishmentNameId;
+	}
+
+
+
+	public void setEstablishmentNameId(int establishmentNameId) {
+		this.establishmentNameId = establishmentNameId;
+	}
+
+
+
+	public String getEstablishmentName() {
+		return establishmentName;
+	}
+
+
+
+	public void setEstablishmentName(String establishmentName) {
+		this.establishmentName = establishmentName;
+	}
+
+
+
+	public String getProductDescription() {
+		return productDescription;
+	}
+
+
+
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
+	}
+
+
+
+	public Date getDateBuy() {
+		return dateBuy;
+	}
+
+
+
+	public void setDateBuy(Date dateBuy) {
+		this.dateBuy = dateBuy;
+	}
+
+
+
+	public int getCardNumber() {
+		return cardNumber;
+	}
+
+
+
+	public void setCardNumber(int cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+
+
+	public double getAmount() {
+		return amount;
+	}
+
+
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+
+
+	public Extract(int id, int establishmentNameId, String establishmentName, String productDescription, Date dateBuy, int cardNumber, double amount) {
         this.id = id;
         this.establishmentNameId = establishmentNameId;
         this.establishmentName = establishmentName;
