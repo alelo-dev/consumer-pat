@@ -20,7 +20,7 @@ public class CardController {
 
     private final RechargeCardInputPort rechargeCardInputPort;
 
-    @PostMapping(value = "/recharge")
+    @PostMapping("/recharge")
     public ResponseEntity<Void> recharge(@Valid @RequestBody RechargeCardRequest cardRechargeRequest) {
         rechargeCardInputPort.recharge(cardRechargeRequest.getCardNumber(), cardRechargeRequest.getAmount());
         return ResponseEntity.noContent().build();
