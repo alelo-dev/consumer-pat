@@ -4,8 +4,9 @@ import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Addres
 import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Contact;
 import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Customer;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +22,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

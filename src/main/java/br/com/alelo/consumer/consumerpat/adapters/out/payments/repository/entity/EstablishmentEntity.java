@@ -1,5 +1,6 @@
-package br.com.alelo.consumer.consumerpat.adapters.out.customer.repository.entity;
+package br.com.alelo.consumer.consumerpat.adapters.out.payments.repository.entity;
 
+import br.com.alelo.consumer.consumerpat.adapters.in.controller.payments.request.EstablishmentTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,18 +20,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "address")
-public class AddressEntity {
-
+@Table(name = "establishment")
+public class EstablishmentEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @ColumnDefault("random_uuid()")
     @Type(type = "uuid-char")
     @Column(name = "ID", updatable = false, nullable = false)
     private UUID id;
-    private String street;
-    private String number;
-    private String city;
-    private String country;
-    private String postalCode;
+    private String establishmentName;
+    private EstablishmentTypeEnum establishmentType;
 }

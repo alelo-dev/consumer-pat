@@ -2,8 +2,9 @@ package br.com.alelo.consumer.consumerpat.adapters.out.cardcustomer.repository.e
 
 import br.com.alelo.consumer.consumerpat.adapters.out.customer.repository.entity.CustomerEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
@@ -17,7 +18,8 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
