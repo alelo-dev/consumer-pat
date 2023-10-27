@@ -1,6 +1,7 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
 public class CustomerRequest {
 
     @NotBlank(message = "name is required")

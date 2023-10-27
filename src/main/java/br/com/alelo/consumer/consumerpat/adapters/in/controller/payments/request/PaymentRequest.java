@@ -1,5 +1,6 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.payments.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
 public class PaymentRequest {
 
     @Valid
