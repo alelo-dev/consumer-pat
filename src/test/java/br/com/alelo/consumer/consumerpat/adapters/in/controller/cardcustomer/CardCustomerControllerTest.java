@@ -1,7 +1,6 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer;
 
 
-import br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.CardCustomerController;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.mapper.CardCustomerMapper;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.request.CardCustomerRequest;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.request.CardTypeEnum;
@@ -37,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CardCustomerControllerTest {
+class CardCustomerControllerTest {
     @InjectMocks
     private CardCustomerController consumerCardController;
 

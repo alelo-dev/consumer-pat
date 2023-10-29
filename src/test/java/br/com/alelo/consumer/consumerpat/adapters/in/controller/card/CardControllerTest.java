@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.card;
 
-import br.com.alelo.consumer.consumerpat.adapters.in.controller.card.CardController;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.card.request.RechargeCardRequest;
 import br.com.alelo.consumer.consumerpat.application.ports.in.card.RechargeCardInputPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CardControllerTest {
+class CardControllerTest {
 
     @InjectMocks
     private CardController cardController;

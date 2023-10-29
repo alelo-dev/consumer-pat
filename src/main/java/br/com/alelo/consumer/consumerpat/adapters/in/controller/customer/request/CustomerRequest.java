@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -17,7 +16,6 @@ public class CustomerRequest {
     private String name;
     @NotBlank(message = "document number is required")
     private String documentNumber;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull
     private LocalDate birthDate;
 

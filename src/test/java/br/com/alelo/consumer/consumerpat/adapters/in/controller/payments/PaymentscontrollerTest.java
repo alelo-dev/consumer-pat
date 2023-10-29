@@ -1,6 +1,5 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.payments;
 
-import br.com.alelo.consumer.consumerpat.adapters.in.controller.payments.PaymentsController;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.payments.request.EstablishmentRequest;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.payments.request.EstablishmentTypeEnum;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.payments.request.PaymentRequest;
@@ -26,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PaymentscontrollerTest {
+class PaymentscontrollerTest {
     @InjectMocks
     private PaymentsController paymentsController;
 

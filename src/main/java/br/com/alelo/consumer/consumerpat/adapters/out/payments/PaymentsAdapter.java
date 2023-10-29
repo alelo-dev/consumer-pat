@@ -40,6 +40,7 @@ public class PaymentsAdapter implements PaymentsOutputPort {
 
             return;
         }
+
         if(cardCustomer.isPresent() && payments.getEstablishment().getEstablishmentType().equals("FUEL") && cardCustomer.get().getCardType().equals("FUEL")) {
             var discountRate = 35;
             BigDecimal cashback = payments.getAmount().divide(BigDecimal.valueOf(100))
@@ -49,9 +50,10 @@ public class PaymentsAdapter implements PaymentsOutputPort {
             cardCustomer.get().setCardBalance(cardCustomer.get().getCardBalance().add(cashback));
             cardCustomerRepository.save(cardCustomer.get());
             paymentsRepository.save(paymentsEntityMapper.toPaymentsEntity(payments));
+            return;
         }
 
-        throw new RuntimeException("Establishment not authorized,");
+        throw new RuntimeException("Establishment not authorized");
     }
 }
 

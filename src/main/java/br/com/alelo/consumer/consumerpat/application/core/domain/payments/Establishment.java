@@ -7,6 +7,11 @@ public class Establishment {
     public Establishment() {
     }
 
+    public Establishment(String establishmentName, String establishmentType) {
+        this.establishmentName = establishmentName;
+        this.establishmentType = establishmentType;
+    }
+
     public String getEstablishmentName() {
         return establishmentName;
     }

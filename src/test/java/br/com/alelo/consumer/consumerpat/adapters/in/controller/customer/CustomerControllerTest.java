@@ -1,7 +1,9 @@
 package br.com.alelo.consumer.consumerpat.adapters.in.controller.customer;
 
 
-import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.CustomerController;
+import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.request.AddressRequest;
+import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.request.ContactRequest;
+import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.request.CustomerRequest;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.response.CustomerResponse;
 import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Address;
 import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Contact;
@@ -31,15 +33,17 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CustomerControllerTest {
+class CustomerControllerTest {
 
     @InjectMocks
     private CustomerController customerController;
@@ -64,18 +68,15 @@ public class CustomerControllerTest {
     void setUp() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
     }
 
     @Test
     void testFindAllCustomersSuccess() throws Exception {
-        // Prepare test data
-        Customer customer = new Customer(UUID.randomUUID(),"John Doe", "123456789", LocalDate.of(1990, 1, 1),
-                new Address("123 Main St", "1", "City", "Country", "12345"),
-                new Contact("123456789", null, "john.doe@example.com"));
+        Customer customer = new Customer(UUID.randomUUID(),"Joao das neves", "111111111", LocalDate.of(1993, 4, 2),
+                new Address("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000"),
+                new Contact("940028786", null, "joaodasneves@gmail.com"));
         List<Customer> customers = List.of(customer);
 
-        // Mock the service method
         when(findCustomerInputPort.findAllCustomers(any(Pageable.class))).thenReturn(customers);
 
 
@@ -95,15 +96,15 @@ public class CustomerControllerTest {
     @Test
     void testFindCustomerSuccess() throws Exception {
         // Prepare test data
-        UUID consumerId = UUID.randomUUID();
-        Customer customer = new Customer(consumerId,"Jane Smith", "987654321", LocalDate.of(1985, 5, 15),
-                new Address("456 Oak St", "2", "City", "Country", "54321"),
-                new Contact("12331231", "987654321", "jane.smith@example.com"));
+        UUID customerId = UUID.randomUUID();
+        Customer customer = new Customer(UUID.randomUUID(),"Joao das neves", "111111111", LocalDate.of(1993, 4, 2),
+                new Address("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000"),
+                new Contact("940028786", null, "joaodasneves@gmail.com"));
 
         // Mock the service method
-        when(findCustomerInputPort.findCustomerById(eq(consumerId))).thenReturn(Optional.of(customer));
+        when(findCustomerInputPort.findCustomerById(customerId)).thenReturn(Optional.of(customer));
 
-        MvcResult result = mockMvc.perform(get("/customer/{customerId}", consumerId))
+        MvcResult result = mockMvc.perform(get("/customer/{customerId}", customerId))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -113,21 +114,50 @@ public class CustomerControllerTest {
 
         assertThat(consumerResponse.getName()).isEqualTo(customer.getName());
         assertThat(consumerResponse.getDocumentNumber()).isEqualTo(customer.getDocumentNumber());
-        assertThat(consumerResponse.getBirthDate().toString()).isEqualTo(customer.getBirthDate().toString());
+        assertThat(consumerResponse.getBirthDate().toString()).hasToString(customer.getBirthDate().toString());
         assertThat(consumerResponse.getContact().getResidencePhoneNumber()).isEqualTo(customer.getContact().getResidencePhoneNumber());
     }
 
+    @Test
+    void testCreateConsumer_Success() throws Exception {
+        var contactRequest = new ContactRequest ("940028786", "312312","joaodasneves@gmail.com");
+        var addressRequest = new AddressRequest("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000");
+        var customerRequest = new CustomerRequest("Joao das neves", "111111111", LocalDate.now(), addressRequest, contactRequest);
+
+        // Mock the service method
+        doNothing().when(insertCustomerInputPort).insert(any(Customer.class));
+
+
+        mockMvc.perform(post("/customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(customerRequest)))
+                .andExpect(status().isOk());
+    }
 
 
     @Test
     void testFindCustomerNotFound() throws Exception {
         UUID consumerId = UUID.randomUUID();
 
-        when(findCustomerInputPort.findCustomerById(eq(consumerId))).thenReturn(Optional.empty());
+        when(findCustomerInputPort.findCustomerById(consumerId)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/customer/{customerId}", consumerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testUpdateConsumer_Success() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        var contactRequest = new ContactRequest ("940028786", "312312","joaodasneves@gmail.com");
+        var addressRequest = new AddressRequest("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000");
+        var customerRequest = new CustomerRequest("Joao das neves", "111111111", LocalDate.now(), addressRequest, contactRequest);
+
+        mockMvc.perform(put("/customer/{customerId}", customerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerRequest)))
+                .andExpect(status().isNoContent());
     }
 }
