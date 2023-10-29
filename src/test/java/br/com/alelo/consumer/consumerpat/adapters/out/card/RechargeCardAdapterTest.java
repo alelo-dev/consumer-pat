@@ -36,9 +36,9 @@ class RechargeCardAdapterTest {
         var cardNumber = "1234567812345678";
         var cardType = "FOOD";
 
-        var contactEntity = new ContactEntity(UUID.randomUUID(),"555555555", "312312","alice.johnson@example.com");
-        var addressEntity = new AddressEntity(UUID.randomUUID(),"789 Elm St", "3", "City", "Country", "98765");
-        var customerEntity = new CustomerEntity(UUID.randomUUID(),"Alice Johnson", "555555555", LocalDate.now(), addressEntity, contactEntity, LocalDateTime.now(), null);
+        var contactEntity = new ContactEntity(UUID.randomUUID(),"940028786", "111111111","joaodasneves@gmail.com");
+        var addressEntity = new AddressEntity(UUID.randomUUID(),"Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000");
+        var customerEntity = new CustomerEntity(UUID.randomUUID(),"Joao das neves", "22222222222", LocalDate.now(), addressEntity, contactEntity, LocalDateTime.now(), null);
         var cardCustomerEntity = new CardCustomerEntity(UUID.randomUUID(), cardType, cardNumber, BigDecimal.valueOf(300), customerEntity);
 
         when(cardCustomerRepository.findByCardNumber(cardNumber)).thenReturn(Optional.of(cardCustomerEntity));

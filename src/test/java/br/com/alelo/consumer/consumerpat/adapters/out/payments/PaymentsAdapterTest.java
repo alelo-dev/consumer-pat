@@ -49,9 +49,9 @@ class PaymentsAdapterTest {
         Establishment establishment = new Establishment("MacDonalds", cardType);
         var payments = new Payments(UUID.randomUUID(), establishment, "Food", LocalDate.now(), cardNumber,BigDecimal.valueOf(150));
 
-        var contactEntity = new ContactEntity(UUID.randomUUID(),"940028786", "111111111","alice.johnson@example.com");
-        var addressEntity = new AddressEntity(UUID.randomUUID(),"789 Elm St", "3", "City", "Country", "98765");
-        var customerEntity = new CustomerEntity(UUID.randomUUID(),"Alice Johnson", "555555555", LocalDate.now(), addressEntity, contactEntity, LocalDateTime.now(), null);
+        var contactEntity = new ContactEntity(UUID.randomUUID(),"940028786", "111111111","joaodasneves@gmail.com");
+        var addressEntity = new AddressEntity(UUID.randomUUID(),"Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000");
+        var customerEntity = new CustomerEntity(UUID.randomUUID(),"Joao das neves", "22222222222", LocalDate.now(), addressEntity, contactEntity, LocalDateTime.now(), null);
         var cardCustomerEntity = new CardCustomerEntity(UUID.randomUUID(), cardType, cardNumber, BigDecimal.valueOf(300), customerEntity);
 
         when(cardCustomerRepository.findByCardNumber(cardNumber)).thenReturn(Optional.of(cardCustomerEntity));
