@@ -42,7 +42,7 @@ class CardControllerTest {
     }
 
     @Test
-    void testRechargeCard_Success() throws Exception {
+    void testRechargeCardWitchSuccess() throws Exception {
         var request = new RechargeCardRequest("1234567890123456", BigDecimal.valueOf(100.00));
 
         mockMvc.perform(post("/card/recharge")

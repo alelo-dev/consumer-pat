@@ -60,7 +60,7 @@ class CardCustomerControllerTest {
     }
 
     @Test
-    void testCreateCardCustomerSuccess() throws Exception {
+    void testCreateCardCustomerWithSuccess() throws Exception {
         UUID consumerId = UUID.randomUUID();
         var cardRequest = new CardCustomerRequest(CardTypeEnum.FOOD, "21312312", null);
 
@@ -72,7 +72,7 @@ class CardCustomerControllerTest {
     }
 
     @Test
-    void testFindAllCardsByCustomerIdSuccess() throws Exception {
+    void testFindAllCardsByCustomerIdWithSuccess() throws Exception {
         UUID consumerId = UUID.randomUUID();
         CardCustomer cardCustomer = new CardCustomer(consumerId, CardTypeEnum.FOOD.value(),"1234567890123456", BigDecimal.valueOf(300), null);
         Set<CardCustomer> cardCustomersSet = new HashSet<>();

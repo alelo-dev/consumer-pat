@@ -47,7 +47,7 @@ class PaymentscontrollerTest {
 
 
     @Test
-    void testRegisterPayment_Success() throws Exception {
+    void testRegisterPaymentWithSuccess() throws Exception {
         var establishment = new EstablishmentRequest("Sample Restaurant", EstablishmentTypeEnum.FOOD);
         String productDescription = "Sample Product";
         var buyDate = LocalDate.now();

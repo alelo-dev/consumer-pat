@@ -71,7 +71,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void testFindAllCustomersSuccess() throws Exception {
+    void testFindAllCustomersWithSuccess() throws Exception {
         Customer customer = new Customer(UUID.randomUUID(),"Joao das neves", "111111111", LocalDate.of(1993, 4, 2),
                 new Address("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000"),
                 new Contact("940028786", null, "joaodasneves@gmail.com"));
@@ -94,7 +94,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void testFindCustomerSuccess() throws Exception {
+    void testFindCustomerWithSuccess() throws Exception {
         // Prepare test data
         UUID customerId = UUID.randomUUID();
         Customer customer = new Customer(UUID.randomUUID(),"Joao das neves", "111111111", LocalDate.of(1993, 4, 2),
@@ -119,7 +119,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void testCreateConsumer_Success() throws Exception {
+    void testCreateConsumerWithSuccess() throws Exception {
         var contactRequest = new ContactRequest ("940028786", "312312","joaodasneves@gmail.com");
         var addressRequest = new AddressRequest("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000");
         var customerRequest = new CustomerRequest("Joao das neves", "111111111", LocalDate.now(), addressRequest, contactRequest);
@@ -149,7 +149,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void testUpdateConsumer_Success() throws Exception {
+    void testUpdateConsumerWithSuccess() throws Exception {
         UUID customerId = UUID.randomUUID();
         var contactRequest = new ContactRequest ("940028786", "312312","joaodasneves@gmail.com");
         var addressRequest = new AddressRequest("Avenida Euclides da cunha", "3", "Dracena", "Brasil", "03343000");
