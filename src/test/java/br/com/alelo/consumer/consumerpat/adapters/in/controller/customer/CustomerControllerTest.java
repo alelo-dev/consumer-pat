@@ -138,11 +138,11 @@ class CustomerControllerTest {
 
     @Test
     void testFindCustomerNotFound() throws Exception {
-        UUID consumerId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
 
-        when(findCustomerInputPort.findCustomerById(consumerId)).thenReturn(Optional.empty());
+        when(findCustomerInputPort.findCustomerById(customerId)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/customer/{customerId}", consumerId)
+        mockMvc.perform(get("/customer/{customerId}", customerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());

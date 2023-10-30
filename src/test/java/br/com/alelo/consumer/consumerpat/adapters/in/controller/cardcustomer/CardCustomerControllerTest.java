@@ -61,10 +61,10 @@ class CardCustomerControllerTest {
 
     @Test
     void testCreateCardCustomerWithSuccess() throws Exception {
-        UUID consumerId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
         var cardRequest = new CardCustomerRequest(CardTypeEnum.FOOD, "21312312", null);
 
-        mockMvc.perform(post("/customer/{customerId}/card", consumerId)
+        mockMvc.perform(post("/customer/{customerId}/card", customerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(cardRequest)))
@@ -73,17 +73,17 @@ class CardCustomerControllerTest {
 
     @Test
     void testFindAllCardsByCustomerIdWithSuccess() throws Exception {
-        UUID consumerId = UUID.randomUUID();
-        CardCustomer cardCustomer = new CardCustomer(consumerId, CardTypeEnum.FOOD.value(),"1234567890123456", BigDecimal.valueOf(300), null);
+        UUID customerId = UUID.randomUUID();
+        CardCustomer cardCustomer = new CardCustomer(customerId, CardTypeEnum.FOOD.value(),"1234567890123456", BigDecimal.valueOf(300), null);
         Set<CardCustomer> cardCustomersSet = new HashSet<>();
         cardCustomersSet.add(cardCustomer);
 
-        var cardCustomerResponse = new CardCustomerResponse(consumerId, CardTypeEnum.FOOD.value(),"1234567890123456", BigDecimal.valueOf(300), null);
+        var cardCustomerResponse = new CardCustomerResponse(customerId, CardTypeEnum.FOOD.value(),"1234567890123456", BigDecimal.valueOf(300), null);
 
 
-        when(findCardCustomerInputPort.findCardCustomerById(consumerId)).thenReturn(cardCustomersSet);
+        when(findCardCustomerInputPort.findCardCustomerById(customerId)).thenReturn(cardCustomersSet);
 
-        mockMvc.perform(get("/customer/{consumerId}/card", consumerId)
+        mockMvc.perform(get("/customer/{customerId}/card", customerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
