@@ -5,5 +5,5 @@ ${AnsiColor.DEFAULT}
           ${AnsiColor.GREEN} | (_| | | | |  __/ | | | (_) |  _   _
           ${AnsiColor.GREEN}  \__,_| |_|  \___| |_|  \___/  (_) (_)
 ${AnsiColor.GREEN} ==================================================================================
-${AnsiColor.DEFAULT} > API...............: consumer-pat
+${AnsiColor.DEFAULT} > API...............: customerEntity-pat
 ${AnsiColor.GREEN} ==================================================================================${AnsiColor.DEFAULT}
