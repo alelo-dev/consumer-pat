@@ -2,6 +2,8 @@ package br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.ma
 
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.request.CardCustomerRequest;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.cardcustomer.response.CardCustomerResponse;
+import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.response.AddressResponse;
+import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.response.ContactResponse;
 import br.com.alelo.consumer.consumerpat.adapters.in.controller.customer.response.CustomerResponse;
 import br.com.alelo.consumer.consumerpat.application.core.domain.cardcustomer.CardCustomer;
 import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Customer;
@@ -29,11 +31,19 @@ public class CardCustomerMapper {
     public CardCustomerResponse toCardCustomerResponse(CardCustomer cardCustomer) {
         var cardCustomerResponse = new CardCustomerResponse();
         var customerReponse = new CustomerResponse();
+        var addressResponse = new AddressResponse();
+        var contactResponse = new ContactResponse();
 
         BeanUtils.copyProperties(cardCustomer, cardCustomerResponse);
         if(Objects.nonNull(cardCustomer.getCustomer()))
             BeanUtils.copyProperties(cardCustomer.getCustomer(), customerReponse);
+        if(Objects.nonNull(cardCustomer.getCustomer() ) && Objects.nonNull(cardCustomer.getCustomer().getAddress()))
+            BeanUtils.copyProperties(cardCustomer.getCustomer().getAddress(), addressResponse);
+        if(Objects.nonNull(cardCustomer.getCustomer() ) && Objects.nonNull(cardCustomer.getCustomer().getContact()))
+            BeanUtils.copyProperties(cardCustomer.getCustomer().getContact(), contactResponse);
 
+        customerReponse.setAddress(addressResponse);
+        customerReponse.setContact(contactResponse);
         cardCustomerResponse.setCustomer(customerReponse);
 
         return cardCustomerResponse;

@@ -9,9 +9,6 @@ import br.com.alelo.consumer.consumerpat.adapters.out.customer.repository.entity
 import br.com.alelo.consumer.consumerpat.adapters.out.customer.repository.entity.ContactEntity;
 import br.com.alelo.consumer.consumerpat.adapters.out.customer.repository.entity.CustomerEntity;
 import br.com.alelo.consumer.consumerpat.application.core.domain.cardcustomer.CardCustomer;
-import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Address;
-import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Contact;
-import br.com.alelo.consumer.consumerpat.application.core.domain.customer.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,11 +16,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
